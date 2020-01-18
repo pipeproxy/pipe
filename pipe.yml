@@ -1,0 +1,9 @@
+Servers:
+  - Listener:
+      '@Name': network
+      Network: tcp
+      Address: :8888
+    Handlers:
+      - '@Name': forward
+        Network: tcp
+        Address: example.com:80
