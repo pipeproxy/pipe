@@ -1,6 +1,7 @@
 package init
 
 import (
+	_ "github.com/wzshiming/pipe/codec"
 	_ "github.com/wzshiming/pipe/listener"
 	_ "github.com/wzshiming/pipe/service"
 	_ "github.com/wzshiming/pipe/stream"
@@ -14,4 +15,6 @@ import (
 	_ "github.com/wzshiming/pipe/stream/mux"
 
 	_ "github.com/wzshiming/pipe/stream/mux/pattern"
+
+	_ "github.com/wzshiming/pipe/codec/json"
 )
