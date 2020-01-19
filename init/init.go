@@ -3,6 +3,7 @@ package init
 import (
 	_ "github.com/wzshiming/pipe/codec"
 	_ "github.com/wzshiming/pipe/listener"
+	_ "github.com/wzshiming/pipe/protocol"
 	_ "github.com/wzshiming/pipe/service"
 	_ "github.com/wzshiming/pipe/stream"
 

@@ -33,13 +33,13 @@ func (h *decoderManager) Register(v interface{}) error {
 	fun := reflect.ValueOf(v)
 	typ, err := checkFunc(fun)
 	if err != nil {
-		log.Printf("[ERROR] Register decode: %s: %s: %s", typ.Kind(), typ.String(), err)
+		log.Printf("[ERROR] Register config decoder: %s: %s.%s: %s", typ.Kind(), typ.PkgPath(), typ.Name(), err)
 		return err
 	}
 
 	for {
 		h.register(typ, fun)
-		log.Printf("[INFO] Register decode: %s: %s", typ.Kind(), typ.String())
+		log.Printf("[INFO] Register config decoder: %s: %s.%s", typ.Kind(), typ.PkgPath(), typ.Name())
 		if typ.Kind() != reflect.Ptr {
 			break
 		}

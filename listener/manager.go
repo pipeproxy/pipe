@@ -36,7 +36,9 @@ func (h *handlerManager) Get(name string) (NewListenerFunc, bool) {
 
 type NewListenerFunc func(ctx context.Context, name string, config []byte) (Listener, error)
 
-type Listener = net.Listener
+type Listener interface {
+	net.Listener
+}
 
 func NewListener(ctx context.Context, name string, config []byte) (Listener, error) {
 	fun, ok := std.Get(name)
