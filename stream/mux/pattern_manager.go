@@ -7,7 +7,6 @@ import (
 var std = newPatternManager()
 
 func RegisterRegexp(name string, pattern string) {
-	log.Printf("[INFO] Register regexp to pattern for stream mux: %s: %q", name, pattern)
 	std.RegisterRegexp(name, pattern)
 }
 
@@ -25,8 +24,10 @@ func newPatternManager() *patternManager {
 	}
 }
 
-func (h *patternManager) RegisterRegexp(name string, pattern string) {
+func (h *patternManager) RegisterRegexp(name string, pattern string) error {
+	log.Printf("[INFO] Register stream mux pattern: %s: %q", name, pattern)
 	h.patterns[name] = pattern
+	return nil
 }
 
 func (h *patternManager) Get(name string) (string, bool) {
