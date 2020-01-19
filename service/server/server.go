@@ -1,16 +1,26 @@
-package pipe
+package server
 
 import (
 	"context"
-	"log"
 
+	"github.com/wzshiming/pipe/decode"
 	"github.com/wzshiming/pipe/listener"
+	"github.com/wzshiming/pipe/service"
 	"github.com/wzshiming/pipe/stream"
 )
 
 type Server struct {
 	Listener listener.Listener
 	Handlers []stream.Handler
+}
+
+func NewServerWithConfig(ctx context.Context, name string, config []byte) (service.Service, error) {
+	var conf Config
+	err := decode.Decode(ctx, config, &conf)
+	if err != nil {
+		return nil, err
+	}
+	return NewServer(conf.Listener, conf.Handlers)
 }
 
 func NewServer(listener listener.Listener, handlers []stream.Handler) (*Server, error) {
@@ -36,14 +46,8 @@ func (s *Server) Run() error {
 	}
 }
 
-func (s *Server) Start() error {
-	go func() {
-		err := s.Run()
-		if err != nil {
-			log.Printf("[ERROR] server start error: %s", err.Error())
-		}
-	}()
-	return nil
+func (s *Server) Close() error {
+	return s.Listener.Close()
 }
 
 func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {

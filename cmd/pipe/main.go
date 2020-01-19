@@ -11,7 +11,6 @@ import (
 	"github.com/kubernetes-sigs/yaml"
 	"github.com/spf13/pflag"
 	"github.com/wzshiming/pipe"
-	"github.com/wzshiming/pipe/decode"
 )
 
 var conf string
@@ -42,20 +41,16 @@ func main() {
 	}
 
 	ctx := context.Background()
-
-	var conf pipe.Config
-	err = decode.Decode(ctx, c, &conf)
+	svc, err := pipe.NewPipeWithConfig(ctx, c)
 	if err != nil {
 		log.Printf("[ERROR] decode config error: %s", err.Error())
 		return
 	}
 
-	for _, server := range conf.Servers {
-		err := server.Start()
-		if err != nil {
-			log.Printf("[ERROR] start error: %s", err.Error())
-			return
-		}
+	err = svc.Run()
+	if err != nil {
+		log.Printf("[ERROR] start error: %s", err.Error())
+		return
 	}
-	<-make(chan struct{})
+
 }

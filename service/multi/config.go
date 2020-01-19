@@ -1,9 +1,11 @@
-package pipe
+package multi
 
 import (
 	"github.com/wzshiming/pipe/service"
 )
 
 type Config struct {
-	Pipe service.Service
+	Services []service.Service
 }
+
+const name = "multi"

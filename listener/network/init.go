@@ -5,5 +5,5 @@ import (
 )
 
 func init() {
-	listener.Register("network", NewNetwork)
+	listener.Register(name, NewNetworkWithConfig)
 }

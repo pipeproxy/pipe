@@ -11,7 +11,7 @@ import (
 
 var ListenConfig net.ListenConfig
 
-func NewNetwork(ctx context.Context, name string, config []byte) (listener.Listener, error) {
+func NewNetworkWithConfig(ctx context.Context, name string, config []byte) (listener.Listener, error) {
 	var conf Config
 	err := decode.Decode(ctx, config, &conf)
 	if err != nil {

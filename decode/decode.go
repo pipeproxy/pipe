@@ -153,9 +153,13 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 	}
 
 	inj := inject.NewInjector(nil)
-	inj.Map(reflect.ValueOf(ctx))
-	inj.Map(reflect.ValueOf(nameField.Name))
-	inj.Map(reflect.ValueOf(config))
+	args := []interface{}{&ctx, nameField.Name, config}
+	for _, arg := range args {
+		err := inj.Map(reflect.ValueOf(arg))
+		if err != nil {
+			return fmt.Errorf("pipe.decode error: %w", err)
+		}
+	}
 	ret, err := inj.Call(fun)
 	if err != nil {
 		return fmt.Errorf("pipe.decode error: %w", err)
