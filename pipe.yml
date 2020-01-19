@@ -1,9 +1,12 @@
-Servers:
-  - Listener:
-      '@Name': network
-      Network: tcp
-      Address: :8888
-    Handlers:
-      - '@Name': forward
+Pipe:
+  '@Name': multi
+  Services:
+    - '@Name': server
+      Listener:
+        '@Name': network
         Network: tcp
-        Address: example.com:80
+        Address: :8888
+      Handlers:
+        - '@Name': forward
+          Network: tcp
+          Address: example.com:80
