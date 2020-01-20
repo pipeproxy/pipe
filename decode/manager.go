@@ -14,32 +14,35 @@ var (
 )
 var stdManager = newDecoderManager()
 
-func Register(fun interface{}) {
-	stdManager.Register(fun)
+func Register(kind string, fun interface{}) {
+	stdManager.Register(kind, fun)
 }
 
 type decoderManager struct {
-	decoder map[reflect.Type]reflect.Value
-	pairs   []*pair
+	decoder    map[reflect.Type]map[string]reflect.Value
+	pairs      map[string][]*pair
+	interfaces map[reflect.Type]struct{}
 }
 
 func newDecoderManager() *decoderManager {
 	return &decoderManager{
-		decoder: map[reflect.Type]reflect.Value{},
+		decoder:    map[reflect.Type]map[string]reflect.Value{},
+		pairs:      map[string][]*pair{},
+		interfaces: map[reflect.Type]struct{}{},
 	}
 }
 
-func (h *decoderManager) Register(v interface{}) error {
+func (h *decoderManager) Register(kind string, v interface{}) error {
 	fun := reflect.ValueOf(v)
 	typ, err := checkFunc(fun)
 	if err != nil {
-		log.Printf("[ERROR] Register config decoder: %s: %s.%s: %s", typ.Kind(), typ.PkgPath(), typ.Name(), err)
+		log.Printf("[ERROR] Register config: %s: %s.%s: %s", kind, typ.PkgPath(), typ.Name(), err)
 		return err
 	}
 
 	for {
-		h.register(typ, fun)
-		log.Printf("[INFO] Register config decoder: %s: %s.%s", typ.Kind(), typ.PkgPath(), typ.Name())
+		h.register(kind, typ, fun)
+		log.Printf("[INFO] Register config: %s: %s.%s", kind, typ.PkgPath(), typ.Name())
 		if typ.Kind() != reflect.Ptr {
 			break
 		}
@@ -48,27 +51,57 @@ func (h *decoderManager) Register(v interface{}) error {
 	return nil
 }
 
-func (h *decoderManager) register(typ reflect.Type, fun reflect.Value) {
+func (h *decoderManager) register(kind string, typ reflect.Type, fun reflect.Value) {
+
+	_, ok := h.decoder[typ]
+	if !ok {
+		h.decoder[typ] = map[string]reflect.Value{}
+	}
+	h.decoder[typ][kind] = fun
+
 	if typ.Kind() == reflect.Interface {
-		h.pairs = append(h.pairs, &pair{
+		h.pairs[kind] = append(h.pairs[kind], &pair{
 			out0Type: typ,
 			funValue: fun,
 		})
-	} else {
-		h.decoder[typ] = fun
+
+		h.interfaces[typ] = struct{}{}
 	}
 }
 
-func (h *decoderManager) Get(out0Type reflect.Type) (reflect.Value, bool) {
-	fun, ok := h.decoder[out0Type]
+func (h *decoderManager) HasType(out0Type reflect.Type) bool {
+	_, ok := h.decoder[out0Type]
 	if ok {
-		return fun, ok
+		return true
 	}
-	for _, pair := range h.pairs {
-		if out0Type.AssignableTo(pair.out0Type) {
-			return pair.funValue, true
+
+	for i := range h.interfaces {
+		if out0Type.AssignableTo(i) {
+			return true
 		}
 	}
+
+	return false
+}
+
+func (h *decoderManager) Get(kind string, out0Type reflect.Type) (reflect.Value, bool) {
+	m, ok := h.decoder[out0Type]
+	if ok {
+		fun, ok := m[kind]
+		if ok {
+			return fun, ok
+		}
+	}
+
+	pairs, ok := h.pairs[kind]
+	if ok {
+		for _, pair := range pairs {
+			if out0Type.AssignableTo(pair.out0Type) {
+				return pair.funValue, true
+			}
+		}
+	}
+
 	return reflect.Value{}, false
 }
 

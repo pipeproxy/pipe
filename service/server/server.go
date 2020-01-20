@@ -3,41 +3,30 @@ package server
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/decode"
 	"github.com/wzshiming/pipe/listener"
-	"github.com/wzshiming/pipe/service"
 	"github.com/wzshiming/pipe/stream"
 )
 
 type Server struct {
-	Listener listener.Listener
-	Handlers []stream.Handler
-}
-
-func NewServerWithConfig(ctx context.Context, name string, config []byte) (service.Service, error) {
-	var conf Config
-	err := decode.Decode(ctx, config, &conf)
-	if err != nil {
-		return nil, err
-	}
-	return NewServer(conf.Listener, conf.Handlers)
+	listener listener.Listener
+	handlers []stream.Handler
 }
 
 func NewServer(listener listener.Listener, handlers []stream.Handler) (*Server, error) {
 	return &Server{
-		Listener: listener,
-		Handlers: handlers,
+		listener: listener,
+		handlers: handlers,
 	}, nil
 }
 
 func (s *Server) Reload(handlers []stream.Handler) error {
-	s.Handlers = handlers
+	s.handlers = handlers
 	return nil
 }
 
 func (s *Server) Run() error {
 	for {
-		conn, err := s.Listener.Accept()
+		conn, err := s.listener.Accept()
 		if err != nil {
 			return err
 		}
@@ -47,11 +36,11 @@ func (s *Server) Run() error {
 }
 
 func (s *Server) Close() error {
-	return s.Listener.Close()
+	return s.listener.Close()
 }
 
 func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
-	handlers := s.Handlers
+	handlers := s.handlers
 	for _, handler := range handlers {
 		handler.ServeStream(ctx, stm)
 	}

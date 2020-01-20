@@ -1,9 +1,30 @@
 package forward
 
 import (
+	"context"
+
+	"github.com/wzshiming/pipe/decode"
 	"github.com/wzshiming/pipe/stream"
 )
 
+const name = "forward"
+
 func init() {
-	stream.Register(name, NewForwardWithConfig)
+	decode.Register(name, NewForwardWithConfig)
+}
+
+type Config struct {
+	Network string
+	Address string
+}
+
+// NewForwardWithConfig create a new forward with config.
+func NewForwardWithConfig(ctx context.Context, config []byte) (stream.Handler, error) {
+	var conf Config
+	err := decode.Decode(ctx, config, &conf)
+	if err != nil {
+		return nil, err
+	}
+	mux := NewForward(conf.Network, conf.Address)
+	return mux, nil
 }

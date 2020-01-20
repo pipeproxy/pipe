@@ -71,7 +71,7 @@ func TestDecodeStruct(t *testing.T) {
 
 	fun := []interface{}{
 		func(name string, config []byte) (*Config, error) {
-			return &Config{name}, nil
+			return &Config{Name: name}, nil
 		},
 		func(name string, config []byte) (Adapter, error) {
 			return &Config{Name: name}, nil
@@ -84,7 +84,17 @@ func TestDecodeStruct(t *testing.T) {
 			decoderManager: stdManager,
 		}
 
-		err := stdManager.Register(f)
+		err := stdManager.Register("hello", f)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		err = stdManager.Register("hello2", f)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		err = stdManager.Register("hello3", f)
 		if err != nil {
 			t.Fatal(err)
 		}

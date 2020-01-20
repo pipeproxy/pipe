@@ -6,20 +6,8 @@ import (
 	"log"
 	"net"
 
-	"github.com/wzshiming/pipe/decode"
 	"github.com/wzshiming/pipe/stream"
 )
-
-// NewForwardWithConfig create a new forward with config.
-func NewForwardWithConfig(ctx context.Context, name string, config []byte) (stream.Handler, error) {
-	var conf Config
-	err := decode.Decode(ctx, config, &conf)
-	if err != nil {
-		return nil, err
-	}
-	mux := NewForward(conf.Network, conf.Address)
-	return mux, nil
-}
 
 type Forward struct {
 	network string

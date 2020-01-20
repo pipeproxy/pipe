@@ -136,8 +136,7 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 
 	config = bytes.TrimSpace(config)
 
-	fun, ok := d.decoderManager.Get(v.Type().Elem())
-	if !ok {
+	if !d.decoderManager.HasType(v.Type().Elem()) {
 		return d.decodeOther(ctx, config, v)
 	}
 
@@ -146,9 +145,13 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 	}
 	err := json.Unmarshal(config, &nameField)
 	if err != nil {
-		return fmt.Errorf("pipe.decode error: %w", err)
+		return d.decodeOther(ctx, config, v)
 	}
 	if nameField.Name == "" {
+		return d.decodeOther(ctx, config, v)
+	}
+	fun, ok := d.decoderManager.Get(nameField.Name, v.Type().Elem())
+	if !ok {
 		return d.decodeOther(ctx, config, v)
 	}
 

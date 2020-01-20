@@ -11,7 +11,6 @@ import (
 	"unsafe"
 
 	"github.com/wzshiming/crun"
-	"github.com/wzshiming/pipe/decode"
 	"github.com/wzshiming/pipe/stream"
 	"github.com/wzshiming/trie"
 )
@@ -29,33 +28,6 @@ type Mux struct {
 	size         uint32
 	handlers     map[uint32]stream.Handler
 	notFound     stream.Handler
-}
-
-// NewProtoMux create a new Mux with config.
-func NewMuxWithConfig(ctx context.Context, name string, config []byte) (stream.Handler, error) {
-	var conf Config
-	err := decode.Decode(ctx, config, &conf)
-	if err != nil {
-		return nil, err
-	}
-	mux := NewMux()
-	if conf.NotFound != nil {
-		mux.NotFound(conf.NotFound)
-	}
-
-	for _, route := range conf.Routes {
-		if route.Pattern != "" {
-			patterm, ok := Get(route.Pattern)
-			if ok && patterm != "" {
-				mux.HandleRegexp(patterm, route.Handler)
-			}
-		} else if route.Regexp != "" {
-			mux.HandleRegexp(route.Regexp, route.Handler)
-		} else if route.Prefix != "" {
-			mux.HandlePrefix(route.Prefix, route.Handler)
-		}
-	}
-	return mux, nil
 }
 
 // NewProtoMux create a new Mux.

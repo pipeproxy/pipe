@@ -3,9 +3,8 @@ package pipe
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/service"
-
 	"github.com/wzshiming/pipe/decode"
+	"github.com/wzshiming/pipe/service"
 )
 
 func NewPipeWithConfig(ctx context.Context, config []byte) (service.Service, error) {

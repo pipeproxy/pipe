@@ -1,12 +1,10 @@
 package multi
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"sync"
 
-	"github.com/wzshiming/pipe/decode"
 	"github.com/wzshiming/pipe/service"
 )
 
@@ -17,21 +15,6 @@ var (
 type Multi struct {
 	wg       sync.WaitGroup
 	services []service.Service
-}
-
-func NewMultiWithConfig(ctx context.Context, name string, config []byte) (service.Service, error) {
-	var conf Config
-	err := decode.Decode(ctx, config, &conf)
-	if err != nil {
-		return nil, err
-	}
-	switch len(conf.Services) {
-	case 1:
-		return conf.Services[0], nil
-	case 0:
-		return nil, ErrNotServer
-	}
-	return NewMulti(conf.Services)
 }
 
 func NewMulti(services []service.Service) (*Multi, error) {
