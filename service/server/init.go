@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/decode"
+	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/listener"
 	"github.com/wzshiming/pipe/service"
 	"github.com/wzshiming/pipe/stream"
@@ -12,7 +12,7 @@ import (
 const name = "server"
 
 func init() {
-	decode.Register(name, NewServerWithConfig)
+	configure.Register(name, NewServerWithConfig)
 }
 
 type Config struct {
@@ -22,7 +22,7 @@ type Config struct {
 
 func NewServerWithConfig(ctx context.Context, config []byte) (service.Service, error) {
 	var conf Config
-	err := decode.Decode(ctx, config, &conf)
+	err := configure.Decode(ctx, config, &conf)
 	if err != nil {
 		return nil, err
 	}

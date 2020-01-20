@@ -3,14 +3,14 @@ package mux
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/decode"
+	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/stream"
 )
 
 const name = "mux"
 
 func init() {
-	decode.Register(name, NewMuxWithConfig)
+	configure.Register(name, NewMuxWithConfig)
 }
 
 type Route struct {
@@ -28,7 +28,7 @@ type Config struct {
 // NewProtoMux create a new Mux with config.
 func NewMuxWithConfig(ctx context.Context, config []byte) (stream.Handler, error) {
 	var conf Config
-	err := decode.Decode(ctx, config, &conf)
+	err := configure.Decode(ctx, config, &conf)
 	if err != nil {
 		return nil, err
 	}

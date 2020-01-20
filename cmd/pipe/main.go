@@ -43,7 +43,7 @@ func main() {
 	ctx := context.Background()
 	svc, err := pipe.NewPipeWithConfig(ctx, c)
 	if err != nil {
-		log.Printf("[ERROR] decode config error: %s", err.Error())
+		log.Printf("[ERROR] configure config error: %s", err.Error())
 		return
 	}
 

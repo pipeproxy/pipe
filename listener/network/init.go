@@ -5,12 +5,12 @@ import (
 	"log"
 	"net"
 
-	"github.com/wzshiming/pipe/decode"
+	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/listener"
 )
 
 func init() {
-	decode.Register(name, NewNetworkWithConfig)
+	configure.Register(name, NewNetworkWithConfig)
 }
 
 const name = "network"
@@ -24,7 +24,7 @@ var ListenConfig net.ListenConfig
 
 func NewNetworkWithConfig(ctx context.Context, config []byte) (listener.Listener, error) {
 	var conf Config
-	err := decode.Decode(ctx, config, &conf)
+	err := configure.Decode(ctx, config, &conf)
 	if err != nil {
 		return nil, err
 	}

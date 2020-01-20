@@ -3,14 +3,14 @@ package multi
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/decode"
+	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/service"
 )
 
 const name = "multi"
 
 func init() {
-	decode.Register(name, NewMultiWithConfig)
+	configure.Register(name, NewMultiWithConfig)
 }
 
 type Config struct {
@@ -19,7 +19,7 @@ type Config struct {
 
 func NewMultiWithConfig(ctx context.Context, config []byte) (service.Service, error) {
 	var conf Config
-	err := decode.Decode(ctx, config, &conf)
+	err := configure.Decode(ctx, config, &conf)
 	if err != nil {
 		return nil, err
 	}

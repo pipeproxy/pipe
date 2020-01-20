@@ -1,4 +1,4 @@
-package decode
+package configure
 
 import (
 	"bytes"
@@ -160,12 +160,12 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 	for _, arg := range args {
 		err := inj.Map(reflect.ValueOf(arg))
 		if err != nil {
-			return fmt.Errorf("pipe.decode error: %w", err)
+			return fmt.Errorf("pipe.configure error: %w", err)
 		}
 	}
 	ret, err := inj.Call(fun)
 	if err != nil {
-		return fmt.Errorf("pipe.decode error: %w", err)
+		return fmt.Errorf("pipe.configure error: %w", err)
 	}
 
 	if len(ret) == 2 {
@@ -176,7 +176,7 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 				panic("this should not be performed until")
 			}
 			if err != nil {
-				return fmt.Errorf("pipe.decode error: %w", err)
+				return fmt.Errorf("pipe.configure error: %w", err)
 			}
 		}
 	}

@@ -4,14 +4,14 @@ import (
 	"context"
 
 	"github.com/wzshiming/pipe/codec"
-	"github.com/wzshiming/pipe/decode"
+	"github.com/wzshiming/pipe/configure"
 )
 
 const name = "json"
 
 func init() {
-	decode.Register(name, NewDecoder)
-	decode.Register(name, NewEncoder)
+	configure.Register(name, NewDecoder)
+	configure.Register(name, NewEncoder)
 }
 
 func NewEncoder(ctx context.Context) (codec.Encoder, error) {

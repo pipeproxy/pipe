@@ -3,14 +3,14 @@ package forward
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/decode"
+	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/stream"
 )
 
 const name = "forward"
 
 func init() {
-	decode.Register(name, NewForwardWithConfig)
+	configure.Register(name, NewForwardWithConfig)
 }
 
 type Config struct {
@@ -21,7 +21,7 @@ type Config struct {
 // NewForwardWithConfig create a new forward with config.
 func NewForwardWithConfig(ctx context.Context, config []byte) (stream.Handler, error) {
 	var conf Config
-	err := decode.Decode(ctx, config, &conf)
+	err := configure.Decode(ctx, config, &conf)
 	if err != nil {
 		return nil, err
 	}
