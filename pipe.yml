@@ -11,5 +11,20 @@ Pipe:
         Multi:
           - '@Kind': forward
             Network: tcp
-            Address: example.com:80
+            Address: 127.0.0.1:9999
           - '@Kind': close
+    - '@Kind': server
+      Listener:
+        '@Kind': network
+        Network: tcp
+        Address: :9999
+      Handler:
+        '@Kind': http
+        Handler:
+          '@Kind': mux
+          Routes:
+            - Path: /
+              Handler:
+                '@Kind': direct
+                Body: |
+                  <html><body>This is Pipe {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
