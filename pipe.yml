@@ -6,7 +6,9 @@ Pipe:
         '@Kind': network
         Network: tcp
         Address: :8888
-      Handlers:
-        - '@Kind': forward
-          Network: tcp
-          Address: example.com:80
+      Handler:
+        '@Kind': multi
+        Handlers:
+          - '@Kind': forward
+            Network: tcp
+            Address: example.com:80
