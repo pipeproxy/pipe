@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	ErrNotFound = fmt.Errorf("err mot found")
+	ErrNotFound = fmt.Errorf("error not found")
 )
 
 // Mux is an Applicative protocol multiplexer
