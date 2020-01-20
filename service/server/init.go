@@ -1,8 +1,9 @@
 package server
 
 import (
+	"net"
+
 	"github.com/wzshiming/pipe/configure"
-	"github.com/wzshiming/pipe/listener"
 	"github.com/wzshiming/pipe/service"
 	"github.com/wzshiming/pipe/stream"
 )
@@ -14,7 +15,7 @@ func init() {
 }
 
 type Config struct {
-	Listener listener.Listener
+	Listener net.Listener
 	Handler  stream.Handler
 }
 

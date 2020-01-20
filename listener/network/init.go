@@ -6,7 +6,6 @@ import (
 	"net"
 
 	"github.com/wzshiming/pipe/configure"
-	"github.com/wzshiming/pipe/listener"
 )
 
 func init() {
@@ -22,7 +21,7 @@ type Config struct {
 
 var ListenConfig net.ListenConfig
 
-func NewNetworkWithConfig(ctx context.Context, conf *Config) (listener.Listener, error) {
+func NewNetworkWithConfig(ctx context.Context, conf *Config) (net.Listener, error) {
 	log.Printf("[INFO] Listen to %s://%s", conf.Network, conf.Address)
 	return ListenConfig.Listen(ctx, conf.Network, conf.Address)
 }

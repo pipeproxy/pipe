@@ -2,17 +2,17 @@ package server
 
 import (
 	"context"
+	"net"
 
-	"github.com/wzshiming/pipe/listener"
 	"github.com/wzshiming/pipe/stream"
 )
 
 type Server struct {
-	listener listener.Listener
+	listener net.Listener
 	handler  stream.Handler
 }
 
-func NewServer(listener listener.Listener, handler stream.Handler) *Server {
+func NewServer(listener net.Listener, handler stream.Handler) *Server {
 	return &Server{
 		listener: listener,
 		handler:  handler,
