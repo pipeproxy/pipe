@@ -2,9 +2,9 @@ package direct
 
 import (
 	"net/http"
-	"unsafe"
 
 	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/http/template"
 )
 
 const name = "direct"
@@ -18,6 +18,10 @@ type Config struct {
 	Body string
 }
 
-func NewDirectWithConfig(conf *Config) http.Handler {
-	return NewDirect(conf.Code, *(*[]byte)(unsafe.Pointer(&conf.Body)))
+func NewDirectWithConfig(conf *Config) (http.Handler, error) {
+	temp, err := template.NewFormat(conf.Body)
+	if err != nil {
+		return nil, err
+	}
+	return NewDirect(conf.Code, temp), nil
 }

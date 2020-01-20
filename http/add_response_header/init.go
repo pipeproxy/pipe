@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/http/template"
 )
 
 const name = "add_response_header"
@@ -13,10 +14,14 @@ func init() {
 }
 
 type Config struct {
-	Key    string
-	Values []string
+	Key   string
+	Value string
 }
 
-func NewAddResponseHeaderWithConfig(conf *Config) http.Handler {
-	return NewAddResponseHeader(conf.Key, conf.Values)
+func NewAddResponseHeaderWithConfig(conf *Config) (http.Handler, error) {
+	temp, err := template.NewFormat(conf.Value)
+	if err != nil {
+		return nil, err
+	}
+	return NewAddResponseHeader(conf.Key, temp), nil
 }

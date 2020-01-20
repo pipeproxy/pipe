@@ -2,18 +2,20 @@ package add_response_header
 
 import (
 	"net/http"
+
+	"github.com/wzshiming/pipe/http/template"
 )
 
 type AddResponseHeader struct {
-	key    string
-	values []string
+	key   string
+	value template.Format
 }
 
-func NewAddResponseHeader(key string, values []string) *AddResponseHeader {
-	return &AddResponseHeader{key, values}
+func NewAddResponseHeader(key string, value template.Format) *AddResponseHeader {
+	return &AddResponseHeader{key, value}
 }
 
 func (a *AddResponseHeader) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	header := rw.Header()
-	header[a.key] = append(header[a.key], a.values...)
+	header[a.key] = append(header[a.key], a.value.FormatString(r))
 }
