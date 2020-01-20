@@ -15,9 +15,9 @@ func init() {
 
 type Config struct {
 	Listener listener.Listener
-	Handlers []stream.Handler
+	Handler  stream.Handler
 }
 
-func NewServerWithConfig(conf *Config) (service.Service, error) {
-	return NewServer(conf.Listener, conf.Handlers)
+func NewServerWithConfig(conf *Config) service.Service {
+	return NewServer(conf.Listener, conf.Handler)
 }

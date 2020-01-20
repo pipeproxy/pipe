@@ -17,10 +17,10 @@ type Multi struct {
 	services []service.Service
 }
 
-func NewMulti(services []service.Service) (*Multi, error) {
+func NewMulti(services []service.Service) *Multi {
 	return &Multi{
 		services: services,
-	}, nil
+	}
 }
 
 func (m *Multi) Run() error {

@@ -12,10 +12,10 @@ func init() {
 	configure.Register(name, NewEncoder)
 }
 
-func NewEncoder() (codec.Encoder, error) {
-	return NewCoder(nil), nil
+func NewEncoder() codec.Encoder {
+	return NewCoder(nil)
 }
 
-func NewDecoder() (codec.Decoder, error) {
-	return NewCoder(nil), nil
+func NewDecoder() codec.Decoder {
+	return NewCoder(nil)
 }

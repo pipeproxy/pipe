@@ -22,5 +22,5 @@ func NewMultiWithConfig(conf *Config) (service.Service, error) {
 	case 0:
 		return nil, ErrNotServer
 	}
-	return NewMulti(conf.Services)
+	return NewMulti(conf.Services), nil
 }

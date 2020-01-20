@@ -1,8 +1,6 @@
 package forward
 
 import (
-	"context"
-
 	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/stream"
 )
@@ -19,7 +17,6 @@ type Config struct {
 }
 
 // NewForwardWithConfig create a new forward with config.
-func NewForwardWithConfig(ctx context.Context, conf *Config) (stream.Handler, error) {
-	mux := NewForward(conf.Network, conf.Address)
-	return mux, nil
+func NewForwardWithConfig(conf *Config) stream.Handler {
+	return NewForward(conf.Network, conf.Address)
 }

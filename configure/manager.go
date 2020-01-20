@@ -42,7 +42,7 @@ func (h *decoderManager) Register(kind string, v interface{}) error {
 
 	for {
 		h.register(kind, typ, fun)
-		log.Printf("[INFO] Register config: %s: %s.%s", kind, typ.PkgPath(), typ.Name())
+		log.Printf("[INFO] Register config: %s: %s.%s: %s", kind, typ.PkgPath(), typ.Name(), fun.Type().String())
 		if typ.Kind() != reflect.Ptr {
 			break
 		}

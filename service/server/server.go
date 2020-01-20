@@ -9,18 +9,18 @@ import (
 
 type Server struct {
 	listener listener.Listener
-	handlers []stream.Handler
+	handler  stream.Handler
 }
 
-func NewServer(listener listener.Listener, handlers []stream.Handler) (*Server, error) {
+func NewServer(listener listener.Listener, handler stream.Handler) *Server {
 	return &Server{
 		listener: listener,
-		handlers: handlers,
-	}, nil
+		handler:  handler,
+	}
 }
 
-func (s *Server) Reload(handlers []stream.Handler) error {
-	s.handlers = handlers
+func (s *Server) Reload(handler stream.Handler) error {
+	s.handler = handler
 	return nil
 }
 
@@ -40,9 +40,5 @@ func (s *Server) Close() error {
 }
 
 func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
-	handlers := s.handlers
-	for _, handler := range handlers {
-		handler.ServeStream(ctx, stm)
-	}
-	stm.Close()
+	s.handler.ServeStream(ctx, stm)
 }
