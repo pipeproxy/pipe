@@ -12,17 +12,17 @@ var (
 )
 
 type Multi struct {
-	handlers []stream.Handler
+	multi []stream.Handler
 }
 
-func NewMulti(handlers []stream.Handler) *Multi {
+func NewMulti(multi []stream.Handler) *Multi {
 	return &Multi{
-		handlers: handlers,
+		multi: multi,
 	}
 }
 
 func (m *Multi) ServeStream(ctx context.Context, stm stream.Stream) {
-	handlers := m.handlers
+	handlers := m.multi
 	for _, handler := range handlers {
 		handler.ServeStream(ctx, stm)
 	}

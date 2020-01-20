@@ -12,15 +12,15 @@ func init() {
 }
 
 type Config struct {
-	Services []service.Service
+	Multi []service.Service
 }
 
 func NewMultiWithConfig(conf *Config) (service.Service, error) {
-	switch len(conf.Services) {
+	switch len(conf.Multi) {
 	case 1:
-		return conf.Services[0], nil
+		return conf.Multi[0], nil
 	case 0:
 		return nil, ErrNotServer
 	}
-	return NewMulti(conf.Services), nil
+	return NewMulti(conf.Multi), nil
 }

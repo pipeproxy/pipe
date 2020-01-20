@@ -12,15 +12,15 @@ func init() {
 }
 
 type Config struct {
-	Handlers []stream.Handler
+	Multi []stream.Handler
 }
 
 func NewMultiWithConfig(conf *Config) (stream.Handler, error) {
-	switch len(conf.Handlers) {
+	switch len(conf.Multi) {
 	case 1:
-		return conf.Handlers[0], nil
+		return conf.Multi[0], nil
 	case 0:
 		return nil, ErrNotHandler
 	}
-	return NewMulti(conf.Handlers), nil
+	return NewMulti(conf.Multi), nil
 }

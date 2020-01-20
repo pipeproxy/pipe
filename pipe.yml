@@ -1,6 +1,6 @@
 Pipe:
   '@Kind': multi
-  Services:
+  Multi:
     - '@Kind': server
       Listener:
         '@Kind': network
@@ -8,7 +8,8 @@ Pipe:
         Address: :8888
       Handler:
         '@Kind': multi
-        Handlers:
+        Multi:
           - '@Kind': forward
             Network: tcp
             Address: example.com:80
+          - '@Kind': close

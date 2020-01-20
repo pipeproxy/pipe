@@ -13,19 +13,19 @@ var (
 )
 
 type Multi struct {
-	wg       sync.WaitGroup
-	services []service.Service
+	wg    sync.WaitGroup
+	multi []service.Service
 }
 
-func NewMulti(services []service.Service) *Multi {
+func NewMulti(multi []service.Service) *Multi {
 	return &Multi{
-		services: services,
+		multi: multi,
 	}
 }
 
 func (m *Multi) Run() error {
-	m.wg.Add(len(m.services))
-	for _, svc := range m.services {
+	m.wg.Add(len(m.multi))
+	for _, svc := range m.multi {
 		go func(svc service.Service) {
 			err := svc.Run()
 			if err != nil {
@@ -39,7 +39,7 @@ func (m *Multi) Run() error {
 }
 
 func (m *Multi) Close() error {
-	for _, service := range m.services {
+	for _, service := range m.multi {
 		err := service.Close()
 		if err != nil {
 			log.Printf("[ERROR] service close error: %s", err.Error())
