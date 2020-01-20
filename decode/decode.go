@@ -142,7 +142,7 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 	}
 
 	var nameField struct {
-		Name string `json:"@name"`
+		Name string `json:"@Kind"`
 	}
 	err := json.Unmarshal(config, &nameField)
 	if err != nil {

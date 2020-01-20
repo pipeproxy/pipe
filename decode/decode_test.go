@@ -29,19 +29,19 @@ func TestDecodeStruct(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			args: args{ctx, []byte(`{"@name":"hello"}`)},
+			args: args{ctx, []byte(`{"@Kind":"hello"}`)},
 			want: &Config{"hello"},
 		},
 		{
-			args: args{ctx, []byte(`[{"@name":"hello"},{"@name":"hello2"}]`)},
+			args: args{ctx, []byte(`[{"@Kind":"hello"},{"@Kind":"hello2"}]`)},
 			want: []*Config{{"hello"}, {"hello2"}},
 		},
 		{
-			args: args{ctx, []byte(`{"A":{"@name":"hello"}}`)},
+			args: args{ctx, []byte(`{"A":{"@Kind":"hello"}}`)},
 			want: &struct{ A *Config }{&Config{"hello"}},
 		},
 		{
-			args: args{ctx, []byte(`{"A":{"@name":"hello"},"B":[{"@name":"hello2"},{"@name":"hello3"}]}`)},
+			args: args{ctx, []byte(`{"A":{"@Kind":"hello"},"B":[{"@Kind":"hello2"},{"@Kind":"hello3"}]}`)},
 			want: &struct {
 				A *Config
 				B []*Config
@@ -49,19 +49,19 @@ func TestDecodeStruct(t *testing.T) {
 		},
 
 		{
-			args: args{ctx, []byte(`{"@name":"hello"}`)},
+			args: args{ctx, []byte(`{"@Kind":"hello"}`)},
 			want: Config{"hello"},
 		},
 		{
-			args: args{ctx, []byte(`[{"@name":"hello"},{"@name":"hello2"}]`)},
+			args: args{ctx, []byte(`[{"@Kind":"hello"},{"@Kind":"hello2"}]`)},
 			want: []Config{{"hello"}, {"hello2"}},
 		},
 		{
-			args: args{ctx, []byte(`{"A":{"@name":"hello"}}`)},
+			args: args{ctx, []byte(`{"A":{"@Kind":"hello"}}`)},
 			want: &struct{ A Config }{Config{"hello"}},
 		},
 		{
-			args: args{ctx, []byte(`{"A":{"@name":"hello"},"B":[{"@name":"hello2"},{"@name":"hello3"}]}`)},
+			args: args{ctx, []byte(`{"A":{"@Kind":"hello"},"B":[{"@Kind":"hello2"},{"@Kind":"hello3"}]}`)},
 			want: &struct {
 				A Config
 				B []Config
