@@ -186,7 +186,7 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 		n := reflect.New(in)
 		err := d.decode(ctx, config, n)
 		if err != nil {
-			return fmt.Errorf("pipe.configure error: %w", err)
+			return fmt.Errorf("config %q error: %w", config, err)
 		}
 		err = inj.Map(n)
 		if err != nil {
