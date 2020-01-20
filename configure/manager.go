@@ -36,7 +36,7 @@ func (h *decoderManager) Register(kind string, v interface{}) error {
 	fun := reflect.ValueOf(v)
 	typ, err := checkFunc(fun)
 	if err != nil {
-		log.Printf("[ERROR] Register config: %s: %s.%s: %s", kind, typ.PkgPath(), typ.Name(), err)
+		log.Printf("[ERROR] Register config: %s.%s: %s: %s", typ.PkgPath(), typ.Name(), kind, err)
 		return err
 	}
 
@@ -47,7 +47,7 @@ func (h *decoderManager) Register(kind string, v interface{}) error {
 		}
 		typ = typ.Elem()
 	}
-	log.Printf("[INFO] Register config: %s: %s.%s: %s", kind, typ.PkgPath(), typ.Name(), fun.Type().String())
+	log.Printf("[INFO] Register config: %s.%s: %s", typ.PkgPath(), typ.Name(), kind)
 	return nil
 }
 
