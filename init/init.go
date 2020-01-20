@@ -6,6 +6,7 @@ import (
 	_ "github.com/wzshiming/pipe/http/add_request_header"
 	_ "github.com/wzshiming/pipe/http/add_response_header"
 	_ "github.com/wzshiming/pipe/http/direct"
+	_ "github.com/wzshiming/pipe/http/file"
 	_ "github.com/wzshiming/pipe/http/mux"
 	_ "github.com/wzshiming/pipe/http/remove_request_header"
 	_ "github.com/wzshiming/pipe/http/remove_response_header"
