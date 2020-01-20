@@ -19,12 +19,7 @@ type Config struct {
 }
 
 // NewForwardWithConfig create a new forward with config.
-func NewForwardWithConfig(ctx context.Context, config []byte) (stream.Handler, error) {
-	var conf Config
-	err := configure.Decode(ctx, config, &conf)
-	if err != nil {
-		return nil, err
-	}
+func NewForwardWithConfig(ctx context.Context, conf *Config) (stream.Handler, error) {
 	mux := NewForward(conf.Network, conf.Address)
 	return mux, nil
 }

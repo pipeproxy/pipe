@@ -1,8 +1,6 @@
 package multi
 
 import (
-	"context"
-
 	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/service"
 )
@@ -17,12 +15,7 @@ type Config struct {
 	Services []service.Service
 }
 
-func NewMultiWithConfig(ctx context.Context, config []byte) (service.Service, error) {
-	var conf Config
-	err := configure.Decode(ctx, config, &conf)
-	if err != nil {
-		return nil, err
-	}
+func NewMultiWithConfig(conf *Config) (service.Service, error) {
 	switch len(conf.Services) {
 	case 1:
 		return conf.Services[0], nil

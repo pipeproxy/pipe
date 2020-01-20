@@ -163,6 +163,37 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 			return fmt.Errorf("pipe.configure error: %w", err)
 		}
 	}
+	funType := fun.Type()
+	num := funType.NumIn()
+	for i := 0; i != num; i++ {
+		in := funType.In(i)
+		switch in.Kind() {
+		case reflect.Slice:
+			if in.Elem().Kind() == reflect.Uint8 {
+				continue
+			}
+		case reflect.Struct, reflect.Map:
+		case reflect.Ptr:
+			if in.Elem().Kind() != reflect.Struct {
+				continue
+			}
+		case reflect.String:
+			continue
+		default:
+			continue
+		}
+
+		n := reflect.New(in)
+		err := d.decode(ctx, config, n)
+		if err != nil {
+			return fmt.Errorf("pipe.configure error: %w", err)
+		}
+		err = inj.Map(n)
+		if err != nil {
+			return fmt.Errorf("pipe.configure error: %w", err)
+		}
+	}
+
 	ret, err := inj.Call(fun)
 	if err != nil {
 		return fmt.Errorf("pipe.configure error: %w", err)

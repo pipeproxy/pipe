@@ -1,8 +1,6 @@
 package server
 
 import (
-	"context"
-
 	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/listener"
 	"github.com/wzshiming/pipe/service"
@@ -20,11 +18,6 @@ type Config struct {
 	Handlers []stream.Handler
 }
 
-func NewServerWithConfig(ctx context.Context, config []byte) (service.Service, error) {
-	var conf Config
-	err := configure.Decode(ctx, config, &conf)
-	if err != nil {
-		return nil, err
-	}
+func NewServerWithConfig(conf *Config) (service.Service, error) {
 	return NewServer(conf.Listener, conf.Handlers)
 }

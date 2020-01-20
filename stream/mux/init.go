@@ -1,8 +1,6 @@
 package mux
 
 import (
-	"context"
-
 	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/stream"
 )
@@ -26,12 +24,7 @@ type Config struct {
 }
 
 // NewProtoMux create a new Mux with config.
-func NewMuxWithConfig(ctx context.Context, config []byte) (stream.Handler, error) {
-	var conf Config
-	err := configure.Decode(ctx, config, &conf)
-	if err != nil {
-		return nil, err
-	}
+func NewMuxWithConfig(conf *Config) (stream.Handler, error) {
 	mux := NewMux()
 	if conf.NotFound != nil {
 		mux.NotFound(conf.NotFound)

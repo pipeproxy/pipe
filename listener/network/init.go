@@ -22,12 +22,7 @@ type Config struct {
 
 var ListenConfig net.ListenConfig
 
-func NewNetworkWithConfig(ctx context.Context, config []byte) (listener.Listener, error) {
-	var conf Config
-	err := configure.Decode(ctx, config, &conf)
-	if err != nil {
-		return nil, err
-	}
+func NewNetworkWithConfig(ctx context.Context, conf *Config) (listener.Listener, error) {
 	log.Printf("[INFO] Listen to %s://%s", conf.Network, conf.Address)
 	return ListenConfig.Listen(ctx, conf.Network, conf.Address)
 }

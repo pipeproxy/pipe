@@ -1,8 +1,6 @@
 package json
 
 import (
-	"context"
-
 	"github.com/wzshiming/pipe/codec"
 	"github.com/wzshiming/pipe/configure"
 )
@@ -14,10 +12,10 @@ func init() {
 	configure.Register(name, NewEncoder)
 }
 
-func NewEncoder(ctx context.Context) (codec.Encoder, error) {
+func NewEncoder() (codec.Encoder, error) {
 	return NewCoder(nil), nil
 }
 
-func NewDecoder(ctx context.Context) (codec.Decoder, error) {
+func NewDecoder() (codec.Decoder, error) {
 	return NewCoder(nil), nil
 }
