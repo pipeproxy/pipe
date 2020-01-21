@@ -13,6 +13,7 @@ import (
 	_ "github.com/wzshiming/pipe/http/ref"
 	_ "github.com/wzshiming/pipe/http/remove_request_header"
 	_ "github.com/wzshiming/pipe/http/remove_response_header"
+	_ "github.com/wzshiming/pipe/listener/multi"
 	_ "github.com/wzshiming/pipe/listener/network"
 	_ "github.com/wzshiming/pipe/listener/ref"
 	_ "github.com/wzshiming/pipe/protocol/ref"
