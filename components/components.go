@@ -15,14 +15,14 @@ import (
 type ctxKeyComponents int
 
 type Components struct {
-	Protocols      map[string]protocol.Protocol
-	Decoders       map[string]codec.Decoder
-	Encoders       map[string]codec.Encoder
-	StreamHandlers map[string]stream.Handler
-	HttpHandlers   map[string]http.Handler
-	Listeners      map[string]net.Listener
-	Services       map[string]service.Service
-	TlsConfigs     map[string]*tls.Config
+	Decoders         map[string]codec.Decoder
+	Encoders         map[string]codec.Encoder
+	Listeners        map[string]net.Listener
+	Services         map[string]service.Service
+	TlsConfigs       map[string]*tls.Config
+	StreamHandlers   map[string]stream.Handler
+	HttpHandlers     map[string]http.Handler
+	ProtocolHandlers map[string]protocol.Handler
 }
 
 func PutCtxComponents(ctx context.Context, components *Components) context.Context {

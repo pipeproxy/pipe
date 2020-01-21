@@ -9,12 +9,14 @@ import (
 )
 
 func NewPipeWithConfig(ctx context.Context, config []byte) (service.Service, error) {
-	var cconf configComponents
-	err := configure.Decode(ctx, config, &cconf)
+	var configComponents struct {
+		Components *components.Components
+	}
+	err := configure.Decode(ctx, config, &configComponents)
 	if err != nil {
 		return nil, err
 	}
-	ctx = components.PutCtxComponents(ctx, cconf.Components)
+	ctx = components.PutCtxComponents(ctx, configComponents.Components)
 	var conf Config
 	err = configure.Decode(ctx, config, &conf)
 	if err != nil {

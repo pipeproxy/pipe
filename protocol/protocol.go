@@ -16,3 +16,7 @@ type Map interface {
 	Range(func(key string, values []string) bool)
 	Clone() Map
 }
+
+type Handler interface {
+	ServeProtocol(ptc Protocol)
+}

@@ -4,18 +4,20 @@ import (
 	"context"
 	"net"
 
+	"github.com/wzshiming/pipe/listener"
 	"github.com/wzshiming/pipe/stream"
 )
 
 type Server struct {
-	listener net.Listener
-	handler  stream.Handler
+	listenConfig listener.ListenConfig
+	listener     net.Listener
+	handler      stream.Handler
 }
 
-func NewServer(listener net.Listener, handler stream.Handler) *Server {
+func NewServer(listener listener.ListenConfig, handler stream.Handler) *Server {
 	return &Server{
-		listener: listener,
-		handler:  handler,
+		listenConfig: listener,
+		handler:      handler,
 	}
 }
 
@@ -25,12 +27,17 @@ func (s *Server) Reload(handler stream.Handler) error {
 }
 
 func (s *Server) Run() error {
+	listener, err := s.listenConfig.Listen(context.Background())
+	if err != nil {
+		return err
+	}
+
+	s.listener = listener
 	for {
-		conn, err := s.listener.Accept()
+		conn, err := listener.Accept()
 		if err != nil {
 			return err
 		}
-
 		go s.ServeStream(context.Background(), conn)
 	}
 }
