@@ -47,6 +47,10 @@ func TestDecodeStruct(t *testing.T) {
 				B []*Config
 			}{&Config{"hello"}, []*Config{{"hello2"}, {"hello3"}}},
 		},
+		{
+			args: args{ctx, []byte(`{"name":{"@Kind":"hello"},"name2":{"@Kind":"hello2"}}`)},
+			want: &map[string]*Config{"name": {"hello"}, "name2": {"hello2"}},
+		},
 
 		{
 			args: args{ctx, []byte(`{"@Kind":"hello"}`)},
@@ -58,14 +62,18 @@ func TestDecodeStruct(t *testing.T) {
 		},
 		{
 			args: args{ctx, []byte(`{"A":{"@Kind":"hello"}}`)},
-			want: &struct{ A Config }{Config{"hello"}},
+			want: struct{ A Config }{Config{"hello"}},
 		},
 		{
 			args: args{ctx, []byte(`{"A":{"@Kind":"hello"},"B":[{"@Kind":"hello2"},{"@Kind":"hello3"}]}`)},
-			want: &struct {
+			want: struct {
 				A Config
 				B []Config
 			}{Config{"hello"}, []Config{{"hello2"}, {"hello3"}}},
+		},
+		{
+			args: args{ctx, []byte(`{"name":{"@Kind":"hello"},"name2":{"@Kind":"hello2"}}`)},
+			want: map[string]Config{"name": {"hello"}, "name2": {"hello2"}},
 		},
 	}
 

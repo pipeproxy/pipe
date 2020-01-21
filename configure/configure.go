@@ -60,7 +60,9 @@ func (d *decoder) decodeOther(ctx context.Context, config []byte, v reflect.Valu
 
 	switch config[0] {
 	case '[':
-		if v := d.indirect(v); v.Kind() == reflect.Slice {
+		v := d.indirect(v)
+		switch v.Kind() {
+		case reflect.Slice:
 			tmp := []json.RawMessage{}
 			err := json.Unmarshal(config, &tmp)
 			if err != nil {
@@ -81,7 +83,28 @@ func (d *decoder) decodeOther(ctx context.Context, config []byte, v reflect.Valu
 			return nil
 		}
 	case '{':
-		if v := d.indirect(v); v.Kind() == reflect.Struct {
+		v := d.indirect(v)
+		switch v.Kind() {
+		case reflect.Map:
+			tmp := map[string]json.RawMessage{}
+			err := json.Unmarshal(config, &tmp)
+			if err != nil {
+				return err
+			}
+			typ := v.Type()
+
+			n := reflect.MakeMap(typ)
+			for key, raw := range tmp {
+				val := reflect.New(typ.Elem())
+				err := d.decode(ctx, raw, val)
+				if err != nil {
+					return err
+				}
+				n.SetMapIndex(reflect.ValueOf(key), val.Elem())
+			}
+			v.Set(n)
+			return nil
+		case reflect.Struct:
 			tmp := map[string]json.RawMessage{}
 			err := json.Unmarshal(config, &tmp)
 			if err != nil {
@@ -114,6 +137,7 @@ func (d *decoder) decodeOther(ctx context.Context, config []byte, v reflect.Valu
 			v.Set(n.Elem())
 			return nil
 		}
+
 	}
 
 	err := json.Unmarshal(config, v.Interface())
