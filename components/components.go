@@ -3,10 +3,10 @@ package components
 import (
 	"context"
 	"crypto/tls"
-	"net"
 	"net/http"
 
 	"github.com/wzshiming/pipe/codec"
+	"github.com/wzshiming/pipe/listener"
 	"github.com/wzshiming/pipe/protocol"
 	"github.com/wzshiming/pipe/service"
 	"github.com/wzshiming/pipe/stream"
@@ -17,7 +17,7 @@ type ctxKeyComponents int
 type Components struct {
 	Decoders         map[string]codec.Decoder
 	Encoders         map[string]codec.Encoder
-	Listeners        map[string]net.Listener
+	Listeners        map[string]listener.ListenConfig
 	Services         map[string]service.Service
 	TlsConfigs       map[string]*tls.Config
 	StreamHandlers   map[string]stream.Handler
