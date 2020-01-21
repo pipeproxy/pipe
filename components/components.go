@@ -17,6 +17,8 @@ type ctxKeyComponents int
 type Components struct {
 	Decoders         map[string]codec.Decoder
 	Encoders         map[string]codec.Encoder
+	Marshalers       map[string]codec.Marshaler
+	Unmarshalers     map[string]codec.Unmarshaler
 	Listeners        map[string]listener.ListenConfig
 	Services         map[string]service.Service
 	TlsConfigs       map[string]*tls.Config

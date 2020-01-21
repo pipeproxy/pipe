@@ -1,11 +1,21 @@
 package codec
 
+import (
+	"io"
+)
+
 type Encoder interface {
-	Encode(v interface{}) error
-	Bytes() []byte
+	Encode(w io.Writer) (io.Writer, error)
 }
 
 type Decoder interface {
-	Decode(v interface{}) error
-	Bytes() []byte
+	Decode(r io.Reader) (io.Reader, error)
+}
+
+type Unmarshaler interface {
+	Unmarshal(buf []byte, v interface{}) error
+}
+
+type Marshaler interface {
+	Marshal(v interface{}) ([]byte, error)
 }

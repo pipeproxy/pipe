@@ -8,14 +8,14 @@ import (
 const name = "json"
 
 func init() {
-	configure.Register(name, NewDecoder)
-	configure.Register(name, NewEncoder)
+	configure.Register(name, NewUnmarshaler)
+	configure.Register(name, NewMarshaler)
 }
 
-func NewEncoder() codec.Encoder {
-	return NewCoder(nil)
+func NewMarshaler() codec.Marshaler {
+	return NewCoder()
 }
 
-func NewDecoder() codec.Decoder {
-	return NewCoder(nil)
+func NewUnmarshaler() codec.Unmarshaler {
+	return NewCoder()
 }
