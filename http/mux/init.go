@@ -41,7 +41,7 @@ func NewMuxWithConfig(conf *Config) (http.Handler, error) {
 			mux.HandlePath(route.Path, route.Handler)
 		}
 		if route.Prefix != "" {
-			mux.HandlePrefix(route.Path, route.Handler)
+			mux.HandlePrefix(route.Prefix, route.Handler)
 		}
 	}
 	return mux, nil
