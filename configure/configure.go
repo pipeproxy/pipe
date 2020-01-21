@@ -241,8 +241,11 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 		r = r.Elem()
 	}
 
-	v = d.indirectTo(v, r.Type().Elem())
-
+	typ := r.Type()
+	if typ.Kind() == reflect.Ptr {
+		typ = typ.Elem()
+	}
+	v = d.indirectTo(v, typ)
 	if v.Kind() != reflect.Interface {
 		r = r.Elem()
 	}
