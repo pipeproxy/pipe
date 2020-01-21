@@ -3,6 +3,9 @@ package init
 import (
 	_ "github.com/wzshiming/pipe/codec/base32"
 	_ "github.com/wzshiming/pipe/codec/base64"
+	_ "github.com/wzshiming/pipe/codec/bzip2"
+	_ "github.com/wzshiming/pipe/codec/gzip"
+	_ "github.com/wzshiming/pipe/codec/hex"
 	_ "github.com/wzshiming/pipe/codec/json"
 	_ "github.com/wzshiming/pipe/codec/ref"
 	_ "github.com/wzshiming/pipe/http"
