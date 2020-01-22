@@ -20,8 +20,15 @@ func NewMulti(multi []http.Handler) *Multi {
 }
 
 func (m *Multi) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	handlers := m.multi
-	for _, handler := range handlers {
+	switch len(m.multi) {
+	case 0:
+	case 1:
+		handler := m.multi[0]
 		handler.ServeHTTP(rw, r)
+	default:
+		handlers := m.multi
+		for _, handler := range handlers {
+			handler.ServeHTTP(rw, r)
+		}
 	}
 }

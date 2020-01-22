@@ -22,8 +22,15 @@ func NewMulti(multi []stream.Handler) *Multi {
 }
 
 func (m *Multi) ServeStream(ctx context.Context, stm stream.Stream) {
-	handlers := m.multi
-	for _, handler := range handlers {
+	switch len(m.multi) {
+	case 0:
+	case 1:
+		handler := m.multi[0]
 		handler.ServeStream(ctx, stm)
+	default:
+		handlers := m.multi
+		for _, handler := range handlers {
+			handler.ServeStream(ctx, stm)
+		}
 	}
 }

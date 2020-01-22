@@ -16,10 +16,7 @@ type Config struct {
 }
 
 func NewMultiWithConfig(conf *Config) (service.Service, error) {
-	switch len(conf.Multi) {
-	case 1:
-		return conf.Multi[0], nil
-	case 0:
+	if len(conf.Multi) == 0 {
 		return nil, ErrNotServer
 	}
 	return NewMulti(conf.Multi), nil
