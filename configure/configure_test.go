@@ -53,6 +53,15 @@ func TestDecodeStruct(t *testing.T) {
 		},
 
 		{
+			args: args{ctx, []byte(`[{"@Kind":"hello","@Name":"name"},{"@Ref":"name"}]`)},
+			want: []*Config{{"hello"}, {"hello"}},
+		},
+		{
+			args: args{ctx, []byte(`[{"@Ref":"name"},{"@Kind":"hello","@Name":"name"}]`)},
+			want: []*Config{{"hello"}, {"hello"}},
+		},
+
+		{
 			args: args{ctx, []byte(`{"@Kind":"hello"}`)},
 			want: Config{"hello"},
 		},
@@ -87,11 +96,6 @@ func TestDecodeStruct(t *testing.T) {
 	}
 
 	for _, f := range fun {
-		stdManager := newDecoderManager()
-		stdDecoder := &decoder{
-			decoderManager: stdManager,
-		}
-
 		err := stdManager.Register("hello", f)
 		if err != nil {
 			t.Fatal(err)
@@ -110,7 +114,8 @@ func TestDecodeStruct(t *testing.T) {
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
 				gotValue := reflect.New(reflect.TypeOf(tt.want))
-				if err := stdDecoder.Decode(tt.args.ctx, tt.args.config, gotValue.Interface()); (err != nil) != tt.wantErr {
+				std := newDecoder()
+				if err := std.Decode(tt.args.ctx, tt.args.config, gotValue.Interface()); (err != nil) != tt.wantErr {
 					t.Errorf("Decode() error = %v, wantErr %v", err, tt.wantErr)
 				}
 
