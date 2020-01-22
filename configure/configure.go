@@ -258,14 +258,14 @@ func (d *decoder) getKind(ctx context.Context, kind string, config []byte, value
 	return ret[0], nil
 }
 func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value) error {
-	//if value.Kind() != reflect.Ptr {
-	//	return ErrParsedParameter
-	//}
-	//
-	//elem := value.Elem()
-	//if !elem.CanSet() {
-	//	return ErrMustBeAssignable
-	//}
+	if value.Kind() != reflect.Ptr {
+		return ErrParsedParameter
+	}
+
+	elem := value.Elem()
+	if !elem.CanSet() {
+		return ErrMustBeAssignable
+	}
 
 	if !d.decoderManager.HasType(value.Type().Elem()) {
 		return d.decodeOther(ctx, config, value)
