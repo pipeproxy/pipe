@@ -10,8 +10,8 @@ type RoundRobin struct {
 	count    uint64
 }
 
-func NewRoundRobin(handlers []http.Handler) *Random {
-	return &Random{handlers: handlers}
+func NewRoundRobin(handlers []http.Handler) *RoundRobin {
+	return &RoundRobin{handlers: handlers}
 }
 
 func (r *RoundRobin) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
