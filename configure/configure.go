@@ -50,8 +50,12 @@ func (d *decoder) Decode(ctx context.Context, config []byte, i interface{}) erro
 	return nil
 }
 
-func (d *decoder) register(name string, v reflect.Value) {
+func (d *decoder) register(name string, v reflect.Value) error {
+	if _, ok := d.temp[name]; ok {
+		return fmt.Errorf("duplicate name %q", name)
+	}
 	d.temp[name] = v
+	return nil
 }
 
 func (d *decoder) lookAt(name string) (reflect.Value, bool) {
@@ -141,8 +145,9 @@ func (d *decoder) decodeStruct(ctx context.Context, config []byte, v reflect.Val
 		}
 
 		if c, ok := tmp[name]; ok {
-			v.Field(i).Set(reflect.Zero(f.Type))
-			err = d.decode(ctx, c, v.Field(i).Addr())
+			field := v.Field(i)
+			field.Set(reflect.Zero(f.Type))
+			err = d.decode(ctx, c, field.Addr())
 			if err != nil {
 				return err
 			}
@@ -187,7 +192,10 @@ func (d *decoder) appendDefer(ref string, value reflect.Value) {
 func (d *decoder) ref(ref string, value reflect.Value) error {
 	v, ok := d.lookAt(ref)
 	if ok {
-		d.set(value, v)
+		err := d.set(value, v)
+		if err != nil {
+			return fmt.Errorf("ref %s: error %w", ref, err)
+		}
 		return nil
 	}
 	return fmt.Errorf("not defined name %q", ref)
@@ -278,7 +286,7 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 		Ref  string `json:"@Ref"`
 	}
 	err := json.Unmarshal(config, &field)
-	if err != nil || (field.Kind == "" && field.Ref == "") {
+	if err != nil {
 		return d.decodeOther(ctx, config, value)
 	}
 
@@ -291,25 +299,34 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 		return nil
 	}
 
-	if field.Kind != "" && r == (reflect.Value{}) {
-		r, err = d.getKind(ctx, field.Kind, config, value)
+	if field.Kind == "" {
+		return d.decodeOther(ctx, config, value)
+	}
+	r, err = d.getKind(ctx, field.Kind, config, value)
+	if err != nil {
+		return err
+	}
+	if field.Name != "" {
+		err := d.register(field.Name, r)
 		if err != nil {
-			return err
+			return fmt.Errorf("config %q: error %w", config, err)
 		}
 	}
 
-	if field.Name != "" {
-		d.register(field.Name, r)
+	err = d.set(value, r)
+	if err != nil {
+		return fmt.Errorf("config %q: error %w", config, err)
 	}
-
-	d.set(value, r)
-
 	return nil
 }
 
-func (d *decoder) set(value, r reflect.Value) {
+func (d *decoder) set(value, r reflect.Value) error {
 	if r.Kind() == reflect.Interface {
 		r = r.Elem()
+	}
+
+	if r.Kind() == reflect.Invalid {
+		return fmt.Errorf("got %s, want %s", r.String(), value.String())
 	}
 
 	typ := r.Type()
@@ -321,4 +338,5 @@ func (d *decoder) set(value, r reflect.Value) {
 		r = r.Elem()
 	}
 	value.Set(r)
+	return nil
 }
