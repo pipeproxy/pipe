@@ -1,30 +1,47 @@
 Pipe:
   '@Kind': multi
   Multi:
-    - '@Kind': server
-      Listener:
-        '@Kind': network
-        Network: tcp
-        Address: :8888
-      Handler:
-        '@Kind': multi
-        Multi:
-          - '@Kind': forward
+    - '@Ref': http_server
+
+Components:
+
+  Services:
+    - '@Kind': multi
+      '@Name': http_server
+      Multi:
+        - '@Kind': server
+          Listener:
+            '@Kind': network
             Network: tcp
-            Address: 127.0.0.1:9999
-          - '@Kind': close
-    - '@Kind': server
-      Listener:
-        '@Kind': network
-        Network: tcp
-        Address: :9999
-      Handler:
-        '@Kind': http
-        Handler:
-          '@Kind': mux
-          Routes:
-            - Path: /
-              Handler:
-                '@Kind': direct
-                Body: |
-                  <html><body>This is Pipe {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+            Address: :80
+          Handler:
+            '@Kind': http
+            Handler:
+              '@Ref': page
+        - '@Kind': server
+          Listener:
+            '@Kind': network
+            Network: tcp
+            Address: :443
+          Handler:
+            '@Kind': http
+            TLS:
+              '@Kind': self_signed
+            Handler:
+              '@Ref': page
+
+  HttpHandlers:
+    - '@Kind': mux
+      '@Name': page
+      Routes:
+        - Path: /
+          Handler:
+            '@Kind': direct
+            Body: |
+              <html><body>This is Pipe {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+        - Path: /expvar
+          Handler:
+            '@Kind': expvar
+        - Prefix: /pprof/
+          Handler:
+            '@Kind': pprof
