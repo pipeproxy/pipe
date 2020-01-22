@@ -26,7 +26,7 @@ type Config struct {
 func NewRefWithConfig(ctx context.Context, conf *Config) (service.Service, error) {
 	components, ok := components.GetCtxComponents(ctx)
 	if !ok || components == nil || components.Services == nil {
-		return nil, ErrNotService
+		return nil, fmt.Errorf("%s: %w", conf.Ref, ErrNotService)
 	}
 	service, ok := components.Services[conf.Ref]
 	if !ok {

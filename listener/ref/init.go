@@ -27,7 +27,7 @@ type Config struct {
 func NewRefWithConfig(ctx context.Context, conf *Config) (listener.ListenConfig, error) {
 	components, ok := components.GetCtxComponents(ctx)
 	if !ok || components == nil || components.Listeners == nil {
-		return nil, ErrNotListener
+		return nil, fmt.Errorf("%s: %w", conf.Ref, ErrNotListener)
 	}
 	listenConfig, ok := components.Listeners[conf.Ref]
 	if !ok {

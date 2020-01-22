@@ -27,7 +27,7 @@ type Config struct {
 func NewRefWithConfig(ctx context.Context, conf *Config) (protocol.Handler, error) {
 	components, ok := components.GetCtxComponents(ctx)
 	if !ok || components == nil || components.ProtocolHandlers == nil {
-		return nil, ErrNotHandler
+		return nil, fmt.Errorf("%s: %w", conf.Ref, ErrNotHandler)
 	}
 	handler, ok := components.ProtocolHandlers[conf.Ref]
 	if !ok {
