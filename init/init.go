@@ -12,6 +12,7 @@ import (
 	_ "github.com/wzshiming/pipe/http/direct"
 	_ "github.com/wzshiming/pipe/http/expvar"
 	_ "github.com/wzshiming/pipe/http/file"
+	_ "github.com/wzshiming/pipe/http/forward"
 	_ "github.com/wzshiming/pipe/http/multi"
 	_ "github.com/wzshiming/pipe/http/mux"
 	_ "github.com/wzshiming/pipe/http/poller"
