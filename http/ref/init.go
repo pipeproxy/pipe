@@ -25,7 +25,7 @@ type Config struct {
 
 func NewRefWithConfig(ctx context.Context, conf *Config) (http.Handler, error) {
 	components, ok := components.GetCtxComponents(ctx)
-	if !ok || components == nil || components.StreamHandlers == nil {
+	if !ok || components == nil || components.HttpHandlers == nil {
 		return nil, ErrNotHandler
 	}
 	handler, ok := components.HttpHandlers[conf.Ref]

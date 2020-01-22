@@ -29,7 +29,7 @@ type Config struct {
 
 func NewRefEncoderWithConfig(ctx context.Context, conf *Config) (codec.Encoder, error) {
 	components, ok := components.GetCtxComponents(ctx)
-	if !ok || components == nil || components.StreamHandlers == nil {
+	if !ok || components == nil || components.Encoders == nil {
 		return nil, ErrNotCodec
 	}
 	encoder, ok := components.Encoders[conf.Ref]
@@ -41,7 +41,7 @@ func NewRefEncoderWithConfig(ctx context.Context, conf *Config) (codec.Encoder, 
 
 func NewRefDecoderWithConfig(ctx context.Context, conf *Config) (codec.Decoder, error) {
 	components, ok := components.GetCtxComponents(ctx)
-	if !ok || components == nil || components.StreamHandlers == nil {
+	if !ok || components == nil || components.Decoders == nil {
 		return nil, ErrNotCodec
 	}
 	decoder, ok := components.Decoders[conf.Ref]
@@ -53,7 +53,7 @@ func NewRefDecoderWithConfig(ctx context.Context, conf *Config) (codec.Decoder, 
 
 func NewRefMarshalerWithConfig(ctx context.Context, conf *Config) (codec.Marshaler, error) {
 	components, ok := components.GetCtxComponents(ctx)
-	if !ok || components == nil || components.StreamHandlers == nil {
+	if !ok || components == nil || components.Marshalers == nil {
 		return nil, ErrNotCodec
 	}
 	marshaler, ok := components.Marshalers[conf.Ref]
@@ -65,7 +65,7 @@ func NewRefMarshalerWithConfig(ctx context.Context, conf *Config) (codec.Marshal
 
 func NewRefUnmarshalerWithConfig(ctx context.Context, conf *Config) (codec.Unmarshaler, error) {
 	components, ok := components.GetCtxComponents(ctx)
-	if !ok || components == nil || components.StreamHandlers == nil {
+	if !ok || components == nil || components.Unmarshalers == nil {
 		return nil, ErrNotCodec
 	}
 	unmarshaler, ok := components.Unmarshalers[conf.Ref]

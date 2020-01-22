@@ -25,7 +25,7 @@ type Config struct {
 
 func NewRefWithConfig(ctx context.Context, conf *Config) (*tls.Config, error) {
 	components, ok := components.GetCtxComponents(ctx)
-	if !ok || components == nil || components.StreamHandlers == nil {
+	if !ok || components == nil || components.TlsConfigs == nil {
 		return nil, ErrNotTlsConfig
 	}
 	tlsConfig, ok := components.TlsConfigs[conf.Ref]
