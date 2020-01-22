@@ -164,21 +164,21 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 		return d.decodeOther(ctx, config, v)
 	}
 
-	var nameField struct {
-		Name string `json:"@Kind"`
+	var field struct {
+		Kind string `json:"@Kind"`
 	}
-	err := json.Unmarshal(config, &nameField)
-	if err != nil || nameField.Name == "" {
+	err := json.Unmarshal(config, &field)
+	if err != nil || field.Kind == "" {
 		return d.decodeOther(ctx, config, v)
 	}
 
-	fun, ok := d.decoderManager.Get(nameField.Name, v.Type().Elem())
+	fun, ok := d.decoderManager.Get(field.Kind, v.Type().Elem())
 	if !ok {
-		return fmt.Errorf("not defined name %q of %s", nameField.Name, v.Type().Elem())
+		return fmt.Errorf("not defined name %q of %s", field.Kind, v.Type().Elem())
 	}
 
 	inj := inject.NewInjector(nil)
-	args := []interface{}{&ctx, nameField.Name, config}
+	args := []interface{}{&ctx, field.Kind, config}
 	for _, arg := range args {
 		err := inj.Map(reflect.ValueOf(arg))
 		if err != nil {
