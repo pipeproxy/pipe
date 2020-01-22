@@ -1,11 +1,11 @@
 package http
 
 import (
-	"crypto/tls"
 	"net/http"
 
 	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/stream"
+	"github.com/wzshiming/pipe/tls"
 )
 
 func init() {
@@ -14,9 +14,12 @@ func init() {
 
 type Config struct {
 	Handler http.Handler
-	TLS     *tls.Config
+	TLS     tls.TLS
 }
 
 func NewServerWithConfig(conf *Config) stream.Handler {
-	return NewServer(conf.Handler, conf.TLS)
+	if conf.TLS == nil {
+		return NewServer(conf.Handler, nil)
+	}
+	return NewServer(conf.Handler, conf.TLS.TLS())
 }

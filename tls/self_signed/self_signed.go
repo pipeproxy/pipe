@@ -7,6 +7,7 @@ import (
 	"crypto/ed25519"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
@@ -15,6 +16,21 @@ import (
 	"net"
 	"time"
 )
+
+func NewSelfSigned() (*tls.Config, error) {
+	certBytes, keyBytes, err := GenerateSelfSigned("pipe test", []string{"localhost", "127.0.0.1", "::1"}, time.Now(), time.Hour*24)
+	if err != nil {
+		return nil, err
+	}
+	cert, err := tls.X509KeyPair(certBytes, keyBytes)
+	if err != nil {
+		return nil, err
+	}
+	conf := &tls.Config{}
+	conf.ServerName = "localhost"
+	conf.Certificates = append(conf.Certificates, cert)
+	return conf, nil
+}
 
 func GenerateSelfSigned(organization string, host []string, notBefore time.Time, validFor time.Duration) (cert, key []byte, err error) {
 	if len(host) == 0 {

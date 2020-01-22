@@ -2,11 +2,11 @@ package ref
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 
 	"github.com/wzshiming/pipe/components"
 	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/tls"
 )
 
 var (
@@ -23,7 +23,7 @@ type Config struct {
 	Ref string
 }
 
-func NewRefWithConfig(ctx context.Context, conf *Config) (*tls.Config, error) {
+func NewRefWithConfig(ctx context.Context, conf *Config) (tls.TLS, error) {
 	components, ok := components.GetCtxComponents(ctx)
 	if !ok || components == nil || components.TlsConfigs == nil {
 		return nil, ErrNotTlsConfig

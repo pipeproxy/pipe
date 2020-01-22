@@ -1,9 +1,8 @@
 package from_file
 
 import (
-	"crypto/tls"
-
 	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/tls"
 )
 
 const name = "from_file"
@@ -18,6 +17,10 @@ type Config struct {
 	KeyFile  string
 }
 
-func NewFromFileWithConfig(conf *Config) (*tls.Config, error) {
-	return NewFromFile(conf.Domain, conf.CertFile, conf.KeyFile)
+func NewFromFileWithConfig(conf *Config) (tls.TLS, error) {
+	tlsConfig, err := NewFromFile(conf.Domain, conf.CertFile, conf.KeyFile)
+	if err != nil {
+		return nil, err
+	}
+	return tls.NewConfig(tlsConfig), nil
 }
