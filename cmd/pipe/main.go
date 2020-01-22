@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 
 	_ "github.com/wzshiming/pipe/init"
 
@@ -27,13 +28,18 @@ func init() {
 }
 
 func main() {
+	conf, err := filepath.Abs(conf)
+	if err != nil {
+		log.Printf("[ERROR] error: %s", err.Error())
+	}
 
 	c, err := ioutil.ReadFile(conf)
 	if err != nil {
-		log.Printf("[ERROR] reader config file error: %s", err.Error())
+		log.Printf("[ERROR] read config file %q error: %s", conf, err.Error())
 		return
 	}
 
+	log.Printf("[INFO] start pipe with config file %q", conf)
 	c, err = yaml.YAMLToJSON(c)
 	if err != nil {
 		log.Printf("[ERROR] converts config YAML to JSON error: %s", err.Error())
