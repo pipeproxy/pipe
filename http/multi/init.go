@@ -17,7 +17,7 @@ type Config struct {
 }
 
 func NewMultiWithConfig(conf *Config) (http.Handler, error) {
-	if len(conf.Multi) != 0 {
+	if len(conf.Multi) == 0 {
 		return nil, ErrNotHandler
 	}
 	return NewMulti(conf.Multi), nil
