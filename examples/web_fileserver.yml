@@ -1,0 +1,21 @@
+Pipe:
+  '@Ref': server
+
+Components:
+  Services:
+    - '@Kind': multi
+      '@Name': server
+      Multi:
+        - '@Kind': server
+          Listener:
+            '@Kind': network
+            Network: tcp
+            Address: :80
+          Handler:
+            '@Kind': http
+            Handler:
+              '@Ref': page
+
+  HttpHandlers:
+    - '@Kind': file
+      '@Name': page
