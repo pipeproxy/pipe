@@ -14,6 +14,7 @@ import (
 	_ "github.com/wzshiming/pipe/http/file"
 	_ "github.com/wzshiming/pipe/http/multi"
 	_ "github.com/wzshiming/pipe/http/mux"
+	_ "github.com/wzshiming/pipe/http/poller"
 	_ "github.com/wzshiming/pipe/http/pprof"
 	_ "github.com/wzshiming/pipe/http/remove_request_header"
 	_ "github.com/wzshiming/pipe/http/remove_response_header"
@@ -26,6 +27,7 @@ import (
 	_ "github.com/wzshiming/pipe/stream/http"
 	_ "github.com/wzshiming/pipe/stream/multi"
 	_ "github.com/wzshiming/pipe/stream/mux"
+	_ "github.com/wzshiming/pipe/stream/poller"
 	_ "github.com/wzshiming/pipe/tls/from_file"
 	_ "github.com/wzshiming/pipe/tls/self_signed"
 
