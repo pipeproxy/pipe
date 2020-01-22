@@ -47,6 +47,11 @@ func main() {
 		return
 	}
 
+	if svc == nil {
+		log.Printf("[ERROR] configure config %q", c)
+		return
+	}
+
 	err = svc.Run()
 	if err != nil {
 		log.Printf("[ERROR] start error: %s", err.Error())

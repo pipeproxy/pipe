@@ -168,15 +168,13 @@ func (d *decoder) decode(ctx context.Context, config []byte, v reflect.Value) er
 		Name string `json:"@Kind"`
 	}
 	err := json.Unmarshal(config, &nameField)
-	if err != nil {
+	if err != nil || nameField.Name == "" {
 		return d.decodeOther(ctx, config, v)
 	}
-	if nameField.Name == "" {
-		return d.decodeOther(ctx, config, v)
-	}
+
 	fun, ok := d.decoderManager.Get(nameField.Name, v.Type().Elem())
 	if !ok {
-		return d.decodeOther(ctx, config, v)
+		return fmt.Errorf("not defined name %q of %s", nameField.Name, v.Type().Elem())
 	}
 
 	inj := inject.NewInjector(nil)
