@@ -19,12 +19,12 @@ type Components struct {
 	Encoders         map[string]codec.Encoder
 	Marshalers       map[string]codec.Marshaler
 	Unmarshalers     map[string]codec.Unmarshaler
-	Listeners        map[string]listener.ListenConfig
-	Services         map[string]service.Service
 	TlsConfigs       map[string]tls.TLS
-	StreamHandlers   map[string]stream.Handler
+	Listeners        map[string]listener.ListenConfig
 	HttpHandlers     map[string]http.Handler
 	ProtocolHandlers map[string]protocol.Handler
+	StreamHandlers   map[string]stream.Handler
+	Services         map[string]service.Service
 }
 
 func PutCtxComponents(ctx context.Context, components *Components) context.Context {
