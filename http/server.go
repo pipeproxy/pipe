@@ -3,55 +3,44 @@ package http
 import (
 	"context"
 	"crypto/tls"
+	"io"
 	"log"
 	"net"
 	"net/http"
-	"sync"
 
 	"github.com/wzshiming/pipe"
 	"github.com/wzshiming/pipe/stream"
 )
 
 type server struct {
-	ch       chan net.Conn
-	listener *Listener
-	handler  http.Handler
-	tls      *tls.Config
-	once     sync.Once
-	svc      *http.Server
+	handler http.Handler
+	tls     *tls.Config
 }
 
 func NewServer(handler http.Handler, tls *tls.Config) *server {
 	s := &server{
-		handler:  handler,
-		listener: NewListener(),
-		tls:      tls,
-	}
-	s.svc = &http.Server{
-		Handler: s,
+		handler: handler,
+		tls:     tls,
 	}
 	return s
 }
 
-func (s *server) Close() {
-	s.listener.Close()
-	s.svc.Close()
-}
-
-func (s *server) start() {
-	go s.run()
-}
-
-func (s *server) run() {
+func (s *server) serve(ctx context.Context, listener net.Listener) {
+	var svc = http.Server{
+		Handler:   s,
+		TLSConfig: s.tls,
+		BaseContext: func(net.Listener) context.Context {
+			return ctx
+		},
+	}
 	if s.tls == nil {
-		err := s.svc.Serve(s.listener)
-		if err != nil {
+		err := svc.Serve(listener)
+		if err != nil && err != io.ErrClosedPipe {
 			log.Println("[ERROR] [http]", err)
 		}
 	} else {
-		s.svc.TLSConfig = s.tls
-		err := s.svc.ServeTLS(s.listener, "", "")
-		if err != nil {
+		err := svc.ServeTLS(listener, "", "")
+		if err != nil && err != io.ErrClosedPipe {
 			log.Println("[ERROR] [http]", err)
 		}
 	}
@@ -63,6 +52,5 @@ func (s *server) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
-	s.once.Do(s.start)
-	s.listener.Send(stm)
+	s.serve(ctx, &singleConnListener{stm})
 }

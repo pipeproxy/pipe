@@ -5,49 +5,23 @@ import (
 	"net"
 )
 
-type Listener struct {
-	ch chan net.Conn
+type singleConnListener struct {
+	conn net.Conn
 }
 
-func NewListener() *Listener {
-	return &Listener{
-		ch: make(chan net.Conn),
-	}
-}
-
-// Send a conn to listener.
-func (l *Listener) Send(conn net.Conn) error {
-	l.ch <- conn
-	return nil
-}
-
-// Accept waits for and returns the next connection to the listener.
-func (l *Listener) Accept() (net.Conn, error) {
-	conn, ok := <-l.ch
-	if !ok {
+func (l *singleConnListener) Accept() (net.Conn, error) {
+	conn := l.conn
+	if conn == nil {
 		return nil, io.ErrClosedPipe
 	}
+	l.conn = nil
 	return conn, nil
 }
 
-// Close closes the listener.
-// Any blocked Accept operations will be unblocked and return errors.
-func (l *Listener) Close() error {
-	close(l.ch)
+func (l *singleConnListener) Close() error {
 	return nil
 }
 
-// Addr returns the listener's network address.
-func (l *Listener) Addr() net.Addr {
-	return noneAddr{}
-}
-
-type noneAddr struct {
-}
-
-func (noneAddr) Network() string {
-	return "none"
-}
-func (noneAddr) String() string {
-	return "none"
+func (l *singleConnListener) Addr() net.Addr {
+	return nil
 }
