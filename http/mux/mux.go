@@ -63,17 +63,19 @@ func (m *Mux) Handler(path string) (handler http.Handler, err error) {
 	}
 	parent := m.trie.Mapping()
 	data, _, _ := parent.Get(*(*[]byte)(unsafe.Pointer(&path)))
-	conn, ok := m.getHandler(data)
-	if ok {
-		handler = conn
-	}
-	if handler == nil {
-		if m.notFound == nil {
-			return nil, ErrNotFound
+	if len(data) != 0 {
+		conn, ok := m.getHandler(data)
+		if ok {
+			handler = conn
 		}
-		handler = m.notFound
 	}
-	return handler, nil
+	if handler != nil {
+		return handler, nil
+	}
+	if m.notFound == nil {
+		return nil, ErrNotFound
+	}
+	return m.notFound, nil
 }
 
 func (m *Mux) handle(prefix string, buf []byte) {
