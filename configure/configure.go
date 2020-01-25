@@ -16,10 +16,8 @@ var (
 	ErrMustBeAssignable = fmt.Errorf("must be assignable")
 )
 
-var stdDecoder = newDecoder()
-
 func Decode(ctx context.Context, config []byte, i interface{}) error {
-	return stdDecoder.Decode(ctx, config, i)
+	return newDecoder().Decode(ctx, config, i)
 }
 
 type decoder struct {

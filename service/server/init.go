@@ -18,6 +18,6 @@ type Config struct {
 	Handler  stream.Handler
 }
 
-func NewServerWithConfig(conf *Config) service.Service {
+func NewServerWithConfig(conf *Config) (service.Service, error) {
 	return NewServer(conf.Listener, conf.Handler)
 }

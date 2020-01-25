@@ -2,14 +2,14 @@ package network
 
 import (
 	"context"
-	"log"
 	"net"
+
+	"github.com/wzshiming/pipe/internal/network"
 )
 
 type Network struct {
-	network      string
-	address      string
-	listenConfig net.ListenConfig
+	network string
+	address string
 }
 
 func NewNetwork(network string, address string) *Network {
@@ -20,6 +20,5 @@ func NewNetwork(network string, address string) *Network {
 }
 
 func (n *Network) Listen(ctx context.Context) (net.Listener, error) {
-	log.Printf("[INFO] Listen to %s://%s", n.network, n.address)
-	return n.listenConfig.Listen(ctx, n.network, n.address)
+	return network.Listen(n.network, n.address)
 }

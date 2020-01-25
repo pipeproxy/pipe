@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"io"
 	"net"
 
 	"github.com/wzshiming/pipe/listener"
@@ -14,28 +15,27 @@ type Server struct {
 	handler      stream.Handler
 }
 
-func NewServer(listener listener.ListenConfig, handler stream.Handler) *Server {
-	return &Server{
-		listenConfig: listener,
+func NewServer(listenConfig listener.ListenConfig, handler stream.Handler) (*Server, error) {
+	s := &Server{
+		listenConfig: listenConfig,
 		handler:      handler,
 	}
-}
-
-func (s *Server) Reload(handler stream.Handler) error {
-	s.handler = handler
-	return nil
-}
-
-func (s *Server) Run() error {
 	listener, err := s.listenConfig.Listen(context.Background())
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	s.listener = listener
+	return s, nil
+}
+
+func (s *Server) Run() error {
 	for {
-		conn, err := listener.Accept()
+		conn, err := s.listener.Accept()
 		if err != nil {
+			if err == io.ErrClosedPipe {
+				return nil
+			}
 			return err
 		}
 		go s.ServeStream(context.Background(), conn)
