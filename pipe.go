@@ -4,46 +4,57 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/wzshiming/pipe/once"
-
 	"github.com/wzshiming/pipe/configure"
-	"github.com/wzshiming/pipe/service"
 	"golang.org/x/sync/errgroup"
 )
 
 type Pipe struct {
-	init  []once.Once
-	pipe  service.Service
+	conf  *Config
 	group errgroup.Group
 	ctx   context.Context
 }
 
+type pipeCtxKeyType int
+
+func GetPipeWithContext(ctx context.Context) (*Pipe, bool) {
+	i := ctx.Value(pipeCtxKeyType(0))
+	if i == nil {
+		return nil, false
+	}
+	p, ok := i.(*Pipe)
+	return p, ok
+}
+
 func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
-	conf := &Config{}
-	err := configure.Decode(ctx, config, conf)
+	c := &Pipe{}
+	c.conf = &Config{}
+	c.ctx = context.WithValue(ctx, pipeCtxKeyType(0), c.conf)
+	err := configure.Decode(ctx, config, c.conf)
 	if err != nil {
 		return nil, err
 	}
-	if conf.Pipe == nil {
+
+	if c.conf.Pipe == nil {
 		return nil, fmt.Errorf("no entry pipe field")
 	}
-
-	return &Pipe{
-		pipe: conf.Pipe,
-		init: conf.Init,
-		ctx:  ctx,
-	}, nil
+	return c, nil
 }
 
 func (c *Pipe) Run() error {
-	for _, init := range c.init {
-		init.Do()
-	}
-	c.group.Go(c.pipe.Run)
+	c.run()
 	return c.group.Wait()
 }
 
+func (c *Pipe) run() {
+	for _, init := range c.conf.Init {
+		init.Do()
+	}
+	c.group.Go(c.conf.Pipe.Run)
+}
+
 func (c *Pipe) Reload(config []byte) error {
+	closeOld := c.conf.Pipe.Close
+
 	conf := &Config{}
 	err := configure.Decode(c.ctx, config, conf)
 	if err != nil {
@@ -53,16 +64,13 @@ func (c *Pipe) Reload(config []byte) error {
 		return fmt.Errorf("no entry pipe field")
 	}
 
-	for _, init := range conf.Init {
-		init.Do()
-	}
-	c.group.Go(conf.Pipe.Run)
-	c.pipe.Close()
-	c.pipe = conf.Pipe
-	c.init = conf.Init
+	defer closeOld()
+
+	c.conf = conf
+	c.run()
 	return nil
 }
 
 func (c *Pipe) Close() error {
-	return c.pipe.Close()
+	return c.conf.Pipe.Close()
 }
