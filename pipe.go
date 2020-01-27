@@ -4,14 +4,18 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/wzshiming/pipe/once"
+
 	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/service"
 	"golang.org/x/sync/errgroup"
 )
 
 type Pipe struct {
+	init  []once.Once
 	pipe  service.Service
 	group errgroup.Group
+	ctx   context.Context
 }
 
 func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
@@ -26,23 +30,36 @@ func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 
 	return &Pipe{
 		pipe: conf.Pipe,
+		init: conf.Init,
+		ctx:  ctx,
 	}, nil
 }
 
 func (c *Pipe) Run() error {
+	for _, init := range c.init {
+		init.Do()
+	}
 	c.group.Go(c.pipe.Run)
 	return c.group.Wait()
 }
 
-func (c *Pipe) Reload(conf []byte) error {
-	p, err := NewPipeWithConfig(context.Background(), conf)
+func (c *Pipe) Reload(config []byte) error {
+	conf := &Config{}
+	err := configure.Decode(c.ctx, config, conf)
 	if err != nil {
 		return err
 	}
+	if conf.Pipe == nil {
+		return fmt.Errorf("no entry pipe field")
+	}
 
-	c.group.Go(p.pipe.Run)
+	for _, init := range conf.Init {
+		init.Do()
+	}
+	c.group.Go(conf.Pipe.Run)
 	c.pipe.Close()
-	c.pipe = p.pipe
+	c.pipe = conf.Pipe
+	c.init = conf.Init
 	return nil
 }
 
