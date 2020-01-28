@@ -2,40 +2,39 @@ Pipe:
   '@Ref': server
 
 Components:
-  Services:
-    - '@Kind': multi
-      '@Name': server
-      Multi:
-        - '@Kind': server
-          Listener:
-            '@Kind': network
-            Network: tcp
-            Address: :80
-          Handler:
-            '@Kind': http
-            Handler:
-              '@Kind': redirect
-              Code: 302
-              Location: '{{.Scheme}}s://{{.Host}}{{.RequestURI}}'
-        - '@Kind': server
-          Listener:
-            '@Kind': network
-            Network: tcp
-            Address: :443
-          Handler:
-            '@Kind': http
-            TLS:
-              '@Kind': self_signed
-            Handler:
-              '@Ref': page
 
-  HttpHandlers:
-    - '@Kind': mux
-      '@Name': page
-      Routes:
-        - Prefix: /
+  - '@Kind': github.com/wzshiming/pipe/service.Service@multi
+    '@Name': server
+    Multi:
+      - '@Kind': server
+        Listener:
+          '@Kind': network
+          Network: tcp
+          Address: :80
+        Handler:
+          '@Kind': http
           Handler:
-            '@Kind': direct
-            Body: |
-              <html><body>This is Pipe page {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+            '@Kind': redirect
+            Code: 302
+            Location: '{{.Scheme}}s://{{.Host}}{{.RequestURI}}'
+      - '@Kind': server
+        Listener:
+          '@Kind': network
+          Network: tcp
+          Address: :443
+        Handler:
+          '@Kind': http
+          TLS:
+            '@Kind': self_signed
+          Handler:
+            '@Ref': page
+
+  - '@Kind': net/http.Handler@mux
+    '@Name': page
+    Routes:
+      - Prefix: /
+        Handler:
+          '@Kind': direct
+          Body: |
+            <html><body>This is Pipe page {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
 

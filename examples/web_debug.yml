@@ -2,40 +2,38 @@ Pipe:
   '@Ref': server
 
 Components:
-  Services:
-    - '@Kind': multi
-      '@Name': server
-      Multi:
-        - '@Kind': server
-          Listener:
-            '@Kind': network
-            Network: tcp
-            Address: :80
+  - '@Kind': github.com/wzshiming/pipe/service.Service@multi
+    '@Name': server
+    Multi:
+      - '@Kind': server
+        Listener:
+          '@Kind': network
+          Network: tcp
+          Address: :80
+        Handler:
+          '@Kind': http
           Handler:
-            '@Kind': http
-            Handler:
-              '@Ref': page
+            '@Ref': page
 
-  HttpHandlers:
-    - '@Kind': mux
-      '@Name': page
-      Routes:
-        - Path: /
-          Handler:
-            '@Kind': multi
-            Multi:
-              - '@Kind': add_response_header
-                Key: Content-Type
-                Value: 'text/html; charset=utf-8'
-              - '@Kind': direct
-                Body: |
-                  <pre>
-                  <a href="./expvar/">./expvar/</a>
-                  <a href="./pprof/">./pprof/</a>
-                  </pre>
-        - Path: /expvar/
-          Handler:
-            '@Kind': expvar
-        - Prefix: /pprof/
-          Handler:
-            '@Kind': pprof
+  - '@Kind': net/http.Handler@mux
+    '@Name': page
+    Routes:
+      - Path: /
+        Handler:
+          '@Kind': multi
+          Multi:
+            - '@Kind': add_response_header
+              Key: Content-Type
+              Value: 'text/html; charset=utf-8'
+            - '@Kind': direct
+              Body: |
+                <pre>
+                <a href="./expvar/">./expvar/</a>
+                <a href="./pprof/">./pprof/</a>
+                </pre>
+      - Path: /expvar/
+        Handler:
+          '@Kind': expvar
+      - Prefix: /pprof/
+        Handler:
+          '@Kind': pprof

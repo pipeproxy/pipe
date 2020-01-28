@@ -4,44 +4,41 @@ Pipe:
     - '@Ref': http_server
 
 Components:
+  - '@Kind': github.com/wzshiming/pipe/service.Service@multi
+    '@Name': http_server
+    Multi:
+      - '@Kind': server
+        Listener:
+          '@Kind': network
+          Network: tcp
+          Address: :80
+        Handler:
+          '@Kind': http
+          Handler:
+            '@Ref': page
+      - '@Kind': server
+        Listener:
+          '@Kind': network
+          Network: tcp
+          Address: :443
+        Handler:
+          '@Kind': http
+          TLS:
+            '@Kind': self_signed
+          Handler:
+            '@Ref': page
 
-  Services:
-    - '@Kind': multi
-      '@Name': http_server
-      Multi:
-        - '@Kind': server
-          Listener:
-            '@Kind': network
-            Network: tcp
-            Address: :80
-          Handler:
-            '@Kind': http
-            Handler:
-              '@Ref': page
-        - '@Kind': server
-          Listener:
-            '@Kind': network
-            Network: tcp
-            Address: :443
-          Handler:
-            '@Kind': http
-            TLS:
-              '@Kind': self_signed
-            Handler:
-              '@Ref': page
-
-  HttpHandlers:
-    - '@Kind': mux
-      '@Name': page
-      Routes:
-        - Path: /
-          Handler:
-            '@Kind': direct
-            Body: |
-              <html><body>This is Pipe {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
-        - Path: /expvar
-          Handler:
-            '@Kind': expvar
-        - Prefix: /pprof/
-          Handler:
-            '@Kind': pprof
+  - '@Kind': net/http.Handler@mux
+    '@Name': page
+    Routes:
+      - Path: /
+        Handler:
+          '@Kind': direct
+          Body: |
+            <html><body>This is Pipe {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+      - Path: /expvar
+        Handler:
+          '@Kind': expvar
+      - Prefix: /pprof/
+        Handler:
+          '@Kind': pprof
