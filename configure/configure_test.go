@@ -17,6 +17,8 @@ type Adapter interface {
 }
 
 func TestDecodeStruct(t *testing.T) {
+
+	var interfaceDate interface{} = &Config{"hello"}
 	ctx := context.Background()
 	type args struct {
 		ctx    context.Context
@@ -28,6 +30,19 @@ func TestDecodeStruct(t *testing.T) {
 		want    interface{}
 		wantErr bool
 	}{
+		{
+			args: args{ctx, []byte(`{"@Kind":"github.com/wzshiming/pipe/configure.Config@hello"}`)},
+			want: &Config{"hello"},
+		},
+		{
+			args: args{ctx, []byte(`{"@Kind":"github.com/wzshiming/pipe/configure.Config@hello"}`)},
+			want: &interfaceDate,
+		},
+		{
+			args:    args{ctx, []byte(`{"@Kind":"hello"}`)},
+			want:    &interfaceDate,
+			wantErr: true,
+		},
 		{
 			args: args{ctx, []byte(`{"@Kind":"hello"}`)},
 			want: &Config{"hello"},
@@ -115,8 +130,12 @@ func TestDecodeStruct(t *testing.T) {
 			t.Run(tt.name, func(t *testing.T) {
 				gotValue := reflect.New(reflect.TypeOf(tt.want))
 				std := newDecoder()
-				if err := std.Decode(tt.args.ctx, tt.args.config, gotValue.Interface()); (err != nil) != tt.wantErr {
+				err := std.Decode(tt.args.ctx, tt.args.config, gotValue.Interface())
+				if (err != nil) != tt.wantErr {
 					t.Errorf("Decode() error = %v, wantErr %v", err, tt.wantErr)
+				}
+				if err != nil {
+					return
 				}
 
 				got := gotValue.Elem().Interface()

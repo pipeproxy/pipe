@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"strings"
 )
 
 var (
@@ -19,6 +20,7 @@ func Register(kind string, fun interface{}) {
 }
 
 type decoderManager struct {
+	typeName   map[string]reflect.Type
 	decoder    map[reflect.Type]map[string]reflect.Value
 	pairs      map[string][]*pair
 	interfaces map[reflect.Type]struct{}
@@ -26,6 +28,7 @@ type decoderManager struct {
 
 func newDecoderManager() *decoderManager {
 	return &decoderManager{
+		typeName:   map[string]reflect.Type{},
 		decoder:    map[reflect.Type]map[string]reflect.Value{},
 		pairs:      map[string][]*pair{},
 		interfaces: map[reflect.Type]struct{}{},
@@ -52,6 +55,8 @@ func (h *decoderManager) Register(kind string, v interface{}) error {
 }
 
 func (h *decoderManager) register(kind string, typ reflect.Type, fun reflect.Value) {
+	typName := strings.Join([]string{typ.PkgPath(), typ.Name()}, ".")
+	h.typeName[typName] = typ
 
 	_, ok := h.decoder[typ]
 	if !ok {
@@ -67,6 +72,18 @@ func (h *decoderManager) register(kind string, typ reflect.Type, fun reflect.Val
 
 		h.interfaces[typ] = struct{}{}
 	}
+}
+
+func (h *decoderManager) LookType(kind string, out0Type reflect.Type) (string, reflect.Type) {
+	if s := strings.SplitN(kind, "@", 2); len(s) == 2 {
+		t, ok := h.typeName[s[0]]
+		if !ok {
+			return kind, out0Type
+		}
+		kind = s[1]
+		return s[1], t
+	}
+	return kind, out0Type
 }
 
 func (h *decoderManager) HasType(out0Type reflect.Type) bool {

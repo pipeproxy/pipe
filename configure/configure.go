@@ -22,42 +22,69 @@ func Decode(ctx context.Context, config []byte, i interface{}) error {
 
 type decoder struct {
 	decoderManager *decoderManager
-	temp           map[string]reflect.Value
-	defers         []func() error
+	Refs           map[string]reflect.Value
+	dependentRef   map[string][]func() error
 }
 
 func newDecoder() *decoder {
 	return &decoder{
 		decoderManager: stdManager,
-		temp:           map[string]reflect.Value{},
+		Refs:           map[string]reflect.Value{},
+		dependentRef:   map[string][]func() error{},
 	}
 }
 
 func (d *decoder) Decode(ctx context.Context, config []byte, i interface{}) error {
 	v := reflect.ValueOf(i)
-	err := d.decode(ctx, config, v)
+	_, err := d.decode(ctx, config, v)
 	if err != nil {
 		return err
 	}
-	for _, def := range d.defers {
-		err = def()
-		if err != nil {
-			return err
+	return nil
+}
+
+func (d *decoder) dependent(names []string, todo func() error) error {
+	switch l := len(names); l {
+	case 0:
+		return todo()
+	case 1:
+		name := names[0]
+		d.dependentRef[name] = append(d.dependentRef[name], todo)
+	default:
+		i := 0
+		for _, name := range names {
+			d.dependentRef[name] = append(d.dependentRef[name], func() error {
+				i++
+				if i == l {
+					return todo()
+				}
+				return nil
+			})
 		}
 	}
+
 	return nil
 }
 
 func (d *decoder) register(name string, v reflect.Value) error {
-	if _, ok := d.temp[name]; ok {
+	if _, ok := d.Refs[name]; ok {
 		return fmt.Errorf("duplicate name %q", name)
 	}
-	d.temp[name] = v
+	d.Refs[name] = v
+	if dep, ok := d.dependentRef[name]; ok {
+		for _, d := range dep {
+			err := d()
+			if err != nil {
+				return err
+			}
+		}
+		delete(d.dependentRef, name)
+	}
 	return nil
 }
 
 func (d *decoder) lookAt(name string) (reflect.Value, bool) {
-	v, ok := d.temp[name]
+	v, ok := d.Refs[name]
 	return v, ok
 }
 
@@ -84,54 +111,59 @@ func (d *decoder) indirectTo(v reflect.Value, to reflect.Type) reflect.Value {
 	return v
 }
 
-func (d *decoder) decodeSlice(ctx context.Context, config []byte, v reflect.Value) error {
+func (d *decoder) decodeSlice(ctx context.Context, config []byte, v reflect.Value) ([]string, error) {
 	tmp := []json.RawMessage{}
 	err := json.Unmarshal(config, &tmp)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	slice := reflect.MakeSlice(v.Type(), 0, len(tmp))
 	typ := v.Type().Elem()
+	deps := []string{}
 	for i := 0; i != len(tmp); i++ {
 		slice = reflect.Append(slice, reflect.Zero(typ))
-		err = d.decode(ctx, tmp[i], slice.Index(i).Addr())
+		dep, err := d.decode(ctx, tmp[i], slice.Index(i).Addr())
 		if err != nil {
-			return err
+			return nil, err
 		}
+		deps = append(deps, dep...)
 	}
 	v.Set(slice)
-	return nil
+	return deps, nil
 }
 
-func (d *decoder) decodeMap(ctx context.Context, config []byte, v reflect.Value) error {
+func (d *decoder) decodeMap(ctx context.Context, config []byte, v reflect.Value) ([]string, error) {
 	tmp := map[string]json.RawMessage{}
 	err := json.Unmarshal(config, &tmp)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	typ := v.Type()
 	n := reflect.MakeMap(typ)
+	deps := []string{}
 	for key, raw := range tmp {
 		val := reflect.New(typ.Elem())
-		err := d.decode(ctx, raw, val)
+		dep, err := d.decode(ctx, raw, val)
 		if err != nil {
-			return err
+			return nil, err
 		}
+		deps = append(deps, dep...)
 		n.SetMapIndex(reflect.ValueOf(key), val.Elem())
 	}
 	v.Set(n)
-	return nil
+	return deps, nil
 }
 
-func (d *decoder) decodeStruct(ctx context.Context, config []byte, v reflect.Value) error {
+func (d *decoder) decodeStruct(ctx context.Context, config []byte, v reflect.Value) ([]string, error) {
 	tmp := map[string]json.RawMessage{}
 	err := json.Unmarshal(config, &tmp)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	typ := v.Type()
 	v.Set(reflect.Zero(typ))
 	num := typ.NumField()
+	deps := []string{}
 	for i := 0; i != num; i++ {
 		f := typ.Field(i)
 		name := f.Name
@@ -145,16 +177,17 @@ func (d *decoder) decodeStruct(ctx context.Context, config []byte, v reflect.Val
 		if c, ok := tmp[name]; ok {
 			field := v.Field(i)
 			field.Set(reflect.Zero(f.Type))
-			err = d.decode(ctx, c, field.Addr())
+			dep, err := d.decode(ctx, c, field.Addr())
 			if err != nil {
-				return err
+				return nil, err
 			}
+			deps = append(deps, dep...)
 		}
 	}
-	return nil
+	return deps, nil
 }
 
-func (d *decoder) decodeOther(ctx context.Context, config []byte, v reflect.Value) error {
+func (d *decoder) decodeOther(ctx context.Context, config []byte, v reflect.Value) ([]string, error) {
 	config = bytes.TrimSpace(config)
 	switch config[0] {
 	case '[':
@@ -175,22 +208,16 @@ func (d *decoder) decodeOther(ctx context.Context, config []byte, v reflect.Valu
 
 	err := json.Unmarshal(config, v.Interface())
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
-}
-
-func (d *decoder) appendDefer(ref string, value reflect.Value) {
-	d.defers = append(d.defers, func() error {
-		return d.ref(ref, value)
-	})
+	return nil, nil
 }
 
 func (d *decoder) ref(ref string, value reflect.Value) error {
 	v, ok := d.lookAt(ref)
 	if ok {
-		err := d.set(value, v)
+		err := d.set(value, v.Type(), v)
 		if err != nil {
 			return fmt.Errorf("ref %s: error %w", ref, err)
 		}
@@ -199,10 +226,10 @@ func (d *decoder) ref(ref string, value reflect.Value) error {
 	return fmt.Errorf("not defined name %q", ref)
 }
 
-func (d *decoder) getKind(ctx context.Context, kind string, config []byte, value reflect.Value) (reflect.Value, error) {
-	fun, ok := d.decoderManager.Get(kind, value.Type().Elem())
+func (d *decoder) kind(ctx context.Context, name string, kind string, typ reflect.Type, config []byte, value reflect.Value) ([]string, error) {
+	fun, ok := d.decoderManager.Get(kind, typ)
 	if !ok {
-		return reflect.Value{}, fmt.Errorf("not defined name %q of %s", kind, value.Type().Elem())
+		return nil, fmt.Errorf("not defined name %q of %s", kind, value.Type().Elem())
 	}
 
 	inj := inject.NewInjector(nil)
@@ -210,11 +237,12 @@ func (d *decoder) getKind(ctx context.Context, kind string, config []byte, value
 	for _, arg := range args {
 		err := inj.Map(reflect.ValueOf(arg))
 		if err != nil {
-			return reflect.Value{}, fmt.Errorf("pipe.configure error: %w", err)
+			return nil, fmt.Errorf("pipe.configure error: %w", err)
 		}
 	}
 	funType := fun.Type()
 	num := funType.NumIn()
+	deps := []string{}
 	for i := 0; i != num; i++ {
 		in := funType.In(i)
 		switch in.Kind() {
@@ -234,19 +262,39 @@ func (d *decoder) getKind(ctx context.Context, kind string, config []byte, value
 		}
 
 		n := reflect.New(in)
-		err := d.decode(ctx, config, n)
+		dep, err := d.decodeOther(ctx, config, n)
 		if err != nil {
-			return reflect.Value{}, fmt.Errorf("config %q error: %w", config, err)
+			return nil, fmt.Errorf("config %q error: %w", config, err)
 		}
 		err = inj.Map(n)
 		if err != nil {
-			return reflect.Value{}, fmt.Errorf("pipe.configure error: %w", err)
+			return nil, fmt.Errorf("pipe.configure map args error: %w", err)
 		}
+		deps = append(deps, dep...)
+
 	}
 
+	if len(deps) == 0 {
+		err := d.call(inj, fun, name, typ, value)
+		if err != nil {
+			return nil, err
+		}
+		return nil, nil
+	}
+
+	err := d.dependent(deps, func() error {
+		return d.call(inj, fun, name, typ, value)
+	})
+	if err != nil {
+		return nil, err
+	}
+	return deps, nil
+}
+
+func (d *decoder) call(inj *inject.Injector, fun reflect.Value, name string, typ reflect.Type, value reflect.Value) error {
 	ret, err := inj.Call(fun)
 	if err != nil {
-		return reflect.Value{}, fmt.Errorf("pipe.configure error: %w", err)
+		return fmt.Errorf("pipe.configure call error: %w", err)
 	}
 
 	if len(ret) == 2 {
@@ -257,24 +305,34 @@ func (d *decoder) getKind(ctx context.Context, kind string, config []byte, value
 				panic("this should not be performed until")
 			}
 			if err != nil {
-				return reflect.Value{}, fmt.Errorf("pipe.configure error: %w", err)
+				return fmt.Errorf("pipe.configure call error: %w", err)
 			}
 		}
 	}
-	return ret[0], nil
+
+	r := ret[0]
+	if name != "" {
+		err := d.register(name, r)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = d.set(value, typ, r)
+	if err != nil {
+		return err
+	}
+	return nil
 }
-func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value) error {
+
+func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value) ([]string, error) {
 	if value.Kind() != reflect.Ptr {
-		return ErrParsedParameter
+		return nil, ErrParsedParameter
 	}
 
 	elem := value.Elem()
 	if !elem.CanSet() {
-		return ErrMustBeAssignable
-	}
-
-	if !d.decoderManager.HasType(value.Type().Elem()) {
-		return d.decodeOther(ctx, config, value)
+		return nil, ErrMustBeAssignable
 	}
 
 	var field struct {
@@ -288,37 +346,45 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 		return d.decodeOther(ctx, config, value)
 	}
 
-	var r reflect.Value
+	if field.Kind == "" && field.Ref == "" {
+		return d.decodeOther(ctx, config, value)
+	}
+
+	kind := field.Kind
+	typ := value.Type().Elem()
+	kind, typ = d.decoderManager.LookType(kind, typ)
+
+	if !d.decoderManager.HasType(typ) {
+		return nil, fmt.Errorf("not define config")
+	}
+
 	if field.Ref != "" {
 		err := d.ref(field.Ref, value)
 		if err != nil {
-			d.appendDefer(field.Ref, value)
+			dep := []string{field.Ref}
+			err := d.dependent(dep, func() error {
+				return d.ref(field.Ref, value)
+			})
+			if err != nil {
+				return nil, err
+			}
+			return dep, nil
 		}
-		return nil
+		return nil, nil
 	}
 
 	if field.Kind == "" {
 		return d.decodeOther(ctx, config, value)
 	}
-	r, err = d.getKind(ctx, field.Kind, config, value)
+	deps, err := d.kind(ctx, field.Name, kind, typ, config, value)
 	if err != nil {
-		return err
-	}
-	if field.Name != "" {
-		err := d.register(field.Name, r)
-		if err != nil {
-			return fmt.Errorf("config %q: error %w", config, err)
-		}
+		return nil, fmt.Errorf("config %q: error %w", config, err)
 	}
 
-	err = d.set(value, r)
-	if err != nil {
-		return fmt.Errorf("config %q: error %w", config, err)
-	}
-	return nil
+	return deps, nil
 }
 
-func (d *decoder) set(value, r reflect.Value) error {
+func (d *decoder) set(value reflect.Value, typ reflect.Type, r reflect.Value) error {
 	if r.Kind() == reflect.Interface {
 		r = r.Elem()
 	}
@@ -327,7 +393,6 @@ func (d *decoder) set(value, r reflect.Value) error {
 		return fmt.Errorf("got %s, want %s", r.String(), value.String())
 	}
 
-	typ := r.Type()
 	if typ.Kind() == reflect.Ptr {
 		typ = typ.Elem()
 	}
@@ -335,6 +400,7 @@ func (d *decoder) set(value, r reflect.Value) error {
 	if value.Kind() != reflect.Interface {
 		r = r.Elem()
 	}
+
 	value.Set(r)
 	return nil
 }
