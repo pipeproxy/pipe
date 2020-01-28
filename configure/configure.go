@@ -214,12 +214,18 @@ func (d *decoder) decodeOther(ctx context.Context, config []byte, v reflect.Valu
 	return nil, nil
 }
 
-func (d *decoder) ref(ref string, value reflect.Value) error {
+func (d *decoder) ref(name, ref string, value reflect.Value) error {
 	v, ok := d.lookAt(ref)
 	if ok {
 		err := d.set(value, v.Type(), v)
 		if err != nil {
 			return fmt.Errorf("ref %s: error %w", ref, err)
+		}
+		if name != "" {
+			err := d.register(name, v)
+			if err != nil {
+				return err
+			}
 		}
 		return nil
 	}
@@ -350,20 +356,12 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 		return d.decodeOther(ctx, config, value)
 	}
 
-	kind := field.Kind
-	typ := value.Type().Elem()
-	kind, typ = d.decoderManager.LookType(kind, typ)
-
-	if !d.decoderManager.HasType(typ) {
-		return nil, fmt.Errorf("not define config")
-	}
-
 	if field.Ref != "" {
-		err := d.ref(field.Ref, value)
+		err := d.ref(field.Name, field.Ref, value)
 		if err != nil {
 			dep := []string{field.Ref}
 			err := d.dependent(dep, func() error {
-				return d.ref(field.Ref, value)
+				return d.ref(field.Name, field.Ref, value)
 			})
 			if err != nil {
 				return nil, err
@@ -373,9 +371,18 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 		return nil, nil
 	}
 
-	if field.Kind == "" {
+	kind := field.Kind
+	typ := value.Type().Elem()
+	kind, typ = d.decoderManager.LookType(kind, typ)
+
+	if kind == "" {
 		return d.decodeOther(ctx, config, value)
 	}
+
+	if !d.decoderManager.HasType(typ) {
+		return nil, fmt.Errorf("not define config")
+	}
+
 	deps, err := d.kind(ctx, field.Name, kind, typ, config, value)
 	if err != nil {
 		return nil, fmt.Errorf("config %q: error %w", config, err)
