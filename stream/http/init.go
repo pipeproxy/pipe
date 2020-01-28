@@ -1,11 +1,16 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/stream"
 	"github.com/wzshiming/pipe/tls"
+)
+
+var (
+	ErrNotHandler = fmt.Errorf("not handler")
 )
 
 func init() {
@@ -17,9 +22,12 @@ type Config struct {
 	TLS     tls.TLS
 }
 
-func NewServerWithConfig(conf *Config) stream.Handler {
-	if conf.TLS == nil {
-		return NewServer(conf.Handler, nil)
+func NewServerWithConfig(conf *Config) (stream.Handler, error) {
+	if conf.Handler == nil {
+		return nil, ErrNotHandler
 	}
-	return NewServer(conf.Handler, conf.TLS.TLS())
+	if conf.TLS == nil {
+		return NewServer(conf.Handler, nil), nil
+	}
+	return NewServer(conf.Handler, conf.TLS.TLS()), nil
 }

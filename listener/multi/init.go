@@ -16,8 +16,11 @@ type Config struct {
 }
 
 func NewMultiWithConfig(conf *Config) (listener.ListenConfig, error) {
-	if len(conf.Multi) == 0 {
+	switch len(conf.Multi) {
+	case 0:
 		return nil, ErrNotListener
+	case 1:
+		return conf.Multi[0], nil
 	}
 	return NewMulti(conf.Multi), nil
 }
