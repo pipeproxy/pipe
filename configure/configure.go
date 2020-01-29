@@ -22,14 +22,16 @@ func Decode(ctx context.Context, config []byte, i interface{}) error {
 
 type decoder struct {
 	decoderManager *decoderManager
-	Refs           map[string]reflect.Value
+	refs           map[string]reflect.Value
+	exists         map[string]struct{}
 	dependentRef   map[string][]func() error
 }
 
 func newDecoder() *decoder {
 	return &decoder{
 		decoderManager: stdManager,
-		Refs:           map[string]reflect.Value{},
+		refs:           map[string]reflect.Value{},
+		exists:         map[string]struct{}{},
 		dependentRef:   map[string][]func() error{},
 	}
 }
@@ -39,6 +41,16 @@ func (d *decoder) Decode(ctx context.Context, config []byte, i interface{}) erro
 	_, err := d.decode(ctx, config, v)
 	if err != nil {
 		return err
+	}
+
+	need := []string{}
+	for name := range d.dependentRef {
+		if _, ok := d.exists[name]; !ok {
+			need = append(need, name)
+		}
+	}
+	if len(need) != 0 {
+		return fmt.Errorf("missing dependency %v", need)
 	}
 	return nil
 }
@@ -66,11 +78,15 @@ func (d *decoder) dependent(names []string, todo func() error) error {
 	return nil
 }
 
+func (d *decoder) setExists(name string) {
+	d.exists[name] = struct{}{}
+}
+
 func (d *decoder) register(name string, v reflect.Value) error {
-	if _, ok := d.Refs[name]; ok {
+	if _, ok := d.refs[name]; ok {
 		return fmt.Errorf("duplicate name %q", name)
 	}
-	d.Refs[name] = v
+	d.refs[name] = v
 	if dep, ok := d.dependentRef[name]; ok {
 		for _, d := range dep {
 			err := d()
@@ -84,7 +100,7 @@ func (d *decoder) register(name string, v reflect.Value) error {
 }
 
 func (d *decoder) lookAt(name string) (reflect.Value, bool) {
-	v, ok := d.Refs[name]
+	v, ok := d.refs[name]
 	return v, ok
 }
 
@@ -350,6 +366,10 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 	err := json.Unmarshal(config, &field)
 	if err != nil {
 		return d.decodeOther(ctx, config, value)
+	}
+
+	if field.Name != "" {
+		d.setExists(field.Name)
 	}
 
 	if field.Kind == "" && field.Ref == "" {
