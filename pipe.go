@@ -28,7 +28,7 @@ func GetPipeWithContext(ctx context.Context) (*Pipe, bool) {
 func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 	c := &Pipe{}
 	c.conf = &Config{}
-	c.ctx = context.WithValue(ctx, pipeCtxKeyType(0), c.conf)
+	c.ctx = context.WithValue(ctx, pipeCtxKeyType(0), c)
 	err := configure.Decode(ctx, config, c.conf)
 	if err != nil {
 		return nil, err
