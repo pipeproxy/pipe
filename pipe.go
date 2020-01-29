@@ -3,8 +3,11 @@ package pipe
 import (
 	"context"
 	"fmt"
+	"sync"
 
 	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/once"
+	"github.com/wzshiming/pipe/service"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -12,6 +15,9 @@ type Pipe struct {
 	conf  *Config
 	group errgroup.Group
 	ctx   context.Context
+	pipe  service.Service
+	init  []once.Once
+	mut   sync.Mutex
 }
 
 type pipeCtxKeyType int
@@ -41,22 +47,31 @@ func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 }
 
 func (c *Pipe) Run() error {
-	c.run()
+	c.run(c.conf.Pipe, c.conf.Init)
 	return c.group.Wait()
 }
 
-func (c *Pipe) run() {
-	for _, init := range c.conf.Init {
+func (c *Pipe) run(pipe service.Service, init []once.Once) {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+
+	for _, init := range init {
 		init.Do(c.ctx)
 	}
 	run := func() error {
-		return c.conf.Pipe.Run(c.ctx)
+		return pipe.Run(c.ctx)
 	}
 	c.group.Go(run)
+
+	if c.pipe != nil {
+		c := c.pipe.Close
+		defer c()
+	}
+	c.init = init
+	c.pipe = pipe
 }
 
 func (c *Pipe) Reload(config []byte) error {
-	closeOld := c.conf.Pipe.Close
 
 	conf := &Config{}
 	err := configure.Decode(c.ctx, config, conf)
@@ -67,13 +82,16 @@ func (c *Pipe) Reload(config []byte) error {
 		return fmt.Errorf("no entry pipe field")
 	}
 
-	defer closeOld()
+	c.run(conf.Pipe, conf.Init)
 
+	c.mut.Lock()
+	defer c.mut.Unlock()
 	c.conf = conf
-	c.run()
 	return nil
 }
 
 func (c *Pipe) Close() error {
-	return c.conf.Pipe.Close()
+	c.mut.Lock()
+	defer c.mut.Unlock()
+	return c.pipe.Close()
 }
