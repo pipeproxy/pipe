@@ -1,6 +1,7 @@
 package multi
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"sync"
@@ -23,16 +24,16 @@ func NewMulti(multi []service.Service) *Multi {
 	}
 }
 
-func (m *Multi) Run() error {
+func (m *Multi) Run(ctx context.Context) error {
 	switch len(m.multi) {
 	case 0:
 	case 1:
-		return m.multi[0].Run()
+		return m.multi[0].Run(ctx)
 	default:
 		m.wg.Add(len(m.multi))
 		for _, svc := range m.multi {
 			go func(svc service.Service) {
-				err := svc.Run()
+				err := svc.Run(ctx)
 				if err != nil {
 					log.Printf("[ERROR] service start error: %s", err.Error())
 				}

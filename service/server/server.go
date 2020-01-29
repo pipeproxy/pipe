@@ -29,7 +29,7 @@ func NewServer(listenConfig listener.ListenConfig, handler stream.Handler) (*Ser
 	return s, nil
 }
 
-func (s *Server) Run() error {
+func (s *Server) Run(ctx context.Context) error {
 	for {
 		conn, err := s.listener.Accept()
 		if err != nil {
@@ -38,7 +38,7 @@ func (s *Server) Run() error {
 			}
 			return err
 		}
-		go s.ServeStream(context.Background(), conn)
+		go s.ServeStream(ctx, conn)
 	}
 }
 

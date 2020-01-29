@@ -1,5 +1,9 @@
 package once
 
+import (
+	"context"
+)
+
 type Once interface {
-	Do()
+	Do(ctx context.Context)
 }

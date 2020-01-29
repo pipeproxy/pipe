@@ -47,9 +47,12 @@ func (c *Pipe) Run() error {
 
 func (c *Pipe) run() {
 	for _, init := range c.conf.Init {
-		init.Do()
+		init.Do(c.ctx)
 	}
-	c.group.Go(c.conf.Pipe.Run)
+	run := func() error {
+		return c.conf.Pipe.Run(c.ctx)
+	}
+	c.group.Go(run)
 }
 
 func (c *Pipe) Reload(config []byte) error {

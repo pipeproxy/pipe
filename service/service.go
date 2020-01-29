@@ -1,6 +1,10 @@
 package service
 
+import (
+	"context"
+)
+
 type Service interface {
-	Run() error
+	Run(ctx context.Context) error
 	Close() error
 }
