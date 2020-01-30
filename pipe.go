@@ -47,16 +47,22 @@ func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 }
 
 func (c *Pipe) Run() error {
-	c.run(c.conf.Pipe, c.conf.Init)
+	err := c.run(c.conf.Pipe, c.conf.Init)
+	if err != nil {
+		return err
+	}
 	return c.group.Wait()
 }
 
-func (c *Pipe) run(pipe service.Service, init []once.Once) {
+func (c *Pipe) run(pipe service.Service, init []once.Once) error {
 	c.mut.Lock()
 	defer c.mut.Unlock()
 
 	for _, init := range init {
-		init.Do(c.ctx)
+		err := init.Do(c.ctx)
+		if err != nil {
+			return err
+		}
 	}
 	run := func() error {
 		return pipe.Run(c.ctx)
@@ -69,6 +75,7 @@ func (c *Pipe) run(pipe service.Service, init []once.Once) {
 	}
 	c.init = init
 	c.pipe = pipe
+	return nil
 }
 
 func (c *Pipe) Reload(config []byte) error {
@@ -82,7 +89,10 @@ func (c *Pipe) Reload(config []byte) error {
 		return fmt.Errorf("no entry pipe field")
 	}
 
-	c.run(conf.Pipe, conf.Init)
+	err = c.run(conf.Pipe, conf.Init)
+	if err != nil {
+		return err
+	}
 
 	c.mut.Lock()
 	defer c.mut.Unlock()
