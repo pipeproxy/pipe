@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	"sync/atomic"
 )
 
 var (
@@ -18,7 +19,7 @@ func CloseExcess() {
 	defer mut.Unlock()
 	dk := []string{}
 	for k, v := range cache {
-		if v.size == 0 {
+		if atomic.LoadInt32(&v.size) == 0 {
 			v.Close()
 			dk = append(dk, k)
 		}
@@ -88,7 +89,7 @@ func (h *Hub) Listener() *Listener {
 		ch:   h.ch,
 		exit: make(chan struct{}),
 	}
-	h.size++
+	atomic.AddInt32(&h.size, 1)
 	return l
 }
 
@@ -111,7 +112,7 @@ func (l *Listener) Accept() (net.Conn, error) {
 // Close closes the listener.
 func (l *Listener) Close() error {
 	l.closeOnce.Do(func() {
-		l.hub.size--
+		atomic.AddInt32(&l.hub.size, -1)
 		l.exit <- struct{}{}
 	})
 	return nil
