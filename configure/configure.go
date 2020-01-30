@@ -400,7 +400,7 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 	}
 
 	if !d.decoderManager.HasType(typ) {
-		return nil, fmt.Errorf("not define config")
+		return nil, fmt.Errorf("not define config %s %v", kind, typ)
 	}
 
 	deps, err := d.kind(ctx, field.Name, kind, typ, config, value)
