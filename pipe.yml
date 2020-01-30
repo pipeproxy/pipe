@@ -15,7 +15,7 @@ Components:
         Handler:
           '@Kind': http
           Handler:
-            '@Ref': page
+            '@Ref': handle
       - '@Kind': server
         Listener:
           '@Kind': network
@@ -26,7 +26,15 @@ Components:
           TLS:
             '@Kind': self_signed
           Handler:
-            '@Ref': page
+            '@Ref': handle
+
+  - '@Kind': net/http.Handler@log
+    '@Name': handle
+    Output:
+      '@Kind': io.WriteCloser@file
+      Path: /dev/stderr
+    Handler:
+      '@Ref': page
 
   - '@Kind': net/http.Handler@mux
     '@Name': page
