@@ -15,7 +15,15 @@ Components:
         Handler:
           '@Kind': http
           Handler:
-            '@Ref': handle
+            '@Kind': h2c
+            Handler:
+              '@Kind': log
+              Output:
+                '@Kind': file
+                Path: /dev/stderr
+              Handler:
+                '@Ref': handle
+
       - '@Kind': server
         Listener:
           '@Kind': network
@@ -26,7 +34,12 @@ Components:
           TLS:
             '@Kind': self_signed
           Handler:
-            '@Ref': handle
+            '@Kind': log
+            Output:
+              '@Kind': file
+              Path: /dev/stderr
+            Handler:
+              '@Ref': handle
 
   - '@Kind': net/http.Handler@log
     '@Name': handle
@@ -43,10 +56,22 @@ Components:
         Handler:
           '@Kind': direct
           Body: |
-            <html><body>This is Pipe {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
-      - Path: /expvar
+            <html>
+            <body>
+            This is Pipe {{.Scheme}}://{{.Host}}{{.RequestURI}}
+            <pre>
+            <a href="/expvar/">/expvar/</a>
+            <a href="/pprof/">/pprof/</a>
+            <a href="/config_dump/">/config_dump/</a>
+            </pre>
+            </body>
+            </html>
+      - Path: /expvar/
         Handler:
           '@Kind': expvar
       - Prefix: /pprof/
         Handler:
           '@Kind': pprof
+      - Path: /config_dump/
+        Handler:
+          '@Kind': config_dump
