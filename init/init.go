@@ -24,6 +24,7 @@ import (
 	_ "github.com/wzshiming/pipe/http/redirect"
 	_ "github.com/wzshiming/pipe/http/remove_request_header"
 	_ "github.com/wzshiming/pipe/http/remove_response_header"
+	_ "github.com/wzshiming/pipe/http/weighted"
 	_ "github.com/wzshiming/pipe/listener/multi"
 	_ "github.com/wzshiming/pipe/listener/network"
 	_ "github.com/wzshiming/pipe/output/file"
@@ -35,6 +36,7 @@ import (
 	_ "github.com/wzshiming/pipe/stream/multi"
 	_ "github.com/wzshiming/pipe/stream/mux"
 	_ "github.com/wzshiming/pipe/stream/poller"
+	_ "github.com/wzshiming/pipe/stream/weighted"
 	_ "github.com/wzshiming/pipe/tls/from_file"
 	_ "github.com/wzshiming/pipe/tls/self_signed"
 

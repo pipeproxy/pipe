@@ -24,9 +24,13 @@ type Config struct {
 }
 
 func NewPollerWithConfig(conf *Config) (stream.Handler, error) {
-	if len(conf.Handlers) == 0 {
+	switch len(conf.Handlers) {
+	case 0:
 		return nil, ErrNotHandler
+	case 1:
+		return conf.Handlers[0], nil
 	}
+
 	switch conf.Poller {
 	case "random":
 		return NewRandom(conf.Handlers), nil
