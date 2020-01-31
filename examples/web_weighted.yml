@@ -1,0 +1,31 @@
+Pipe:
+  '@Kind': multi
+  Multi:
+    - '@Ref': gateway
+
+Components:
+
+  - '@Kind': github.com/wzshiming/pipe/service.Service@server
+    '@Name': gateway
+    Listener:
+      '@Kind': network
+      Network: tcp
+      Address: :80
+    Handler:
+      '@Kind': http
+      Handler:
+        '@Ref': weighted
+
+  - '@Kind': net/http.Handler@weighted
+    '@Name': weighted
+    Weighted:
+      - Weight: 1
+        Handler:
+          '@Kind': direct
+          Body: |
+            <html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+      - Weight: 2
+        Handler:
+          '@Kind': direct
+          Body: |
+            <html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
