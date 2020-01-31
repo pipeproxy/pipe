@@ -30,8 +30,6 @@ func (f *Forward) ServeStream(ctx context.Context, stm stream.Stream) {
 	}
 	defer conn.Close()
 
-	log.Printf("[INFO] Forward to %s://%s", f.network, f.address)
-
 	go io.Copy(stm, conn)
 	io.Copy(conn, stm)
 }
