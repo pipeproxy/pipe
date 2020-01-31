@@ -15,6 +15,7 @@ import (
 	_ "github.com/wzshiming/pipe/http/expvar"
 	_ "github.com/wzshiming/pipe/http/file"
 	_ "github.com/wzshiming/pipe/http/forward"
+	_ "github.com/wzshiming/pipe/http/h2c"
 	_ "github.com/wzshiming/pipe/http/log"
 	_ "github.com/wzshiming/pipe/http/multi"
 	_ "github.com/wzshiming/pipe/http/mux"
