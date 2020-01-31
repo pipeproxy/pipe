@@ -12,6 +12,7 @@ require (
 	github.com/wzshiming/lockfile v0.0.5
 	github.com/wzshiming/notify v0.0.5
 	github.com/wzshiming/trie v0.0.1
+	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/yaml.v2 v2.2.2 // indirect
