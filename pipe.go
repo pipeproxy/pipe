@@ -12,12 +12,13 @@ import (
 )
 
 type Pipe struct {
-	conf  *Config
-	group errgroup.Group
-	ctx   context.Context
-	pipe  service.Service
-	init  []once.Once
-	mut   sync.Mutex
+	conf   *Config
+	config []byte
+	group  errgroup.Group
+	ctx    context.Context
+	pipe   service.Service
+	init   []once.Once
+	mut    sync.Mutex
 }
 
 type pipeCtxKeyType int
@@ -34,6 +35,7 @@ func GetPipeWithContext(ctx context.Context) (*Pipe, bool) {
 func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 	c := &Pipe{}
 	c.conf = &Config{}
+	c.config = config
 	c.ctx = context.WithValue(ctx, pipeCtxKeyType(0), c)
 	err := configure.Decode(ctx, config, c.conf)
 	if err != nil {
@@ -97,6 +99,7 @@ func (c *Pipe) Reload(config []byte) error {
 	c.mut.Lock()
 	defer c.mut.Unlock()
 	c.conf = conf
+	c.config = config
 	return nil
 }
 
@@ -104,4 +107,10 @@ func (c *Pipe) Close() error {
 	c.mut.Lock()
 	defer c.mut.Unlock()
 	return c.pipe.Close()
+}
+
+func (c *Pipe) Config() []byte {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+	return c.config
 }

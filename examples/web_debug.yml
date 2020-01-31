@@ -30,6 +30,7 @@ Components:
                 <pre>
                 <a href="./expvar/">./expvar/</a>
                 <a href="./pprof/">./pprof/</a>
+                <a href="./config_dump/">./config_dump/</a>
                 </pre>
       - Path: /expvar/
         Handler:
@@ -37,3 +38,6 @@ Components:
       - Prefix: /pprof/
         Handler:
           '@Kind': pprof
+      - Path: /config_dump/
+        Handler:
+          '@Kind': config_dump

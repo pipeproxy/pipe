@@ -10,6 +10,7 @@ import (
 	_ "github.com/wzshiming/pipe/http/add_request_header"
 	_ "github.com/wzshiming/pipe/http/add_response_header"
 	_ "github.com/wzshiming/pipe/http/compress"
+	_ "github.com/wzshiming/pipe/http/config_dump"
 	_ "github.com/wzshiming/pipe/http/direct"
 	_ "github.com/wzshiming/pipe/http/expvar"
 	_ "github.com/wzshiming/pipe/http/file"
