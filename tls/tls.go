@@ -4,18 +4,20 @@ import (
 	"crypto/tls"
 )
 
+type Config = tls.Config
+
 type TLS interface {
-	TLS() *tls.Config
+	TLS() *Config
 }
 
-type Config struct {
-	tlsConfig *tls.Config
+type wrapTLS struct {
+	tlsConfig *Config
 }
 
-func NewConfig(tlsConfig *tls.Config) TLS {
-	return &Config{tlsConfig: tlsConfig}
+func WrapTLS(tlsConfig *Config) TLS {
+	return &wrapTLS{tlsConfig: tlsConfig}
 }
 
-func (t *Config) TLS() *tls.Config {
+func (t *wrapTLS) TLS() *Config {
 	return t.tlsConfig
 }

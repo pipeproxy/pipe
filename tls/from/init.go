@@ -43,5 +43,5 @@ func NewFromWithConfig(conf *Config) (tls.TLS, error) {
 	if err != nil {
 		return nil, err
 	}
-	return tls.NewConfig(tlsConfig), nil
+	return tls.WrapTLS(tlsConfig), nil
 }
