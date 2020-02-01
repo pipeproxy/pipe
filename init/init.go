@@ -25,6 +25,8 @@ import (
 	_ "github.com/wzshiming/pipe/http/remove_request_header"
 	_ "github.com/wzshiming/pipe/http/remove_response_header"
 	_ "github.com/wzshiming/pipe/http/weighted"
+	_ "github.com/wzshiming/pipe/input/file"
+	_ "github.com/wzshiming/pipe/input/inline"
 	_ "github.com/wzshiming/pipe/listener/multi"
 	_ "github.com/wzshiming/pipe/listener/network"
 	_ "github.com/wzshiming/pipe/output/file"
