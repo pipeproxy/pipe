@@ -4,13 +4,13 @@ import (
 	"crypto/tls"
 )
 
-func NewFromFile(domain string, certFile string, keyFile string) (*tls.Config, error) {
-	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
+func NewFromFile(domain string, cert, key []byte) (*tls.Config, error) {
+	pair, err := tls.X509KeyPair(cert, key)
 	if err != nil {
 		return nil, err
 	}
 	conf := &tls.Config{}
 	conf.ServerName = domain
-	conf.Certificates = append(conf.Certificates, cert)
+	conf.Certificates = append(conf.Certificates, pair)
 	return conf, nil
 }

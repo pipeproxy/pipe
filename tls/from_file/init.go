@@ -1,7 +1,10 @@
 package from_file
 
 import (
+	"io/ioutil"
+
 	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/input"
 	"github.com/wzshiming/pipe/tls"
 )
 
@@ -12,13 +15,31 @@ func init() {
 }
 
 type Config struct {
-	Domain   string
-	CertFile string
-	KeyFile  string
+	Domain string
+	Cert   input.Input
+	Key    input.Input
 }
 
 func NewFromFileWithConfig(conf *Config) (tls.TLS, error) {
-	tlsConfig, err := NewFromFile(conf.Domain, conf.CertFile, conf.KeyFile)
+	cert, err := ioutil.ReadAll(conf.Cert)
+	if err != nil {
+		return nil, err
+	}
+	err = conf.Cert.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	key, err := ioutil.ReadAll(conf.Key)
+	if err != nil {
+		return nil, err
+	}
+	err = conf.Key.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	tlsConfig, err := NewFromFile(conf.Domain, cert, key)
 	if err != nil {
 		return nil, err
 	}
