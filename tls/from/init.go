@@ -1,4 +1,4 @@
-package from_file
+package from
 
 import (
 	"io/ioutil"
@@ -8,10 +8,10 @@ import (
 	"github.com/wzshiming/pipe/tls"
 )
 
-const name = "from_file"
+const name = "from"
 
 func init() {
-	configure.Register(name, NewFromFileWithConfig)
+	configure.Register(name, NewFromWithConfig)
 }
 
 type Config struct {
@@ -20,7 +20,7 @@ type Config struct {
 	Key    input.Input
 }
 
-func NewFromFileWithConfig(conf *Config) (tls.TLS, error) {
+func NewFromWithConfig(conf *Config) (tls.TLS, error) {
 	cert, err := ioutil.ReadAll(conf.Cert)
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func NewFromFileWithConfig(conf *Config) (tls.TLS, error) {
 		return nil, err
 	}
 
-	tlsConfig, err := NewFromFile(conf.Domain, cert, key)
+	tlsConfig, err := NewFrom(conf.Domain, cert, key)
 	if err != nil {
 		return nil, err
 	}

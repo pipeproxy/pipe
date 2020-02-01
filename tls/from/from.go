@@ -1,10 +1,10 @@
-package from_file
+package from
 
 import (
 	"crypto/tls"
 )
 
-func NewFromFile(domain string, cert, key []byte) (*tls.Config, error) {
+func NewFrom(domain string, cert, key []byte) (*tls.Config, error) {
 	pair, err := tls.X509KeyPair(cert, key)
 	if err != nil {
 		return nil, err
