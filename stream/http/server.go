@@ -59,10 +59,11 @@ func (s *server) serve(ctx context.Context, listener net.Listener, handler http.
 }
 
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
-	wait := make(chan struct{})
-	s.serve(ctx, &singleConnListener{stm}, http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		s.handler.ServeHTTP(rw, r)
-		wait <- struct{}{}
-	}))
-	<-wait
+	done := make(chan struct{})
+	s.serve(ctx, &singleConnListener{stm},
+		http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+			s.handler.ServeHTTP(rw, r)
+			close(done)
+		}))
+	<-done
 }
