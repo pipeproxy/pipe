@@ -55,17 +55,19 @@ Components:
       - Path: /
         Handler:
           '@Kind': direct
-          Body: |
-            <html>
-            <body>
-            This is Pipe {{.Scheme}}://{{.Host}}{{.RequestURI}}
-            <pre>
-            <a href="/expvar/">/expvar/</a>
-            <a href="/pprof/">/pprof/</a>
-            <a href="/config_dump/">/config_dump/</a>
-            </pre>
-            </body>
-            </html>
+          Body:
+            '@Kind': inline
+            Data: |
+              <html>
+              <body>
+              This is Pipe {{.Scheme}}://{{.Host}}{{.RequestURI}}
+              <pre>
+              <a href="/expvar/">/expvar/</a>
+              <a href="/pprof/">/pprof/</a>
+              <a href="/config_dump/">/config_dump/</a>
+              </pre>
+              </body>
+              </html>
       - Path: /expvar/
         Handler:
           '@Kind': expvar

@@ -26,12 +26,14 @@ Components:
               Key: Content-Type
               Value: 'text/html; charset=utf-8'
             - '@Kind': direct
-              Body: |
-                <pre>
-                <a href="./expvar/">./expvar/</a>
-                <a href="./pprof/">./pprof/</a>
-                <a href="./config_dump/">./config_dump/</a>
-                </pre>
+              Body:
+                '@Kind': inline
+                Data: |
+                  <pre>
+                  <a href="./expvar/">./expvar/</a>
+                  <a href="./pprof/">./pprof/</a>
+                  <a href="./config_dump/">./config_dump/</a>
+                  </pre>
       - Path: /expvar/
         Handler:
           '@Kind': expvar
