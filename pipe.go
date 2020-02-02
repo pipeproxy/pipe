@@ -16,6 +16,7 @@ type Pipe struct {
 	config []byte
 	group  *errgroup.Group
 	ctx    context.Context
+	cancel func()
 	pipe   service.Service
 	init   []once.Once
 	mut    sync.Mutex
@@ -61,24 +62,29 @@ func (c *Pipe) Run() error {
 }
 
 func (c *Pipe) run(pipe service.Service, init []once.Once) error {
+	ctx, cancel := context.WithCancel(c.ctx)
 
 	for _, init := range init {
-		err := init.Do(c.ctx)
+		err := init.Do(ctx)
 		if err != nil {
 			return err
 		}
 	}
 	run := func() error {
-		return pipe.Run(c.ctx)
+		return pipe.Run(ctx)
 	}
 	c.group.Go(run)
 
+	if c.cancel != nil {
+		c.cancel()
+	}
 	if c.pipe != nil {
 		c.pipe.Close()
 	}
 
 	c.init = init
 	c.pipe = pipe
+	c.cancel = cancel
 	return nil
 }
 
@@ -107,6 +113,9 @@ func (c *Pipe) Reload(config []byte) error {
 func (c *Pipe) Close() error {
 	c.mut.Lock()
 	defer c.mut.Unlock()
+	if c.cancel != nil {
+		c.cancel()
+	}
 	return c.pipe.Close()
 }
 

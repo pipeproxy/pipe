@@ -1,6 +1,7 @@
 package network
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"log"
@@ -31,14 +32,14 @@ func CloseExcess() {
 	}
 }
 
-func Listen(network, address string) (net.Listener, error) {
+func Listen(ctx context.Context, network, address string) (net.Listener, error) {
 	mut.Lock()
 	defer mut.Unlock()
 	key := fmt.Sprintf("%s://%s", network, address)
 	n, ok := cache[key]
 	if ok {
 		log.Printf("[INFO] Relisten to %s", key)
-		return n.Listener(), nil
+		return n.Listener(ctx), nil
 	}
 
 	log.Printf("[INFO] Listen to %s", key)
@@ -48,7 +49,7 @@ func Listen(network, address string) (net.Listener, error) {
 	}
 	n = newListener(l)
 	cache[key] = n
-	return n.Listener(), nil
+	return n.Listener(ctx), nil
 }
 
 type Hub struct {
@@ -83,8 +84,9 @@ func (h *Hub) Close() error {
 	return nil
 }
 
-func (h *Hub) Listener() *Listener {
+func (h *Hub) Listener(ctx context.Context) *Listener {
 	l := &Listener{
+		ctx:  ctx,
 		hub:  h,
 		ch:   h.ch,
 		exit: make(chan struct{}),
@@ -94,6 +96,7 @@ func (h *Hub) Listener() *Listener {
 }
 
 type Listener struct {
+	ctx       context.Context
 	closeOnce sync.Once
 	ch        chan net.Conn
 	exit      chan struct{}
@@ -102,6 +105,9 @@ type Listener struct {
 
 func (l *Listener) Accept() (net.Conn, error) {
 	select {
+	case <-l.ctx.Done():
+		l.Close()
+		return nil, l.ctx.Err()
 	case conn := <-l.ch:
 		return conn, nil
 	case <-l.exit:
@@ -113,7 +119,7 @@ func (l *Listener) Accept() (net.Conn, error) {
 func (l *Listener) Close() error {
 	l.closeOnce.Do(func() {
 		atomic.AddInt32(&l.hub.size, -1)
-		l.exit <- struct{}{}
+		close(l.exit)
 	})
 	return nil
 }

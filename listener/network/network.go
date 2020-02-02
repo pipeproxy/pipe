@@ -20,5 +20,5 @@ func NewNetwork(network string, address string) *Network {
 }
 
 func (n *Network) Listen(ctx context.Context) (net.Listener, error) {
-	return network.Listen(n.network, n.address)
+	return network.Listen(ctx, n.network, n.address)
 }

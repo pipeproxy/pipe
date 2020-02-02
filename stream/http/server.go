@@ -63,7 +63,13 @@ func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
 	s.serve(ctx, &singleConnListener{stm},
 		http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 			s.handler.ServeHTTP(rw, r)
-			close(done)
+			select {
+			case done <- struct{}{}:
+			default:
+			}
 		}))
-	<-done
+	select {
+	case <-done:
+	case <-ctx.Done():
+	}
 }
