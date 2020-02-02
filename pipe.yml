@@ -17,12 +17,7 @@ Components:
           Handler:
             '@Kind': h2c
             Handler:
-              '@Kind': log
-              Output:
-                '@Kind': file
-                Path: /dev/stderr
-              Handler:
-                '@Ref': handle
+              '@Ref': handle
 
       - '@Kind': server
         Listener:
@@ -34,12 +29,7 @@ Components:
           TLS:
             '@Kind': self_signed
           Handler:
-            '@Kind': log
-            Output:
-              '@Kind': file
-              Path: /dev/stderr
-            Handler:
-              '@Ref': handle
+            '@Ref': handle
 
   - '@Kind': net/http.Handler@log
     '@Name': handle
