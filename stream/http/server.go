@@ -7,14 +7,15 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"sync"
 
-	"github.com/wzshiming/pipe"
 	"github.com/wzshiming/pipe/stream"
 )
 
 type server struct {
 	handler http.Handler
 	tls     *tls.Config
+	pool    sync.Pool
 }
 
 func NewServer(handler http.Handler, tls *tls.Config) *server {
@@ -25,20 +26,31 @@ func NewServer(handler http.Handler, tls *tls.Config) *server {
 	return s
 }
 
-func (s *server) serve(ctx context.Context, listener net.Listener) {
-	var svc = http.Server{
-		Handler:   s,
-		TLSConfig: s.tls,
-		BaseContext: func(net.Listener) context.Context {
-			return ctx
-		},
-	}
+func (s *server) serve(ctx context.Context, listener net.Listener, handler http.Handler) {
 	if s.tls == nil {
+		var svc = http.Server{
+			Handler: handler,
+			BaseContext: func(net.Listener) context.Context {
+				return ctx
+			},
+		}
 		err := svc.Serve(listener)
 		if err != nil && err != io.ErrClosedPipe {
 			log.Println("[ERROR] [http]", err)
 		}
 	} else {
+		tls, ok := s.pool.Get().(*tls.Config)
+		if !ok {
+			tls = s.tls.Clone()
+		}
+		defer s.pool.Put(tls)
+		var svc = http.Server{
+			Handler:   handler,
+			TLSConfig: tls,
+			BaseContext: func(net.Listener) context.Context {
+				return ctx
+			},
+		}
 		err := svc.ServeTLS(listener, "", "")
 		if err != nil && err != io.ErrClosedPipe {
 			log.Println("[ERROR] [http]", err)
@@ -46,11 +58,11 @@ func (s *server) serve(ctx context.Context, listener net.Listener) {
 	}
 }
 
-func (s *server) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	rw.Header().Set("Server", pipe.Name)
-	s.handler.ServeHTTP(rw, r)
-}
-
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
-	s.serve(ctx, &singleConnListener{stm})
+	wait := make(chan struct{})
+	s.serve(ctx, &singleConnListener{stm}, http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		s.handler.ServeHTTP(rw, r)
+		wait <- struct{}{}
+	}))
+	<-wait
 }
