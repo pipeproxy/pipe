@@ -14,7 +14,7 @@ import (
 type Pipe struct {
 	conf   *Config
 	config []byte
-	group  errgroup.Group
+	group  *errgroup.Group
 	ctx    context.Context
 	pipe   service.Service
 	init   []once.Once
@@ -36,8 +36,9 @@ func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 	c := &Pipe{}
 	c.conf = &Config{}
 	c.config = config
-	c.ctx = context.WithValue(ctx, pipeCtxKeyType(0), c)
-	err := configure.Decode(ctx, config, c.conf)
+	c.group, c.ctx = errgroup.WithContext(ctx)
+	c.ctx = context.WithValue(c.ctx, pipeCtxKeyType(0), c)
+	err := configure.Decode(c.ctx, config, c.conf)
 	if err != nil {
 		return nil, err
 	}
@@ -49,16 +50,17 @@ func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 }
 
 func (c *Pipe) Run() error {
+	c.mut.Lock()
 	err := c.run(c.conf.Pipe, c.conf.Init)
 	if err != nil {
+		c.mut.Unlock()
 		return err
 	}
+	c.mut.Unlock()
 	return c.group.Wait()
 }
 
 func (c *Pipe) run(pipe service.Service, init []once.Once) error {
-	c.mut.Lock()
-	defer c.mut.Unlock()
 
 	for _, init := range init {
 		err := init.Do(c.ctx)
@@ -72,9 +74,9 @@ func (c *Pipe) run(pipe service.Service, init []once.Once) error {
 	c.group.Go(run)
 
 	if c.pipe != nil {
-		c := c.pipe.Close
-		defer c()
+		c.pipe.Close()
 	}
+
 	c.init = init
 	c.pipe = pipe
 	return nil
@@ -91,13 +93,12 @@ func (c *Pipe) Reload(config []byte) error {
 		return fmt.Errorf("no entry pipe field")
 	}
 
+	c.mut.Lock()
+	defer c.mut.Unlock()
 	err = c.run(conf.Pipe, conf.Init)
 	if err != nil {
 		return err
 	}
-
-	c.mut.Lock()
-	defer c.mut.Unlock()
 	c.conf = conf
 	c.config = config
 	return nil
