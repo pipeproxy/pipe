@@ -32,7 +32,6 @@ import (
 	_ "github.com/wzshiming/pipe/output/file"
 	_ "github.com/wzshiming/pipe/service/multi"
 	_ "github.com/wzshiming/pipe/service/server"
-	_ "github.com/wzshiming/pipe/stream/close"
 	_ "github.com/wzshiming/pipe/stream/forward"
 	_ "github.com/wzshiming/pipe/stream/http"
 	_ "github.com/wzshiming/pipe/stream/multi"
