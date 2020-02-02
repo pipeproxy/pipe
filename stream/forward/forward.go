@@ -30,6 +30,8 @@ func (f *Forward) ServeStream(ctx context.Context, stm stream.Stream) {
 	}
 	defer conn.Close()
 
-	go io.Copy(stm, conn)
-	io.Copy(conn, stm)
+	var buf1 [1024]byte
+	var buf2 [1024]byte
+	go io.CopyBuffer(stm, conn, buf1[:])
+	io.CopyBuffer(conn, stm, buf2[:])
 }
