@@ -1,9 +1,11 @@
 package http
 
 import (
+	"bytes"
 	"context"
 	"crypto/tls"
 	"io"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -62,6 +64,13 @@ func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
 	done := make(chan struct{})
 	s.serve(ctx, &singleConnListener{stm},
 		http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+			if r.Body != nil {
+				buf, err := ioutil.ReadAll(r.Body)
+				if err != nil {
+					log.Println("[ERROR] [http] read body", err)
+				}
+				r.Body = ioutil.NopCloser(bytes.NewReader(buf))
+			}
 			s.handler.ServeHTTP(rw, r)
 			select {
 			case done <- struct{}{}:
