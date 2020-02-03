@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/dialer"
 	"github.com/wzshiming/pipe/internal/pool"
-	"github.com/wzshiming/pipe/stream"
 )
 
 const name = "forward"
@@ -20,8 +20,8 @@ func init() {
 }
 
 type Config struct {
-	Forward stream.Handler
-	Pass    string
+	Dialer dialer.Dialer
+	Pass   string
 }
 
 var defaultTransport = http.Transport{
@@ -46,13 +46,11 @@ func NewForwardWithConfig(conf *Config) (http.Handler, error) {
 
 	rp := httputil.NewSingleHostReverseProxy(u)
 	rp.Transport = &defaultTransport
-	if conf.Forward != nil {
+	if conf.Dialer != nil {
 		rp.BufferPool = pool.Buffer
 		rp.Transport = &http.Transport{
 			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
-				p1, p2 := net.Pipe()
-				go conf.Forward.ServeStream(ctx, p1)
-				return p2, nil
+				return conf.Dialer.Dial(ctx)
 			},
 			ForceAttemptHTTP2:     defaultTransport.ForceAttemptHTTP2,
 			MaxIdleConns:          defaultTransport.MaxIdleConns,

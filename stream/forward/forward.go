@@ -3,30 +3,25 @@ package forward
 import (
 	"context"
 	"io"
-	"log"
-	"net"
 
+	"github.com/wzshiming/pipe/dialer"
 	"github.com/wzshiming/pipe/internal/pool"
 	"github.com/wzshiming/pipe/stream"
 )
 
 type Forward struct {
-	network string
-	address string
-	dialer  net.Dialer
+	dialer dialer.Dialer
 }
 
-func NewForward(network, address string) *Forward {
+func NewForward(dialer dialer.Dialer) *Forward {
 	return &Forward{
-		network: network,
-		address: address,
+		dialer: dialer,
 	}
 }
 
 func (f *Forward) ServeStream(ctx context.Context, stm stream.Stream) {
-	conn, err := f.dialer.DialContext(ctx, f.network, f.address)
+	conn, err := f.dialer.Dial(ctx)
 	if err != nil {
-		log.Printf("[ERROR] Forward to %s://%s error: %s", f.network, f.address, err.Error())
 		return
 	}
 	defer conn.Close()

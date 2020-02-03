@@ -2,6 +2,7 @@ package forward
 
 import (
 	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/dialer"
 	"github.com/wzshiming/pipe/stream"
 )
 
@@ -12,11 +13,10 @@ func init() {
 }
 
 type Config struct {
-	Network string
-	Address string
+	Dialer dialer.Dialer
 }
 
 // NewForwardWithConfig create a new forward with config.
 func NewForwardWithConfig(conf *Config) stream.Handler {
-	return NewForward(conf.Network, conf.Address)
+	return NewForward(conf.Dialer)
 }

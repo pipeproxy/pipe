@@ -7,6 +7,8 @@ import (
 	_ "github.com/wzshiming/pipe/codec/gzip"
 	_ "github.com/wzshiming/pipe/codec/hex"
 	_ "github.com/wzshiming/pipe/codec/json"
+	_ "github.com/wzshiming/pipe/dialer/network"
+	_ "github.com/wzshiming/pipe/dialer/poller"
 	_ "github.com/wzshiming/pipe/http/add_request_header"
 	_ "github.com/wzshiming/pipe/http/add_response_header"
 	_ "github.com/wzshiming/pipe/http/compress"
