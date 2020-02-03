@@ -428,6 +428,17 @@ func (d *decoder) set(value reflect.Value, typ reflect.Type, r reflect.Value) er
 		r = r.Elem()
 	}
 
+	switch value.Kind() {
+	case reflect.Interface:
+		if !r.Type().Implements(value.Type()) {
+			return fmt.Errorf("value of %s is not assignable to %s", r.Type(), value.Type())
+		}
+	default:
+		if !r.Type().AssignableTo(value.Type()) {
+			return fmt.Errorf("value of %s is not assignable to %s", r.Type(), value.Type())
+		}
+	}
+
 	value.Set(r)
 	return nil
 }
