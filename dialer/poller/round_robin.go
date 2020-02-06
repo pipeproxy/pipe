@@ -5,7 +5,6 @@ import (
 	"sync/atomic"
 
 	"github.com/wzshiming/pipe/dialer"
-
 	"github.com/wzshiming/pipe/stream"
 )
 

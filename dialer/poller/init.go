@@ -3,9 +3,8 @@ package poller
 import (
 	"fmt"
 
-	"github.com/wzshiming/pipe/dialer"
-
 	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/dialer"
 )
 
 var (

@@ -3,9 +3,8 @@ package network
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/dialer"
-
 	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/dialer"
 )
 
 func init() {

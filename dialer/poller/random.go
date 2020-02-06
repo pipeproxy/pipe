@@ -4,9 +4,8 @@ import (
 	"context"
 	"math/rand"
 
-	"github.com/wzshiming/pipe/stream"
-
 	"github.com/wzshiming/pipe/dialer"
+	"github.com/wzshiming/pipe/stream"
 )
 
 type Random struct {
