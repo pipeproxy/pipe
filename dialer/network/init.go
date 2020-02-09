@@ -1,8 +1,6 @@
 package network
 
 import (
-	"context"
-
 	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/dialer"
 )
@@ -18,6 +16,6 @@ type Config struct {
 	Address string
 }
 
-func NewNetworkWithConfig(ctx context.Context, conf *Config) dialer.Dialer {
+func NewNetworkWithConfig(conf *Config) dialer.Dialer {
 	return NewNetwork(conf.Network, conf.Address)
 }
