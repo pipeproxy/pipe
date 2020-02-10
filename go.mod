@@ -4,7 +4,6 @@ go 1.13
 
 require (
 	github.com/gorilla/handlers v1.4.2
-	github.com/kr/pretty v0.2.0 // indirect
 	github.com/kubernetes-sigs/yaml v1.1.0
 	github.com/spf13/pflag v1.0.5
 	github.com/wzshiming/crun v0.3.3
@@ -12,8 +11,14 @@ require (
 	github.com/wzshiming/lockfile v0.0.5
 	github.com/wzshiming/notify v0.0.5
 	github.com/wzshiming/trie v0.0.1
-	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa
+	golang.org/x/crypto v0.0.0-20200208060501-ecb85df21340
+	golang.org/x/net v0.0.0-20200202094626-16171245cfb2
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gopkg.in/yaml.v2 v2.2.2 // indirect
+	gopkg.in/yaml.v2 v2.2.8 // indirect
+)
+
+replace (
+	golang.org/x/crypto => golang.org/x/crypto v0.0.0-20200208060501-ecb85df21340
+	golang.org/x/net => golang.org/x/net v0.0.0-20200202094626-16171245cfb2
+	golang.org/x/sync => golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
 )
