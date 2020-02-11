@@ -3,7 +3,7 @@ package poller
 import (
 	"fmt"
 
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/dialer"
 )
 
@@ -15,7 +15,7 @@ var (
 const name = "poller"
 
 func init() {
-	configure.Register(name, NewPollerWithConfig)
+	manager.Register(name, NewPollerWithConfig)
 }
 
 type Config struct {

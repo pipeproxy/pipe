@@ -3,13 +3,13 @@ package pprof
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 )
 
 const name = "pprof"
 
 func init() {
-	configure.Register(name, NewPprofWithConfig)
+	manager.Register(name, NewPprofWithConfig)
 }
 
 func NewPprofWithConfig() http.Handler {

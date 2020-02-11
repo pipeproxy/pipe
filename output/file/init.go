@@ -1,14 +1,14 @@
 package file
 
 import (
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/output"
 )
 
 const name = "file"
 
 func init() {
-	configure.Register(name, NewFileWithConfig)
+	manager.Register(name, NewFileWithConfig)
 }
 
 type Config struct {

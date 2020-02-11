@@ -3,7 +3,7 @@ package from
 import (
 	"io/ioutil"
 
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/input"
 	"github.com/wzshiming/pipe/tls"
 )
@@ -11,7 +11,7 @@ import (
 const name = "from"
 
 func init() {
-	configure.Register(name, NewFromWithConfig)
+	manager.Register(name, NewFromWithConfig)
 }
 
 type Config struct {

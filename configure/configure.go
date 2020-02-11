@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/wzshiming/inject"
+	"github.com/wzshiming/pipe/configure/manager"
 )
 
 var (
@@ -21,18 +22,16 @@ func Decode(ctx context.Context, config []byte, i interface{}) error {
 }
 
 type decoder struct {
-	decoderManager *decoderManager
-	refs           map[string]reflect.Value
-	exists         map[string]struct{}
-	dependentRef   map[string][]func() error
+	refs         map[string]reflect.Value
+	exists       map[string]struct{}
+	dependentRef map[string][]func() error
 }
 
 func newDecoder() *decoder {
 	return &decoder{
-		decoderManager: stdManager,
-		refs:           map[string]reflect.Value{},
-		exists:         map[string]struct{}{},
-		dependentRef:   map[string][]func() error{},
+		refs:         map[string]reflect.Value{},
+		exists:       map[string]struct{}{},
+		dependentRef: map[string][]func() error{},
 	}
 }
 
@@ -249,7 +248,7 @@ func (d *decoder) ref(name, ref string, value reflect.Value) error {
 }
 
 func (d *decoder) kind(ctx context.Context, name string, kind string, typ reflect.Type, config []byte, value reflect.Value) ([]string, error) {
-	fun, ok := d.decoderManager.Get(kind, typ)
+	fun, ok := manager.Get(kind, typ)
 	if !ok {
 		return nil, fmt.Errorf("not defined name %q of %s", kind, value.Type().Elem())
 	}
@@ -393,13 +392,13 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 
 	kind := field.Kind
 	typ := value.Type().Elem()
-	kind, typ = d.decoderManager.LookType(kind, typ)
+	kind, typ = manager.LookType(kind, typ)
 
 	if kind == "" {
 		return d.decodeOther(ctx, config, value)
 	}
 
-	if !d.decoderManager.HasType(typ) {
+	if !manager.HasType(typ) {
 		return nil, fmt.Errorf("not define config %s %v", kind, typ)
 	}
 

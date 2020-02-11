@@ -3,14 +3,14 @@ package add_request_header
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/http/template"
 )
 
 const name = "add_request_header"
 
 func init() {
-	configure.Register(name, NewAddRequestHeaderWithConfig)
+	manager.Register(name, NewAddRequestHeaderWithConfig)
 }
 
 type Config struct {

@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/listener"
 	"github.com/wzshiming/pipe/service"
 	"github.com/wzshiming/pipe/stream"
@@ -10,7 +10,7 @@ import (
 const name = "server"
 
 func init() {
-	configure.Register(name, NewServerWithConfig)
+	manager.Register(name, NewServerWithConfig)
 }
 
 type Config struct {

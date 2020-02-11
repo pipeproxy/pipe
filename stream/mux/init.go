@@ -1,14 +1,14 @@
 package mux
 
 import (
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/stream"
 )
 
 const name = "mux"
 
 func init() {
-	configure.Register(name, NewMuxWithConfig)
+	manager.Register(name, NewMuxWithConfig)
 }
 
 type Route struct {

@@ -4,14 +4,14 @@ import (
 	"net/http"
 
 	"github.com/gorilla/handlers"
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/output"
 )
 
 const name = "log"
 
 func init() {
-	configure.Register(name, NewLogWithConfig)
+	manager.Register(name, NewLogWithConfig)
 }
 
 type Config struct {

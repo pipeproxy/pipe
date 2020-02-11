@@ -1,12 +1,12 @@
 package network
 
 import (
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/dialer"
 )
 
 func init() {
-	configure.Register(name, NewNetworkWithConfig)
+	manager.Register(name, NewNetworkWithConfig)
 }
 
 const name = "network"

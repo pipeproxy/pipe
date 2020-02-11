@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/dialer"
 	"github.com/wzshiming/pipe/internal/pool"
 )
@@ -16,7 +16,7 @@ import (
 const name = "forward"
 
 func init() {
-	configure.Register(name, NewForwardWithConfig)
+	manager.Register(name, NewForwardWithConfig)
 }
 
 type Config struct {

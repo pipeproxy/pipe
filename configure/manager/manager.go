@@ -1,4 +1,4 @@
-package configure
+package manager
 
 import (
 	"fmt"
@@ -13,10 +13,22 @@ var (
 	ErrTooManyReturnParameters = fmt.Errorf("too many return parameters")
 	ErrSecondReturnParameters  = fmt.Errorf("the second return parameter must be error")
 )
-var stdManager = newDecoderManager()
+var stdManager = NewDecoderManager()
 
-func Register(kind string, fun interface{}) {
-	stdManager.Register(kind, fun)
+func Register(kind string, fun interface{}) error {
+	return stdManager.Register(kind, fun)
+}
+
+func Get(kind string, out0Type reflect.Type) (reflect.Value, bool) {
+	return stdManager.Get(kind, out0Type)
+}
+
+func LookType(kind string, out0Type reflect.Type) (string, reflect.Type) {
+	return stdManager.LookType(kind, out0Type)
+}
+
+func HasType(out0Type reflect.Type) bool {
+	return stdManager.HasType(out0Type)
 }
 
 type decoderManager struct {
@@ -26,7 +38,7 @@ type decoderManager struct {
 	interfaces map[reflect.Type]struct{}
 }
 
-func newDecoderManager() *decoderManager {
+func NewDecoderManager() *decoderManager {
 	return &decoderManager{
 		typeName:   map[string]reflect.Type{},
 		decoder:    map[reflect.Type]map[string]reflect.Value{},

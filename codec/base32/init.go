@@ -4,7 +4,7 @@ import (
 	"encoding/base32"
 
 	"github.com/wzshiming/pipe/codec"
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 )
 
 const (
@@ -12,8 +12,8 @@ const (
 )
 
 func init() {
-	configure.Register(name, NewEncodeWithConfig)
-	configure.Register(name, NewDecodeWithConfig)
+	manager.Register(name, NewEncodeWithConfig)
+	manager.Register(name, NewDecodeWithConfig)
 }
 
 type Config struct {

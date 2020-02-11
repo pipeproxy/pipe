@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/http/template"
 	"github.com/wzshiming/pipe/input"
 )
@@ -12,7 +12,7 @@ import (
 const name = "direct"
 
 func init() {
-	configure.Register(name, NewDirectWithConfig)
+	manager.Register(name, NewDirectWithConfig)
 }
 
 type Config struct {

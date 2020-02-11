@@ -5,13 +5,13 @@ import (
 	"net/http"
 
 	"github.com/gorilla/handlers"
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 )
 
 const name = "compress"
 
 func init() {
-	configure.Register(name, NewLogWithConfig)
+	manager.Register(name, NewLogWithConfig)
 }
 
 type Config struct {

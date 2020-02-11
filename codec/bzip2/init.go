@@ -2,7 +2,7 @@ package bzip2
 
 import (
 	"github.com/wzshiming/pipe/codec"
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 )
 
 const (
@@ -10,7 +10,7 @@ const (
 )
 
 func init() {
-	configure.Register(name, NewDecodeWithConfig)
+	manager.Register(name, NewDecodeWithConfig)
 }
 
 func NewDecodeWithConfig() (codec.Decoder, error) {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/http/poller"
 	"github.com/wzshiming/pipe/internal/gcd"
 )
@@ -16,7 +16,7 @@ var (
 const name = "weighted"
 
 func init() {
-	configure.Register(name, NewWeightedWithConfig)
+	manager.Register(name, NewWeightedWithConfig)
 }
 
 type Weighted struct {

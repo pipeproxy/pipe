@@ -3,14 +3,14 @@ package redirect
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/http/template"
 )
 
 const name = "redirect"
 
 func init() {
-	configure.Register(name, NewRedirectWithConfig)
+	manager.Register(name, NewRedirectWithConfig)
 }
 
 type Config struct {

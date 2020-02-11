@@ -3,16 +3,15 @@ package h2c
 import (
 	"net/http"
 
+	"github.com/wzshiming/pipe/configure/manager"
 	"golang.org/x/net/http2"
-
-	"github.com/wzshiming/pipe/configure"
 	"golang.org/x/net/http2/h2c"
 )
 
 const name = "h2c"
 
 func init() {
-	configure.Register(name, NewH2cWithConfig)
+	manager.Register(name, NewH2cWithConfig)
 }
 
 type Config struct {
