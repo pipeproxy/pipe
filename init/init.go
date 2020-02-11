@@ -41,6 +41,7 @@ import (
 	_ "github.com/wzshiming/pipe/stream/poller"
 	_ "github.com/wzshiming/pipe/stream/tls"
 	_ "github.com/wzshiming/pipe/stream/weighted"
+	_ "github.com/wzshiming/pipe/tls/acme"
 	_ "github.com/wzshiming/pipe/tls/from"
 	_ "github.com/wzshiming/pipe/tls/self_signed"
 
