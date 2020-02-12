@@ -19,6 +19,10 @@ func Register(kind string, fun interface{}) error {
 	return stdManager.Register(kind, fun)
 }
 
+func ForEach(f func(typ, kind string, out0Type reflect.Type, fun reflect.Value)) {
+	stdManager.ForEach(f)
+}
+
 func Get(kind string, out0Type reflect.Type) (reflect.Value, bool) {
 	return stdManager.Get(kind, out0Type)
 }
@@ -44,6 +48,27 @@ func NewDecoderManager() *decoderManager {
 		decoder:    map[reflect.Type]map[string]reflect.Value{},
 		pairs:      map[string][]*pair{},
 		interfaces: map[reflect.Type]struct{}{},
+	}
+}
+
+func (h *decoderManager) ForEach(f func(typ, kind string, out0Type reflect.Type, fun reflect.Value)) {
+	typKeys := make([]string, 0, len(h.typeName))
+	for typ := range h.typeName {
+		typKeys = append(typKeys, typ)
+	}
+
+	kindKeys := []string{}
+	for _, typ := range typKeys {
+		out0Type := h.typeName[typ]
+		m := h.decoder[out0Type]
+		for kind := range m {
+			kindKeys = append(kindKeys, kind)
+		}
+		for _, kind := range kindKeys {
+			fun := m[kind]
+			f(typ, kind, out0Type, fun)
+		}
+		kindKeys = kindKeys[:0]
 	}
 }
 
