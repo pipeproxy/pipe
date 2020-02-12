@@ -31,22 +31,14 @@ func (b *Build) init() {
 package %s
 
 import (
-	"errors"
 	"encoding/json"
+	"errors"
+	"fmt"
 )
-
-type PipeComponent interface {
-	isPipeComponent()
-	json.Marshaler
-}
-
-type PipeConfig struct {
-	Pipe       Service
-	Init       []Once
-	Components []PipeComponent
-}
-
 `, b.pkg)
+
+	fmt.Fprint(b.buf, tempConfig)
+
 }
 
 func (b *Build) Bytes() []byte {
