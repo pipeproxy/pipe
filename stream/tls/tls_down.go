@@ -7,19 +7,19 @@ import (
 	"github.com/wzshiming/pipe/stream"
 )
 
-type TlsServer struct {
+type TlsDown struct {
 	handler   stream.Handler
 	tlsConfig *tls.Config
 }
 
-func NewTlsDown(handler stream.Handler, tlsConfig *tls.Config) *TlsServer {
-	return &TlsServer{
+func NewTlsDown(handler stream.Handler, tlsConfig *tls.Config) *TlsDown {
+	return &TlsDown{
 		handler:   handler,
 		tlsConfig: tlsConfig,
 	}
 }
 
-func (t *TlsServer) ServeStream(ctx context.Context, stm stream.Stream) {
+func (t *TlsDown) ServeStream(ctx context.Context, stm stream.Stream) {
 	conn := tls.Server(stm, t.tlsConfig)
 	t.handler.ServeStream(ctx, conn)
 }
