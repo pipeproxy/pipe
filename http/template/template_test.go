@@ -98,11 +98,7 @@ func TestFormat(t *testing.T) {
 				t.Errorf("newTemplate() error = %v", err)
 				return
 			}
-			got, err := temp.FormatString(tt.args.r)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Format() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
+			got := temp.FormatString(tt.args.r)
 			if got != tt.want {
 				t.Errorf("Format() got = %v, want %v", got, tt.want)
 			}
