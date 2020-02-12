@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"sort"
 	"strings"
 )
 
@@ -56,6 +57,7 @@ func (h *decoderManager) ForEach(f func(typ, kind string, out0Type reflect.Type,
 	for typ := range h.typeName {
 		typKeys = append(typKeys, typ)
 	}
+	sort.Strings(typKeys)
 
 	kindKeys := []string{}
 	for _, typ := range typKeys {
@@ -64,6 +66,8 @@ func (h *decoderManager) ForEach(f func(typ, kind string, out0Type reflect.Type,
 		for kind := range m {
 			kindKeys = append(kindKeys, kind)
 		}
+		sort.Strings(kindKeys)
+
 		for _, kind := range kindKeys {
 			fun := m[kind]
 			f(typ, kind, out0Type, fun)
