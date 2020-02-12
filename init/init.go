@@ -31,6 +31,7 @@ import (
 	_ "github.com/wzshiming/pipe/input/inline"
 	_ "github.com/wzshiming/pipe/listener/multi"
 	_ "github.com/wzshiming/pipe/listener/network"
+	_ "github.com/wzshiming/pipe/once/message"
 	_ "github.com/wzshiming/pipe/output/file"
 	_ "github.com/wzshiming/pipe/service/multi"
 	_ "github.com/wzshiming/pipe/service/server"
