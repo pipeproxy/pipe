@@ -48,11 +48,19 @@ func (s *Server) Close() error {
 }
 
 func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
-	s.handler.ServeStream(ctx, stm)
+	s.handler.ServeStream(ctx, nopCloser{stm})
 	err := stm.Close()
 	if err != nil {
 		addr := stm.LocalAddr()
 		log.Printf("[ERROR] Close %s://%s error: %s", addr.Network(), addr.String(), err.Error())
 		return
 	}
+}
+
+type nopCloser struct {
+	stream.Stream
+}
+
+func (nopCloser) Close() error {
+	return nil
 }

@@ -3,10 +3,12 @@ package http
 import (
 	"io"
 	"net"
+
+	"github.com/wzshiming/pipe/stream"
 )
 
 type singleConnListener struct {
-	conn net.Conn
+	conn stream.Stream
 }
 
 func (l *singleConnListener) Accept() (net.Conn, error) {
@@ -18,10 +20,10 @@ func (l *singleConnListener) Accept() (net.Conn, error) {
 	return conn, nil
 }
 
-func (l *singleConnListener) Close() error {
+func (*singleConnListener) Close() error {
 	return nil
 }
 
-func (l *singleConnListener) Addr() net.Addr {
+func (*singleConnListener) Addr() net.Addr {
 	return nil
 }

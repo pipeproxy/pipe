@@ -1,11 +1,9 @@
 package http
 
 import (
-	"bytes"
 	"context"
 	"crypto/tls"
 	"io"
-	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -28,7 +26,7 @@ func NewServer(handler http.Handler, tls *tls.Config) *server {
 	return s
 }
 
-func (s *server) serve(ctx context.Context, listener net.Listener, handler http.Handler) {
+func (s *server) serve(ctx context.Context, listener net.Listener, handler http.Handler) error {
 	if s.tls == nil {
 		var svc = http.Server{
 			Handler: handler,
@@ -38,7 +36,7 @@ func (s *server) serve(ctx context.Context, listener net.Listener, handler http.
 		}
 		err := svc.Serve(listener)
 		if err != nil && err != io.ErrClosedPipe {
-			log.Println("[ERROR] [http]", err)
+			return err
 		}
 	} else {
 		tls, ok := s.pool.Get().(*tls.Config)
@@ -55,28 +53,24 @@ func (s *server) serve(ctx context.Context, listener net.Listener, handler http.
 		}
 		err := svc.ServeTLS(listener, "", "")
 		if err != nil && err != io.ErrClosedPipe {
-			log.Println("[ERROR] [http]", err)
+			return err
 		}
 	}
+	return nil
 }
 
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
 	done := make(chan struct{})
-	s.serve(ctx, &singleConnListener{stm},
+	err := s.serve(ctx, &singleConnListener{stm},
 		http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-			if r.Body != nil {
-				buf, err := ioutil.ReadAll(r.Body)
-				if err != nil {
-					log.Println("[ERROR] [http] read body", err)
-				}
-				r.Body = ioutil.NopCloser(bytes.NewReader(buf))
-			}
 			s.handler.ServeHTTP(rw, r)
-			select {
-			case done <- struct{}{}:
-			default:
-			}
+			close(done)
 		}))
+	if err != nil {
+		log.Println("[ERROR] [http]", err)
+		return
+	}
+
 	select {
 	case <-done:
 	case <-ctx.Done():
