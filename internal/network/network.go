@@ -21,7 +21,7 @@ func CloseExcess() {
 	dk := []string{}
 	for k, v := range cache {
 		if atomic.LoadInt32(&v.size) == 0 {
-			v.Close()
+			v.Shutdown()
 			dk = append(dk, k)
 		}
 	}
@@ -47,7 +47,7 @@ func Listen(ctx context.Context, network, address string) (net.Listener, error) 
 	if err != nil {
 		return nil, err
 	}
-	n = newListener(l)
+	n = newHub(l)
 	cache[key] = n
 	return n.Listener(ctx), nil
 }
@@ -55,13 +55,15 @@ func Listen(ctx context.Context, network, address string) (net.Listener, error) 
 type Hub struct {
 	listener net.Listener
 	ch       chan net.Conn
+	exit     chan struct{}
 	size     int32
 }
 
-func newListener(listener net.Listener) *Hub {
+func newHub(listener net.Listener) *Hub {
 	m := &Hub{
 		listener: listener,
 		ch:       make(chan net.Conn),
+		exit:     make(chan struct{}),
 	}
 	go m.run()
 	return m
@@ -74,22 +76,25 @@ func (h *Hub) run() {
 			log.Printf("[ERROR] accept error %s", err)
 			return
 		}
-		h.ch <- conn
+		select {
+		case h.ch <- conn:
+		case <-h.exit:
+			conn.Close()
+		}
 	}
 }
 
-func (h *Hub) Close() error {
-	h.listener.Close()
+func (h *Hub) Shutdown() error {
+	err := h.listener.Close()
+	close(h.exit)
 	close(h.ch)
-
-	return nil
+	return err
 }
 
 func (h *Hub) Listener(ctx context.Context) *Listener {
 	l := &Listener{
 		ctx:  ctx,
 		hub:  h,
-		ch:   h.ch,
 		exit: make(chan struct{}),
 	}
 	atomic.AddInt32(&h.size, 1)
@@ -99,7 +104,6 @@ func (h *Hub) Listener(ctx context.Context) *Listener {
 type Listener struct {
 	ctx       context.Context
 	closeOnce sync.Once
-	ch        chan net.Conn
 	exit      chan struct{}
 	hub       *Hub
 }
@@ -113,8 +117,9 @@ func (l *Listener) Accept() (net.Conn, error) {
 			return nil, err
 		}
 		return nil, io.ErrClosedPipe
-	case conn := <-l.ch:
+	case conn := <-l.hub.ch:
 		if conn == nil {
+			l.Close()
 			return nil, io.ErrClosedPipe
 		}
 		return conn, nil

@@ -1,29 +1,55 @@
 package http
 
 import (
-	"io"
 	"net"
+	"net/http"
 
 	"github.com/wzshiming/pipe/stream"
 )
 
 type singleConnListener struct {
-	conn stream.Stream
+	addr net.Addr
+	ch   chan stream.Stream
+}
+
+func newSingleConnListener(conn net.Conn) *singleConnListener {
+	ch := make(chan stream.Stream, 1)
+	ch <- conn
+	return &singleConnListener{
+		addr: conn.LocalAddr(),
+		ch:   ch,
+	}
 }
 
 func (l *singleConnListener) Accept() (net.Conn, error) {
-	conn := l.conn
+	conn := <-l.ch
 	if conn == nil {
-		return nil, io.ErrClosedPipe
+		return nil, http.ErrServerClosed
 	}
-	l.conn = nil
-	return conn, nil
+	return &connCloser{
+		l:    l,
+		Conn: conn,
+	}, nil
 }
 
-func (*singleConnListener) Close() error {
+func (l *singleConnListener) shutdown() error {
+	close(l.ch)
 	return nil
 }
 
-func (*singleConnListener) Addr() net.Addr {
+func (l *singleConnListener) Close() error {
 	return nil
+}
+
+func (l *singleConnListener) Addr() net.Addr {
+	return l.addr
+}
+
+type connCloser struct {
+	l *singleConnListener
+	net.Conn
+}
+
+func (c *connCloser) Close() error {
+	return c.l.shutdown()
 }

@@ -3,7 +3,6 @@ package http
 import (
 	"context"
 	"crypto/tls"
-	"io"
 	"log"
 	"net"
 	"net/http"
@@ -35,7 +34,7 @@ func (s *server) serve(ctx context.Context, listener net.Listener, handler http.
 			},
 		}
 		err := svc.Serve(listener)
-		if err != nil && err != io.ErrClosedPipe {
+		if err != nil && err != http.ErrServerClosed {
 			return err
 		}
 	} else {
@@ -52,7 +51,7 @@ func (s *server) serve(ctx context.Context, listener net.Listener, handler http.
 			},
 		}
 		err := svc.ServeTLS(listener, "", "")
-		if err != nil && err != io.ErrClosedPipe {
+		if err != nil && err != http.ErrServerClosed {
 			return err
 		}
 	}
@@ -60,15 +59,9 @@ func (s *server) serve(ctx context.Context, listener net.Listener, handler http.
 }
 
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
-	done := make(chan struct{})
-	err := s.serve(ctx, &singleConnListener{stm},
-		http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-			defer close(done)
-			s.handler.ServeHTTP(rw, r)
-		}))
+	err := s.serve(ctx, newSingleConnListener(stm), s.handler)
 	if err != nil {
 		log.Println("[ERROR] [http]", err)
 		return
 	}
-	<-done
 }
