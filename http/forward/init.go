@@ -45,9 +45,9 @@ func NewForwardWithConfig(conf *Config) (http.Handler, error) {
 	}
 
 	rp := httputil.NewSingleHostReverseProxy(u)
+	rp.BufferPool = pool.Buffer
 	rp.Transport = &defaultTransport
 	if conf.Dialer != nil {
-		rp.BufferPool = pool.Buffer
 		rp.Transport = &http.Transport{
 			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
 				return conf.Dialer.Dial(ctx)

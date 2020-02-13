@@ -63,16 +63,12 @@ func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
 	done := make(chan struct{})
 	err := s.serve(ctx, &singleConnListener{stm},
 		http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+			defer close(done)
 			s.handler.ServeHTTP(rw, r)
-			close(done)
 		}))
 	if err != nil {
 		log.Println("[ERROR] [http]", err)
 		return
 	}
-
-	select {
-	case <-done:
-	case <-ctx.Done():
-	}
+	<-done
 }

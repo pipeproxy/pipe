@@ -24,8 +24,7 @@ func NewNetwork(network string, address string) *Network {
 func (n *Network) Dial(ctx context.Context) (stream.Stream, error) {
 	stm, err := n.dialer.DialContext(ctx, n.network, n.address)
 	if err != nil {
-		addr := stm.RemoteAddr()
-		log.Printf("[ERROR] Forward to %s://%s error: %s", addr.Network(), addr.String(), err.Error())
+		log.Printf("[ERROR] Forward error: %s", err.Error())
 	}
 	return stm, err
 }

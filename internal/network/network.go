@@ -71,6 +71,7 @@ func (h *Hub) run() {
 	for {
 		conn, err := h.listener.Accept()
 		if err != nil {
+			log.Printf("[ERROR] accept error %s", err)
 			return
 		}
 		h.ch <- conn
@@ -107,8 +108,15 @@ func (l *Listener) Accept() (net.Conn, error) {
 	select {
 	case <-l.ctx.Done():
 		l.Close()
-		return nil, l.ctx.Err()
+		err := l.ctx.Err()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.ErrClosedPipe
 	case conn := <-l.ch:
+		if conn == nil {
+			return nil, io.ErrClosedPipe
+		}
 		return conn, nil
 	case <-l.exit:
 		return nil, io.ErrClosedPipe
