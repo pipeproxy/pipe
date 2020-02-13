@@ -11,6 +11,7 @@ import (
 	"github.com/wzshiming/pipe/configure/manager"
 	"github.com/wzshiming/pipe/dialer"
 	"github.com/wzshiming/pipe/internal/pool"
+	"github.com/wzshiming/pipe/tls"
 )
 
 const name = "forward"
@@ -20,6 +21,7 @@ func init() {
 }
 
 type Config struct {
+	TLS    tls.TLS
 	Dialer dialer.Dialer
 	Pass   string
 }
@@ -48,16 +50,21 @@ func NewForwardWithConfig(conf *Config) (http.Handler, error) {
 	rp.BufferPool = pool.Buffer
 	rp.Transport = &defaultTransport
 	if conf.Dialer != nil {
-		rp.Transport = &http.Transport{
-			DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
-				return conf.Dialer.Dial(ctx)
-			},
-			ForceAttemptHTTP2:     defaultTransport.ForceAttemptHTTP2,
-			MaxIdleConns:          defaultTransport.MaxIdleConns,
-			IdleConnTimeout:       defaultTransport.IdleConnTimeout,
-			TLSHandshakeTimeout:   defaultTransport.TLSHandshakeTimeout,
-			ExpectContinueTimeout: defaultTransport.ExpectContinueTimeout,
+		transport := defaultTransport.Clone()
+		transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
+			return conf.Dialer.Dial(ctx)
+		}
+		if conf.TLS != nil {
+			transport.TLSClientConfig = conf.TLS.TLS()
+		}
+		rp.Transport = transport
+	} else {
+		if conf.TLS != nil {
+			transport := defaultTransport.Clone()
+			transport.TLSClientConfig = conf.TLS.TLS()
+			rp.Transport = transport
 		}
 	}
+
 	return rp, nil
 }
