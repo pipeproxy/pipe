@@ -9,8 +9,8 @@ import (
 )
 
 var exceptionTypeName = map[string]string{
-	"io.ReadCloser":  "input.Input",
-	"io.WriteCloser": "output.Output",
+	//"io.ReadCloser":  "input.Input",
+	//"io.WriteCloser": "output.Output",
 }
 
 func getTypeName(typName string) string {

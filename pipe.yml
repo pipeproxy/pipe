@@ -4,7 +4,7 @@ Pipe:
     - '@Ref': http_server
 
 Components:
-  - '@Kind': github.com/wzshiming/pipe/service.Service@multi
+  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
     '@Name': http_server
     Multi:
       - '@Kind': server
@@ -34,7 +34,7 @@ Components:
   - '@Kind': net/http.Handler@log
     '@Name': handle
     Output:
-      '@Kind': io.WriteCloser@file
+      '@Kind': file
       Path: /dev/stderr
     Handler:
       '@Ref': page

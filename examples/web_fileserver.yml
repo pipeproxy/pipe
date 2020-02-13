@@ -3,7 +3,7 @@ Pipe:
 
 Components:
 
-  - '@Kind': github.com/wzshiming/pipe/service.Service@multi
+  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
     '@Name': server
     Multi:
       - '@Kind': server

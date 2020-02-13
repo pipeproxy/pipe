@@ -5,7 +5,7 @@ Pipe:
 
 Components:
 
-  - '@Kind': github.com/wzshiming/pipe/service.Service@server
+  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@server
     '@Name': gateway
     Listener:
       '@Kind': network

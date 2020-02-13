@@ -135,7 +135,7 @@ func (m RefCodecDecoder) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// CodecDecoderBase32Config github.com/wzshiming/pipe/codec.Decoder@base32
+// CodecDecoderBase32Config github.com/wzshiming/pipe/pipe/codec.Decoder@base32
 type CodecDecoderBase32Config struct {
 	Encoding string
 }
@@ -145,7 +145,7 @@ func (CodecDecoderBase32Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderBase32Config) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Decoder@base32"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@base32"
 	type t CodecDecoderBase32Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -161,7 +161,7 @@ func (m CodecDecoderBase32Config) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// CodecDecoderBase64Config github.com/wzshiming/pipe/codec.Decoder@base64
+// CodecDecoderBase64Config github.com/wzshiming/pipe/pipe/codec.Decoder@base64
 type CodecDecoderBase64Config struct {
 	Encoding string
 }
@@ -171,7 +171,7 @@ func (CodecDecoderBase64Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderBase64Config) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Decoder@base64"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@base64"
 	type t CodecDecoderBase64Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -187,7 +187,7 @@ func (m CodecDecoderBase64Config) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// CodecDecoderBzip2 github.com/wzshiming/pipe/codec.Decoder@bzip2
+// CodecDecoderBzip2 github.com/wzshiming/pipe/pipe/codec.Decoder@bzip2
 type CodecDecoderBzip2 struct {
 }
 
@@ -196,7 +196,7 @@ func (CodecDecoderBzip2) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderBzip2) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Decoder@bzip2"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@bzip2"
 	type t CodecDecoderBzip2
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -212,7 +212,7 @@ func (m CodecDecoderBzip2) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// CodecDecoderGzip github.com/wzshiming/pipe/codec.Decoder@gzip
+// CodecDecoderGzip github.com/wzshiming/pipe/pipe/codec.Decoder@gzip
 type CodecDecoderGzip struct {
 }
 
@@ -221,7 +221,7 @@ func (CodecDecoderGzip) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderGzip) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Decoder@gzip"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@gzip"
 	type t CodecDecoderGzip
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -237,7 +237,7 @@ func (m CodecDecoderGzip) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// CodecDecoderHex github.com/wzshiming/pipe/codec.Decoder@hex
+// CodecDecoderHex github.com/wzshiming/pipe/pipe/codec.Decoder@hex
 type CodecDecoderHex struct {
 }
 
@@ -246,7 +246,7 @@ func (CodecDecoderHex) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderHex) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Decoder@hex"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@hex"
 	type t CodecDecoderHex
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -323,7 +323,7 @@ func (m RefCodecEncoder) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// CodecEncoderBase32Config github.com/wzshiming/pipe/codec.Encoder@base32
+// CodecEncoderBase32Config github.com/wzshiming/pipe/pipe/codec.Encoder@base32
 type CodecEncoderBase32Config struct {
 	Encoding string
 }
@@ -333,7 +333,7 @@ func (CodecEncoderBase32Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderBase32Config) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Encoder@base32"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Encoder@base32"
 	type t CodecEncoderBase32Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -349,7 +349,7 @@ func (m CodecEncoderBase32Config) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// CodecEncoderBase64Config github.com/wzshiming/pipe/codec.Encoder@base64
+// CodecEncoderBase64Config github.com/wzshiming/pipe/pipe/codec.Encoder@base64
 type CodecEncoderBase64Config struct {
 	Encoding string
 }
@@ -359,7 +359,7 @@ func (CodecEncoderBase64Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderBase64Config) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Encoder@base64"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Encoder@base64"
 	type t CodecEncoderBase64Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -375,7 +375,7 @@ func (m CodecEncoderBase64Config) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// CodecEncoderGzip github.com/wzshiming/pipe/codec.Encoder@gzip
+// CodecEncoderGzip github.com/wzshiming/pipe/pipe/codec.Encoder@gzip
 type CodecEncoderGzip struct {
 }
 
@@ -384,7 +384,7 @@ func (CodecEncoderGzip) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderGzip) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Encoder@gzip"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Encoder@gzip"
 	type t CodecEncoderGzip
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -400,7 +400,7 @@ func (m CodecEncoderGzip) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// CodecEncoderHex github.com/wzshiming/pipe/codec.Encoder@hex
+// CodecEncoderHex github.com/wzshiming/pipe/pipe/codec.Encoder@hex
 type CodecEncoderHex struct {
 }
 
@@ -409,7 +409,7 @@ func (CodecEncoderHex) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderHex) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Encoder@hex"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Encoder@hex"
 	type t CodecEncoderHex
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -486,7 +486,7 @@ func (m RefCodecMarshaler) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// CodecMarshalerJson github.com/wzshiming/pipe/codec.Marshaler@json
+// CodecMarshalerJson github.com/wzshiming/pipe/pipe/codec.Marshaler@json
 type CodecMarshalerJson struct {
 }
 
@@ -495,7 +495,7 @@ func (CodecMarshalerJson) isPipeComponent()  {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecMarshalerJson) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Marshaler@json"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Marshaler@json"
 	type t CodecMarshalerJson
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -572,7 +572,7 @@ func (m RefCodecUnmarshaler) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// CodecUnmarshalerJson github.com/wzshiming/pipe/codec.Unmarshaler@json
+// CodecUnmarshalerJson github.com/wzshiming/pipe/pipe/codec.Unmarshaler@json
 type CodecUnmarshalerJson struct {
 }
 
@@ -581,291 +581,8 @@ func (CodecUnmarshalerJson) isPipeComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecUnmarshalerJson) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/codec.Unmarshaler@json"
+	const kind = "github.com/wzshiming/pipe/pipe/codec.Unmarshaler@json"
 	type t CodecUnmarshalerJson
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-type Dialer interface {
-	isDialer()
-	PipeComponent
-}
-
-type RawDialer []byte
-
-func (RawDialer) isDialer()        {}
-func (RawDialer) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawDialer) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawDialer) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawDialer: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-type NameDialer struct {
-	Name string
-	Dialer
-}
-
-func (NameDialer) isDialer()        {}
-func (NameDialer) isPipeComponent() {}
-
-func (n NameDialer) MarshalJSON() ([]byte, error) {
-	data, err := n.Dialer.MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
-	return data, nil
-}
-
-type RefDialer string
-
-func (RefDialer) isDialer()        {}
-func (RefDialer) isPipeComponent() {}
-
-func (m RefDialer) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
-}
-
-// DialerNetworkConfig github.com/wzshiming/pipe/dialer.Dialer@network
-type DialerNetworkConfig struct {
-	Network string
-	Address string
-}
-
-func (DialerNetworkConfig) isDialer()        {}
-func (DialerNetworkConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m DialerNetworkConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/dialer.Dialer@network"
-	type t DialerNetworkConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// DialerPollerConfig github.com/wzshiming/pipe/dialer.Dialer@poller
-type DialerPollerConfig struct {
-	Poller  string
-	Dialers []Dialer
-}
-
-func (DialerPollerConfig) isDialer()        {}
-func (DialerPollerConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m DialerPollerConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/dialer.Dialer@poller"
-	type t DialerPollerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// DialerTlsConfig github.com/wzshiming/pipe/dialer.Dialer@tls
-type DialerTlsConfig struct {
-	Dialer Dialer
-	TLS    TLS
-}
-
-func (DialerTlsConfig) isDialer()        {}
-func (DialerTlsConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m DialerTlsConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/dialer.Dialer@tls"
-	type t DialerTlsConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-type ListenerListenConfig interface {
-	isListenerListenConfig()
-	PipeComponent
-}
-
-type RawListenerListenConfig []byte
-
-func (RawListenerListenConfig) isListenerListenConfig() {}
-func (RawListenerListenConfig) isPipeComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawListenerListenConfig) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawListenerListenConfig) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawListenerListenConfig: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-type NameListenerListenConfig struct {
-	Name string
-	ListenerListenConfig
-}
-
-func (NameListenerListenConfig) isListenerListenConfig() {}
-func (NameListenerListenConfig) isPipeComponent()        {}
-
-func (n NameListenerListenConfig) MarshalJSON() ([]byte, error) {
-	data, err := n.ListenerListenConfig.MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
-	return data, nil
-}
-
-type RefListenerListenConfig string
-
-func (RefListenerListenConfig) isListenerListenConfig() {}
-func (RefListenerListenConfig) isPipeComponent()        {}
-
-func (m RefListenerListenConfig) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
-}
-
-// ListenerListenConfigMultiConfig github.com/wzshiming/pipe/listener.ListenConfig@multi
-type ListenerListenConfigMultiConfig struct {
-	Multi []ListenerListenConfig
-}
-
-func (ListenerListenConfigMultiConfig) isListenerListenConfig() {}
-func (ListenerListenConfigMultiConfig) isPipeComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m ListenerListenConfigMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/listener.ListenConfig@multi"
-	type t ListenerListenConfigMultiConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// ListenerListenConfigNetworkConfig github.com/wzshiming/pipe/listener.ListenConfig@network
-type ListenerListenConfigNetworkConfig struct {
-	Network string
-	Address string
-}
-
-func (ListenerListenConfigNetworkConfig) isListenerListenConfig() {}
-func (ListenerListenConfigNetworkConfig) isPipeComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m ListenerListenConfigNetworkConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/listener.ListenConfig@network"
-	type t ListenerListenConfigNetworkConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// ListenerListenConfigTlsConfig github.com/wzshiming/pipe/listener.ListenConfig@tls
-type ListenerListenConfigTlsConfig struct {
-	ListenConfig ListenerListenConfig
-	TLS          TLS
-}
-
-func (ListenerListenConfigTlsConfig) isListenerListenConfig() {}
-func (ListenerListenConfigTlsConfig) isPipeComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m ListenerListenConfigTlsConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/listener.ListenConfig@tls"
-	type t ListenerListenConfigTlsConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -941,7 +658,7 @@ func (m RefOnce) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// OnceMessageConfig github.com/wzshiming/pipe/once.Once@message
+// OnceMessageConfig github.com/wzshiming/pipe/pipe/once.Once@message
 type OnceMessageConfig struct {
 	Message string
 }
@@ -951,7 +668,7 @@ func (OnceMessageConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceMessageConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/once.Once@message"
+	const kind = "github.com/wzshiming/pipe/pipe/once.Once@message"
 	type t OnceMessageConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1028,7 +745,7 @@ func (m RefService) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// ServiceMultiConfig github.com/wzshiming/pipe/service.Service@multi
+// ServiceMultiConfig github.com/wzshiming/pipe/pipe/service.Service@multi
 type ServiceMultiConfig struct {
 	Multi []Service
 }
@@ -1038,7 +755,7 @@ func (ServiceMultiConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m ServiceMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/service.Service@multi"
+	const kind = "github.com/wzshiming/pipe/pipe/service.Service@multi"
 	type t ServiceMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1054,7 +771,7 @@ func (m ServiceMultiConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// ServiceServerConfig github.com/wzshiming/pipe/service.Service@server
+// ServiceServerConfig github.com/wzshiming/pipe/pipe/service.Service@server
 type ServiceServerConfig struct {
 	Listener ListenerListenConfig
 	Handler  StreamHandler
@@ -1065,433 +782,8 @@ func (ServiceServerConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m ServiceServerConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/service.Service@server"
+	const kind = "github.com/wzshiming/pipe/pipe/service.Service@server"
 	type t ServiceServerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-type StreamHandler interface {
-	isStreamHandler()
-	PipeComponent
-}
-
-type RawStreamHandler []byte
-
-func (RawStreamHandler) isStreamHandler() {}
-func (RawStreamHandler) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawStreamHandler) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawStreamHandler) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawStreamHandler: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-type NameStreamHandler struct {
-	Name string
-	StreamHandler
-}
-
-func (NameStreamHandler) isStreamHandler() {}
-func (NameStreamHandler) isPipeComponent() {}
-
-func (n NameStreamHandler) MarshalJSON() ([]byte, error) {
-	data, err := n.StreamHandler.MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
-	return data, nil
-}
-
-type RefStreamHandler string
-
-func (RefStreamHandler) isStreamHandler() {}
-func (RefStreamHandler) isPipeComponent() {}
-
-func (m RefStreamHandler) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
-}
-
-// StreamHandlerForwardConfig github.com/wzshiming/pipe/stream.Handler@forward
-type StreamHandlerForwardConfig struct {
-	Dialer Dialer
-}
-
-func (StreamHandlerForwardConfig) isStreamHandler() {}
-func (StreamHandlerForwardConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerForwardConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/stream.Handler@forward"
-	type t StreamHandlerForwardConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// StreamHandlerHttpConfig github.com/wzshiming/pipe/stream.Handler@http
-type StreamHandlerHttpConfig struct {
-	Handler HttpHandler
-	TLS     TLS
-}
-
-func (StreamHandlerHttpConfig) isStreamHandler() {}
-func (StreamHandlerHttpConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerHttpConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/stream.Handler@http"
-	type t StreamHandlerHttpConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// StreamHandlerMultiConfig github.com/wzshiming/pipe/stream.Handler@multi
-type StreamHandlerMultiConfig struct {
-	Multi []StreamHandler
-}
-
-func (StreamHandlerMultiConfig) isStreamHandler() {}
-func (StreamHandlerMultiConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/stream.Handler@multi"
-	type t StreamHandlerMultiConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// StreamHandlerMuxConfig github.com/wzshiming/pipe/stream.Handler@mux
-type StreamHandlerMuxConfig struct {
-	Routes   []StreamHandlerMuxRoute
-	NotFound StreamHandler
-}
-type StreamHandlerMuxRoute struct {
-	Pattern string
-	Regexp  string
-	Prefix  string
-	Handler StreamHandler
-}
-
-func (StreamHandlerMuxConfig) isStreamHandler() {}
-func (StreamHandlerMuxConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerMuxConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/stream.Handler@mux"
-	type t StreamHandlerMuxConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// StreamHandlerPollerConfig github.com/wzshiming/pipe/stream.Handler@poller
-type StreamHandlerPollerConfig struct {
-	Poller   string
-	Handlers []StreamHandler
-}
-
-func (StreamHandlerPollerConfig) isStreamHandler() {}
-func (StreamHandlerPollerConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerPollerConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/stream.Handler@poller"
-	type t StreamHandlerPollerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// StreamHandlerTlsDownConfig github.com/wzshiming/pipe/stream.Handler@tls_down
-type StreamHandlerTlsDownConfig struct {
-	Handler StreamHandler
-	TLS     TLS
-}
-
-func (StreamHandlerTlsDownConfig) isStreamHandler() {}
-func (StreamHandlerTlsDownConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerTlsDownConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/stream.Handler@tls_down"
-	type t StreamHandlerTlsDownConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// StreamHandlerTlsUpConfig github.com/wzshiming/pipe/stream.Handler@tls_up
-type StreamHandlerTlsUpConfig struct {
-	Handler StreamHandler
-	TLS     TLS
-}
-
-func (StreamHandlerTlsUpConfig) isStreamHandler() {}
-func (StreamHandlerTlsUpConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerTlsUpConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/stream.Handler@tls_up"
-	type t StreamHandlerTlsUpConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// StreamHandlerWeightedConfig github.com/wzshiming/pipe/stream.Handler@weighted
-type StreamHandlerWeightedConfig struct {
-	Weighted []StreamHandlerWeightedWeighted
-}
-type StreamHandlerWeightedWeighted struct {
-	Weight  uint
-	Handler StreamHandler
-}
-
-func (StreamHandlerWeightedConfig) isStreamHandler() {}
-func (StreamHandlerWeightedConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/stream.Handler@weighted"
-	type t StreamHandlerWeightedConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-type TLS interface {
-	isTLS()
-	PipeComponent
-}
-
-type RawTLS []byte
-
-func (RawTLS) isTLS()           {}
-func (RawTLS) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawTLS) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawTLS) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawTLS: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-type NameTLS struct {
-	Name string
-	TLS
-}
-
-func (NameTLS) isTLS()           {}
-func (NameTLS) isPipeComponent() {}
-
-func (n NameTLS) MarshalJSON() ([]byte, error) {
-	data, err := n.TLS.MarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
-	return data, nil
-}
-
-type RefTLS string
-
-func (RefTLS) isTLS()           {}
-func (RefTLS) isPipeComponent() {}
-
-func (m RefTLS) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
-}
-
-// TLSAcmeConfig github.com/wzshiming/pipe/tls.TLS@acme
-type TLSAcmeConfig struct {
-	Domains  []string
-	CacheDir string
-}
-
-func (TLSAcmeConfig) isTLS()           {}
-func (TLSAcmeConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m TLSAcmeConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/tls.TLS@acme"
-	type t TLSAcmeConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// TLSFromConfig github.com/wzshiming/pipe/tls.TLS@from
-type TLSFromConfig struct {
-	Domain string
-	Cert   Input
-	Key    Input
-}
-
-func (TLSFromConfig) isTLS()           {}
-func (TLSFromConfig) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m TLSFromConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/tls.TLS@from"
-	type t TLSFromConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
-	return data, nil
-}
-
-// TLSSelfSigned github.com/wzshiming/pipe/tls.TLS@self_signed
-type TLSSelfSigned struct {
-}
-
-func (TLSSelfSigned) isTLS()           {}
-func (TLSSelfSigned) isPipeComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m TLSSelfSigned) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/tls.TLS@self_signed"
-	type t TLSSelfSigned
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1567,7 +859,7 @@ func (m RefInput) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// InputFileConfig io.ReadCloser@file
+// InputFileConfig github.com/wzshiming/pipe/pipe/stdio/input.Input@file
 type InputFileConfig struct {
 	Path string
 }
@@ -1577,7 +869,7 @@ func (InputFileConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m InputFileConfig) MarshalJSON() ([]byte, error) {
-	const kind = "io.ReadCloser@file"
+	const kind = "github.com/wzshiming/pipe/pipe/stdio/input.Input@file"
 	type t InputFileConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1593,7 +885,7 @@ func (m InputFileConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// InputInlineConfig io.ReadCloser@inline
+// InputInlineConfig github.com/wzshiming/pipe/pipe/stdio/input.Input@inline
 type InputInlineConfig struct {
 	Data string
 }
@@ -1603,7 +895,7 @@ func (InputInlineConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m InputInlineConfig) MarshalJSON() ([]byte, error) {
-	const kind = "io.ReadCloser@inline"
+	const kind = "github.com/wzshiming/pipe/pipe/stdio/input.Input@inline"
 	type t InputInlineConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1680,7 +972,7 @@ func (m RefOutput) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// OutputFileConfig io.WriteCloser@file
+// OutputFileConfig github.com/wzshiming/pipe/pipe/stdio/output.Output@file
 type OutputFileConfig struct {
 	Path string
 }
@@ -1690,8 +982,716 @@ func (OutputFileConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OutputFileConfig) MarshalJSON() ([]byte, error) {
-	const kind = "io.WriteCloser@file"
+	const kind = "github.com/wzshiming/pipe/pipe/stdio/output.Output@file"
 	type t OutputFileConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+type StreamHandler interface {
+	isStreamHandler()
+	PipeComponent
+}
+
+type RawStreamHandler []byte
+
+func (RawStreamHandler) isStreamHandler() {}
+func (RawStreamHandler) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawStreamHandler) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawStreamHandler) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawStreamHandler: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+type NameStreamHandler struct {
+	Name string
+	StreamHandler
+}
+
+func (NameStreamHandler) isStreamHandler() {}
+func (NameStreamHandler) isPipeComponent() {}
+
+func (n NameStreamHandler) MarshalJSON() ([]byte, error) {
+	data, err := n.StreamHandler.MarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
+		}
+	}
+
+	return data, nil
+}
+
+type RefStreamHandler string
+
+func (RefStreamHandler) isStreamHandler() {}
+func (RefStreamHandler) isPipeComponent() {}
+
+func (m RefStreamHandler) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
+}
+
+// StreamHandlerForwardConfig github.com/wzshiming/pipe/pipe/stream.Handler@forward
+type StreamHandlerForwardConfig struct {
+	Dialer Dialer
+}
+
+func (StreamHandlerForwardConfig) isStreamHandler() {}
+func (StreamHandlerForwardConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m StreamHandlerForwardConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@forward"
+	type t StreamHandlerForwardConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// StreamHandlerHttpConfig github.com/wzshiming/pipe/pipe/stream.Handler@http
+type StreamHandlerHttpConfig struct {
+	Handler HttpHandler
+	TLS     TLS
+}
+
+func (StreamHandlerHttpConfig) isStreamHandler() {}
+func (StreamHandlerHttpConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m StreamHandlerHttpConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@http"
+	type t StreamHandlerHttpConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// StreamHandlerMultiConfig github.com/wzshiming/pipe/pipe/stream.Handler@multi
+type StreamHandlerMultiConfig struct {
+	Multi []StreamHandler
+}
+
+func (StreamHandlerMultiConfig) isStreamHandler() {}
+func (StreamHandlerMultiConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m StreamHandlerMultiConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@multi"
+	type t StreamHandlerMultiConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// StreamHandlerMuxConfig github.com/wzshiming/pipe/pipe/stream.Handler@mux
+type StreamHandlerMuxConfig struct {
+	Routes   []StreamHandlerMuxRoute
+	NotFound StreamHandler
+}
+type StreamHandlerMuxRoute struct {
+	Pattern string
+	Regexp  string
+	Prefix  string
+	Handler StreamHandler
+}
+
+func (StreamHandlerMuxConfig) isStreamHandler() {}
+func (StreamHandlerMuxConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m StreamHandlerMuxConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@mux"
+	type t StreamHandlerMuxConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// StreamHandlerPollerConfig github.com/wzshiming/pipe/pipe/stream.Handler@poller
+type StreamHandlerPollerConfig struct {
+	Poller   string
+	Handlers []StreamHandler
+}
+
+func (StreamHandlerPollerConfig) isStreamHandler() {}
+func (StreamHandlerPollerConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m StreamHandlerPollerConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@poller"
+	type t StreamHandlerPollerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// StreamHandlerTlsDownConfig github.com/wzshiming/pipe/pipe/stream.Handler@tls_down
+type StreamHandlerTlsDownConfig struct {
+	Handler StreamHandler
+	TLS     TLS
+}
+
+func (StreamHandlerTlsDownConfig) isStreamHandler() {}
+func (StreamHandlerTlsDownConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m StreamHandlerTlsDownConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@tls_down"
+	type t StreamHandlerTlsDownConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// StreamHandlerTlsUpConfig github.com/wzshiming/pipe/pipe/stream.Handler@tls_up
+type StreamHandlerTlsUpConfig struct {
+	Handler StreamHandler
+	TLS     TLS
+}
+
+func (StreamHandlerTlsUpConfig) isStreamHandler() {}
+func (StreamHandlerTlsUpConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m StreamHandlerTlsUpConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@tls_up"
+	type t StreamHandlerTlsUpConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// StreamHandlerWeightedConfig github.com/wzshiming/pipe/pipe/stream.Handler@weighted
+type StreamHandlerWeightedConfig struct {
+	Weighted []StreamHandlerWeightedWeighted
+}
+type StreamHandlerWeightedWeighted struct {
+	Weight  uint
+	Handler StreamHandler
+}
+
+func (StreamHandlerWeightedConfig) isStreamHandler() {}
+func (StreamHandlerWeightedConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m StreamHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@weighted"
+	type t StreamHandlerWeightedConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+type Dialer interface {
+	isDialer()
+	PipeComponent
+}
+
+type RawDialer []byte
+
+func (RawDialer) isDialer()        {}
+func (RawDialer) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawDialer) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawDialer) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawDialer: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+type NameDialer struct {
+	Name string
+	Dialer
+}
+
+func (NameDialer) isDialer()        {}
+func (NameDialer) isPipeComponent() {}
+
+func (n NameDialer) MarshalJSON() ([]byte, error) {
+	data, err := n.Dialer.MarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
+		}
+	}
+
+	return data, nil
+}
+
+type RefDialer string
+
+func (RefDialer) isDialer()        {}
+func (RefDialer) isPipeComponent() {}
+
+func (m RefDialer) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
+}
+
+// DialerNetworkConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@network
+type DialerNetworkConfig struct {
+	Network string
+	Address string
+}
+
+func (DialerNetworkConfig) isDialer()        {}
+func (DialerNetworkConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DialerNetworkConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@network"
+	type t DialerNetworkConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// DialerPollerConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@poller
+type DialerPollerConfig struct {
+	Poller  string
+	Dialers []Dialer
+}
+
+func (DialerPollerConfig) isDialer()        {}
+func (DialerPollerConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DialerPollerConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@poller"
+	type t DialerPollerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// DialerTlsConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@tls
+type DialerTlsConfig struct {
+	Dialer Dialer
+	TLS    TLS
+}
+
+func (DialerTlsConfig) isDialer()        {}
+func (DialerTlsConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DialerTlsConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@tls"
+	type t DialerTlsConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+type ListenerListenConfig interface {
+	isListenerListenConfig()
+	PipeComponent
+}
+
+type RawListenerListenConfig []byte
+
+func (RawListenerListenConfig) isListenerListenConfig() {}
+func (RawListenerListenConfig) isPipeComponent()        {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawListenerListenConfig) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawListenerListenConfig) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawListenerListenConfig: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+type NameListenerListenConfig struct {
+	Name string
+	ListenerListenConfig
+}
+
+func (NameListenerListenConfig) isListenerListenConfig() {}
+func (NameListenerListenConfig) isPipeComponent()        {}
+
+func (n NameListenerListenConfig) MarshalJSON() ([]byte, error) {
+	data, err := n.ListenerListenConfig.MarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
+		}
+	}
+
+	return data, nil
+}
+
+type RefListenerListenConfig string
+
+func (RefListenerListenConfig) isListenerListenConfig() {}
+func (RefListenerListenConfig) isPipeComponent()        {}
+
+func (m RefListenerListenConfig) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
+}
+
+// ListenerListenConfigMultiConfig github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@multi
+type ListenerListenConfigMultiConfig struct {
+	Multi []ListenerListenConfig
+}
+
+func (ListenerListenConfigMultiConfig) isListenerListenConfig() {}
+func (ListenerListenConfigMultiConfig) isPipeComponent()        {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m ListenerListenConfigMultiConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@multi"
+	type t ListenerListenConfigMultiConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// ListenerListenConfigNetworkConfig github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+type ListenerListenConfigNetworkConfig struct {
+	Network string
+	Address string
+}
+
+func (ListenerListenConfigNetworkConfig) isListenerListenConfig() {}
+func (ListenerListenConfigNetworkConfig) isPipeComponent()        {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m ListenerListenConfigNetworkConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network"
+	type t ListenerListenConfigNetworkConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// ListenerListenConfigTlsConfig github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@tls
+type ListenerListenConfigTlsConfig struct {
+	ListenConfig ListenerListenConfig
+	TLS          TLS
+}
+
+func (ListenerListenConfigTlsConfig) isListenerListenConfig() {}
+func (ListenerListenConfigTlsConfig) isPipeComponent()        {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m ListenerListenConfigTlsConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@tls"
+	type t ListenerListenConfigTlsConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+type TLS interface {
+	isTLS()
+	PipeComponent
+}
+
+type RawTLS []byte
+
+func (RawTLS) isTLS()           {}
+func (RawTLS) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawTLS) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawTLS) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawTLS: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+type NameTLS struct {
+	Name string
+	TLS
+}
+
+func (NameTLS) isTLS()           {}
+func (NameTLS) isPipeComponent() {}
+
+func (n NameTLS) MarshalJSON() ([]byte, error) {
+	data, err := n.TLS.MarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
+		}
+	}
+
+	return data, nil
+}
+
+type RefTLS string
+
+func (RefTLS) isTLS()           {}
+func (RefTLS) isPipeComponent() {}
+
+func (m RefTLS) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
+}
+
+// TLSAcmeConfig github.com/wzshiming/pipe/pipe/tls.TLS@acme
+type TLSAcmeConfig struct {
+	Domains  []string
+	CacheDir string
+}
+
+func (TLSAcmeConfig) isTLS()           {}
+func (TLSAcmeConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m TLSAcmeConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/tls.TLS@acme"
+	type t TLSAcmeConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// TLSFromConfig github.com/wzshiming/pipe/pipe/tls.TLS@from
+type TLSFromConfig struct {
+	Domain string
+	Cert   Input
+	Key    Input
+}
+
+func (TLSFromConfig) isTLS()           {}
+func (TLSFromConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m TLSFromConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/tls.TLS@from"
+	type t TLSFromConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// TLSSelfSigned github.com/wzshiming/pipe/pipe/tls.TLS@self_signed
+type TLSSelfSigned struct {
+}
+
+func (TLSSelfSigned) isTLS()           {}
+func (TLSSelfSigned) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m TLSSelfSigned) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/tls.TLS@self_signed"
+	type t TLSSelfSigned
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1953,6 +1953,7 @@ func (m HttpHandlerFileConfig) MarshalJSON() ([]byte, error) {
 
 // HttpHandlerForwardConfig net/http.Handler@forward
 type HttpHandlerForwardConfig struct {
+	TLS    TLS
 	Dialer Dialer
 	Pass   string
 }

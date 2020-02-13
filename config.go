@@ -1,8 +1,8 @@
 package pipe
 
 import (
-	"github.com/wzshiming/pipe/once"
-	"github.com/wzshiming/pipe/service"
+	"github.com/wzshiming/pipe/pipe/once"
+	"github.com/wzshiming/pipe/pipe/service"
 )
 
 type Config struct {

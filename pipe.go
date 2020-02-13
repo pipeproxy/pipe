@@ -6,8 +6,8 @@ import (
 	"sync"
 
 	"github.com/wzshiming/pipe/configure"
-	"github.com/wzshiming/pipe/once"
-	"github.com/wzshiming/pipe/service"
+	"github.com/wzshiming/pipe/pipe/once"
+	"github.com/wzshiming/pipe/pipe/service"
 	"golang.org/x/sync/errgroup"
 )
 
