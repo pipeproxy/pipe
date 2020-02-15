@@ -1,10 +1,12 @@
-package stream
+package mux
 
 import (
 	"io"
+
+	"github.com/wzshiming/pipe/pipe/stream"
 )
 
-func UnwrapUnreadStream(rwc Stream) (Stream, []byte) {
+func UnwrapUnreadStream(rwc stream.Stream) (stream.Stream, []byte) {
 	if us, ok := rwc.(*unreadStream); ok {
 		_, prefix := UnwrapUnread(us.Reader)
 		return us.Stream, prefix
@@ -12,7 +14,7 @@ func UnwrapUnreadStream(rwc Stream) (Stream, []byte) {
 	return rwc, nil
 }
 
-func UnreadStream(rwc Stream, prefix []byte) Stream {
+func UnreadStream(rwc stream.Stream, prefix []byte) stream.Stream {
 	if len(prefix) == 0 {
 		return rwc
 	}
@@ -28,7 +30,7 @@ func UnreadStream(rwc Stream, prefix []byte) Stream {
 
 type unreadStream struct {
 	io.Reader
-	Stream
+	stream.Stream
 }
 
 func (c *unreadStream) Read(p []byte) (n int, err error) {

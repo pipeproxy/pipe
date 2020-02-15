@@ -142,6 +142,6 @@ func (m *Mux) ServeStream(ctx context.Context, stm stream.Stream) {
 		stm.Close()
 		return
 	}
-	stm = stream.UnreadStream(stm, buf)
+	stm = UnreadStream(stm, buf)
 	connector.ServeStream(ctx, stm)
 }
