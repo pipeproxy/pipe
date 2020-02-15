@@ -38,15 +38,17 @@ func HasType(out0Type reflect.Type) bool {
 	return stdDecoder.HasType(out0Type)
 }
 
-type decoderManager struct {
+type decoder struct {
+	sortName   map[string]struct{}
 	typeName   map[string]reflect.Type
 	decoder    map[reflect.Type]map[string]reflect.Value
 	pairs      map[string][]*pair
 	interfaces map[reflect.Type]struct{}
 }
 
-func newDecoder() *decoderManager {
-	return &decoderManager{
+func newDecoder() *decoder {
+	return &decoder{
+		sortName:   map[string]struct{}{},
 		typeName:   map[string]reflect.Type{},
 		decoder:    map[reflect.Type]map[string]reflect.Value{},
 		pairs:      map[string][]*pair{},
@@ -54,9 +56,9 @@ func newDecoder() *decoderManager {
 	}
 }
 
-func (h *decoderManager) ForEach(f func(typ, kind string, out0Type reflect.Type, fun reflect.Value)) {
+func (h *decoder) ForEach(f func(typ, kind string, out0Type reflect.Type, fun reflect.Value)) {
 	typKeys := make([]string, 0, len(h.typeName))
-	for typ := range h.typeName {
+	for typ := range h.sortName {
 		typKeys = append(typKeys, typ)
 	}
 	sort.Strings(typKeys)
@@ -78,7 +80,7 @@ func (h *decoderManager) ForEach(f func(typ, kind string, out0Type reflect.Type,
 	}
 }
 
-func (h *decoderManager) Register(kind string, v interface{}) error {
+func (h *decoder) Register(kind string, v interface{}) error {
 	fun := reflect.ValueOf(v)
 	typ, err := checkFunc(fun)
 	name := alias.GetType(typ)
@@ -98,15 +100,16 @@ func (h *decoderManager) Register(kind string, v interface{}) error {
 	return nil
 }
 
-func (h *decoderManager) register(kind string, typ reflect.Type, fun reflect.Value) {
+func (h *decoder) register(kind string, typ reflect.Type, fun reflect.Value) {
 	typDefName := alias.GetDefaultName(typ)
 	typName := alias.GetType(typ)
+	h.sortName[typDefName] = struct{}{}
 	h.typeName[typDefName] = typ
 	h.typeName[typName] = typ
 	h.registerWithName(kind, typ, fun)
 }
 
-func (h *decoderManager) registerWithName(kind string, typ reflect.Type, fun reflect.Value) {
+func (h *decoder) registerWithName(kind string, typ reflect.Type, fun reflect.Value) {
 	_, ok := h.decoder[typ]
 	if !ok {
 		h.decoder[typ] = map[string]reflect.Value{}
@@ -123,7 +126,7 @@ func (h *decoderManager) registerWithName(kind string, typ reflect.Type, fun ref
 	}
 }
 
-func (h *decoderManager) LookType(kind string, out0Type reflect.Type) (string, reflect.Type) {
+func (h *decoder) LookType(kind string, out0Type reflect.Type) (string, reflect.Type) {
 	if s := strings.SplitN(kind, "@", 2); len(s) == 2 {
 		t, ok := h.typeName[s[0]]
 		if !ok {
@@ -135,7 +138,7 @@ func (h *decoderManager) LookType(kind string, out0Type reflect.Type) (string, r
 	return kind, out0Type
 }
 
-func (h *decoderManager) HasType(out0Type reflect.Type) bool {
+func (h *decoder) HasType(out0Type reflect.Type) bool {
 	_, ok := h.decoder[out0Type]
 	if ok {
 		return true
@@ -150,7 +153,7 @@ func (h *decoderManager) HasType(out0Type reflect.Type) bool {
 	return false
 }
 
-func (h *decoderManager) Get(kind string, out0Type reflect.Type) (reflect.Value, bool) {
+func (h *decoder) Get(kind string, out0Type reflect.Type) (reflect.Value, bool) {
 	m, ok := h.decoder[out0Type]
 	if ok {
 		fun, ok := m[kind]
