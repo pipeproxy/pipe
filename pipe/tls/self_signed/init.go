@@ -1,14 +1,14 @@
 package self_signed
 
 import (
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/tls"
 )
 
 const name = "self_signed"
 
 func init() {
-	manager.Register(name, NewSelfSignedWithConfig)
+	decode.Register(name, NewSelfSignedWithConfig)
 }
 
 func NewSelfSignedWithConfig() (tls.TLS, error) {

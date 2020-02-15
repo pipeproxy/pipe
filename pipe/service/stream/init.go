@@ -1,7 +1,7 @@
 package stream
 
 import (
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/service"
 	"github.com/wzshiming/pipe/pipe/stream"
 	"github.com/wzshiming/pipe/pipe/stream/listener"
@@ -10,7 +10,7 @@ import (
 const name = "stream"
 
 func init() {
-	manager.Register(name, NewServerWithConfig)
+	decode.Register(name, NewServerWithConfig)
 }
 
 type Config struct {

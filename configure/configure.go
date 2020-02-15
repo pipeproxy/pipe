@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/wzshiming/inject"
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 )
 
 var (
@@ -248,7 +248,7 @@ func (d *decoder) ref(name, ref string, value reflect.Value) error {
 }
 
 func (d *decoder) kind(ctx context.Context, name string, kind string, typ reflect.Type, config []byte, value reflect.Value) ([]string, error) {
-	fun, ok := manager.Get(kind, typ)
+	fun, ok := decode.Get(kind, typ)
 	if !ok {
 		return nil, fmt.Errorf("not defined name %q of %s", kind, value.Type().Elem())
 	}
@@ -392,13 +392,13 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 
 	kind := field.Kind
 	typ := value.Type().Elem()
-	kind, typ = manager.LookType(kind, typ)
+	kind, typ = decode.LookType(kind, typ)
 
 	if kind == "" {
 		return d.decodeOther(ctx, config, value)
 	}
 
-	if !manager.HasType(typ) {
+	if !decode.HasType(typ) {
 		return nil, fmt.Errorf("not define config %s %v", kind, typ)
 	}
 

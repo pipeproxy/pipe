@@ -3,7 +3,7 @@ package weighted
 import (
 	"fmt"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/internal/gcd"
 	"github.com/wzshiming/pipe/pipe/stream"
 	"github.com/wzshiming/pipe/pipe/stream/poller"
@@ -16,7 +16,7 @@ var (
 const name = "weighted"
 
 func init() {
-	manager.Register(name, NewWeightedWithConfig)
+	decode.Register(name, NewWeightedWithConfig)
 }
 
 type Weighted struct {

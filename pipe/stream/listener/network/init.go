@@ -3,12 +3,12 @@ package network
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/stream/listener"
 )
 
 func init() {
-	manager.Register(name, NewNetworkWithConfig)
+	decode.Register(name, NewNetworkWithConfig)
 }
 
 const name = "network"

@@ -5,7 +5,7 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/stream/dialer"
 	"github.com/wzshiming/pipe/pipe/tls"
 )
@@ -13,7 +13,7 @@ import (
 const name = "forward"
 
 func init() {
-	manager.Register(name, NewForwardWithConfig)
+	decode.Register(name, NewForwardWithConfig)
 }
 
 type Config struct {

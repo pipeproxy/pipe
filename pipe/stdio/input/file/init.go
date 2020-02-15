@@ -4,14 +4,14 @@ import (
 	"bytes"
 	"io/ioutil"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/stdio/input"
 )
 
 const name = "file"
 
 func init() {
-	manager.Register(name, NewFileWithConfig)
+	decode.Register(name, NewFileWithConfig)
 }
 
 type Config struct {

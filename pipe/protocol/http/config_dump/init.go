@@ -3,13 +3,13 @@ package config_dump
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 )
 
 const name = "config_dump"
 
 func init() {
-	manager.Register(name, NewConfigDumpWithConfig)
+	decode.Register(name, NewConfigDumpWithConfig)
 }
 
 func NewConfigDumpWithConfig() http.Handler {

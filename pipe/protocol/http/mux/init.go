@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 )
 
 const name = "mux"
 
 func init() {
-	manager.Register(name, NewMuxWithConfig)
+	decode.Register(name, NewMuxWithConfig)
 }
 
 var (

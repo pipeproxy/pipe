@@ -1,14 +1,14 @@
 package multi
 
 import (
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/stream"
 )
 
 const name = "multi"
 
 func init() {
-	manager.Register(name, NewMultiWithConfig)
+	decode.Register(name, NewMultiWithConfig)
 }
 
 type Config struct {

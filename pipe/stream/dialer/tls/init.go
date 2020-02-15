@@ -1,7 +1,7 @@
 package tls
 
 import (
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/stream/dialer"
 	"github.com/wzshiming/pipe/pipe/tls"
 )
@@ -9,7 +9,7 @@ import (
 const name = "tls"
 
 func init() {
-	manager.Register(name, NewTlsWithConfig)
+	decode.Register(name, NewTlsWithConfig)
 }
 
 type Config struct {

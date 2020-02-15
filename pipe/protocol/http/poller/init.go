@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 )
 
 var (
@@ -15,7 +15,7 @@ var (
 const name = "poller"
 
 func init() {
-	manager.Register(name, NewPollerWithConfig)
+	decode.Register(name, NewPollerWithConfig)
 }
 
 type Config struct {

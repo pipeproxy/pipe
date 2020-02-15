@@ -1,14 +1,14 @@
 package acme
 
 import (
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/tls"
 )
 
 const name = "acme"
 
 func init() {
-	manager.Register(name, NewAcmeWithConfig)
+	decode.Register(name, NewAcmeWithConfig)
 }
 
 type Config struct {

@@ -3,13 +3,13 @@ package remove_request_header
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 )
 
 const name = "remove_request_header"
 
 func init() {
-	manager.Register(name, NewRemoveRequestHeaderWithConfig)
+	decode.Register(name, NewRemoveRequestHeaderWithConfig)
 }
 
 type Config struct {

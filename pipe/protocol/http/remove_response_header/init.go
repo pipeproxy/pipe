@@ -3,13 +3,13 @@ package remove_response_header
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 )
 
 const name = "remove_response_header"
 
 func init() {
-	manager.Register(name, NewRemoveResponseHeaderWithConfig)
+	decode.Register(name, NewRemoveResponseHeaderWithConfig)
 }
 
 type Config struct {

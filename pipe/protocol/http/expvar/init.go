@@ -3,11 +3,11 @@ package expvar
 import (
 	"expvar"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 )
 
 const name = "expvar"
 
 func init() {
-	manager.Register(name, expvar.Handler)
+	decode.Register(name, expvar.Handler)
 }

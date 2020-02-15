@@ -3,13 +3,13 @@ package file
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 )
 
 const name = "file"
 
 func init() {
-	manager.Register(name, NewFileWithConfig)
+	decode.Register(name, NewFileWithConfig)
 }
 
 type Config struct {

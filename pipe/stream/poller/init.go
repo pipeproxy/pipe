@@ -3,7 +3,7 @@ package poller
 import (
 	"fmt"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/stream"
 )
 
@@ -15,7 +15,7 @@ var (
 const name = "poller"
 
 func init() {
-	manager.Register(name, NewPollerWithConfig)
+	decode.Register(name, NewPollerWithConfig)
 }
 
 type Config struct {

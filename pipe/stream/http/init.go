@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/stream"
 	"github.com/wzshiming/pipe/pipe/tls"
 )
@@ -14,7 +14,7 @@ var (
 )
 
 func init() {
-	manager.Register("http", NewServerWithConfig)
+	decode.Register("http", NewServerWithConfig)
 }
 
 type Config struct {

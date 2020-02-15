@@ -3,13 +3,13 @@ package multi
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 )
 
 const name = "multi"
 
 func init() {
-	manager.Register(name, NewMultiWithConfig)
+	decode.Register(name, NewMultiWithConfig)
 }
 
 type Config struct {

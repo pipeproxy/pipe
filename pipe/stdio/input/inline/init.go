@@ -4,14 +4,14 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/stdio/input"
 )
 
 const name = "inline"
 
 func init() {
-	manager.Register(name, NewInlineWithConfig)
+	decode.Register(name, NewInlineWithConfig)
 }
 
 type Config struct {

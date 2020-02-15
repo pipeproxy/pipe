@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 )
 
 type Config struct {
@@ -113,17 +113,17 @@ func TestDecodeStruct(t *testing.T) {
 	}
 
 	for _, f := range fun {
-		err := manager.Register("hello", f)
+		err := decode.Register("hello", f)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		err = manager.Register("hello2", f)
+		err = decode.Register("hello2", f)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		err = manager.Register("hello3", f)
+		err = decode.Register("hello3", f)
 		if err != nil {
 			t.Fatal(err)
 		}

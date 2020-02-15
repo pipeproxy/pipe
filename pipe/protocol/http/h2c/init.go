@@ -3,7 +3,7 @@ package h2c
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 )
@@ -11,7 +11,7 @@ import (
 const name = "h2c"
 
 func init() {
-	manager.Register(name, NewH2cWithConfig)
+	decode.Register(name, NewH2cWithConfig)
 }
 
 type Config struct {

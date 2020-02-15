@@ -1,7 +1,7 @@
 package forward
 
 import (
-	"github.com/wzshiming/pipe/configure/manager"
+	"github.com/wzshiming/pipe/configure/decode"
 	"github.com/wzshiming/pipe/pipe/stream"
 	"github.com/wzshiming/pipe/pipe/stream/dialer"
 )
@@ -9,7 +9,7 @@ import (
 const name = "forward"
 
 func init() {
-	manager.Register(name, NewForwardWithConfig)
+	decode.Register(name, NewForwardWithConfig)
 }
 
 type Config struct {
