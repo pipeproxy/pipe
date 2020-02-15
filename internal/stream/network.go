@@ -1,4 +1,4 @@
-package network
+package stream
 
 import (
 	"context"
@@ -137,7 +137,7 @@ func (l *Listener) Close() error {
 	return nil
 }
 
-// Addr returns the listener's network address.
+// Addr returns the listener's stream address.
 func (l *Listener) Addr() net.Addr {
 	return l.hub.listener.Addr()
 }

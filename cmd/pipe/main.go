@@ -10,8 +10,8 @@ import (
 
 	_ "github.com/wzshiming/pipe/init"
 
-	"github.com/wzshiming/pipe/internal/network"
 	"github.com/wzshiming/pipe/internal/notify"
+	"github.com/wzshiming/pipe/internal/stream"
 
 	"github.com/kubernetes-sigs/yaml"
 	"github.com/spf13/pflag"
@@ -140,7 +140,7 @@ func start(conf string) {
 	notify.On(notify.Stop, func() {
 		log.Println("[INFO] [close] start")
 		defer log.Println("[INFO] [close] end")
-		defer network.CloseExcess()
+		defer stream.CloseExcess()
 
 		err := svc.Close()
 		if svc == nil {
@@ -151,7 +151,7 @@ func start(conf string) {
 	notify.On(notify.Reload, func() {
 		log.Println("[INFO] [reload] start")
 		defer log.Println("[INFO] [reload] end")
-		defer network.CloseExcess()
+		defer stream.CloseExcess()
 
 		c, err := getConfig(conf)
 		if err != nil {
