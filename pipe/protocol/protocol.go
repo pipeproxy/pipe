@@ -1,5 +1,14 @@
 package protocol
 
+import (
+	"github.com/wzshiming/pipe/configure/alias"
+)
+
+func init() {
+	var handler Handler
+	alias.Register("protocol.Handler", &handler)
+}
+
 type Protocol interface {
 	WriteHeader(Map) error
 	WriteBody(interface{}) error

@@ -1,6 +1,16 @@
 package init
 
 import (
+	_ "github.com/wzshiming/pipe/pipe/codec"
+	_ "github.com/wzshiming/pipe/pipe/once"
+	_ "github.com/wzshiming/pipe/pipe/protocol"
+	_ "github.com/wzshiming/pipe/pipe/protocol/http"
+	_ "github.com/wzshiming/pipe/pipe/service"
+	_ "github.com/wzshiming/pipe/pipe/stdio/input"
+	_ "github.com/wzshiming/pipe/pipe/stdio/output"
+	_ "github.com/wzshiming/pipe/pipe/stream"
+	_ "github.com/wzshiming/pipe/pipe/tls"
+
 	_ "github.com/wzshiming/pipe/pipe/codec/base32"
 	_ "github.com/wzshiming/pipe/pipe/codec/base64"
 	_ "github.com/wzshiming/pipe/pipe/codec/bzip2"

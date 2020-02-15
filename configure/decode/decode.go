@@ -6,6 +6,8 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+
+	"github.com/wzshiming/pipe/configure/alias"
 )
 
 var (
@@ -14,7 +16,7 @@ var (
 	ErrTooManyReturnParameters = fmt.Errorf("too many return parameters")
 	ErrSecondReturnParameters  = fmt.Errorf("the second return parameter must be error")
 )
-var stdDecoder = NewDecoder()
+var stdDecoder = newDecoder()
 
 func Register(kind string, fun interface{}) error {
 	return stdDecoder.Register(kind, fun)
@@ -43,7 +45,7 @@ type decoderManager struct {
 	interfaces map[reflect.Type]struct{}
 }
 
-func NewDecoder() *decoderManager {
+func newDecoder() *decoderManager {
 	return &decoderManager{
 		typeName:   map[string]reflect.Type{},
 		decoder:    map[reflect.Type]map[string]reflect.Value{},
@@ -79,8 +81,9 @@ func (h *decoderManager) ForEach(f func(typ, kind string, out0Type reflect.Type,
 func (h *decoderManager) Register(kind string, v interface{}) error {
 	fun := reflect.ValueOf(v)
 	typ, err := checkFunc(fun)
+	name := alias.GetType(typ)
 	if err != nil {
-		log.Printf("[ERROR] Register config: %s.%s: %s: %s", typ.PkgPath(), typ.Name(), kind, err)
+		log.Printf("[ERROR] Register decode: %s: %s: %s", name, kind, err)
 		return err
 	}
 
@@ -91,14 +94,19 @@ func (h *decoderManager) Register(kind string, v interface{}) error {
 		}
 		typ = typ.Elem()
 	}
-	log.Printf("[INFO] Register config: %s.%s: %s", typ.PkgPath(), typ.Name(), kind)
+	log.Printf("[INFO] Register decode: %s: %s", name, kind)
 	return nil
 }
 
 func (h *decoderManager) register(kind string, typ reflect.Type, fun reflect.Value) {
-	typName := strings.Join([]string{typ.PkgPath(), typ.Name()}, ".")
+	typDefName := alias.GetDefaultName(typ)
+	typName := alias.GetType(typ)
+	h.typeName[typDefName] = typ
 	h.typeName[typName] = typ
+	h.registerWithName(kind, typ, fun)
+}
 
+func (h *decoderManager) registerWithName(kind string, typ reflect.Type, fun reflect.Value) {
 	_, ok := h.decoder[typ]
 	if !ok {
 		h.decoder[typ] = map[string]reflect.Value{}
