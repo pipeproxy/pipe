@@ -7,5 +7,5 @@ import (
 )
 
 type Dialer interface {
-	Dial(ctx context.Context) (stream.Stream, error)
+	DialStream(ctx context.Context) (stream.Stream, error)
 }

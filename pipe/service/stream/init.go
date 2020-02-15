@@ -1,4 +1,4 @@
-package server
+package stream
 
 import (
 	"github.com/wzshiming/pipe/configure/manager"
@@ -7,7 +7,7 @@ import (
 	"github.com/wzshiming/pipe/pipe/stream/listener"
 )
 
-const name = "server"
+const name = "stream"
 
 func init() {
 	manager.Register(name, NewServerWithConfig)

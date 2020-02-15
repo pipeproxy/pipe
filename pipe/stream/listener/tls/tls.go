@@ -20,8 +20,8 @@ func NewTls(listenConfig listener.ListenConfig, tlsConfig *tls.Config) *Tls {
 	}
 }
 
-func (t *Tls) Listen(ctx context.Context) (net.Listener, error) {
-	listener, err := t.listenConfig.Listen(ctx)
+func (t *Tls) ListenStream(ctx context.Context) (net.Listener, error) {
+	listener, err := t.listenConfig.ListenStream(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -27,7 +27,7 @@ import (
 	_ "github.com/wzshiming/pipe/pipe/protocol/http/remove_response_header"
 	_ "github.com/wzshiming/pipe/pipe/protocol/http/weighted"
 	_ "github.com/wzshiming/pipe/pipe/service/multi"
-	_ "github.com/wzshiming/pipe/pipe/service/server"
+	_ "github.com/wzshiming/pipe/pipe/service/stream"
 	_ "github.com/wzshiming/pipe/pipe/stdio/input/file"
 	_ "github.com/wzshiming/pipe/pipe/stdio/input/inline"
 	_ "github.com/wzshiming/pipe/pipe/stdio/output/file"

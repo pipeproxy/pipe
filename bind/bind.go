@@ -771,19 +771,19 @@ func (m ServiceMultiConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// ServiceServerConfig github.com/wzshiming/pipe/pipe/service.Service@server
-type ServiceServerConfig struct {
+// ServiceStreamConfig github.com/wzshiming/pipe/pipe/service.Service@stream
+type ServiceStreamConfig struct {
 	Listener ListenerListenConfig
 	Handler  StreamHandler
 }
 
-func (ServiceServerConfig) isService()       {}
-func (ServiceServerConfig) isPipeComponent() {}
+func (ServiceStreamConfig) isService()       {}
+func (ServiceStreamConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m ServiceServerConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/service.Service@server"
-	type t ServiceServerConfig
+func (m ServiceStreamConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/service.Service@stream"
+	type t ServiceStreamConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err

@@ -6,5 +6,5 @@ import (
 )
 
 type ListenConfig interface {
-	Listen(ctx context.Context) (net.Listener, error)
+	ListenStream(ctx context.Context) (net.Listener, error)
 }

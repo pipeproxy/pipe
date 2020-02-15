@@ -6,7 +6,7 @@ Components:
   - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
     '@Name': server
     Multi:
-      - '@Kind': server
+      - '@Kind': stream
         Listener:
           '@Kind': network
           Network: tcp

@@ -7,7 +7,7 @@ Pipe:
 
 Components:
 
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@server
+  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
     '@Name': gateway
     Listener:
       '@Kind': network
@@ -18,7 +18,7 @@ Components:
       Handler:
         '@Ref': balance
 
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@server
+  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
     '@Name': host1
     Listener:
       '@Kind': network
@@ -29,7 +29,7 @@ Components:
       Handler:
         '@Ref': page1
 
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@server
+  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
     '@Name': host2
     Listener:
       '@Kind': network

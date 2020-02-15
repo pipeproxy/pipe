@@ -22,10 +22,10 @@ func NewMulti(multi []listener.ListenConfig) *Multi {
 	}
 }
 
-func (m *Multi) Listen(ctx context.Context) (net.Listener, error) {
+func (m *Multi) ListenStream(ctx context.Context) (net.Listener, error) {
 	multi := make([]net.Listener, 0, len(m.multi))
 	for _, lc := range m.multi {
-		l, err := lc.Listen(ctx)
+		l, err := lc.ListenStream(ctx)
 		if err != nil {
 			fmt.Errorf("[ERROR] listen")
 			continue

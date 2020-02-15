@@ -19,6 +19,6 @@ func NewNetwork(network string, address string) *Network {
 	}
 }
 
-func (n *Network) Listen(ctx context.Context) (net.Listener, error) {
+func (n *Network) ListenStream(ctx context.Context) (net.Listener, error) {
 	return network.Listen(ctx, n.network, n.address)
 }

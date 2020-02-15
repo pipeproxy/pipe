@@ -21,8 +21,8 @@ func NewTls(dialer dialer.Dialer, tlsConfig *tls.Config) *Tls {
 	}
 }
 
-func (t *Tls) Dial(ctx context.Context) (stream.Stream, error) {
-	stm, err := t.dialer.Dial(ctx)
+func (t *Tls) DialStream(ctx context.Context) (stream.Stream, error) {
+	stm, err := t.dialer.DialStream(ctx)
 	if err != nil {
 		return nil, err
 	}

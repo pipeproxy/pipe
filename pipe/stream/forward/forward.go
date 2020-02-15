@@ -19,7 +19,7 @@ func NewForward(dialer dialer.Dialer) *Forward {
 }
 
 func (f *Forward) ServeStream(ctx context.Context, stm stream.Stream) {
-	conn, err := f.dialer.Dial(ctx)
+	conn, err := f.dialer.DialStream(ctx)
 	if err != nil {
 		return
 	}

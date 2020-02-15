@@ -6,7 +6,7 @@ Components:
   - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
     '@Name': server
     Multi:
-      - '@Kind': server
+      - '@Kind': stream
         Listener:
           '@Kind': network
           Network: tcp
@@ -17,7 +17,7 @@ Components:
             '@Kind': redirect
             Code: 302
             Location: '{{.Scheme}}s://{{.Host}}{{.RequestURI}}'
-      - '@Kind': server
+      - '@Kind': stream
         Listener:
           '@Kind': network
           Network: tcp

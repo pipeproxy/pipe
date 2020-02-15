@@ -30,7 +30,7 @@ func NewForwardWithConfig(conf *Config) (http.Handler, error) {
 	if conf.Dialer != nil {
 		transport = defaultTransport.Clone()
 		transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-			return conf.Dialer.Dial(ctx)
+			return conf.Dialer.DialStream(ctx)
 		}
 		if conf.TLS != nil {
 			transport.TLSClientConfig = conf.TLS.TLS()

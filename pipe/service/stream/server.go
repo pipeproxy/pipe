@@ -1,4 +1,4 @@
-package server
+package stream
 
 import (
 	"context"
@@ -21,7 +21,7 @@ func NewServer(listenConfig listener.ListenConfig, handler stream.Handler) (*Ser
 		listenConfig: listenConfig,
 		handler:      handler,
 	}
-	listener, err := s.listenConfig.Listen(context.Background())
+	listener, err := s.listenConfig.ListenStream(context.Background())
 	if err != nil {
 		return nil, err
 	}

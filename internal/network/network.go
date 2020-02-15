@@ -42,7 +42,7 @@ func Listen(ctx context.Context, network, address string) (net.Listener, error) 
 		return n.Listener(ctx), nil
 	}
 
-	log.Printf("[INFO] Listen to %s", key)
+	log.Printf("[INFO] ListenStream to %s", key)
 	l, err := net.Listen(network, address)
 	if err != nil {
 		return nil, err
