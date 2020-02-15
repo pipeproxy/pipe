@@ -7,7 +7,7 @@ import (
 	"reflect"
 )
 
-func GenType(prefix string, typ reflect.Type, getTypeName func(string) string) string {
+func GenType(prefix string, typ reflect.Type, getTypeName func(reflect.Type) string) string {
 	buf := bytes.NewBuffer(nil)
 	g := genType{
 		prefix:      prefix,
@@ -23,7 +23,7 @@ func GenType(prefix string, typ reflect.Type, getTypeName func(string) string) s
 type genType struct {
 	prefix      string
 	out         io.Writer
-	getTypeName func(string) string
+	getTypeName func(reflect.Type) string
 	todos       []reflect.Type
 	nameOnce    map[string]struct{}
 }
@@ -120,7 +120,6 @@ func (g *genType) toOther(typ reflect.Type) {
 }
 
 func (g *genType) toInterface(typ reflect.Type) {
-	name := typ.String()
-	typName := g.getTypeName(name)
+	typName := g.getTypeName(typ)
 	fmt.Fprint(g.out, typName)
 }

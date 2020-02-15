@@ -486,17 +486,17 @@ func (m RefCodecMarshaler) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// CodecMarshalerJson github.com/wzshiming/pipe/pipe/codec.Marshaler@json
-type CodecMarshalerJson struct {
+// CodecMarshalerJSON github.com/wzshiming/pipe/pipe/codec.Marshaler@json
+type CodecMarshalerJSON struct {
 }
 
-func (CodecMarshalerJson) isCodecMarshaler() {}
-func (CodecMarshalerJson) isPipeComponent()  {}
+func (CodecMarshalerJSON) isCodecMarshaler() {}
+func (CodecMarshalerJSON) isPipeComponent()  {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m CodecMarshalerJson) MarshalJSON() ([]byte, error) {
+func (m CodecMarshalerJSON) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/codec.Marshaler@json"
-	type t CodecMarshalerJson
+	type t CodecMarshalerJSON
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -572,17 +572,17 @@ func (m RefCodecUnmarshaler) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// CodecUnmarshalerJson github.com/wzshiming/pipe/pipe/codec.Unmarshaler@json
-type CodecUnmarshalerJson struct {
+// CodecUnmarshalerJSON github.com/wzshiming/pipe/pipe/codec.Unmarshaler@json
+type CodecUnmarshalerJSON struct {
 }
 
-func (CodecUnmarshalerJson) isCodecUnmarshaler() {}
-func (CodecUnmarshalerJson) isPipeComponent()    {}
+func (CodecUnmarshalerJSON) isCodecUnmarshaler() {}
+func (CodecUnmarshalerJSON) isPipeComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m CodecUnmarshalerJson) MarshalJSON() ([]byte, error) {
+func (m CodecUnmarshalerJSON) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/codec.Unmarshaler@json"
-	type t CodecUnmarshalerJson
+	type t CodecUnmarshalerJSON
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -773,7 +773,7 @@ func (m ServiceMultiConfig) MarshalJSON() ([]byte, error) {
 
 // ServiceStreamConfig github.com/wzshiming/pipe/pipe/service.Service@stream
 type ServiceStreamConfig struct {
-	Listener ListenerListenConfig
+	Listener StreamListenConfig
 	Handler  StreamHandler
 }
 
@@ -1061,7 +1061,7 @@ func (m RefStreamHandler) MarshalJSON() ([]byte, error) {
 
 // StreamHandlerForwardConfig github.com/wzshiming/pipe/pipe/stream.Handler@forward
 type StreamHandlerForwardConfig struct {
-	Dialer Dialer
+	Dialer StreamDialer
 }
 
 func (StreamHandlerForwardConfig) isStreamHandler() {}
@@ -1085,19 +1085,19 @@ func (m StreamHandlerForwardConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// StreamHandlerHttpConfig github.com/wzshiming/pipe/pipe/stream.Handler@http
-type StreamHandlerHttpConfig struct {
-	Handler HttpHandler
+// StreamHandlerHTTPConfig github.com/wzshiming/pipe/pipe/stream.Handler@http
+type StreamHandlerHTTPConfig struct {
+	Handler HTTPHandler
 	TLS     TLS
 }
 
-func (StreamHandlerHttpConfig) isStreamHandler() {}
-func (StreamHandlerHttpConfig) isPipeComponent() {}
+func (StreamHandlerHTTPConfig) isStreamHandler() {}
+func (StreamHandlerHTTPConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerHttpConfig) MarshalJSON() ([]byte, error) {
+func (m StreamHandlerHTTPConfig) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@http"
-	type t StreamHandlerHttpConfig
+	type t StreamHandlerHTTPConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1198,19 +1198,19 @@ func (m StreamHandlerPollerConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// StreamHandlerTlsDownConfig github.com/wzshiming/pipe/pipe/stream.Handler@tls_down
-type StreamHandlerTlsDownConfig struct {
+// StreamHandlerTLSDownConfig github.com/wzshiming/pipe/pipe/stream.Handler@tls_down
+type StreamHandlerTLSDownConfig struct {
 	Handler StreamHandler
 	TLS     TLS
 }
 
-func (StreamHandlerTlsDownConfig) isStreamHandler() {}
-func (StreamHandlerTlsDownConfig) isPipeComponent() {}
+func (StreamHandlerTLSDownConfig) isStreamHandler() {}
+func (StreamHandlerTLSDownConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerTlsDownConfig) MarshalJSON() ([]byte, error) {
+func (m StreamHandlerTLSDownConfig) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@tls_down"
-	type t StreamHandlerTlsDownConfig
+	type t StreamHandlerTLSDownConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1225,19 +1225,19 @@ func (m StreamHandlerTlsDownConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// StreamHandlerTlsUpConfig github.com/wzshiming/pipe/pipe/stream.Handler@tls_up
-type StreamHandlerTlsUpConfig struct {
+// StreamHandlerTLSUpConfig github.com/wzshiming/pipe/pipe/stream.Handler@tls_up
+type StreamHandlerTLSUpConfig struct {
 	Handler StreamHandler
 	TLS     TLS
 }
 
-func (StreamHandlerTlsUpConfig) isStreamHandler() {}
-func (StreamHandlerTlsUpConfig) isPipeComponent() {}
+func (StreamHandlerTLSUpConfig) isStreamHandler() {}
+func (StreamHandlerTLSUpConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m StreamHandlerTlsUpConfig) MarshalJSON() ([]byte, error) {
+func (m StreamHandlerTLSUpConfig) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@tls_up"
-	type t StreamHandlerTlsUpConfig
+	type t StreamHandlerTLSUpConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1282,18 +1282,18 @@ func (m StreamHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-type Dialer interface {
-	isDialer()
+type StreamDialer interface {
+	isStreamDialer()
 	PipeComponent
 }
 
-type RawDialer []byte
+type RawStreamDialer []byte
 
-func (RawDialer) isDialer()        {}
-func (RawDialer) isPipeComponent() {}
+func (RawStreamDialer) isStreamDialer()  {}
+func (RawStreamDialer) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m RawDialer) MarshalJSON() ([]byte, error) {
+func (m RawStreamDialer) MarshalJSON() ([]byte, error) {
 	if m == nil {
 		return []byte("null"), nil
 	}
@@ -1301,24 +1301,24 @@ func (m RawDialer) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON sets *m to a copy of data.
-func (m *RawDialer) UnmarshalJSON(data []byte) error {
+func (m *RawStreamDialer) UnmarshalJSON(data []byte) error {
 	if m == nil {
-		return errors.New("RawDialer: UnmarshalJSON on nil pointer")
+		return errors.New("RawStreamDialer: UnmarshalJSON on nil pointer")
 	}
 	*m = append((*m)[:0], data...)
 	return nil
 }
 
-type NameDialer struct {
+type NameStreamDialer struct {
 	Name string
-	Dialer
+	StreamDialer
 }
 
-func (NameDialer) isDialer()        {}
-func (NameDialer) isPipeComponent() {}
+func (NameStreamDialer) isStreamDialer()  {}
+func (NameStreamDialer) isPipeComponent() {}
 
-func (n NameDialer) MarshalJSON() ([]byte, error) {
-	data, err := n.Dialer.MarshalJSON()
+func (n NameStreamDialer) MarshalJSON() ([]byte, error) {
+	data, err := n.StreamDialer.MarshalJSON()
 	if err != nil {
 		return nil, err
 	}
@@ -1334,28 +1334,28 @@ func (n NameDialer) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-type RefDialer string
+type RefStreamDialer string
 
-func (RefDialer) isDialer()        {}
-func (RefDialer) isPipeComponent() {}
+func (RefStreamDialer) isStreamDialer()  {}
+func (RefStreamDialer) isPipeComponent() {}
 
-func (m RefDialer) MarshalJSON() ([]byte, error) {
+func (m RefStreamDialer) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// DialerNetworkConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@network
-type DialerNetworkConfig struct {
+// StreamDialerNetworkConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@network
+type StreamDialerNetworkConfig struct {
 	Network string
 	Address string
 }
 
-func (DialerNetworkConfig) isDialer()        {}
-func (DialerNetworkConfig) isPipeComponent() {}
+func (StreamDialerNetworkConfig) isStreamDialer()  {}
+func (StreamDialerNetworkConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m DialerNetworkConfig) MarshalJSON() ([]byte, error) {
+func (m StreamDialerNetworkConfig) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@network"
-	type t DialerNetworkConfig
+	type t StreamDialerNetworkConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1370,19 +1370,19 @@ func (m DialerNetworkConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// DialerPollerConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@poller
-type DialerPollerConfig struct {
+// StreamDialerPollerConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@poller
+type StreamDialerPollerConfig struct {
 	Poller  string
-	Dialers []Dialer
+	Dialers []StreamDialer
 }
 
-func (DialerPollerConfig) isDialer()        {}
-func (DialerPollerConfig) isPipeComponent() {}
+func (StreamDialerPollerConfig) isStreamDialer()  {}
+func (StreamDialerPollerConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m DialerPollerConfig) MarshalJSON() ([]byte, error) {
+func (m StreamDialerPollerConfig) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@poller"
-	type t DialerPollerConfig
+	type t StreamDialerPollerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1397,19 +1397,19 @@ func (m DialerPollerConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// DialerTlsConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@tls
-type DialerTlsConfig struct {
-	Dialer Dialer
+// StreamDialerTLSConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@tls
+type StreamDialerTLSConfig struct {
+	Dialer StreamDialer
 	TLS    TLS
 }
 
-func (DialerTlsConfig) isDialer()        {}
-func (DialerTlsConfig) isPipeComponent() {}
+func (StreamDialerTLSConfig) isStreamDialer()  {}
+func (StreamDialerTLSConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m DialerTlsConfig) MarshalJSON() ([]byte, error) {
+func (m StreamDialerTLSConfig) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@tls"
-	type t DialerTlsConfig
+	type t StreamDialerTLSConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1424,18 +1424,18 @@ func (m DialerTlsConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-type ListenerListenConfig interface {
-	isListenerListenConfig()
+type StreamListenConfig interface {
+	isStreamListenConfig()
 	PipeComponent
 }
 
-type RawListenerListenConfig []byte
+type RawStreamListenConfig []byte
 
-func (RawListenerListenConfig) isListenerListenConfig() {}
-func (RawListenerListenConfig) isPipeComponent()        {}
+func (RawStreamListenConfig) isStreamListenConfig() {}
+func (RawStreamListenConfig) isPipeComponent()      {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m RawListenerListenConfig) MarshalJSON() ([]byte, error) {
+func (m RawStreamListenConfig) MarshalJSON() ([]byte, error) {
 	if m == nil {
 		return []byte("null"), nil
 	}
@@ -1443,24 +1443,24 @@ func (m RawListenerListenConfig) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON sets *m to a copy of data.
-func (m *RawListenerListenConfig) UnmarshalJSON(data []byte) error {
+func (m *RawStreamListenConfig) UnmarshalJSON(data []byte) error {
 	if m == nil {
-		return errors.New("RawListenerListenConfig: UnmarshalJSON on nil pointer")
+		return errors.New("RawStreamListenConfig: UnmarshalJSON on nil pointer")
 	}
 	*m = append((*m)[:0], data...)
 	return nil
 }
 
-type NameListenerListenConfig struct {
+type NameStreamListenConfig struct {
 	Name string
-	ListenerListenConfig
+	StreamListenConfig
 }
 
-func (NameListenerListenConfig) isListenerListenConfig() {}
-func (NameListenerListenConfig) isPipeComponent()        {}
+func (NameStreamListenConfig) isStreamListenConfig() {}
+func (NameStreamListenConfig) isPipeComponent()      {}
 
-func (n NameListenerListenConfig) MarshalJSON() ([]byte, error) {
-	data, err := n.ListenerListenConfig.MarshalJSON()
+func (n NameStreamListenConfig) MarshalJSON() ([]byte, error) {
+	data, err := n.StreamListenConfig.MarshalJSON()
 	if err != nil {
 		return nil, err
 	}
@@ -1476,27 +1476,27 @@ func (n NameListenerListenConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-type RefListenerListenConfig string
+type RefStreamListenConfig string
 
-func (RefListenerListenConfig) isListenerListenConfig() {}
-func (RefListenerListenConfig) isPipeComponent()        {}
+func (RefStreamListenConfig) isStreamListenConfig() {}
+func (RefStreamListenConfig) isPipeComponent()      {}
 
-func (m RefListenerListenConfig) MarshalJSON() ([]byte, error) {
+func (m RefStreamListenConfig) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// ListenerListenConfigMultiConfig github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@multi
-type ListenerListenConfigMultiConfig struct {
-	Multi []ListenerListenConfig
+// StreamListenConfigMultiConfig github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@multi
+type StreamListenConfigMultiConfig struct {
+	Multi []StreamListenConfig
 }
 
-func (ListenerListenConfigMultiConfig) isListenerListenConfig() {}
-func (ListenerListenConfigMultiConfig) isPipeComponent()        {}
+func (StreamListenConfigMultiConfig) isStreamListenConfig() {}
+func (StreamListenConfigMultiConfig) isPipeComponent()      {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m ListenerListenConfigMultiConfig) MarshalJSON() ([]byte, error) {
+func (m StreamListenConfigMultiConfig) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@multi"
-	type t ListenerListenConfigMultiConfig
+	type t StreamListenConfigMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1511,19 +1511,19 @@ func (m ListenerListenConfigMultiConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// ListenerListenConfigNetworkConfig github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
-type ListenerListenConfigNetworkConfig struct {
+// StreamListenConfigNetworkConfig github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+type StreamListenConfigNetworkConfig struct {
 	Network string
 	Address string
 }
 
-func (ListenerListenConfigNetworkConfig) isListenerListenConfig() {}
-func (ListenerListenConfigNetworkConfig) isPipeComponent()        {}
+func (StreamListenConfigNetworkConfig) isStreamListenConfig() {}
+func (StreamListenConfigNetworkConfig) isPipeComponent()      {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m ListenerListenConfigNetworkConfig) MarshalJSON() ([]byte, error) {
+func (m StreamListenConfigNetworkConfig) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network"
-	type t ListenerListenConfigNetworkConfig
+	type t StreamListenConfigNetworkConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1538,19 +1538,19 @@ func (m ListenerListenConfigNetworkConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// ListenerListenConfigTlsConfig github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@tls
-type ListenerListenConfigTlsConfig struct {
-	ListenConfig ListenerListenConfig
+// StreamListenConfigTLSConfig github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@tls
+type StreamListenConfigTLSConfig struct {
+	ListenConfig StreamListenConfig
 	TLS          TLS
 }
 
-func (ListenerListenConfigTlsConfig) isListenerListenConfig() {}
-func (ListenerListenConfigTlsConfig) isPipeComponent()        {}
+func (StreamListenConfigTLSConfig) isStreamListenConfig() {}
+func (StreamListenConfigTLSConfig) isPipeComponent()      {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m ListenerListenConfigTlsConfig) MarshalJSON() ([]byte, error) {
+func (m StreamListenConfigTLSConfig) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@tls"
-	type t ListenerListenConfigTlsConfig
+	type t StreamListenConfigTLSConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1706,18 +1706,18 @@ func (m TLSSelfSigned) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-type HttpHandler interface {
-	isHttpHandler()
+type HTTPHandler interface {
+	isHTTPHandler()
 	PipeComponent
 }
 
-type RawHttpHandler []byte
+type RawHTTPHandler []byte
 
-func (RawHttpHandler) isHttpHandler()   {}
-func (RawHttpHandler) isPipeComponent() {}
+func (RawHTTPHandler) isHTTPHandler()   {}
+func (RawHTTPHandler) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m RawHttpHandler) MarshalJSON() ([]byte, error) {
+func (m RawHTTPHandler) MarshalJSON() ([]byte, error) {
 	if m == nil {
 		return []byte("null"), nil
 	}
@@ -1725,24 +1725,24 @@ func (m RawHttpHandler) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON sets *m to a copy of data.
-func (m *RawHttpHandler) UnmarshalJSON(data []byte) error {
+func (m *RawHTTPHandler) UnmarshalJSON(data []byte) error {
 	if m == nil {
-		return errors.New("RawHttpHandler: UnmarshalJSON on nil pointer")
+		return errors.New("RawHTTPHandler: UnmarshalJSON on nil pointer")
 	}
 	*m = append((*m)[:0], data...)
 	return nil
 }
 
-type NameHttpHandler struct {
+type NameHTTPHandler struct {
 	Name string
-	HttpHandler
+	HTTPHandler
 }
 
-func (NameHttpHandler) isHttpHandler()   {}
-func (NameHttpHandler) isPipeComponent() {}
+func (NameHTTPHandler) isHTTPHandler()   {}
+func (NameHTTPHandler) isPipeComponent() {}
 
-func (n NameHttpHandler) MarshalJSON() ([]byte, error) {
-	data, err := n.HttpHandler.MarshalJSON()
+func (n NameHTTPHandler) MarshalJSON() ([]byte, error) {
+	data, err := n.HTTPHandler.MarshalJSON()
 	if err != nil {
 		return nil, err
 	}
@@ -1758,28 +1758,28 @@ func (n NameHttpHandler) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-type RefHttpHandler string
+type RefHTTPHandler string
 
-func (RefHttpHandler) isHttpHandler()   {}
-func (RefHttpHandler) isPipeComponent() {}
+func (RefHTTPHandler) isHTTPHandler()   {}
+func (RefHTTPHandler) isPipeComponent() {}
 
-func (m RefHttpHandler) MarshalJSON() ([]byte, error) {
+func (m RefHTTPHandler) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
-// HttpHandlerAddRequestHeaderConfig net/http.Handler@add_request_header
-type HttpHandlerAddRequestHeaderConfig struct {
+// HTTPHandlerAddRequestHeaderConfig net/http.Handler@add_request_header
+type HTTPHandlerAddRequestHeaderConfig struct {
 	Key   string
 	Value string
 }
 
-func (HttpHandlerAddRequestHeaderConfig) isHttpHandler()   {}
-func (HttpHandlerAddRequestHeaderConfig) isPipeComponent() {}
+func (HTTPHandlerAddRequestHeaderConfig) isHTTPHandler()   {}
+func (HTTPHandlerAddRequestHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerAddRequestHeaderConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerAddRequestHeaderConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@add_request_header"
-	type t HttpHandlerAddRequestHeaderConfig
+	type t HTTPHandlerAddRequestHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1794,19 +1794,19 @@ func (m HttpHandlerAddRequestHeaderConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerAddResponseHeaderConfig net/http.Handler@add_response_header
-type HttpHandlerAddResponseHeaderConfig struct {
+// HTTPHandlerAddResponseHeaderConfig net/http.Handler@add_response_header
+type HTTPHandlerAddResponseHeaderConfig struct {
 	Key   string
 	Value string
 }
 
-func (HttpHandlerAddResponseHeaderConfig) isHttpHandler()   {}
-func (HttpHandlerAddResponseHeaderConfig) isPipeComponent() {}
+func (HTTPHandlerAddResponseHeaderConfig) isHTTPHandler()   {}
+func (HTTPHandlerAddResponseHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerAddResponseHeaderConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerAddResponseHeaderConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@add_response_header"
-	type t HttpHandlerAddResponseHeaderConfig
+	type t HTTPHandlerAddResponseHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1821,19 +1821,19 @@ func (m HttpHandlerAddResponseHeaderConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerCompressConfig net/http.Handler@compress
-type HttpHandlerCompressConfig struct {
+// HTTPHandlerCompressConfig net/http.Handler@compress
+type HTTPHandlerCompressConfig struct {
 	Level   int
-	Handler HttpHandler
+	Handler HTTPHandler
 }
 
-func (HttpHandlerCompressConfig) isHttpHandler()   {}
-func (HttpHandlerCompressConfig) isPipeComponent() {}
+func (HTTPHandlerCompressConfig) isHTTPHandler()   {}
+func (HTTPHandlerCompressConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerCompressConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerCompressConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@compress"
-	type t HttpHandlerCompressConfig
+	type t HTTPHandlerCompressConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1848,17 +1848,17 @@ func (m HttpHandlerCompressConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerConfigDump net/http.Handler@config_dump
-type HttpHandlerConfigDump struct {
+// HTTPHandlerConfigDump net/http.Handler@config_dump
+type HTTPHandlerConfigDump struct {
 }
 
-func (HttpHandlerConfigDump) isHttpHandler()   {}
-func (HttpHandlerConfigDump) isPipeComponent() {}
+func (HTTPHandlerConfigDump) isHTTPHandler()   {}
+func (HTTPHandlerConfigDump) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerConfigDump) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerConfigDump) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@config_dump"
-	type t HttpHandlerConfigDump
+	type t HTTPHandlerConfigDump
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1873,19 +1873,19 @@ func (m HttpHandlerConfigDump) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerDirectConfig net/http.Handler@direct
-type HttpHandlerDirectConfig struct {
+// HTTPHandlerDirectConfig net/http.Handler@direct
+type HTTPHandlerDirectConfig struct {
 	Code int
 	Body Input
 }
 
-func (HttpHandlerDirectConfig) isHttpHandler()   {}
-func (HttpHandlerDirectConfig) isPipeComponent() {}
+func (HTTPHandlerDirectConfig) isHTTPHandler()   {}
+func (HTTPHandlerDirectConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerDirectConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerDirectConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@direct"
-	type t HttpHandlerDirectConfig
+	type t HTTPHandlerDirectConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1900,17 +1900,17 @@ func (m HttpHandlerDirectConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerExpvar net/http.Handler@expvar
-type HttpHandlerExpvar struct {
+// HTTPHandlerExpvar net/http.Handler@expvar
+type HTTPHandlerExpvar struct {
 }
 
-func (HttpHandlerExpvar) isHttpHandler()   {}
-func (HttpHandlerExpvar) isPipeComponent() {}
+func (HTTPHandlerExpvar) isHTTPHandler()   {}
+func (HTTPHandlerExpvar) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerExpvar) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerExpvar) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@expvar"
-	type t HttpHandlerExpvar
+	type t HTTPHandlerExpvar
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1925,18 +1925,18 @@ func (m HttpHandlerExpvar) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerFileConfig net/http.Handler@file
-type HttpHandlerFileConfig struct {
+// HTTPHandlerFileConfig net/http.Handler@file
+type HTTPHandlerFileConfig struct {
 	Root string
 }
 
-func (HttpHandlerFileConfig) isHttpHandler()   {}
-func (HttpHandlerFileConfig) isPipeComponent() {}
+func (HTTPHandlerFileConfig) isHTTPHandler()   {}
+func (HTTPHandlerFileConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerFileConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerFileConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@file"
-	type t HttpHandlerFileConfig
+	type t HTTPHandlerFileConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1951,20 +1951,20 @@ func (m HttpHandlerFileConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerForwardConfig net/http.Handler@forward
-type HttpHandlerForwardConfig struct {
+// HTTPHandlerForwardConfig net/http.Handler@forward
+type HTTPHandlerForwardConfig struct {
 	TLS    TLS
-	Dialer Dialer
+	Dialer StreamDialer
 	Pass   string
 }
 
-func (HttpHandlerForwardConfig) isHttpHandler()   {}
-func (HttpHandlerForwardConfig) isPipeComponent() {}
+func (HTTPHandlerForwardConfig) isHTTPHandler()   {}
+func (HTTPHandlerForwardConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerForwardConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerForwardConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@forward"
-	type t HttpHandlerForwardConfig
+	type t HTTPHandlerForwardConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -1979,18 +1979,18 @@ func (m HttpHandlerForwardConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerH2CConfig net/http.Handler@h2c
-type HttpHandlerH2CConfig struct {
-	Handler HttpHandler
+// HTTPHandlerH2CConfig net/http.Handler@h2c
+type HTTPHandlerH2CConfig struct {
+	Handler HTTPHandler
 }
 
-func (HttpHandlerH2CConfig) isHttpHandler()   {}
-func (HttpHandlerH2CConfig) isPipeComponent() {}
+func (HTTPHandlerH2CConfig) isHTTPHandler()   {}
+func (HTTPHandlerH2CConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerH2CConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerH2CConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@h2c"
-	type t HttpHandlerH2CConfig
+	type t HTTPHandlerH2CConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -2005,19 +2005,19 @@ func (m HttpHandlerH2CConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerLogConfig net/http.Handler@log
-type HttpHandlerLogConfig struct {
+// HTTPHandlerLogConfig net/http.Handler@log
+type HTTPHandlerLogConfig struct {
 	Output  Output
-	Handler HttpHandler
+	Handler HTTPHandler
 }
 
-func (HttpHandlerLogConfig) isHttpHandler()   {}
-func (HttpHandlerLogConfig) isPipeComponent() {}
+func (HTTPHandlerLogConfig) isHTTPHandler()   {}
+func (HTTPHandlerLogConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerLogConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerLogConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@log"
-	type t HttpHandlerLogConfig
+	type t HTTPHandlerLogConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -2032,18 +2032,18 @@ func (m HttpHandlerLogConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerMultiConfig net/http.Handler@multi
-type HttpHandlerMultiConfig struct {
-	Multi []HttpHandler
+// HTTPHandlerMultiConfig net/http.Handler@multi
+type HTTPHandlerMultiConfig struct {
+	Multi []HTTPHandler
 }
 
-func (HttpHandlerMultiConfig) isHttpHandler()   {}
-func (HttpHandlerMultiConfig) isPipeComponent() {}
+func (HTTPHandlerMultiConfig) isHTTPHandler()   {}
+func (HTTPHandlerMultiConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerMultiConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerMultiConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@multi"
-	type t HttpHandlerMultiConfig
+	type t HTTPHandlerMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -2058,25 +2058,25 @@ func (m HttpHandlerMultiConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerMuxConfig net/http.Handler@mux
-type HttpHandlerMuxConfig struct {
-	Routes   []HttpHandlerMuxRoute
-	NotFound HttpHandler
+// HTTPHandlerMuxConfig net/http.Handler@mux
+type HTTPHandlerMuxConfig struct {
+	Routes   []HTTPHandlerMuxRoute
+	NotFound HTTPHandler
 }
-type HttpHandlerMuxRoute struct {
+type HTTPHandlerMuxRoute struct {
 	Prefix  string
 	Path    string
 	Regexp  string
-	Handler HttpHandler
+	Handler HTTPHandler
 }
 
-func (HttpHandlerMuxConfig) isHttpHandler()   {}
-func (HttpHandlerMuxConfig) isPipeComponent() {}
+func (HTTPHandlerMuxConfig) isHTTPHandler()   {}
+func (HTTPHandlerMuxConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerMuxConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerMuxConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@mux"
-	type t HttpHandlerMuxConfig
+	type t HTTPHandlerMuxConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -2091,19 +2091,19 @@ func (m HttpHandlerMuxConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerPollerConfig net/http.Handler@poller
-type HttpHandlerPollerConfig struct {
+// HTTPHandlerPollerConfig net/http.Handler@poller
+type HTTPHandlerPollerConfig struct {
 	Poller   string
-	Handlers []HttpHandler
+	Handlers []HTTPHandler
 }
 
-func (HttpHandlerPollerConfig) isHttpHandler()   {}
-func (HttpHandlerPollerConfig) isPipeComponent() {}
+func (HTTPHandlerPollerConfig) isHTTPHandler()   {}
+func (HTTPHandlerPollerConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerPollerConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerPollerConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@poller"
-	type t HttpHandlerPollerConfig
+	type t HTTPHandlerPollerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -2118,17 +2118,17 @@ func (m HttpHandlerPollerConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerPprof net/http.Handler@pprof
-type HttpHandlerPprof struct {
+// HTTPHandlerPprof net/http.Handler@pprof
+type HTTPHandlerPprof struct {
 }
 
-func (HttpHandlerPprof) isHttpHandler()   {}
-func (HttpHandlerPprof) isPipeComponent() {}
+func (HTTPHandlerPprof) isHTTPHandler()   {}
+func (HTTPHandlerPprof) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerPprof) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerPprof) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@pprof"
-	type t HttpHandlerPprof
+	type t HTTPHandlerPprof
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -2143,19 +2143,19 @@ func (m HttpHandlerPprof) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerRedirectConfig net/http.Handler@redirect
-type HttpHandlerRedirectConfig struct {
+// HTTPHandlerRedirectConfig net/http.Handler@redirect
+type HTTPHandlerRedirectConfig struct {
 	Code     int
 	Location string
 }
 
-func (HttpHandlerRedirectConfig) isHttpHandler()   {}
-func (HttpHandlerRedirectConfig) isPipeComponent() {}
+func (HTTPHandlerRedirectConfig) isHTTPHandler()   {}
+func (HTTPHandlerRedirectConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerRedirectConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerRedirectConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@redirect"
-	type t HttpHandlerRedirectConfig
+	type t HTTPHandlerRedirectConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -2170,18 +2170,18 @@ func (m HttpHandlerRedirectConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerRemoveRequestHeaderConfig net/http.Handler@remove_request_header
-type HttpHandlerRemoveRequestHeaderConfig struct {
+// HTTPHandlerRemoveRequestHeaderConfig net/http.Handler@remove_request_header
+type HTTPHandlerRemoveRequestHeaderConfig struct {
 	Key string
 }
 
-func (HttpHandlerRemoveRequestHeaderConfig) isHttpHandler()   {}
-func (HttpHandlerRemoveRequestHeaderConfig) isPipeComponent() {}
+func (HTTPHandlerRemoveRequestHeaderConfig) isHTTPHandler()   {}
+func (HTTPHandlerRemoveRequestHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerRemoveRequestHeaderConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerRemoveRequestHeaderConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@remove_request_header"
-	type t HttpHandlerRemoveRequestHeaderConfig
+	type t HTTPHandlerRemoveRequestHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -2196,18 +2196,18 @@ func (m HttpHandlerRemoveRequestHeaderConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerRemoveResponseHeaderConfig net/http.Handler@remove_response_header
-type HttpHandlerRemoveResponseHeaderConfig struct {
+// HTTPHandlerRemoveResponseHeaderConfig net/http.Handler@remove_response_header
+type HTTPHandlerRemoveResponseHeaderConfig struct {
 	Key string
 }
 
-func (HttpHandlerRemoveResponseHeaderConfig) isHttpHandler()   {}
-func (HttpHandlerRemoveResponseHeaderConfig) isPipeComponent() {}
+func (HTTPHandlerRemoveResponseHeaderConfig) isHTTPHandler()   {}
+func (HTTPHandlerRemoveResponseHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerRemoveResponseHeaderConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerRemoveResponseHeaderConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@remove_response_header"
-	type t HttpHandlerRemoveResponseHeaderConfig
+	type t HTTPHandlerRemoveResponseHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
@@ -2222,22 +2222,22 @@ func (m HttpHandlerRemoveResponseHeaderConfig) MarshalJSON() ([]byte, error) {
 	return data, nil
 }
 
-// HttpHandlerWeightedConfig net/http.Handler@weighted
-type HttpHandlerWeightedConfig struct {
-	Weighted []HttpHandlerWeightedWeighted
+// HTTPHandlerWeightedConfig net/http.Handler@weighted
+type HTTPHandlerWeightedConfig struct {
+	Weighted []HTTPHandlerWeightedWeighted
 }
-type HttpHandlerWeightedWeighted struct {
+type HTTPHandlerWeightedWeighted struct {
 	Weight  uint
-	Handler HttpHandler
+	Handler HTTPHandler
 }
 
-func (HttpHandlerWeightedConfig) isHttpHandler()   {}
-func (HttpHandlerWeightedConfig) isPipeComponent() {}
+func (HTTPHandlerWeightedConfig) isHTTPHandler()   {}
+func (HTTPHandlerWeightedConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HttpHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
+func (m HTTPHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@weighted"
-	type t HttpHandlerWeightedConfig
+	type t HTTPHandlerWeightedConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err

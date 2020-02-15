@@ -58,7 +58,7 @@ func (b *Build) String() string {
 
 func (b *Build) Add(kind string, t reflect.Type, fun reflect.Value) {
 
-	typeName := getTypeName(t.String())
+	typeName := getTypeName(t)
 	kindName := getKindName(kind)
 	if _, ok := b.typeOnce[typeName]; !ok {
 		err := tempType.Execute(b.buf, map[string]string{

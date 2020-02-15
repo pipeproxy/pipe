@@ -2,31 +2,14 @@ package build
 
 import (
 	"reflect"
-	"strings"
 	"text/template"
 
 	"github.com/wzshiming/namecase"
+	"github.com/wzshiming/pipe/configure/alias"
 )
 
-var exceptionTypeName = map[string]string{
-	//"io.ReadCloser":  "input.Input",
-	//"io.WriteCloser": "output.Output",
-}
-
-func getTypeName(typName string) string {
-	if t, ok := exceptionTypeName[typName]; ok {
-		typName = t
-	}
-
-	n := strings.SplitN(typName, ".", 2)
-	if len(n) == 1 {
-		return n[0]
-	}
-	if strings.ToLower(n[0]) == strings.ToLower(n[1]) {
-		return n[1]
-	}
-
-	return getName(n[0]) + getName(n[1])
+func getTypeName(t reflect.Type) string {
+	return getName(alias.GetType(t))
 }
 
 func getKindName(typName string) string {
@@ -34,7 +17,7 @@ func getKindName(typName string) string {
 }
 
 func getName(name string) string {
-	return namecase.ToUpperHump(name)
+	return namecase.ToUpperHumpInitialisms(name)
 }
 
 var tempType = template.Must(template.New("_").
