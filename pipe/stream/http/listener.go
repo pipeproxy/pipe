@@ -12,7 +12,7 @@ type singleConnListener struct {
 	ch   chan stream.Stream
 }
 
-func newSingleConnListener(conn net.Conn) *singleConnListener {
+func newSingleConnListener(conn stream.Stream) *singleConnListener {
 	ch := make(chan stream.Stream, 1)
 	ch <- conn
 	return &singleConnListener{
@@ -21,7 +21,7 @@ func newSingleConnListener(conn net.Conn) *singleConnListener {
 	}
 }
 
-func (l *singleConnListener) Accept() (net.Conn, error) {
+func (l *singleConnListener) Accept() (stream.Stream, error) {
 	conn := <-l.ch
 	if conn == nil {
 		return nil, http.ErrServerClosed
@@ -47,7 +47,7 @@ func (l *singleConnListener) Addr() net.Addr {
 
 type connCloser struct {
 	l *singleConnListener
-	net.Conn
+	stream.Stream
 }
 
 func (c *connCloser) Close() error {

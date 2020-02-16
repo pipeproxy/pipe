@@ -4,11 +4,11 @@ import (
 	"context"
 	"crypto/tls"
 	"log"
-	"net"
 	"net/http"
 	"sync"
 
 	"github.com/wzshiming/pipe/pipe/stream"
+	"github.com/wzshiming/pipe/pipe/stream/listener"
 )
 
 type server struct {
@@ -25,11 +25,11 @@ func NewServer(handler http.Handler, tls *tls.Config) *server {
 	return s
 }
 
-func (s *server) serve(ctx context.Context, listener net.Listener, handler http.Handler) error {
+func (s *server) serve(ctx context.Context, listener listener.StreamListener, handler http.Handler) error {
 	if s.tls == nil {
 		var svc = http.Server{
 			Handler: handler,
-			BaseContext: func(net.Listener) context.Context {
+			BaseContext: func(listener.StreamListener) context.Context {
 				return ctx
 			},
 		}
@@ -46,7 +46,7 @@ func (s *server) serve(ctx context.Context, listener net.Listener, handler http.
 		var svc = http.Server{
 			Handler:   handler,
 			TLSConfig: tls,
-			BaseContext: func(net.Listener) context.Context {
+			BaseContext: func(listener.StreamListener) context.Context {
 				return ctx
 			},
 		}

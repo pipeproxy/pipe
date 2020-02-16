@@ -4,7 +4,6 @@ import (
 	"context"
 	"io"
 	"log"
-	"net"
 
 	"github.com/wzshiming/pipe/pipe/stream"
 	"github.com/wzshiming/pipe/pipe/stream/listener"
@@ -12,7 +11,7 @@ import (
 
 type Server struct {
 	listenConfig listener.ListenConfig
-	listener     net.Listener
+	listener     listener.StreamListener
 	handler      stream.Handler
 }
 

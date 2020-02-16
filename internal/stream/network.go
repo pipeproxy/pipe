@@ -8,6 +8,9 @@ import (
 	"net"
 	"sync"
 	"sync/atomic"
+
+	"github.com/wzshiming/pipe/pipe/stream"
+	"github.com/wzshiming/pipe/pipe/stream/listener"
 )
 
 var (
@@ -32,7 +35,7 @@ func CloseExcess() {
 	}
 }
 
-func Listen(ctx context.Context, network, address string) (net.Listener, error) {
+func Listen(ctx context.Context, network, address string) (listener.StreamListener, error) {
 	mut.Lock()
 	defer mut.Unlock()
 	key := fmt.Sprintf("%s://%s", network, address)
@@ -53,16 +56,16 @@ func Listen(ctx context.Context, network, address string) (net.Listener, error) 
 }
 
 type Hub struct {
-	listener net.Listener
-	ch       chan net.Conn
+	listener listener.StreamListener
+	ch       chan stream.Stream
 	exit     chan struct{}
 	size     int32
 }
 
-func newHub(listener net.Listener) *Hub {
+func newHub(listener listener.StreamListener) *Hub {
 	m := &Hub{
 		listener: listener,
-		ch:       make(chan net.Conn),
+		ch:       make(chan stream.Stream),
 		exit:     make(chan struct{}),
 	}
 	go m.run()
@@ -108,7 +111,7 @@ type Listener struct {
 	hub       *Hub
 }
 
-func (l *Listener) Accept() (net.Conn, error) {
+func (l *Listener) Accept() (stream.Stream, error) {
 	select {
 	case <-l.ctx.Done():
 		l.Close()

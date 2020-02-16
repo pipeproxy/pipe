@@ -12,6 +12,8 @@ func init() {
 	alias.Register("stream.ListenConfig", &listenConfig)
 }
 
+type StreamListener = net.Listener
+
 type ListenConfig interface {
-	ListenStream(ctx context.Context) (net.Listener, error)
+	ListenStream(ctx context.Context) (StreamListener, error)
 }

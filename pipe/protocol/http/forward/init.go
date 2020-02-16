@@ -2,10 +2,10 @@ package forward
 
 import (
 	"context"
-	"net"
 	"net/http"
 
 	"github.com/wzshiming/pipe/configure/decode"
+	"github.com/wzshiming/pipe/pipe/stream"
 	"github.com/wzshiming/pipe/pipe/stream/dialer"
 	"github.com/wzshiming/pipe/pipe/tls"
 )
@@ -29,7 +29,7 @@ func NewForwardWithConfig(conf *Config) (http.Handler, error) {
 	transport := defaultTransport
 	if conf.Dialer != nil {
 		transport = defaultTransport.Clone()
-		transport.DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
+		transport.DialContext = func(ctx context.Context, network, addr string) (stream.Stream, error) {
 			return conf.Dialer.DialStream(ctx)
 		}
 		if conf.TLS != nil {

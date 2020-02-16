@@ -3,7 +3,6 @@ package tls
 import (
 	"context"
 	"crypto/tls"
-	"net"
 
 	"github.com/wzshiming/pipe/pipe/stream/listener"
 )
@@ -20,7 +19,7 @@ func NewTls(listenConfig listener.ListenConfig, tlsConfig *tls.Config) *Tls {
 	}
 }
 
-func (t *Tls) ListenStream(ctx context.Context) (net.Listener, error) {
+func (t *Tls) ListenStream(ctx context.Context) (listener.StreamListener, error) {
 	listener, err := t.listenConfig.ListenStream(ctx)
 	if err != nil {
 		return nil, err
