@@ -21,5 +21,6 @@ func (b *bufferPool) Get() []byte {
 }
 
 func (b *bufferPool) Put(d []byte) {
+	d = d[:cap(d)]
 	b.Pool.Put(d)
 }

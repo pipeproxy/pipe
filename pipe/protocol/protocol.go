@@ -1,6 +1,8 @@
 package protocol
 
 import (
+	"context"
+
 	"github.com/wzshiming/pipe/configure/alias"
 )
 
@@ -27,5 +29,5 @@ type Map interface {
 }
 
 type Handler interface {
-	ServeProtocol(ptc Protocol)
+	ServeProtocol(ctx context.Context, ptc Protocol)
 }
