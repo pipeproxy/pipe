@@ -3,13 +3,12 @@ package template
 import (
 	"io"
 	"net/http"
-	"unsafe"
 )
 
 type Text string
 
 func (t Text) Format(w io.Writer, r *http.Request) error {
-	_, err := w.Write(*(*[]byte)(unsafe.Pointer(&t)))
+	_, err := io.WriteString(w, string(t))
 	return err
 }
 

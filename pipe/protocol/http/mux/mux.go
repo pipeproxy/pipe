@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"sync/atomic"
-	"unsafe"
 
+	"github.com/wzshiming/pipe/internal/pool"
 	"github.com/wzshiming/trie"
 )
 
@@ -31,7 +31,6 @@ func NewMux() *Mux {
 		handlers: map[uint32]http.Handler{},
 		paths:    map[string]http.Handler{},
 	}
-
 	return p
 }
 
@@ -61,8 +60,11 @@ func (m *Mux) Handler(path string) (handler http.Handler, err error) {
 	if m.prefixLength == 0 {
 		return nil, ErrNotFound
 	}
-	parent := m.trie.Mapping()
-	data, _, _ := parent.Get(*(*[]byte)(unsafe.Pointer(&path)))
+
+	buf := pool.Buffer.Get()
+	defer pool.Buffer.Put(buf)
+	i := copy(buf, path[:])
+	data, _, _ := m.trie.Mapping().Get(buf[:i])
 	if len(data) != 0 {
 		conn, ok := m.getHandler(data)
 		if ok {
@@ -79,7 +81,7 @@ func (m *Mux) Handler(path string) (handler http.Handler, err error) {
 }
 
 func (m *Mux) handle(prefix string, buf []byte) {
-	m.trie.Put(*(*[]byte)(unsafe.Pointer(&prefix)), buf)
+	m.trie.Put([]byte(prefix), buf)
 	if m.prefixLength < len(prefix) {
 		m.prefixLength = len(prefix)
 	}
@@ -100,10 +102,9 @@ func (m *Mux) getHandler(index []byte) (http.Handler, bool) {
 
 func (m *Mux) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
-	connector, err := m.Handler(path)
-	if err != nil {
-		http.NotFound(rw, r)
-		return
+	handler, err := m.Handler(path)
+	if err != nil || handler == nil {
+		handler = http.HandlerFunc(http.NotFound)
 	}
-	connector.ServeHTTP(rw, r)
+	handler.ServeHTTP(rw, r)
 }

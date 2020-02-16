@@ -8,7 +8,6 @@ import (
 	"log"
 	"strings"
 	"sync/atomic"
-	"unsafe"
 
 	"github.com/wzshiming/crun"
 	"github.com/wzshiming/pipe/pipe/stream"
@@ -115,7 +114,7 @@ func (m *Mux) Handler(r io.Reader) (handler stream.Handler, prefix []byte, err e
 }
 
 func (m *Mux) handle(prefix string, buf []byte) {
-	m.trie.Put(*(*[]byte)(unsafe.Pointer(&prefix)), buf)
+	m.trie.Put([]byte(prefix), buf)
 	if m.prefixLength < len(prefix) {
 		m.prefixLength = len(prefix)
 	}

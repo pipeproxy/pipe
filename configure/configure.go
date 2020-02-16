@@ -376,6 +376,9 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 	}
 
 	if field.Ref != "" {
+		if field.Name == field.Ref {
+			return nil, nil
+		}
 		err := d.ref(field.Name, field.Ref, value)
 		if err != nil {
 			dep := []string{field.Ref}
