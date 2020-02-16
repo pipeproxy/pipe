@@ -46,7 +46,6 @@ import (
 	_ "github.com/wzshiming/pipe/pipe/stream/dialer/tls"
 	_ "github.com/wzshiming/pipe/pipe/stream/forward"
 	_ "github.com/wzshiming/pipe/pipe/stream/http"
-	_ "github.com/wzshiming/pipe/pipe/stream/listener/multi"
 	_ "github.com/wzshiming/pipe/pipe/stream/listener/network"
 	_ "github.com/wzshiming/pipe/pipe/stream/listener/tls"
 	_ "github.com/wzshiming/pipe/pipe/stream/multi"
