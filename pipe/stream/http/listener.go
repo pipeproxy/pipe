@@ -27,8 +27,8 @@ func (l *singleConnListener) Accept() (stream.Stream, error) {
 		return nil, http.ErrServerClosed
 	}
 	return &connCloser{
-		l:    l,
-		Conn: conn,
+		l:      l,
+		Stream: conn,
 	}, nil
 }
 

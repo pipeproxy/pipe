@@ -25,7 +25,7 @@ func NewServer(handler http.Handler, tls *tls.Config) *server {
 	return s
 }
 
-func (s *server) serve(ctx context.Context, listener listener.StreamListener, handler http.Handler) error {
+func (s *server) serve(ctx context.Context, listen listener.StreamListener, handler http.Handler) error {
 	if s.tls == nil {
 		var svc = http.Server{
 			Handler: handler,
@@ -33,7 +33,7 @@ func (s *server) serve(ctx context.Context, listener listener.StreamListener, ha
 				return ctx
 			},
 		}
-		err := svc.Serve(listener)
+		err := svc.Serve(listen)
 		if err != nil && err != http.ErrServerClosed {
 			return err
 		}
@@ -50,7 +50,7 @@ func (s *server) serve(ctx context.Context, listener listener.StreamListener, ha
 				return ctx
 			},
 		}
-		err := svc.ServeTLS(listener, "", "")
+		err := svc.ServeTLS(listen, "", "")
 		if err != nil && err != http.ErrServerClosed {
 			return err
 		}
