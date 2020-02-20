@@ -10,6 +10,8 @@ import (
 	_ "github.com/wzshiming/pipe/pipe/stdio/input"
 	_ "github.com/wzshiming/pipe/pipe/stdio/output"
 	_ "github.com/wzshiming/pipe/pipe/stream"
+	_ "github.com/wzshiming/pipe/pipe/stream/dialer"
+	_ "github.com/wzshiming/pipe/pipe/stream/listener"
 	_ "github.com/wzshiming/pipe/pipe/tls"
 
 	_ "github.com/wzshiming/pipe/pipe/codec/base32"
