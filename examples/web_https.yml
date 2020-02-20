@@ -1,42 +1,50 @@
-Pipe:
-  '@Ref': server
-
 Components:
-
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
-    '@Name': server
-    Multi:
-      - '@Kind': stream
-        Listener:
-          '@Kind': network
-          Network: tcp
-          Address: :80
+- '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
+  '@Name': server
+  Multi:
+  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+    Handler:
+      '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
+      Handler:
+        '@Kind': net/http.Handler@log
         Handler:
-          '@Kind': http
-          Handler:
-            '@Kind': redirect
-            Code: 302
-            Location: '{{.Scheme}}s://{{.Host}}{{.RequestURI}}'
-      - '@Kind': stream
-        Listener:
-          '@Kind': network
-          Network: tcp
-          Address: :443
+          '@Ref': redirect
+        Output:
+          '@Kind': io.WriteCloser@file
+          Path: /dev/stderr
+      TLS: null
+    Listener:
+      '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+      Address: :80
+      Network: tcp
+  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+    Handler:
+      '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
+      Handler:
+        '@Kind': net/http.Handler@log
         Handler:
-          '@Kind': http
-          TLS:
-            '@Kind': self_signed
-          Handler:
-            '@Ref': page
-
-  - '@Kind': net/http.Handler@mux
-    '@Name': page
-    Routes:
-      - Prefix: /
-        Handler:
-          '@Kind': direct
-          Body:
-            '@Kind': inline
-            Data: |
-              <html><body>This is Pipe page {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
-
+          '@Ref': page
+        Output:
+          '@Kind': io.WriteCloser@file
+          Path: /dev/stderr
+      TLS:
+        '@Kind': github.com/wzshiming/pipe/pipe/tls.TLS@self_signed
+    Listener:
+      '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+      Address: :443
+      Network: tcp
+- '@Kind': net/http.Handler@redirect
+  '@Name': redirect
+  Code: 302
+  Location: '{{.Scheme}}s://{{.Host}}{{.RequestURI}}'
+- '@Kind': net/http.Handler@direct
+  '@Name': page
+  Body:
+    '@Kind': io.ReadCloser@inline
+    Data: <html><body>This is Pipe page {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+  Code: 200
+Init: null
+Pipe:
+  '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
+  Multi:
+  - '@Ref': server

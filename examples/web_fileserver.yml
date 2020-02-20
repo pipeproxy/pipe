@@ -1,20 +1,23 @@
+Components:
+- '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+  '@Name': server
+  Handler:
+    '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
+    Handler:
+      '@Kind': net/http.Handler@log
+      Handler:
+        '@Ref': file
+      Output:
+        '@Kind': io.WriteCloser@file
+        Path: /dev/stderr
+    TLS: null
+  Listener:
+    '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+    Address: :80
+    Network: tcp
+- '@Kind': net/http.Handler@file
+  '@Name': file
+  Root: ""
+Init: null
 Pipe:
   '@Ref': server
-
-Components:
-
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
-    '@Name': server
-    Multi:
-      - '@Kind': stream
-        Listener:
-          '@Kind': network
-          Network: tcp
-          Address: :80
-        Handler:
-          '@Kind': http
-          Handler:
-            '@Ref': page
-
-  - '@Kind': net/http.Handler@file
-    '@Name': page

@@ -1,69 +1,78 @@
-Pipe:
-  '@Kind': multi
-  Multi:
-    - '@Ref': http_server
-
 Components:
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
-    '@Name': http_server
-    Multi:
-      - '@Kind': stream
-        Listener:
-          '@Kind': network
-          Network: tcp
-          Address: :80
-        Handler:
-          '@Kind': http
-          Handler:
-            '@Kind': h2c
-            Handler:
-              '@Ref': handle
-
-      - '@Kind': stream
-        Listener:
-          '@Kind': network
-          Network: tcp
-          Address: :443
-        Handler:
-          '@Kind': http
-          TLS:
-            '@Kind': self_signed
-          Handler:
-            '@Ref': handle
-
-  - '@Kind': net/http.Handler@log
-    '@Name': handle
-    Output:
-      '@Kind': file
-      Path: /dev/stderr
+- '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
+  '@Name': server
+  Multi:
+  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
     Handler:
-      '@Ref': page
-
-  - '@Kind': net/http.Handler@mux
-    '@Name': page
-    Routes:
-      - Path: /
+      '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
+      Handler:
+        '@Kind': net/http.Handler@log
         Handler:
-          '@Kind': direct
-          Body:
-            '@Kind': inline
-            Data: |
-              <html>
-              <body>
-              This is Pipe {{.Scheme}}://{{.Host}}{{.RequestURI}}
-              <pre>
-              <a href="/expvar/">/expvar/</a>
-              <a href="/pprof/">/pprof/</a>
-              <a href="/config_dump/">/config_dump/</a>
-              </pre>
-              </body>
-              </html>
-      - Path: /expvar/
+          '@Ref': debug
+        Output:
+          '@Kind': io.WriteCloser@file
+          Path: /dev/stderr
+      TLS: null
+    Listener:
+      '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+      Address: :80
+      Network: tcp
+  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+    Handler:
+      '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
+      Handler:
+        '@Kind': net/http.Handler@log
         Handler:
-          '@Kind': expvar
-      - Prefix: /pprof/
-        Handler:
-          '@Kind': pprof
-      - Path: /config_dump/
-        Handler:
-          '@Kind': config_dump
+          '@Ref': debug
+        Output:
+          '@Kind': io.WriteCloser@file
+          Path: /dev/stderr
+      TLS:
+        '@Kind': github.com/wzshiming/pipe/pipe/tls.TLS@self_signed
+    Listener:
+      '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+      Address: :443
+      Network: tcp
+- '@Kind': net/http.Handler@mux
+  '@Name': debug
+  NotFound: null
+  Routes:
+  - Handler:
+      '@Kind': net/http.Handler@multi
+      Multi:
+      - '@Kind': net/http.Handler@add_response_header
+        Key: Content-Type
+        Value: text/html; charset=utf-8
+      - '@Kind': net/http.Handler@direct
+        Body:
+          '@Kind': io.ReadCloser@inline
+          Data: |-
+            <pre>
+            <a href="./expvar/">./expvar/</a>
+            <a href="./pprof/">./pprof/</a>
+            <a href="./config_dump/">./config_dump/</a>
+            </pre>
+        Code: 200
+    Path: /
+    Prefix: ""
+    Regexp: ""
+  - Handler:
+      '@Kind': net/http.Handler@expvar
+    Path: /expvar/
+    Prefix: ""
+    Regexp: ""
+  - Handler:
+      '@Kind': net/http.Handler@pprof
+    Path: ""
+    Prefix: /pprof/
+    Regexp: ""
+  - Handler:
+      '@Kind': net/http.Handler@config_dump
+    Path: /config_dump/
+    Prefix: ""
+    Regexp: ""
+Init: null
+Pipe:
+  '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
+  Multi:
+  - '@Ref': server

@@ -1,45 +1,58 @@
+Components:
+- '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+  '@Name': server
+  Handler:
+    '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
+    Handler:
+      '@Kind': net/http.Handler@log
+      Handler:
+        '@Ref': debug
+      Output:
+        '@Kind': io.WriteCloser@file
+        Path: /dev/stderr
+    TLS: null
+  Listener:
+    '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+    Address: :80
+    Network: tcp
+- '@Kind': net/http.Handler@mux
+  '@Name': debug
+  NotFound: null
+  Routes:
+  - Handler:
+      '@Kind': net/http.Handler@multi
+      Multi:
+      - '@Kind': net/http.Handler@add_response_header
+        Key: Content-Type
+        Value: text/html; charset=utf-8
+      - '@Kind': net/http.Handler@direct
+        Body:
+          '@Kind': io.ReadCloser@inline
+          Data: |-
+            <pre>
+            <a href="./expvar/">./expvar/</a>
+            <a href="./pprof/">./pprof/</a>
+            <a href="./config_dump/">./config_dump/</a>
+            </pre>
+        Code: 200
+    Path: /
+    Prefix: ""
+    Regexp: ""
+  - Handler:
+      '@Kind': net/http.Handler@expvar
+    Path: /expvar/
+    Prefix: ""
+    Regexp: ""
+  - Handler:
+      '@Kind': net/http.Handler@pprof
+    Path: ""
+    Prefix: /pprof/
+    Regexp: ""
+  - Handler:
+      '@Kind': net/http.Handler@config_dump
+    Path: /config_dump/
+    Prefix: ""
+    Regexp: ""
+Init: null
 Pipe:
   '@Ref': server
-
-Components:
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
-    '@Name': server
-    Multi:
-      - '@Kind': stream
-        Listener:
-          '@Kind': network
-          Network: tcp
-          Address: :80
-        Handler:
-          '@Kind': http
-          Handler:
-            '@Ref': page
-
-  - '@Kind': net/http.Handler@mux
-    '@Name': page
-    Routes:
-      - Path: /
-        Handler:
-          '@Kind': multi
-          Multi:
-            - '@Kind': add_response_header
-              Key: Content-Type
-              Value: 'text/html; charset=utf-8'
-            - '@Kind': direct
-              Body:
-                '@Kind': inline
-                Data: |
-                  <pre>
-                  <a href="./expvar/">./expvar/</a>
-                  <a href="./pprof/">./pprof/</a>
-                  <a href="./config_dump/">./config_dump/</a>
-                  </pre>
-      - Path: /expvar/
-        Handler:
-          '@Kind': expvar
-      - Prefix: /pprof/
-        Handler:
-          '@Kind': pprof
-      - Path: /config_dump/
-        Handler:
-          '@Kind': config_dump

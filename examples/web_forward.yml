@@ -1,64 +1,78 @@
-Pipe:
-  '@Kind': multi
-  Multi:
-    - '@Ref': host1
-    - '@Ref': host2
-    - '@Ref': gateway
-
 Components:
-
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
-    '@Name': gateway
-    Listener:
-      '@Kind': network
-      Network: tcp
-      Address: :80
+- '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+  '@Name': server
+  Handler:
+    '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
     Handler:
-      '@Kind': http
+      '@Kind': net/http.Handler@log
       Handler:
         '@Ref': balance
-
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
-    '@Name': host1
-    Listener:
-      '@Kind': network
-      Network: tcp
-      Address: :8001
+      Output:
+        '@Kind': io.WriteCloser@file
+        Path: /dev/stderr
+    TLS: null
+  Listener:
+    '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+    Address: :80
+    Network: tcp
+- '@Kind': net/http.Handler@poller
+  '@Name': balance
+  Handlers:
+  - '@Kind': net/http.Handler@forward
+    RoundTripper: null
+    URL: http://127.0.0.1:8001
+  - '@Kind': net/http.Handler@forward
+    RoundTripper: null
+    URL: http://127.0.0.1:8002
+  Poller: round_robin
+- '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+  '@Name': host1
+  Handler:
+    '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
     Handler:
-      '@Kind': http
+      '@Kind': net/http.Handler@log
       Handler:
         '@Ref': page1
-
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
-    '@Name': host2
-    Listener:
-      '@Kind': network
-      Network: tcp
-      Address: :8002
+      Output:
+        '@Kind': io.WriteCloser@file
+        Path: /dev/stderr
+    TLS: null
+  Listener:
+    '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+    Address: :8001
+    Network: tcp
+- '@Kind': net/http.Handler@direct
+  '@Name': page1
+  Body:
+    '@Kind': io.ReadCloser@inline
+    Data: <html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+  Code: 200
+- '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+  '@Name': host2
+  Handler:
+    '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
     Handler:
-      '@Kind': http
+      '@Kind': net/http.Handler@log
       Handler:
         '@Ref': page2
-
-  - '@Kind': net/http.Handler@poller
-    '@Name': balance
-    Poller: round_robin
-    Handlers:
-      - '@Kind': forward
-        Pass: http://127.0.0.1:8001
-      - '@Kind': forward
-        Pass: http://127.0.0.1:8002
-
-  - '@Kind': net/http.Handler@direct
-    '@Name': page1
-    Body:
-      '@Kind': inline
-      Data: |
-        <html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
-
-  - '@Kind': net/http.Handler@direct
-    '@Name': page2
-    Body:
-      '@Kind': inline
-      Data: |
-        <html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+      Output:
+        '@Kind': io.WriteCloser@file
+        Path: /dev/stderr
+    TLS: null
+  Listener:
+    '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+    Address: :8002
+    Network: tcp
+- '@Kind': net/http.Handler@direct
+  '@Name': page2
+  Body:
+    '@Kind': io.ReadCloser@inline
+    Data: <html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+  Code: 200
+Init: null
+Pipe:
+  '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
+  Multi:
+  - '@Ref': host1
+  - '@Ref': host2
+  - '@Ref': gateway
