@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"strings"
+
+	"github.com/wzshiming/gotype"
 )
 
 func GenType(prefix string, typ reflect.Type, getTypeName func(reflect.Type) string) string {
@@ -52,14 +55,50 @@ func (g *genType) toType(typ reflect.Type) {
 	}
 	g.nameOnce[name] = struct{}{}
 
-	if typ.Kind() == reflect.Interface {
+	kind := typ.Kind()
+	if kind == reflect.Interface {
 		return
 	}
 
-	fmt.Fprintf(g.out, `type `)
-	fmt.Fprintf(g.out, name)
-	fmt.Fprintf(g.out, " ")
-	g.to(typ, false)
+	fmt.Fprintf(g.out, "type %s ", name)
+	switch kind {
+	case reflect.String, reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		fmt.Fprintln(g.out, strings.ToLower(kind.String()))
+		g.toEnum(typ)
+	default:
+		g.to(typ, false)
+	}
+}
+
+func (g *genType) toEnum(typ reflect.Type) {
+	pkg := typ.PkgPath()
+	imp := gotype.NewImporter()
+	t, err := imp.Import(pkg, ".")
+	if err != nil {
+		fmt.Fprintf(g.out, "// %q", err.Error())
+		return
+	}
+	name := typ.Name()
+	numChild := t.NumChild()
+
+	if numChild != 0 {
+		fmt.Fprintln(g.out, "const (")
+
+		for i := 0; i != numChild; i++ {
+			child := t.Child(i)
+			if child.Kind() != gotype.Declaration {
+				continue
+			}
+			if child.Declaration().Name() != name {
+				continue
+			}
+			g.toOther(typ)
+			fmt.Fprint(g.out, child.Name(), " ")
+			g.toOther(typ)
+			fmt.Fprintln(g.out, " = ", child.Value())
+		}
+		fmt.Fprintln(g.out, ")")
+	}
 }
 
 func (g *genType) to(typ reflect.Type, define bool) {

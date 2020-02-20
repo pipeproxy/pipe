@@ -18,8 +18,15 @@ func init() {
 	decode.Register(name, NewPollerWithConfig)
 }
 
+type PollerEnum string
+
+const (
+	EnumRandom     PollerEnum = "random"
+	EnumRoundRobin PollerEnum = "round_robin"
+)
+
 type Config struct {
-	Poller  string
+	Poller  PollerEnum
 	Dialers []dialer.Dialer
 }
 
@@ -32,9 +39,9 @@ func NewPollerWithConfig(conf *Config) (dialer.Dialer, error) {
 	}
 
 	switch conf.Poller {
-	case "random":
+	case EnumRandom:
 		return NewRandom(conf.Dialers), nil
-	case "round_robin":
+	case EnumRoundRobin:
 		return NewRoundRobin(conf.Dialers), nil
 	default:
 		return nil, ErrNotRoller

@@ -1242,9 +1242,15 @@ func (m StreamHandlerMuxConfig) MarshalJSON() ([]byte, error) {
 
 // StreamHandlerPollerConfig github.com/wzshiming/pipe/pipe/stream.Handler@poller
 type StreamHandlerPollerConfig struct {
-	Poller   string
+	Poller   StreamHandlerPollerPollerEnum
 	Handlers []StreamHandler
 }
+type StreamHandlerPollerPollerEnum string
+
+const (
+	StreamHandlerPollerPollerEnumEnumRoundRobin StreamHandlerPollerPollerEnum = "round_robin"
+	StreamHandlerPollerPollerEnumEnumRandom     StreamHandlerPollerPollerEnum = "random"
+)
 
 func (StreamHandlerPollerConfig) isStreamHandler() {}
 func (StreamHandlerPollerConfig) isPipeComponent() {}
@@ -1440,9 +1446,17 @@ func (m StreamDialerLoadConfig) MarshalJSON() ([]byte, error) {
 
 // StreamDialerNetworkConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@network
 type StreamDialerNetworkConfig struct {
-	Network string
+	Network StreamDialerNetworkNetworkEnum
 	Address string
 }
+type StreamDialerNetworkNetworkEnum string
+
+const (
+	StreamDialerNetworkNetworkEnumEnumUnix StreamDialerNetworkNetworkEnum = "unix"
+	StreamDialerNetworkNetworkEnumEnumTCP6 StreamDialerNetworkNetworkEnum = "tcp6"
+	StreamDialerNetworkNetworkEnumEnumTCP4 StreamDialerNetworkNetworkEnum = "tcp4"
+	StreamDialerNetworkNetworkEnumEnumTCP  StreamDialerNetworkNetworkEnum = "tcp"
+)
 
 func (StreamDialerNetworkConfig) isStreamDialer()  {}
 func (StreamDialerNetworkConfig) isPipeComponent() {}
@@ -1467,9 +1481,15 @@ func (m StreamDialerNetworkConfig) MarshalJSON() ([]byte, error) {
 
 // StreamDialerPollerConfig github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@poller
 type StreamDialerPollerConfig struct {
-	Poller  string
+	Poller  StreamDialerPollerPollerEnum
 	Dialers []StreamDialer
 }
+type StreamDialerPollerPollerEnum string
+
+const (
+	StreamDialerPollerPollerEnumEnumRoundRobin StreamDialerPollerPollerEnum = "round_robin"
+	StreamDialerPollerPollerEnumEnumRandom     StreamDialerPollerPollerEnum = "random"
+)
 
 func (StreamDialerPollerConfig) isStreamDialer()  {}
 func (StreamDialerPollerConfig) isPipeComponent() {}
@@ -1608,9 +1628,17 @@ func (m StreamListenConfigLoadConfig) MarshalJSON() ([]byte, error) {
 
 // StreamListenConfigNetworkConfig github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
 type StreamListenConfigNetworkConfig struct {
-	Network string
+	Network StreamListenConfigNetworkNetworkEnum
 	Address string
 }
+type StreamListenConfigNetworkNetworkEnum string
+
+const (
+	StreamListenConfigNetworkNetworkEnumEnumUnix StreamListenConfigNetworkNetworkEnum = "unix"
+	StreamListenConfigNetworkNetworkEnumEnumTCP6 StreamListenConfigNetworkNetworkEnum = "tcp6"
+	StreamListenConfigNetworkNetworkEnumEnumTCP4 StreamListenConfigNetworkNetworkEnum = "tcp4"
+	StreamListenConfigNetworkNetworkEnumEnumTCP  StreamListenConfigNetworkNetworkEnum = "tcp"
+)
 
 func (StreamListenConfigNetworkConfig) isStreamListenConfig() {}
 func (StreamListenConfigNetworkConfig) isPipeComponent()      {}
@@ -2491,9 +2519,15 @@ func (m HTTPHandlerMuxConfig) MarshalJSON() ([]byte, error) {
 
 // HTTPHandlerPollerConfig net/http.Handler@poller
 type HTTPHandlerPollerConfig struct {
-	Poller   string
+	Poller   HTTPHandlerPollerPollerEnum
 	Handlers []HTTPHandler
 }
+type HTTPHandlerPollerPollerEnum string
+
+const (
+	HTTPHandlerPollerPollerEnumEnumRoundRobin HTTPHandlerPollerPollerEnum = "round_robin"
+	HTTPHandlerPollerPollerEnumEnumRandom     HTTPHandlerPollerPollerEnum = "random"
+)
 
 func (HTTPHandlerPollerConfig) isHTTPHandler()   {}
 func (HTTPHandlerPollerConfig) isPipeComponent() {}

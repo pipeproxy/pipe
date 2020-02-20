@@ -13,11 +13,20 @@ func init() {
 
 const name = "network"
 
+type NetworkEnum string
+
+const (
+	EnumTCP  NetworkEnum = "tcp"
+	EnumTCP4 NetworkEnum = "tcp4"
+	EnumTCP6 NetworkEnum = "tcp6"
+	EnumUnix NetworkEnum = "unix"
+)
+
 type Config struct {
-	Network string
+	Network NetworkEnum
 	Address string
 }
 
 func NewNetworkWithConfig(ctx context.Context, conf *Config) listener.ListenConfig {
-	return NewNetwork(conf.Network, conf.Address)
+	return NewNetwork(string(conf.Network), conf.Address)
 }
