@@ -15,24 +15,24 @@ import (
 )
 
 type Forward struct {
-	pass      template.Format
+	url       template.Format
 	transport http.RoundTripper
 }
 
-func NewForward(pass string, transport http.RoundTripper) (*Forward, error) {
-	pa, err := template.NewFormat(pass)
+func NewForward(url string, transport http.RoundTripper) (*Forward, error) {
+	u, err := template.NewFormat(url)
 	if err != nil {
 		return nil, err
 	}
 	return &Forward{
-		pass:      pa,
+		url:       u,
 		transport: transport,
 	}, nil
 }
 
 func (h *Forward) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	pass := h.pass.FormatString(r)
-	target, err := url.Parse(pass)
+	u := h.url.FormatString(r)
+	target, err := url.Parse(u)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return

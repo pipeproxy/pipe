@@ -1,13 +1,10 @@
 package forward
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/wzshiming/pipe/configure/decode"
-	"github.com/wzshiming/pipe/pipe/stream"
-	"github.com/wzshiming/pipe/pipe/stream/dialer"
-	"github.com/wzshiming/pipe/pipe/tls"
+	"github.com/wzshiming/pipe/pipe/protocol/http/round_tripper"
 )
 
 const name = "forward"
@@ -17,30 +14,15 @@ func init() {
 }
 
 type Config struct {
-	TLS    tls.TLS
-	Dialer dialer.Dialer
-	Pass   string
+	RoundTripper round_tripper.RoundTripper
+	URL          string
 }
-
-var defaultTransport = http.DefaultTransport.(*http.Transport)
 
 // NewForwardWithConfig create a new forward with config.
 func NewForwardWithConfig(conf *Config) (http.Handler, error) {
-	transport := defaultTransport
-	if conf.Dialer != nil {
-		transport = defaultTransport.Clone()
-		transport.DialContext = func(ctx context.Context, network, addr string) (stream.Stream, error) {
-			return conf.Dialer.DialStream(ctx)
-		}
-		if conf.TLS != nil {
-			transport.TLSClientConfig = conf.TLS.TLS()
-		}
-	} else {
-		if conf.TLS != nil {
-			transport = defaultTransport.Clone()
-			transport.TLSClientConfig = conf.TLS.TLS()
-		}
+	roundTripper := conf.RoundTripper
+	if roundTripper == nil {
+		roundTripper = http.DefaultTransport
 	}
-
-	return NewForward(conf.Pass, transport)
+	return NewForward(conf.URL, roundTripper)
 }

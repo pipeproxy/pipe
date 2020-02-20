@@ -1927,9 +1927,8 @@ func (m HTTPHandlerFileConfig) MarshalJSON() ([]byte, error) {
 
 // HTTPHandlerForwardConfig net/http.Handler@forward
 type HTTPHandlerForwardConfig struct {
-	TLS    TLS
-	Dialer StreamDialer
-	Pass   string
+	RoundTripper HTTPRoundTripper
+	URL          string
 }
 
 func (HTTPHandlerForwardConfig) isHTTPHandler()   {}
@@ -2212,6 +2211,94 @@ func (HTTPHandlerWeightedConfig) isPipeComponent() {}
 func (m HTTPHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
 	const kind = "net/http.Handler@weighted"
 	type t HTTPHandlerWeightedConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+type HTTPRoundTripper interface {
+	isHTTPRoundTripper()
+	PipeComponent
+}
+
+type RawHTTPRoundTripper []byte
+
+func (RawHTTPRoundTripper) isHTTPRoundTripper() {}
+func (RawHTTPRoundTripper) isPipeComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawHTTPRoundTripper) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawHTTPRoundTripper) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawHTTPRoundTripper: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+type NameHTTPRoundTripper struct {
+	Name string
+	HTTPRoundTripper
+}
+
+func (NameHTTPRoundTripper) isHTTPRoundTripper() {}
+func (NameHTTPRoundTripper) isPipeComponent()    {}
+
+func (n NameHTTPRoundTripper) MarshalJSON() ([]byte, error) {
+	data, err := n.HTTPRoundTripper.MarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
+		}
+	}
+
+	return data, nil
+}
+
+type RefHTTPRoundTripper string
+
+func (RefHTTPRoundTripper) isHTTPRoundTripper() {}
+func (RefHTTPRoundTripper) isPipeComponent()    {}
+
+func (m RefHTTPRoundTripper) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
+}
+
+// HTTPRoundTripperTransportConfig net/http.RoundTripper@transport
+type HTTPRoundTripperTransportConfig struct {
+	TLS    TLS
+	Dialer StreamDialer
+}
+
+func (HTTPRoundTripperTransportConfig) isHTTPRoundTripper() {}
+func (HTTPRoundTripperTransportConfig) isPipeComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m HTTPRoundTripperTransportConfig) MarshalJSON() ([]byte, error) {
+	const kind = "net/http.RoundTripper@transport"
+	type t HTTPRoundTripperTransportConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
