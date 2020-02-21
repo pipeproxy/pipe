@@ -64,14 +64,7 @@ func (n Name{{.Type}}) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name" ,n.Name, data)
 	return data, nil
 }
 
@@ -109,13 +102,7 @@ func (m {{.Name}}{{.Ref.Name}}) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 `))
@@ -161,15 +148,7 @@ func (n NamePipeComponent) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -182,4 +161,14 @@ func (r RefPipeComponent) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", r)), nil
 }
 
+func appendKV(k, v string, data []byte) []byte{
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@%s\":%q}", k, v))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@%s\":%q,", k, v)), data[1:]...)
+		}
+	}
+	return data
+}
 `

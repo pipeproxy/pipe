@@ -47,15 +47,7 @@ func (n NamePipeComponent) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -66,6 +58,17 @@ func (RefPipeComponent) isPipeComponent() {}
 // MarshalJSON returns m as the JSON encoding of r.
 func (r RefPipeComponent) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", r)), nil
+}
+
+func appendKV(k, v string, data []byte) []byte {
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@%s\":%q}", k, v))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@%s\":%q,", k, v)), data[1:]...)
+		}
+	}
+	return data
 }
 
 type CodecDecoder interface {
@@ -109,14 +112,7 @@ func (n NameCodecDecoder) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -145,13 +141,7 @@ func (m CodecDecoderBase32Config) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -171,13 +161,7 @@ func (m CodecDecoderBase64Config) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -196,13 +180,7 @@ func (m CodecDecoderBzip2) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -221,13 +199,7 @@ func (m CodecDecoderGzip) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -246,13 +218,7 @@ func (m CodecDecoderHex) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -272,13 +238,7 @@ func (m CodecDecoderLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -323,14 +283,7 @@ func (n NameCodecEncoder) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -359,13 +312,7 @@ func (m CodecEncoderBase32Config) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -385,13 +332,7 @@ func (m CodecEncoderBase64Config) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -410,13 +351,7 @@ func (m CodecEncoderGzip) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -435,13 +370,7 @@ func (m CodecEncoderHex) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -461,13 +390,7 @@ func (m CodecEncoderLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -512,14 +435,7 @@ func (n NameCodecMarshaler) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -547,13 +463,7 @@ func (m CodecMarshalerJSON) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -573,13 +483,7 @@ func (m CodecMarshalerLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -624,14 +528,7 @@ func (n NameCodecUnmarshaler) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -659,13 +556,7 @@ func (m CodecUnmarshalerJSON) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -685,13 +576,7 @@ func (m CodecUnmarshalerLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -736,14 +621,7 @@ func (n NameOnce) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -774,13 +652,7 @@ func (m OnceConfigConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -800,13 +672,7 @@ func (m OnceLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -826,13 +692,7 @@ func (m OnceMessageConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -852,13 +712,7 @@ func (m OnceMultiConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -878,13 +732,7 @@ func (m OnceNoneConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -904,13 +752,7 @@ func (m OnceServiceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -955,14 +797,7 @@ func (n NameProtocolHandler) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -991,13 +826,7 @@ func (m ProtocolHandlerLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1042,14 +871,7 @@ func (n NameService) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -1078,13 +900,7 @@ func (m ServiceLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1104,13 +920,7 @@ func (m ServiceMultiConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1131,13 +941,7 @@ func (m ServiceStreamConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1182,14 +986,7 @@ func (n NameStreamHandler) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -1218,13 +1015,7 @@ func (m StreamHandlerForwardConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1245,13 +1036,7 @@ func (m StreamHandlerHTTPConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1271,13 +1056,7 @@ func (m StreamHandlerLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1297,13 +1076,7 @@ func (m StreamHandlerMultiConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1330,13 +1103,7 @@ func (m StreamHandlerMuxConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1363,13 +1130,7 @@ func (m StreamHandlerPollerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1390,13 +1151,7 @@ func (m StreamHandlerTLSDownConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1417,13 +1172,7 @@ func (m StreamHandlerTLSUpConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1447,13 +1196,7 @@ func (m StreamHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1498,14 +1241,7 @@ func (n NameStreamDialer) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -1534,13 +1270,7 @@ func (m StreamDialerLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1569,13 +1299,7 @@ func (m StreamDialerNetworkConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1602,13 +1326,7 @@ func (m StreamDialerPollerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1629,13 +1347,7 @@ func (m StreamDialerTLSConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1680,14 +1392,7 @@ func (n NameStreamListenConfig) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -1716,13 +1421,7 @@ func (m StreamListenConfigLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1751,13 +1450,7 @@ func (m StreamListenConfigNetworkConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1778,13 +1471,7 @@ func (m StreamListenConfigTLSConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1829,14 +1516,7 @@ func (n NameTLS) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -1866,13 +1546,7 @@ func (m TLSAcmeConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1894,13 +1568,7 @@ func (m TLSFromConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1920,13 +1588,7 @@ func (m TLSLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1945,13 +1607,7 @@ func (m TLSSelfSigned) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -1996,14 +1652,7 @@ func (n NameInput) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -2032,13 +1681,7 @@ func (m InputFileConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2058,13 +1701,7 @@ func (m InputInlineConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2084,13 +1721,7 @@ func (m InputLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2135,14 +1766,7 @@ func (n NameOutput) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -2171,13 +1795,7 @@ func (m OutputFileConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2197,13 +1815,7 @@ func (m OutputLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2248,14 +1860,7 @@ func (n NameHTTPHandler) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -2285,13 +1890,7 @@ func (m HTTPHandlerAddRequestHeaderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2312,13 +1911,7 @@ func (m HTTPHandlerAddResponseHeaderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2339,13 +1932,7 @@ func (m HTTPHandlerCompressConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2364,13 +1951,7 @@ func (m HTTPHandlerConfigDump) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2391,13 +1972,7 @@ func (m HTTPHandlerDirectConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2416,13 +1991,7 @@ func (m HTTPHandlerExpvar) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2442,13 +2011,7 @@ func (m HTTPHandlerFileConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2469,13 +2032,7 @@ func (m HTTPHandlerForwardConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2495,13 +2052,7 @@ func (m HTTPHandlerH2CConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2521,13 +2072,7 @@ func (m HTTPHandlerLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2548,13 +2093,7 @@ func (m HTTPHandlerLogConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2574,13 +2113,7 @@ func (m HTTPHandlerMultiConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2607,13 +2140,7 @@ func (m HTTPHandlerMuxConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2640,13 +2167,7 @@ func (m HTTPHandlerPollerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2665,13 +2186,7 @@ func (m HTTPHandlerPprof) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2692,13 +2207,7 @@ func (m HTTPHandlerRedirectConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2718,13 +2227,7 @@ func (m HTTPHandlerRemoveRequestHeaderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2744,13 +2247,7 @@ func (m HTTPHandlerRemoveResponseHeaderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2774,13 +2271,7 @@ func (m HTTPHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2825,14 +2316,7 @@ func (n NameHTTPRoundTripper) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Name\":%q}", n.Name))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Name\":%q,", n.Name)), data[1:]...)
-		}
-	}
-
+	data = appendKV("Name", n.Name, data)
 	return data, nil
 }
 
@@ -2861,13 +2345,7 @@ func (m HTTPRoundTripperLoadConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
 
@@ -2888,12 +2366,6 @@ func (m HTTPRoundTripperTransportConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if data[0] == '{' {
-		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
-		} else {
-			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
-		}
-	}
+	data = appendKV("Kind", kind, data)
 	return data, nil
 }
