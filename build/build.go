@@ -6,6 +6,8 @@ import (
 	"go/format"
 	"log"
 	"reflect"
+
+	"github.com/wzshiming/pipe/configure/alias"
 )
 
 type Build struct {
@@ -89,11 +91,12 @@ func (b *Build) Add(kind string, t reflect.Type, fun reflect.Value) {
 	}
 
 	err := tempKind.Execute(b.buf, map[string]interface{}{
-		"Name": typeName + kindName,
-		"Type": typeName,
-		"Kind": kind,
-		"Out":  t,
-		"Ref":  refType,
+		"Name":  typeName + kindName,
+		"Type":  typeName,
+		"Kind":  kind,
+		"Out":   t,
+		"Ref":   refType,
+		"Alias": alias.GetType(t),
 	})
 	if err != nil {
 		log.Printf("[ERROR] kind %s", err)

@@ -139,7 +139,7 @@ func (CodecDecoderBase32Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderBase32Config) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@base32"
+	const kind = "codec.Decoder@base32"
 	type t CodecDecoderBase32Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -165,7 +165,7 @@ func (CodecDecoderBase64Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderBase64Config) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@base64"
+	const kind = "codec.Decoder@base64"
 	type t CodecDecoderBase64Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -190,7 +190,7 @@ func (CodecDecoderBzip2) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderBzip2) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@bzip2"
+	const kind = "codec.Decoder@bzip2"
 	type t CodecDecoderBzip2
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -215,7 +215,7 @@ func (CodecDecoderGzip) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderGzip) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@gzip"
+	const kind = "codec.Decoder@gzip"
 	type t CodecDecoderGzip
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -240,7 +240,7 @@ func (CodecDecoderHex) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderHex) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@hex"
+	const kind = "codec.Decoder@hex"
 	type t CodecDecoderHex
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -266,7 +266,7 @@ func (CodecDecoderLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Decoder@load"
+	const kind = "codec.Decoder@load"
 	type t CodecDecoderLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -353,7 +353,7 @@ func (CodecEncoderBase32Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderBase32Config) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Encoder@base32"
+	const kind = "codec.Encoder@base32"
 	type t CodecEncoderBase32Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -379,7 +379,7 @@ func (CodecEncoderBase64Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderBase64Config) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Encoder@base64"
+	const kind = "codec.Encoder@base64"
 	type t CodecEncoderBase64Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -404,7 +404,7 @@ func (CodecEncoderGzip) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderGzip) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Encoder@gzip"
+	const kind = "codec.Encoder@gzip"
 	type t CodecEncoderGzip
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -429,7 +429,7 @@ func (CodecEncoderHex) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderHex) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Encoder@hex"
+	const kind = "codec.Encoder@hex"
 	type t CodecEncoderHex
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -455,7 +455,7 @@ func (CodecEncoderLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Encoder@load"
+	const kind = "codec.Encoder@load"
 	type t CodecEncoderLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -541,7 +541,7 @@ func (CodecMarshalerJSON) isPipeComponent()  {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecMarshalerJSON) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Marshaler@json"
+	const kind = "codec.Marshaler@json"
 	type t CodecMarshalerJSON
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -567,7 +567,7 @@ func (CodecMarshalerLoadConfig) isPipeComponent()  {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecMarshalerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Marshaler@load"
+	const kind = "codec.Marshaler@load"
 	type t CodecMarshalerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -653,7 +653,7 @@ func (CodecUnmarshalerJSON) isPipeComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecUnmarshalerJSON) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Unmarshaler@json"
+	const kind = "codec.Unmarshaler@json"
 	type t CodecUnmarshalerJSON
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -679,7 +679,7 @@ func (CodecUnmarshalerLoadConfig) isPipeComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecUnmarshalerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/codec.Unmarshaler@load"
+	const kind = "codec.Unmarshaler@load"
 	type t CodecUnmarshalerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -768,7 +768,7 @@ func (OnceConfigConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceConfigConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/once.Once@config"
+	const kind = "Once@config"
 	type t OnceConfigConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -794,7 +794,7 @@ func (OnceLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/once.Once@load"
+	const kind = "Once@load"
 	type t OnceLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -820,7 +820,7 @@ func (OnceMessageConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceMessageConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/once.Once@message"
+	const kind = "Once@message"
 	type t OnceMessageConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -846,7 +846,7 @@ func (OnceMultiConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/once.Once@multi"
+	const kind = "Once@multi"
 	type t OnceMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -872,7 +872,7 @@ func (OnceNoneConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceNoneConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/once.Once@none"
+	const kind = "Once@none"
 	type t OnceNoneConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -898,7 +898,7 @@ func (OnceServiceConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceServiceConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/once.Once@service"
+	const kind = "Once@service"
 	type t OnceServiceConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -985,7 +985,7 @@ func (ProtocolHandlerLoadConfig) isPipeComponent()   {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m ProtocolHandlerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/protocol.Handler@load"
+	const kind = "protocol.Handler@load"
 	type t ProtocolHandlerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1072,7 +1072,7 @@ func (ServiceLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m ServiceLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/service.Service@load"
+	const kind = "Service@load"
 	type t ServiceLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1098,7 +1098,7 @@ func (ServiceMultiConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m ServiceMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/service.Service@multi"
+	const kind = "Service@multi"
 	type t ServiceMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1125,7 +1125,7 @@ func (ServiceStreamConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m ServiceStreamConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/service.Service@stream"
+	const kind = "Service@stream"
 	type t ServiceStreamConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1212,7 +1212,7 @@ func (StreamHandlerForwardConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerForwardConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@forward"
+	const kind = "stream.Handler@forward"
 	type t StreamHandlerForwardConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1239,7 +1239,7 @@ func (StreamHandlerHTTPConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerHTTPConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@http"
+	const kind = "stream.Handler@http"
 	type t StreamHandlerHTTPConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1265,7 +1265,7 @@ func (StreamHandlerLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@load"
+	const kind = "stream.Handler@load"
 	type t StreamHandlerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1291,7 +1291,7 @@ func (StreamHandlerMultiConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@multi"
+	const kind = "stream.Handler@multi"
 	type t StreamHandlerMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1324,7 +1324,7 @@ func (StreamHandlerMuxConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerMuxConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@mux"
+	const kind = "stream.Handler@mux"
 	type t StreamHandlerMuxConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1357,7 +1357,7 @@ func (StreamHandlerPollerConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerPollerConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@poller"
+	const kind = "stream.Handler@poller"
 	type t StreamHandlerPollerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1384,7 +1384,7 @@ func (StreamHandlerTLSDownConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerTLSDownConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@tls_down"
+	const kind = "stream.Handler@tls_down"
 	type t StreamHandlerTLSDownConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1411,7 +1411,7 @@ func (StreamHandlerTLSUpConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerTLSUpConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@tls_up"
+	const kind = "stream.Handler@tls_up"
 	type t StreamHandlerTLSUpConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1441,7 +1441,7 @@ func (StreamHandlerWeightedConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream.Handler@weighted"
+	const kind = "stream.Handler@weighted"
 	type t StreamHandlerWeightedConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1528,7 +1528,7 @@ func (StreamDialerLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamDialerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@load"
+	const kind = "stream.Dialer@load"
 	type t StreamDialerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1563,7 +1563,7 @@ func (StreamDialerNetworkConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamDialerNetworkConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@network"
+	const kind = "stream.Dialer@network"
 	type t StreamDialerNetworkConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1596,7 +1596,7 @@ func (StreamDialerPollerConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamDialerPollerConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@poller"
+	const kind = "stream.Dialer@poller"
 	type t StreamDialerPollerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1623,7 +1623,7 @@ func (StreamDialerTLSConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamDialerTLSConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream/dialer.Dialer@tls"
+	const kind = "stream.Dialer@tls"
 	type t StreamDialerTLSConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1710,7 +1710,7 @@ func (StreamListenConfigLoadConfig) isPipeComponent()      {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamListenConfigLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@load"
+	const kind = "stream.ListenConfig@load"
 	type t StreamListenConfigLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1745,7 +1745,7 @@ func (StreamListenConfigNetworkConfig) isPipeComponent()      {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamListenConfigNetworkConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network"
+	const kind = "stream.ListenConfig@network"
 	type t StreamListenConfigNetworkConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1772,7 +1772,7 @@ func (StreamListenConfigTLSConfig) isPipeComponent()      {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamListenConfigTLSConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@tls"
+	const kind = "stream.ListenConfig@tls"
 	type t StreamListenConfigTLSConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1860,7 +1860,7 @@ func (TLSAcmeConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m TLSAcmeConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/tls.TLS@acme"
+	const kind = "TLS@acme"
 	type t TLSAcmeConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1888,7 +1888,7 @@ func (TLSFromConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m TLSFromConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/tls.TLS@from"
+	const kind = "TLS@from"
 	type t TLSFromConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1914,7 +1914,7 @@ func (TLSLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m TLSLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/tls.TLS@load"
+	const kind = "TLS@load"
 	type t TLSLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -1939,7 +1939,7 @@ func (TLSSelfSigned) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m TLSSelfSigned) MarshalJSON() ([]byte, error) {
-	const kind = "github.com/wzshiming/pipe/pipe/tls.TLS@self_signed"
+	const kind = "TLS@self_signed"
 	type t TLSSelfSigned
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2026,7 +2026,7 @@ func (InputFileConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m InputFileConfig) MarshalJSON() ([]byte, error) {
-	const kind = "io.ReadCloser@file"
+	const kind = "Input@file"
 	type t InputFileConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2052,7 +2052,7 @@ func (InputInlineConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m InputInlineConfig) MarshalJSON() ([]byte, error) {
-	const kind = "io.ReadCloser@inline"
+	const kind = "Input@inline"
 	type t InputInlineConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2078,7 +2078,7 @@ func (InputLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m InputLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "io.ReadCloser@load"
+	const kind = "Input@load"
 	type t InputLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2165,7 +2165,7 @@ func (OutputFileConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OutputFileConfig) MarshalJSON() ([]byte, error) {
-	const kind = "io.WriteCloser@file"
+	const kind = "Output@file"
 	type t OutputFileConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2191,7 +2191,7 @@ func (OutputLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OutputLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "io.WriteCloser@load"
+	const kind = "Output@load"
 	type t OutputLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2279,7 +2279,7 @@ func (HTTPHandlerAddRequestHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerAddRequestHeaderConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@add_request_header"
+	const kind = "http.Handler@add_request_header"
 	type t HTTPHandlerAddRequestHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2306,7 +2306,7 @@ func (HTTPHandlerAddResponseHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerAddResponseHeaderConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@add_response_header"
+	const kind = "http.Handler@add_response_header"
 	type t HTTPHandlerAddResponseHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2333,7 +2333,7 @@ func (HTTPHandlerCompressConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerCompressConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@compress"
+	const kind = "http.Handler@compress"
 	type t HTTPHandlerCompressConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2358,7 +2358,7 @@ func (HTTPHandlerConfigDump) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerConfigDump) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@config_dump"
+	const kind = "http.Handler@config_dump"
 	type t HTTPHandlerConfigDump
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2385,7 +2385,7 @@ func (HTTPHandlerDirectConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerDirectConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@direct"
+	const kind = "http.Handler@direct"
 	type t HTTPHandlerDirectConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2410,7 +2410,7 @@ func (HTTPHandlerExpvar) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerExpvar) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@expvar"
+	const kind = "http.Handler@expvar"
 	type t HTTPHandlerExpvar
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2436,7 +2436,7 @@ func (HTTPHandlerFileConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerFileConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@file"
+	const kind = "http.Handler@file"
 	type t HTTPHandlerFileConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2463,7 +2463,7 @@ func (HTTPHandlerForwardConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerForwardConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@forward"
+	const kind = "http.Handler@forward"
 	type t HTTPHandlerForwardConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2489,7 +2489,7 @@ func (HTTPHandlerH2CConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerH2CConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@h2c"
+	const kind = "http.Handler@h2c"
 	type t HTTPHandlerH2CConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2515,7 +2515,7 @@ func (HTTPHandlerLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@load"
+	const kind = "http.Handler@load"
 	type t HTTPHandlerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2542,7 +2542,7 @@ func (HTTPHandlerLogConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerLogConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@log"
+	const kind = "http.Handler@log"
 	type t HTTPHandlerLogConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2568,7 +2568,7 @@ func (HTTPHandlerMultiConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@multi"
+	const kind = "http.Handler@multi"
 	type t HTTPHandlerMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2601,7 +2601,7 @@ func (HTTPHandlerMuxConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerMuxConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@mux"
+	const kind = "http.Handler@mux"
 	type t HTTPHandlerMuxConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2634,7 +2634,7 @@ func (HTTPHandlerPollerConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerPollerConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@poller"
+	const kind = "http.Handler@poller"
 	type t HTTPHandlerPollerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2659,7 +2659,7 @@ func (HTTPHandlerPprof) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerPprof) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@pprof"
+	const kind = "http.Handler@pprof"
 	type t HTTPHandlerPprof
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2686,7 +2686,7 @@ func (HTTPHandlerRedirectConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerRedirectConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@redirect"
+	const kind = "http.Handler@redirect"
 	type t HTTPHandlerRedirectConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2712,7 +2712,7 @@ func (HTTPHandlerRemoveRequestHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerRemoveRequestHeaderConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@remove_request_header"
+	const kind = "http.Handler@remove_request_header"
 	type t HTTPHandlerRemoveRequestHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2738,7 +2738,7 @@ func (HTTPHandlerRemoveResponseHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerRemoveResponseHeaderConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@remove_response_header"
+	const kind = "http.Handler@remove_response_header"
 	type t HTTPHandlerRemoveResponseHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2768,7 +2768,7 @@ func (HTTPHandlerWeightedConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.Handler@weighted"
+	const kind = "http.Handler@weighted"
 	type t HTTPHandlerWeightedConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2855,7 +2855,7 @@ func (HTTPRoundTripperLoadConfig) isPipeComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPRoundTripperLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.RoundTripper@load"
+	const kind = "http.RoundTripper@load"
 	type t HTTPRoundTripperLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
@@ -2882,7 +2882,7 @@ func (HTTPRoundTripperTransportConfig) isPipeComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPRoundTripperTransportConfig) MarshalJSON() ([]byte, error) {
-	const kind = "net/http.RoundTripper@transport"
+	const kind = "http.RoundTripper@transport"
 	type t HTTPRoundTripperTransportConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {

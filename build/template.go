@@ -103,7 +103,7 @@ func ({{.Name}}{{.Ref.Name}}) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m {{.Name}}{{.Ref.Name}}) MarshalJSON() ([]byte, error) {
-	const kind = "{{.Out.PkgPath}}.{{.Out.Name}}@{{.Kind}}"
+	const kind = "{{.Alias}}@{{.Kind}}"
 	type t {{.Name}}{{.Ref.Name}}
 	data, err := json.Marshal(t(m))
 	if err != nil {
