@@ -8,12 +8,6 @@ import (
 	"fmt"
 )
 
-type PipeConfig struct {
-	Pipe       Service
-	Init       []Once
-	Components []PipeComponent
-}
-
 type PipeComponent interface {
 	isPipeComponent()
 	json.Marshaler
@@ -762,6 +756,34 @@ func (m RefOnce) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf("{\"@Ref\":%q}", m)), nil
 }
 
+// OnceConfigConfig github.com/wzshiming/pipe/pipe/once.Once@config
+type OnceConfigConfig struct {
+	Components []PipeComponent
+	Pipe       Service
+	Init       []Once
+}
+
+func (OnceConfigConfig) isOnce()          {}
+func (OnceConfigConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m OnceConfigConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/once.Once@config"
+	type t OnceConfigConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
 // OnceLoadConfig github.com/wzshiming/pipe/pipe/once.Once@load
 type OnceLoadConfig struct {
 	Load Input
@@ -800,6 +822,84 @@ func (OnceMessageConfig) isPipeComponent() {}
 func (m OnceMessageConfig) MarshalJSON() ([]byte, error) {
 	const kind = "github.com/wzshiming/pipe/pipe/once.Once@message"
 	type t OnceMessageConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// OnceMultiConfig github.com/wzshiming/pipe/pipe/once.Once@multi
+type OnceMultiConfig struct {
+	Multi []Once
+}
+
+func (OnceMultiConfig) isOnce()          {}
+func (OnceMultiConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m OnceMultiConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/once.Once@multi"
+	type t OnceMultiConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// OnceNoneConfig github.com/wzshiming/pipe/pipe/once.Once@none
+type OnceNoneConfig struct {
+	Any PipeComponent
+}
+
+func (OnceNoneConfig) isOnce()          {}
+func (OnceNoneConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m OnceNoneConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/once.Once@none"
+	type t OnceNoneConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	if data[0] == '{' {
+		if len(data) == 2 {
+			data = []byte(fmt.Sprintf("{\"@Kind\":%q}", kind))
+		} else {
+			data = append([]byte(fmt.Sprintf("{\"@Kind\":%q,", kind)), data[1:]...)
+		}
+	}
+	return data, nil
+}
+
+// OnceServiceConfig github.com/wzshiming/pipe/pipe/once.Once@service
+type OnceServiceConfig struct {
+	Service Service
+}
+
+func (OnceServiceConfig) isOnce()          {}
+func (OnceServiceConfig) isPipeComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m OnceServiceConfig) MarshalJSON() ([]byte, error) {
+	const kind = "github.com/wzshiming/pipe/pipe/once.Once@service"
+	type t OnceServiceConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err

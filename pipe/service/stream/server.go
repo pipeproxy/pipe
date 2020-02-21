@@ -20,20 +20,19 @@ func NewServer(listenConfig listener.ListenConfig, handler stream.Handler) (*Ser
 		listenConfig: listenConfig,
 		handler:      handler,
 	}
-	listener, err := s.listenConfig.ListenStream(context.Background())
-	if err != nil {
-		return nil, err
-	}
-
-	s.listener = listener
 	return s, nil
 }
 
 func (s *Server) Run(ctx context.Context) error {
+	listener, err := s.listenConfig.ListenStream(ctx)
+	if err != nil {
+		return err
+	}
+	s.listener = listener
 	for {
 		conn, err := s.listener.Accept()
 		if err != nil {
-			if err == io.ErrClosedPipe {
+			if err == io.ErrClosedPipe || err == context.Canceled {
 				return nil
 			}
 			return err
@@ -43,6 +42,9 @@ func (s *Server) Run(ctx context.Context) error {
 }
 
 func (s *Server) Close() error {
+	if s.listener == nil {
+		return nil
+	}
 	return s.listener.Close()
 }
 

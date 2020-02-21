@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"sort"
 	"strings"
 
 	"github.com/wzshiming/inject"
@@ -292,17 +293,9 @@ func (d *decoder) kind(ctx context.Context, name string, kind string, typ reflec
 			return nil, fmt.Errorf("pipe.configure map args error: %w", err)
 		}
 		deps = append(deps, dep...)
-
 	}
 
-	if len(deps) == 0 {
-		err := d.call(inj, fun, name, typ, value)
-		if err != nil {
-			return nil, err
-		}
-		return nil, nil
-	}
-
+	deps = d.unique(deps)
 	err := d.dependent(deps, func() error {
 		return d.call(inj, fun, name, typ, value)
 	})
@@ -351,8 +344,7 @@ func (d *decoder) decode(ctx context.Context, config []byte, value reflect.Value
 		return nil, ErrParsedParameter
 	}
 
-	elem := value.Elem()
-	if !elem.CanSet() {
+	if !value.Elem().CanSet() {
 		return nil, ErrMustBeAssignable
 	}
 
@@ -443,4 +435,28 @@ func (d *decoder) set(value reflect.Value, typ reflect.Type, r reflect.Value) er
 
 	value.Set(r)
 	return nil
+}
+
+func (d *decoder) unique(s []string) []string {
+	switch len(s) {
+	case 0:
+		return s
+	case 1:
+		_, ok := d.exists[s[0]]
+		if ok {
+			return s[:0]
+		} else {
+			return s
+		}
+	}
+	sort.Strings(s)
+	n := 0
+	for i := 1; i < len(s); i++ {
+		_, ok := d.exists[s[i]]
+		if ok || s[i] != s[n] {
+			n++
+			s[n] = s[i]
+		}
+	}
+	return s[:n+1]
 }

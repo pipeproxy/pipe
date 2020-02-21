@@ -1,3 +1,4 @@
+'@Kind': github.com/wzshiming/pipe/pipe/once.Once@config
 Components:
 - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
   '@Name': server

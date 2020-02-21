@@ -7,18 +7,15 @@ import (
 
 	"github.com/wzshiming/pipe/configure"
 	"github.com/wzshiming/pipe/pipe/once"
-	"github.com/wzshiming/pipe/pipe/service"
 	"golang.org/x/sync/errgroup"
 )
 
 type Pipe struct {
-	conf   *Config
 	config []byte
 	group  *errgroup.Group
 	ctx    context.Context
 	cancel func()
-	pipe   service.Service
-	init   []once.Once
+	once   once.Once
 	mut    sync.Mutex
 }
 
@@ -35,24 +32,24 @@ func GetPipeWithContext(ctx context.Context) (*Pipe, bool) {
 
 func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 	c := &Pipe{}
-	c.conf = &Config{}
-	c.config = config
 	c.group, c.ctx = errgroup.WithContext(ctx)
 	c.ctx = context.WithValue(c.ctx, pipeCtxKeyType(0), c)
-	err := configure.Decode(c.ctx, config, c.conf)
+	var o once.Once
+	err := configure.Decode(c.ctx, config, &o)
 	if err != nil {
 		return nil, err
 	}
-
-	if c.conf.Pipe == nil {
-		return nil, fmt.Errorf("no entry pipe field")
+	if o == nil {
+		return nil, fmt.Errorf("no entry")
 	}
+	c.once = o
+	c.config = config
 	return c, nil
 }
 
 func (c *Pipe) Run() error {
 	c.mut.Lock()
-	err := c.run(c.conf.Pipe, c.conf.Init)
+	err := c.run(c.once)
 	if err != nil {
 		c.mut.Unlock()
 		return err
@@ -61,51 +58,37 @@ func (c *Pipe) Run() error {
 	return c.group.Wait()
 }
 
-func (c *Pipe) run(pipe service.Service, init []once.Once) error {
+func (c *Pipe) run(o once.Once) error {
 	ctx, cancel := context.WithCancel(c.ctx)
-
-	for _, init := range init {
-		err := init.Do(ctx)
-		if err != nil {
-			return err
-		}
-	}
 	run := func() error {
-		return pipe.Run(ctx)
+		return o.Do(ctx)
 	}
 	c.group.Go(run)
-
 	if c.cancel != nil {
 		c.cancel()
 	}
-	if c.pipe != nil {
-		c.pipe.Close()
-	}
-
-	c.init = init
-	c.pipe = pipe
+	c.once = o
 	c.cancel = cancel
 	return nil
 }
 
 func (c *Pipe) Reload(config []byte) error {
 
-	conf := &Config{}
-	err := configure.Decode(c.ctx, config, conf)
+	var o once.Once
+	err := configure.Decode(c.ctx, config, &o)
 	if err != nil {
 		return err
 	}
-	if conf.Pipe == nil {
-		return fmt.Errorf("no entry pipe field")
+	if o == nil {
+		return fmt.Errorf("no entry")
 	}
 
 	c.mut.Lock()
 	defer c.mut.Unlock()
-	err = c.run(conf.Pipe, conf.Init)
+	err = c.run(o)
 	if err != nil {
 		return err
 	}
-	c.conf = conf
 	c.config = config
 	return nil
 }
@@ -116,7 +99,7 @@ func (c *Pipe) Close() error {
 	if c.cancel != nil {
 		c.cancel()
 	}
-	return c.pipe.Close()
+	return nil
 }
 
 func (c *Pipe) Config() []byte {

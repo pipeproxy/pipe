@@ -121,11 +121,6 @@ func (m {{.Name}}{{.Ref.Name}}) MarshalJSON() ([]byte, error) {
 `))
 
 var tempConfig = `
-type PipeConfig struct {
-	Pipe       Service
-	Init       []Once
-	Components []PipeComponent
-}
 
 type PipeComponent interface {
 	isPipeComponent()

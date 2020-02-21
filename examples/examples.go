@@ -57,7 +57,7 @@ var (
 		},
 	}
 
-	ExampleDebug = bind.PipeConfig{
+	ExampleDebug = bind.OnceConfigConfig{
 		Pipe: bind.RefService("server"),
 		Components: []bind.PipeComponent{
 			bind.NameService{
@@ -68,7 +68,7 @@ var (
 		},
 	}
 
-	ExampleFileServer = bind.PipeConfig{
+	ExampleFileServer = bind.OnceConfigConfig{
 		Pipe: bind.RefService("server"),
 		Components: []bind.PipeComponent{
 			bind.NameService{
@@ -84,7 +84,7 @@ var (
 		},
 	}
 
-	ExampleForward = bind.PipeConfig{
+	ExampleForward = bind.OnceConfigConfig{
 		Pipe: bind.ServiceMultiConfig{
 			Multi: []bind.Service{
 				bind.RefService("host1"),
@@ -140,7 +140,7 @@ var (
 		},
 	}
 
-	ExampleHTTPS = bind.PipeConfig{
+	ExampleHTTPS = bind.OnceConfigConfig{
 		Pipe: bind.ServiceMultiConfig{
 			Multi: []bind.Service{
 				bind.RefService("server"),
@@ -177,7 +177,7 @@ var (
 		},
 	}
 
-	ExampleWeighted = bind.PipeConfig{
+	ExampleWeighted = bind.OnceConfigConfig{
 		Pipe: bind.ServiceMultiConfig{
 			Multi: []bind.Service{
 				bind.RefService("gateway"),
@@ -216,7 +216,7 @@ var (
 		},
 	}
 
-	ExampleBasic = bind.PipeConfig{
+	ExampleBasic = bind.OnceConfigConfig{
 		Pipe: bind.ServiceMultiConfig{
 			Multi: []bind.Service{
 				bind.RefService("server"),
