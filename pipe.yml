@@ -1,52 +1,52 @@
-'@Kind': github.com/wzshiming/pipe/pipe/once.Once@config
+'@Kind': Once@config
 Components:
-- '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
+- '@Kind': Service@multi
   '@Name': server
   Multi:
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+  - '@Kind': Service@stream
     Handler:
-      '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
+      '@Kind': stream.Handler@http
       Handler:
-        '@Kind': net/http.Handler@log
+        '@Kind': http.Handler@log
         Handler:
           '@Ref': debug
         Output:
-          '@Kind': io.WriteCloser@file
+          '@Kind': Output@file
           Path: /dev/stderr
       TLS: null
     Listener:
-      '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+      '@Kind': stream.ListenConfig@network
       Address: :80
       Network: tcp
-  - '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+  - '@Kind': Service@stream
     Handler:
-      '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
+      '@Kind': stream.Handler@http
       Handler:
-        '@Kind': net/http.Handler@log
+        '@Kind': http.Handler@log
         Handler:
           '@Ref': debug
         Output:
-          '@Kind': io.WriteCloser@file
+          '@Kind': Output@file
           Path: /dev/stderr
       TLS:
-        '@Kind': github.com/wzshiming/pipe/pipe/tls.TLS@self_signed
+        '@Kind': TLS@self_signed
     Listener:
-      '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+      '@Kind': stream.ListenConfig@network
       Address: :443
       Network: tcp
-- '@Kind': net/http.Handler@mux
+- '@Kind': http.Handler@mux
   '@Name': debug
   NotFound: null
   Routes:
   - Handler:
-      '@Kind': net/http.Handler@multi
+      '@Kind': http.Handler@multi
       Multi:
-      - '@Kind': net/http.Handler@add_response_header
+      - '@Kind': http.Handler@add_response_header
         Key: Content-Type
         Value: text/html; charset=utf-8
-      - '@Kind': net/http.Handler@direct
+      - '@Kind': http.Handler@direct
         Body:
-          '@Kind': io.ReadCloser@inline
+          '@Kind': Input@inline
           Data: |-
             <pre>
             <a href="./expvar/">./expvar/</a>
@@ -58,22 +58,22 @@ Components:
     Prefix: ""
     Regexp: ""
   - Handler:
-      '@Kind': net/http.Handler@expvar
+      '@Kind': http.Handler@expvar
     Path: /expvar/
     Prefix: ""
     Regexp: ""
   - Handler:
-      '@Kind': net/http.Handler@pprof
+      '@Kind': http.Handler@pprof
     Path: ""
     Prefix: /pprof/
     Regexp: ""
   - Handler:
-      '@Kind': net/http.Handler@config_dump
+      '@Kind': http.Handler@config_dump
     Path: /config_dump/
     Prefix: ""
     Regexp: ""
 Init: null
 Pipe:
-  '@Kind': github.com/wzshiming/pipe/pipe/service.Service@multi
+  '@Kind': Service@multi
   Multi:
   - '@Ref': server

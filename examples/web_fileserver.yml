@@ -1,22 +1,22 @@
-'@Kind': github.com/wzshiming/pipe/pipe/once.Once@config
+'@Kind': Once@config
 Components:
-- '@Kind': github.com/wzshiming/pipe/pipe/service.Service@stream
+- '@Kind': Service@stream
   '@Name': server
   Handler:
-    '@Kind': github.com/wzshiming/pipe/pipe/stream.Handler@http
+    '@Kind': stream.Handler@http
     Handler:
-      '@Kind': net/http.Handler@log
+      '@Kind': http.Handler@log
       Handler:
         '@Ref': file
       Output:
-        '@Kind': io.WriteCloser@file
+        '@Kind': Output@file
         Path: /dev/stderr
     TLS: null
   Listener:
-    '@Kind': github.com/wzshiming/pipe/pipe/stream/listener.ListenConfig@network
+    '@Kind': stream.ListenConfig@network
     Address: :80
     Network: tcp
-- '@Kind': net/http.Handler@file
+- '@Kind': http.Handler@file
   '@Name': file
   Root: ""
 Init: null
