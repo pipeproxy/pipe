@@ -19,6 +19,9 @@ func RegisterWithBuildFunc(kind string, function, result interface{}) error {
 func buildFunc(function, result interface{}) (reflect.Value, error) {
 	buildFun := reflect.ValueOf(function)
 	buildFunTyp := buildFun.Type()
+	if buildFunTyp.Kind() != reflect.Func {
+		return reflect.Value{}, fmt.Errorf("must is a function")
+	}
 	if buildFunTyp.IsVariadic() {
 		return reflect.Value{}, fmt.Errorf("last args must is interface{}")
 	}

@@ -86,8 +86,6 @@ func tempKindGenType(prefix string, typ reflect.Type) string {
 var tempKind = template.Must(template.New("_").
 	Funcs(template.FuncMap{"genType": tempKindGenType}).
 	Parse(`
-
-
 // {{.Name}}{{.Ref.Name}} {{.Out.PkgPath}}.{{.Out.Name}}@{{.Kind}}
 {{genType .Name .Ref}}
 
@@ -96,13 +94,13 @@ func ({{.Name}}{{.Ref.Name}}) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m {{.Name}}{{.Ref.Name}}) MarshalJSON() ([]byte, error) {
-	const kind = "{{.Alias}}@{{.Kind}}"
+	const kind{{.Name}}{{.Ref.Name}} = "{{.Alias}}@{{.Kind}}"
 	type t {{.Name}}{{.Ref.Name}}
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kind{{.Name}}{{.Ref.Name}}, data)
 	return data, nil
 }
 `))
@@ -171,4 +169,18 @@ func appendKV(k, v string, data []byte) []byte{
 	}
 	return data
 }
+`
+
+var tempHeader = `
+
+// DO NOT EDIT! Code generated.
+
+package %s
+
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+)
+
 `

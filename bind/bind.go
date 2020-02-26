@@ -135,13 +135,13 @@ func (CodecDecoderBase32Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderBase32Config) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Decoder@base32"
+	const kindCodecDecoderBase32Config = "codec.Decoder@base32"
 	type t CodecDecoderBase32Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecDecoderBase32Config, data)
 	return data, nil
 }
 
@@ -155,13 +155,13 @@ func (CodecDecoderBase64Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderBase64Config) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Decoder@base64"
+	const kindCodecDecoderBase64Config = "codec.Decoder@base64"
 	type t CodecDecoderBase64Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecDecoderBase64Config, data)
 	return data, nil
 }
 
@@ -174,13 +174,13 @@ func (CodecDecoderBzip2) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderBzip2) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Decoder@bzip2"
+	const kindCodecDecoderBzip2 = "codec.Decoder@bzip2"
 	type t CodecDecoderBzip2
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecDecoderBzip2, data)
 	return data, nil
 }
 
@@ -193,13 +193,13 @@ func (CodecDecoderGzip) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderGzip) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Decoder@gzip"
+	const kindCodecDecoderGzip = "codec.Decoder@gzip"
 	type t CodecDecoderGzip
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecDecoderGzip, data)
 	return data, nil
 }
 
@@ -212,13 +212,13 @@ func (CodecDecoderHex) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderHex) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Decoder@hex"
+	const kindCodecDecoderHex = "codec.Decoder@hex"
 	type t CodecDecoderHex
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecDecoderHex, data)
 	return data, nil
 }
 
@@ -232,13 +232,13 @@ func (CodecDecoderLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecDecoderLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Decoder@load"
+	const kindCodecDecoderLoadConfig = "codec.Decoder@load"
 	type t CodecDecoderLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecDecoderLoadConfig, data)
 	return data, nil
 }
 
@@ -306,13 +306,13 @@ func (CodecEncoderBase32Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderBase32Config) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Encoder@base32"
+	const kindCodecEncoderBase32Config = "codec.Encoder@base32"
 	type t CodecEncoderBase32Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecEncoderBase32Config, data)
 	return data, nil
 }
 
@@ -326,13 +326,13 @@ func (CodecEncoderBase64Config) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderBase64Config) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Encoder@base64"
+	const kindCodecEncoderBase64Config = "codec.Encoder@base64"
 	type t CodecEncoderBase64Config
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecEncoderBase64Config, data)
 	return data, nil
 }
 
@@ -345,13 +345,13 @@ func (CodecEncoderGzip) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderGzip) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Encoder@gzip"
+	const kindCodecEncoderGzip = "codec.Encoder@gzip"
 	type t CodecEncoderGzip
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecEncoderGzip, data)
 	return data, nil
 }
 
@@ -364,13 +364,13 @@ func (CodecEncoderHex) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderHex) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Encoder@hex"
+	const kindCodecEncoderHex = "codec.Encoder@hex"
 	type t CodecEncoderHex
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecEncoderHex, data)
 	return data, nil
 }
 
@@ -384,13 +384,13 @@ func (CodecEncoderLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecEncoderLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Encoder@load"
+	const kindCodecEncoderLoadConfig = "codec.Encoder@load"
 	type t CodecEncoderLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecEncoderLoadConfig, data)
 	return data, nil
 }
 
@@ -457,13 +457,13 @@ func (CodecMarshalerJSON) isPipeComponent()  {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecMarshalerJSON) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Marshaler@json"
+	const kindCodecMarshalerJSON = "codec.Marshaler@json"
 	type t CodecMarshalerJSON
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecMarshalerJSON, data)
 	return data, nil
 }
 
@@ -477,13 +477,13 @@ func (CodecMarshalerLoadConfig) isPipeComponent()  {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecMarshalerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Marshaler@load"
+	const kindCodecMarshalerLoadConfig = "codec.Marshaler@load"
 	type t CodecMarshalerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecMarshalerLoadConfig, data)
 	return data, nil
 }
 
@@ -550,13 +550,13 @@ func (CodecUnmarshalerJSON) isPipeComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecUnmarshalerJSON) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Unmarshaler@json"
+	const kindCodecUnmarshalerJSON = "codec.Unmarshaler@json"
 	type t CodecUnmarshalerJSON
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecUnmarshalerJSON, data)
 	return data, nil
 }
 
@@ -570,13 +570,13 @@ func (CodecUnmarshalerLoadConfig) isPipeComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m CodecUnmarshalerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "codec.Unmarshaler@load"
+	const kindCodecUnmarshalerLoadConfig = "codec.Unmarshaler@load"
 	type t CodecUnmarshalerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindCodecUnmarshalerLoadConfig, data)
 	return data, nil
 }
 
@@ -646,13 +646,13 @@ func (OnceConfigConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceConfigConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Once@config"
+	const kindOnceConfigConfig = "Once@config"
 	type t OnceConfigConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindOnceConfigConfig, data)
 	return data, nil
 }
 
@@ -666,13 +666,13 @@ func (OnceLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Once@load"
+	const kindOnceLoadConfig = "Once@load"
 	type t OnceLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindOnceLoadConfig, data)
 	return data, nil
 }
 
@@ -686,13 +686,13 @@ func (OnceMessageConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceMessageConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Once@message"
+	const kindOnceMessageConfig = "Once@message"
 	type t OnceMessageConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindOnceMessageConfig, data)
 	return data, nil
 }
 
@@ -706,13 +706,13 @@ func (OnceMultiConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Once@multi"
+	const kindOnceMultiConfig = "Once@multi"
 	type t OnceMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindOnceMultiConfig, data)
 	return data, nil
 }
 
@@ -726,13 +726,13 @@ func (OnceNoneConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceNoneConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Once@none"
+	const kindOnceNoneConfig = "Once@none"
 	type t OnceNoneConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindOnceNoneConfig, data)
 	return data, nil
 }
 
@@ -746,13 +746,13 @@ func (OnceServiceConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OnceServiceConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Once@service"
+	const kindOnceServiceConfig = "Once@service"
 	type t OnceServiceConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindOnceServiceConfig, data)
 	return data, nil
 }
 
@@ -820,13 +820,13 @@ func (ProtocolHandlerLoadConfig) isPipeComponent()   {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m ProtocolHandlerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "protocol.Handler@load"
+	const kindProtocolHandlerLoadConfig = "protocol.Handler@load"
 	type t ProtocolHandlerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindProtocolHandlerLoadConfig, data)
 	return data, nil
 }
 
@@ -894,13 +894,13 @@ func (ServiceLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m ServiceLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Service@load"
+	const kindServiceLoadConfig = "Service@load"
 	type t ServiceLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindServiceLoadConfig, data)
 	return data, nil
 }
 
@@ -914,13 +914,13 @@ func (ServiceMultiConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m ServiceMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Service@multi"
+	const kindServiceMultiConfig = "Service@multi"
 	type t ServiceMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindServiceMultiConfig, data)
 	return data, nil
 }
 
@@ -935,13 +935,13 @@ func (ServiceStreamConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m ServiceStreamConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Service@stream"
+	const kindServiceStreamConfig = "Service@stream"
 	type t ServiceStreamConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindServiceStreamConfig, data)
 	return data, nil
 }
 
@@ -1009,13 +1009,13 @@ func (StreamHandlerForwardConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerForwardConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Handler@forward"
+	const kindStreamHandlerForwardConfig = "stream.Handler@forward"
 	type t StreamHandlerForwardConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamHandlerForwardConfig, data)
 	return data, nil
 }
 
@@ -1030,13 +1030,13 @@ func (StreamHandlerHTTPConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerHTTPConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Handler@http"
+	const kindStreamHandlerHTTPConfig = "stream.Handler@http"
 	type t StreamHandlerHTTPConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamHandlerHTTPConfig, data)
 	return data, nil
 }
 
@@ -1050,13 +1050,13 @@ func (StreamHandlerLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Handler@load"
+	const kindStreamHandlerLoadConfig = "stream.Handler@load"
 	type t StreamHandlerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamHandlerLoadConfig, data)
 	return data, nil
 }
 
@@ -1070,13 +1070,13 @@ func (StreamHandlerMultiConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Handler@multi"
+	const kindStreamHandlerMultiConfig = "stream.Handler@multi"
 	type t StreamHandlerMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamHandlerMultiConfig, data)
 	return data, nil
 }
 
@@ -1097,13 +1097,13 @@ func (StreamHandlerMuxConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerMuxConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Handler@mux"
+	const kindStreamHandlerMuxConfig = "stream.Handler@mux"
 	type t StreamHandlerMuxConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamHandlerMuxConfig, data)
 	return data, nil
 }
 
@@ -1124,13 +1124,13 @@ func (StreamHandlerPollerConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerPollerConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Handler@poller"
+	const kindStreamHandlerPollerConfig = "stream.Handler@poller"
 	type t StreamHandlerPollerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamHandlerPollerConfig, data)
 	return data, nil
 }
 
@@ -1145,13 +1145,13 @@ func (StreamHandlerTLSDownConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerTLSDownConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Handler@tls_down"
+	const kindStreamHandlerTLSDownConfig = "stream.Handler@tls_down"
 	type t StreamHandlerTLSDownConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamHandlerTLSDownConfig, data)
 	return data, nil
 }
 
@@ -1166,13 +1166,13 @@ func (StreamHandlerTLSUpConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerTLSUpConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Handler@tls_up"
+	const kindStreamHandlerTLSUpConfig = "stream.Handler@tls_up"
 	type t StreamHandlerTLSUpConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamHandlerTLSUpConfig, data)
 	return data, nil
 }
 
@@ -1190,13 +1190,13 @@ func (StreamHandlerWeightedConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Handler@weighted"
+	const kindStreamHandlerWeightedConfig = "stream.Handler@weighted"
 	type t StreamHandlerWeightedConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamHandlerWeightedConfig, data)
 	return data, nil
 }
 
@@ -1264,13 +1264,13 @@ func (StreamDialerLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamDialerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Dialer@load"
+	const kindStreamDialerLoadConfig = "stream.Dialer@load"
 	type t StreamDialerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamDialerLoadConfig, data)
 	return data, nil
 }
 
@@ -1293,13 +1293,13 @@ func (StreamDialerNetworkConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamDialerNetworkConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Dialer@network"
+	const kindStreamDialerNetworkConfig = "stream.Dialer@network"
 	type t StreamDialerNetworkConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamDialerNetworkConfig, data)
 	return data, nil
 }
 
@@ -1320,13 +1320,13 @@ func (StreamDialerPollerConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamDialerPollerConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Dialer@poller"
+	const kindStreamDialerPollerConfig = "stream.Dialer@poller"
 	type t StreamDialerPollerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamDialerPollerConfig, data)
 	return data, nil
 }
 
@@ -1341,13 +1341,13 @@ func (StreamDialerTLSConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamDialerTLSConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.Dialer@tls"
+	const kindStreamDialerTLSConfig = "stream.Dialer@tls"
 	type t StreamDialerTLSConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamDialerTLSConfig, data)
 	return data, nil
 }
 
@@ -1415,13 +1415,13 @@ func (StreamListenConfigLoadConfig) isPipeComponent()      {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamListenConfigLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.ListenConfig@load"
+	const kindStreamListenConfigLoadConfig = "stream.ListenConfig@load"
 	type t StreamListenConfigLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamListenConfigLoadConfig, data)
 	return data, nil
 }
 
@@ -1444,13 +1444,13 @@ func (StreamListenConfigNetworkConfig) isPipeComponent()      {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamListenConfigNetworkConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.ListenConfig@network"
+	const kindStreamListenConfigNetworkConfig = "stream.ListenConfig@network"
 	type t StreamListenConfigNetworkConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamListenConfigNetworkConfig, data)
 	return data, nil
 }
 
@@ -1465,13 +1465,13 @@ func (StreamListenConfigTLSConfig) isPipeComponent()      {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m StreamListenConfigTLSConfig) MarshalJSON() ([]byte, error) {
-	const kind = "stream.ListenConfig@tls"
+	const kindStreamListenConfigTLSConfig = "stream.ListenConfig@tls"
 	type t StreamListenConfigTLSConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindStreamListenConfigTLSConfig, data)
 	return data, nil
 }
 
@@ -1540,13 +1540,13 @@ func (TLSAcmeConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m TLSAcmeConfig) MarshalJSON() ([]byte, error) {
-	const kind = "TLS@acme"
+	const kindTLSAcmeConfig = "TLS@acme"
 	type t TLSAcmeConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindTLSAcmeConfig, data)
 	return data, nil
 }
 
@@ -1562,13 +1562,13 @@ func (TLSFromConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m TLSFromConfig) MarshalJSON() ([]byte, error) {
-	const kind = "TLS@from"
+	const kindTLSFromConfig = "TLS@from"
 	type t TLSFromConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindTLSFromConfig, data)
 	return data, nil
 }
 
@@ -1582,13 +1582,13 @@ func (TLSLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m TLSLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "TLS@load"
+	const kindTLSLoadConfig = "TLS@load"
 	type t TLSLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindTLSLoadConfig, data)
 	return data, nil
 }
 
@@ -1601,13 +1601,13 @@ func (TLSSelfSigned) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m TLSSelfSigned) MarshalJSON() ([]byte, error) {
-	const kind = "TLS@self_signed"
+	const kindTLSSelfSigned = "TLS@self_signed"
 	type t TLSSelfSigned
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindTLSSelfSigned, data)
 	return data, nil
 }
 
@@ -1675,13 +1675,13 @@ func (InputFileConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m InputFileConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Input@file"
+	const kindInputFileConfig = "Input@file"
 	type t InputFileConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindInputFileConfig, data)
 	return data, nil
 }
 
@@ -1695,13 +1695,13 @@ func (InputInlineConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m InputInlineConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Input@inline"
+	const kindInputInlineConfig = "Input@inline"
 	type t InputInlineConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindInputInlineConfig, data)
 	return data, nil
 }
 
@@ -1715,13 +1715,13 @@ func (InputLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m InputLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Input@load"
+	const kindInputLoadConfig = "Input@load"
 	type t InputLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindInputLoadConfig, data)
 	return data, nil
 }
 
@@ -1789,13 +1789,13 @@ func (OutputFileConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OutputFileConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Output@file"
+	const kindOutputFileConfig = "Output@file"
 	type t OutputFileConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindOutputFileConfig, data)
 	return data, nil
 }
 
@@ -1809,13 +1809,13 @@ func (OutputLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m OutputLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "Output@load"
+	const kindOutputLoadConfig = "Output@load"
 	type t OutputLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindOutputLoadConfig, data)
 	return data, nil
 }
 
@@ -1884,13 +1884,13 @@ func (HTTPHandlerAddRequestHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerAddRequestHeaderConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@add_request_header"
+	const kindHTTPHandlerAddRequestHeaderConfig = "http.Handler@add_request_header"
 	type t HTTPHandlerAddRequestHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerAddRequestHeaderConfig, data)
 	return data, nil
 }
 
@@ -1905,13 +1905,13 @@ func (HTTPHandlerAddResponseHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerAddResponseHeaderConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@add_response_header"
+	const kindHTTPHandlerAddResponseHeaderConfig = "http.Handler@add_response_header"
 	type t HTTPHandlerAddResponseHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerAddResponseHeaderConfig, data)
 	return data, nil
 }
 
@@ -1926,13 +1926,13 @@ func (HTTPHandlerCompressConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerCompressConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@compress"
+	const kindHTTPHandlerCompressConfig = "http.Handler@compress"
 	type t HTTPHandlerCompressConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerCompressConfig, data)
 	return data, nil
 }
 
@@ -1945,13 +1945,13 @@ func (HTTPHandlerConfigDump) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerConfigDump) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@config_dump"
+	const kindHTTPHandlerConfigDump = "http.Handler@config_dump"
 	type t HTTPHandlerConfigDump
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerConfigDump, data)
 	return data, nil
 }
 
@@ -1966,13 +1966,13 @@ func (HTTPHandlerDirectConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerDirectConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@direct"
+	const kindHTTPHandlerDirectConfig = "http.Handler@direct"
 	type t HTTPHandlerDirectConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerDirectConfig, data)
 	return data, nil
 }
 
@@ -1985,13 +1985,13 @@ func (HTTPHandlerExpvar) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerExpvar) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@expvar"
+	const kindHTTPHandlerExpvar = "http.Handler@expvar"
 	type t HTTPHandlerExpvar
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerExpvar, data)
 	return data, nil
 }
 
@@ -2005,13 +2005,13 @@ func (HTTPHandlerFileConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerFileConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@file"
+	const kindHTTPHandlerFileConfig = "http.Handler@file"
 	type t HTTPHandlerFileConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerFileConfig, data)
 	return data, nil
 }
 
@@ -2026,13 +2026,13 @@ func (HTTPHandlerForwardConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerForwardConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@forward"
+	const kindHTTPHandlerForwardConfig = "http.Handler@forward"
 	type t HTTPHandlerForwardConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerForwardConfig, data)
 	return data, nil
 }
 
@@ -2046,13 +2046,13 @@ func (HTTPHandlerH2CConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerH2CConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@h2c"
+	const kindHTTPHandlerH2CConfig = "http.Handler@h2c"
 	type t HTTPHandlerH2CConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerH2CConfig, data)
 	return data, nil
 }
 
@@ -2066,13 +2066,13 @@ func (HTTPHandlerLoadConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@load"
+	const kindHTTPHandlerLoadConfig = "http.Handler@load"
 	type t HTTPHandlerLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerLoadConfig, data)
 	return data, nil
 }
 
@@ -2087,13 +2087,13 @@ func (HTTPHandlerLogConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerLogConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@log"
+	const kindHTTPHandlerLogConfig = "http.Handler@log"
 	type t HTTPHandlerLogConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerLogConfig, data)
 	return data, nil
 }
 
@@ -2107,13 +2107,13 @@ func (HTTPHandlerMultiConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerMultiConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@multi"
+	const kindHTTPHandlerMultiConfig = "http.Handler@multi"
 	type t HTTPHandlerMultiConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerMultiConfig, data)
 	return data, nil
 }
 
@@ -2134,13 +2134,13 @@ func (HTTPHandlerMuxConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerMuxConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@mux"
+	const kindHTTPHandlerMuxConfig = "http.Handler@mux"
 	type t HTTPHandlerMuxConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerMuxConfig, data)
 	return data, nil
 }
 
@@ -2161,13 +2161,13 @@ func (HTTPHandlerPollerConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerPollerConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@poller"
+	const kindHTTPHandlerPollerConfig = "http.Handler@poller"
 	type t HTTPHandlerPollerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerPollerConfig, data)
 	return data, nil
 }
 
@@ -2180,13 +2180,13 @@ func (HTTPHandlerPprof) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerPprof) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@pprof"
+	const kindHTTPHandlerPprof = "http.Handler@pprof"
 	type t HTTPHandlerPprof
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerPprof, data)
 	return data, nil
 }
 
@@ -2201,13 +2201,13 @@ func (HTTPHandlerRedirectConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerRedirectConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@redirect"
+	const kindHTTPHandlerRedirectConfig = "http.Handler@redirect"
 	type t HTTPHandlerRedirectConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerRedirectConfig, data)
 	return data, nil
 }
 
@@ -2221,13 +2221,13 @@ func (HTTPHandlerRemoveRequestHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerRemoveRequestHeaderConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@remove_request_header"
+	const kindHTTPHandlerRemoveRequestHeaderConfig = "http.Handler@remove_request_header"
 	type t HTTPHandlerRemoveRequestHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerRemoveRequestHeaderConfig, data)
 	return data, nil
 }
 
@@ -2241,13 +2241,13 @@ func (HTTPHandlerRemoveResponseHeaderConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerRemoveResponseHeaderConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@remove_response_header"
+	const kindHTTPHandlerRemoveResponseHeaderConfig = "http.Handler@remove_response_header"
 	type t HTTPHandlerRemoveResponseHeaderConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerRemoveResponseHeaderConfig, data)
 	return data, nil
 }
 
@@ -2265,13 +2265,13 @@ func (HTTPHandlerWeightedConfig) isPipeComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPHandlerWeightedConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.Handler@weighted"
+	const kindHTTPHandlerWeightedConfig = "http.Handler@weighted"
 	type t HTTPHandlerWeightedConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPHandlerWeightedConfig, data)
 	return data, nil
 }
 
@@ -2339,13 +2339,13 @@ func (HTTPRoundTripperLoadConfig) isPipeComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPRoundTripperLoadConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.RoundTripper@load"
+	const kindHTTPRoundTripperLoadConfig = "http.RoundTripper@load"
 	type t HTTPRoundTripperLoadConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPRoundTripperLoadConfig, data)
 	return data, nil
 }
 
@@ -2360,12 +2360,12 @@ func (HTTPRoundTripperTransportConfig) isPipeComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
 func (m HTTPRoundTripperTransportConfig) MarshalJSON() ([]byte, error) {
-	const kind = "http.RoundTripper@transport"
+	const kindHTTPRoundTripperTransportConfig = "http.RoundTripper@transport"
 	type t HTTPRoundTripperTransportConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV("Kind", kind, data)
+	data = appendKV("Kind", kindHTTPRoundTripperTransportConfig, data)
 	return data, nil
 }
