@@ -38,17 +38,16 @@ func newDecoder() *decoder {
 
 func (d *decoder) Decode(ctx context.Context, config []byte, i interface{}) error {
 	v := reflect.ValueOf(i)
-	_, err := d.decode(ctx, config, v)
+	need, err := d.decode(ctx, config, v)
 	if err != nil {
 		return err
 	}
 
-	need := []string{}
 	for name := range d.dependentRef {
-		if _, ok := d.exists[name]; !ok {
-			need = append(need, name)
-		}
+		need = append(need, name)
 	}
+	need = d.unique(need)
+
 	if len(need) != 0 {
 		return fmt.Errorf("missing dependency %v", need)
 	}
@@ -449,14 +448,22 @@ func (d *decoder) unique(s []string) []string {
 			return s
 		}
 	}
+
 	sort.Strings(s)
-	n := 0
-	for i := 1; i < len(s); i++ {
-		_, ok := d.exists[s[i]]
-		if ok || s[i] != s[n] {
-			n++
-			s[n] = s[i]
+	ret := s[:0]
+	for i := 0; i != len(s); i++ {
+		j := i + 1
+		if j != len(s) {
+			if s[i] == s[j] {
+				continue
+			}
 		}
+		_, ok := d.exists[s[i]]
+		if ok {
+			continue
+		}
+
+		ret = append(ret, s[i])
 	}
-	return s[:n+1]
+	return ret
 }
