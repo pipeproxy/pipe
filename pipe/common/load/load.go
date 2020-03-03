@@ -15,7 +15,7 @@ func Load(ctx context.Context, load io.ReadCloser, i interface{}) error {
 		return err
 	}
 	load.Close()
-	data, err = yaml.YAMLToJSON(data)
+	data, err = yaml.YAMLToJSONStrict(data)
 	if err != nil {
 		return err
 	}

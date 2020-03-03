@@ -13,7 +13,6 @@ import (
 	"github.com/wzshiming/pipe/internal/notify"
 	"github.com/wzshiming/pipe/internal/stream"
 
-	"github.com/kubernetes-sigs/yaml"
 	"github.com/spf13/pflag"
 	"github.com/wzshiming/lockfile"
 	"github.com/wzshiming/pipe"
@@ -116,10 +115,6 @@ func getConfig(conf string) ([]byte, error) {
 		return nil, fmt.Errorf("read config file %q error: %w", conf, err)
 	}
 
-	c, err = yaml.YAMLToJSONStrict(c)
-	if err != nil {
-		return nil, fmt.Errorf("converts config YAML to JSON error: %w", err)
-	}
 	return c, nil
 }
 

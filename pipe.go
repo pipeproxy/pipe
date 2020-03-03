@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/wzshiming/pipe/configure"
+	"github.com/wzshiming/pipe/pipe/common/load"
 	"github.com/wzshiming/pipe/pipe/once"
+	"github.com/wzshiming/pipe/pipe/stdio/input/inline"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -35,7 +36,7 @@ func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 	c.group, c.ctx = errgroup.WithContext(ctx)
 	c.ctx = context.WithValue(c.ctx, pipeCtxKeyType(0), c)
 	var o once.Once
-	err := configure.Decode(c.ctx, config, &o)
+	err := load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: string(config)}), &o)
 	if err != nil {
 		return nil, err
 	}
@@ -73,9 +74,8 @@ func (c *Pipe) run(o once.Once) error {
 }
 
 func (c *Pipe) Reload(config []byte) error {
-
 	var o once.Once
-	err := configure.Decode(c.ctx, config, &o)
+	err := load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: string(config)}), &o)
 	if err != nil {
 		return err
 	}
