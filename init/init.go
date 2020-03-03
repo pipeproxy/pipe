@@ -35,6 +35,7 @@ import (
 	_ "github.com/wzshiming/pipe/pipe/protocol/http/file"
 	_ "github.com/wzshiming/pipe/pipe/protocol/http/forward"
 	_ "github.com/wzshiming/pipe/pipe/protocol/http/h2c"
+	_ "github.com/wzshiming/pipe/pipe/protocol/http/host"
 	_ "github.com/wzshiming/pipe/pipe/protocol/http/log"
 	_ "github.com/wzshiming/pipe/pipe/protocol/http/multi"
 	_ "github.com/wzshiming/pipe/pipe/protocol/http/mux"
