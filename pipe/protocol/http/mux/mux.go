@@ -29,13 +29,13 @@ type Mux struct {
 }
 
 type regexpRoutes struct {
-	Regexps []*regexpRoute
-	Handler http.Handler
+	matchers []*matcher
+	handler  http.Handler
 }
 
-type regexpRoute struct {
-	Regexp  *regexp.Regexp
-	Handler http.Handler
+type matcher struct {
+	match   *regexp.Regexp
+	handler http.Handler
 }
 
 // NewMux create a new Mux.
@@ -127,14 +127,14 @@ func (m *Mux) setHandler(hand http.Handler, reg *regexp.Regexp) ([]byte, error) 
 		m.handlers[k] = &regexpRoutes{}
 	}
 	if reg == nil {
-		if m.handlers[k].Handler != nil {
+		if m.handlers[k].handler != nil {
 			return nil, ErrRouteAlreadyExists
 		}
-		m.handlers[k].Handler = hand
+		m.handlers[k].handler = hand
 	} else {
-		m.handlers[k].Regexps = append(m.handlers[k].Regexps, &regexpRoute{
-			Regexp:  reg,
-			Handler: hand,
+		m.handlers[k].matchers = append(m.handlers[k].matchers, &matcher{
+			match:   reg,
+			handler: hand,
 		})
 	}
 
@@ -146,17 +146,17 @@ func (m *Mux) getHandler(index []byte) (http.Handler, bool) {
 	if !ok {
 		return nil, false
 	}
-	if len(c.Regexps) != 0 {
-		for _, r := range c.Regexps {
-			if r.Regexp.Match(index[handlerMapPrefixSize:]) {
-				return r.Handler, true
+	if len(c.matchers) != 0 {
+		for _, r := range c.matchers {
+			if r.match.Match(index[handlerMapPrefixSize:]) {
+				return r.handler, true
 			}
 		}
 	}
-	if c.Handler == nil {
+	if c.handler == nil {
 		return nil, false
 	}
-	return c.Handler, true
+	return c.handler, true
 }
 
 func (m *Mux) ServeHTTP(rw http.ResponseWriter, r *http.Request) {

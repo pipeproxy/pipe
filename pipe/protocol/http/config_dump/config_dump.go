@@ -1,6 +1,7 @@
 package config_dump
 
 import (
+	"bytes"
 	"net/http"
 
 	"github.com/wzshiming/pipe"
@@ -16,6 +17,14 @@ func (c *ConfigDump) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if ok {
 		config = pip.Config()
 	}
-	rw.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	config = bytes.TrimSpace(config)
+
+	contentType := "application/json; charset=utf-8"
+	if config[0] != '{' {
+		contentType = "text/x-yaml; charset=utf-8"
+	}
+
+	rw.Header().Set("Content-Type", contentType)
 	rw.Write(config)
 }
