@@ -20,6 +20,7 @@ import (
 	_ "github.com/wzshiming/pipe/pipe/codec/gzip"
 	_ "github.com/wzshiming/pipe/pipe/codec/hex"
 	_ "github.com/wzshiming/pipe/pipe/codec/json"
+	_ "github.com/wzshiming/pipe/pipe/codec/yaml"
 	_ "github.com/wzshiming/pipe/pipe/once/config"
 	_ "github.com/wzshiming/pipe/pipe/once/message"
 	_ "github.com/wzshiming/pipe/pipe/once/multi"
