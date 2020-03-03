@@ -15,6 +15,7 @@ func init() {
 
 var (
 	ErrNotHandler = fmt.Errorf("error not handler")
+	ErrNotRouter  = fmt.Errorf("error not router")
 )
 
 type Route struct {
@@ -39,9 +40,12 @@ func NewMuxWithConfig(conf *Config) (http.Handler, error) {
 		}
 		if route.Path != "" {
 			mux.HandlePath(route.Path, route.Handler)
-		}
-		if route.Prefix != "" {
+		} else if route.Regexp == "" && route.Prefix != "" {
 			mux.HandlePrefix(route.Prefix, route.Handler)
+		} else if route.Regexp != "" {
+			mux.HandlePrefixAndRegexp(route.Prefix, route.Regexp, route.Handler)
+		} else {
+			return nil, ErrNotRouter
 		}
 	}
 	return mux, nil

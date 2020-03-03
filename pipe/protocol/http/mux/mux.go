@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"net/http"
+	"regexp"
 	"sync/atomic"
 
 	"github.com/wzshiming/pipe/internal/pool"
@@ -11,24 +12,37 @@ import (
 )
 
 var (
-	ErrNotFound = fmt.Errorf("error not found")
+	ErrNotFound           = fmt.Errorf("error not found")
+	ErrRouteAlreadyExists = fmt.Errorf("error route already exists")
 )
+
+const handlerMapPrefixSize = 4
 
 // Mux is an Applicative protocol multiplexer.
 type Mux struct {
 	trie         *trie.Trie
 	prefixLength int
 	size         uint32
-	handlers     map[uint32]http.Handler
+	handlers     map[uint32]*regexpRoutes
 	paths        map[string]http.Handler
 	notFound     http.Handler
+}
+
+type regexpRoutes struct {
+	Regexps []*regexpRoute
+	Handler http.Handler
+}
+
+type regexpRoute struct {
+	Regexp  *regexp.Regexp
+	Handler http.Handler
 }
 
 // NewMux create a new Mux.
 func NewMux() *Mux {
 	p := &Mux{
 		trie:     trie.NewTrie(),
-		handlers: map[uint32]http.Handler{},
+		handlers: map[uint32]*regexpRoutes{},
 		paths:    map[string]http.Handler{},
 	}
 	return p
@@ -41,7 +55,23 @@ func (m *Mux) NotFound(handler http.Handler) error {
 }
 
 func (m *Mux) HandlePrefix(prefix string, handler http.Handler) error {
-	buf := m.setHandler(handler)
+	buf, err := m.setHandler(handler, nil)
+	if err != nil {
+		return err
+	}
+	m.handle(prefix, buf)
+	return nil
+}
+
+func (m *Mux) HandlePrefixAndRegexp(prefix, reg string, handler http.Handler) error {
+	r, err := regexp.Compile(reg)
+	if err != nil {
+		return err
+	}
+	buf, err := m.setHandler(handler, r)
+	if err != nil {
+		return err
+	}
 	m.handle(prefix, buf)
 	return nil
 }
@@ -87,17 +117,46 @@ func (m *Mux) handle(prefix string, buf []byte) {
 	}
 }
 
-func (m *Mux) setHandler(hand http.Handler) []byte {
+func (m *Mux) setHandler(hand http.Handler, reg *regexp.Regexp) ([]byte, error) {
 	k := atomic.AddUint32(&m.size, 1)
-	m.handlers[k] = hand
-	buf := make([]byte, 4)
+	buf := make([]byte, handlerMapPrefixSize)
 	binary.BigEndian.PutUint32(buf, k)
-	return buf
+
+	_, ok := m.handlers[k]
+	if !ok {
+		m.handlers[k] = &regexpRoutes{}
+	}
+	if reg == nil {
+		if m.handlers[k].Handler != nil {
+			return nil, ErrRouteAlreadyExists
+		}
+		m.handlers[k].Handler = hand
+	} else {
+		m.handlers[k].Regexps = append(m.handlers[k].Regexps, &regexpRoute{
+			Regexp:  reg,
+			Handler: hand,
+		})
+	}
+
+	return buf, nil
 }
 
 func (m *Mux) getHandler(index []byte) (http.Handler, bool) {
 	c, ok := m.handlers[binary.BigEndian.Uint32(index)]
-	return c, ok
+	if !ok {
+		return nil, false
+	}
+	if len(c.Regexps) != 0 {
+		for _, r := range c.Regexps {
+			if r.Regexp.Match(index[handlerMapPrefixSize:]) {
+				return r.Handler, true
+			}
+		}
+	}
+	if c.Handler == nil {
+		return nil, false
+	}
+	return c.Handler, true
 }
 
 func (m *Mux) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
