@@ -7,10 +7,8 @@ require (
 	github.com/kubernetes-sigs/yaml v1.1.0
 	github.com/spf13/pflag v1.0.5
 	github.com/wzshiming/crun v0.3.3
-	github.com/wzshiming/gotype v0.6.3
-	github.com/wzshiming/inject v0.1.0
+	github.com/wzshiming/funcfg v0.0.0-20200402093000-44fa593a28aa
 	github.com/wzshiming/lockfile v0.0.5
-	github.com/wzshiming/namecase v0.0.0-20191212122028-041c69d82ef7
 	github.com/wzshiming/notify v0.0.5
 	github.com/wzshiming/trie v0.0.1
 	golang.org/x/crypto v0.0.0-20200208060501-ecb85df21340

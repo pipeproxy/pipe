@@ -9,8 +9,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/wzshiming/pipe/pipe/stream"
-	"github.com/wzshiming/pipe/pipe/stream/listener"
+	"github.com/wzshiming/pipe/components/stream"
+	"github.com/wzshiming/pipe/components/stream/listener"
 )
 
 var (

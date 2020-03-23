@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/wzshiming/pipe/pipe/common/load"
-	"github.com/wzshiming/pipe/pipe/once"
-	"github.com/wzshiming/pipe/pipe/stdio/input/inline"
+	"github.com/wzshiming/pipe/components/common/load"
+	"github.com/wzshiming/pipe/components/once"
+	"github.com/wzshiming/pipe/components/stdio/input/inline"
 	"golang.org/x/sync/errgroup"
 )
 
 type Pipe struct {
-	config []byte
+	config string
 	group  *errgroup.Group
 	ctx    context.Context
 	cancel func()
@@ -32,11 +32,12 @@ func GetPipeWithContext(ctx context.Context) (*Pipe, bool) {
 }
 
 func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
+	conf := string(config)
 	c := &Pipe{}
 	c.group, c.ctx = errgroup.WithContext(ctx)
 	c.ctx = context.WithValue(c.ctx, pipeCtxKeyType(0), c)
 	var o once.Once
-	err := load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: string(config)}), &o)
+	err := load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 		return nil, fmt.Errorf("no entry")
 	}
 	c.once = o
-	c.config = config
+	c.config = conf
 	return c, nil
 }
 
@@ -74,8 +75,9 @@ func (c *Pipe) run(o once.Once) error {
 }
 
 func (c *Pipe) Reload(config []byte) error {
+	conf := string(config)
 	var o once.Once
-	err := load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: string(config)}), &o)
+	err := load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
 	if err != nil {
 		return err
 	}
@@ -89,7 +91,7 @@ func (c *Pipe) Reload(config []byte) error {
 	if err != nil {
 		return err
 	}
-	c.config = config
+	c.config = conf
 	return nil
 }
 
@@ -105,5 +107,5 @@ func (c *Pipe) Close() error {
 func (c *Pipe) Config() []byte {
 	c.mut.Lock()
 	defer c.mut.Unlock()
-	return c.config
+	return []byte(c.config)
 }
