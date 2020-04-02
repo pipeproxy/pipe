@@ -1,40 +1,48 @@
-'@Kind': Once@config
+'@Kind': sample@once.Once
 Components:
-- '@Kind': Service@stream
-  '@Name': gateway
-  Handler:
-    '@Kind': stream.Handler@http
+- '@Kind': def@service.Service
+  Def:
+    '@Kind': stream@service.Service
     Handler:
-      '@Kind': http.Handler@log
+      '@Kind': http@stream.Handler
       Handler:
-        '@Ref': weighted
-      Output:
-        '@Kind': Output@file
-        Path: /dev/stderr
-    TLS: null
-  Listener:
-    '@Kind': stream.ListenConfig@network
-    Address: :80
-    Network: tcp
-- '@Kind': http.Handler@weighted
-  '@Name': weighted
-  Weighted:
-  - Handler:
-      '@Kind': http.Handler@direct
-      Body:
-        '@Kind': Input@inline
-        Data: <html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
-      Code: 200
-    Weight: 2
-  - Handler:
-      '@Kind': http.Handler@direct
-      Body:
-        '@Kind': Input@inline
-        Data: <html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
-      Code: 200
-    Weight: 8
+        '@Kind': log@net/http.Handler
+        Handler:
+          '@Kind': def@net/http.Handler
+          Def: null
+          Name: weighted
+        Output:
+          '@Kind': file@io.Writer
+          Path: /dev/stderr
+      TLS: null
+    Listener:
+      '@Kind': network@stream/listener.ListenConfig
+      Address: :80
+      Network: tcp
+  Name: gateway
+- '@Kind': def@net/http.Handler
+  Def:
+    '@Kind': weighted@net/http.Handler
+    Weighted:
+    - Handler:
+        '@Kind': direct@net/http.Handler
+        Body:
+          '@Kind': inline@io.Reader
+          Data: <html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+        Code: 200
+      Weight: 2
+    - Handler:
+        '@Kind': direct@net/http.Handler
+        Body:
+          '@Kind': inline@io.Reader
+          Data: <html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+        Code: 200
+      Weight: 8
+  Name: weighted
 Init: null
 Pipe:
-  '@Kind': Service@multi
+  '@Kind': multi@service.Service
   Multi:
-  - '@Ref': gateway
+  - '@Kind': ref@service.Service
+    Def: null
+    Name: gateway

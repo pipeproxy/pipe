@@ -1,7 +1,6 @@
 package reference
 
 import (
-	"context"
 	"fmt"
 	"reflect"
 	"sync"
@@ -14,12 +13,12 @@ var (
 	defs  = map[reflect.Type]map[string]reflect.Value{}
 )
 
-func Def(ctx context.Context, name string, def define.Self, i interface{}) error {
+func Def(name string, def define.Self, i interface{}) error {
+	s := reflect.ValueOf(i).Elem()
 	d := reflect.ValueOf(def)
-	s := reflect.ValueOf(i)
 	s.Set(d)
 
-	t := s.Type().Elem()
+	t := s.Type()
 
 	mutex.Lock()
 	defer mutex.Unlock()
@@ -33,25 +32,23 @@ func Def(ctx context.Context, name string, def define.Self, i interface{}) error
 	return nil
 }
 
-func Ref(ctx context.Context, name string, def define.Self, i interface{}) error {
+func Ref(name string, def define.Self, i interface{}) error {
+	s := reflect.ValueOf(i).Elem()
+	d := reflect.ValueOf(def)
 
-	s := reflect.ValueOf(i)
-	t := s.Type().Elem()
+	t := s.Type()
 
-	mutex.RLock()
-	defer mutex.RUnlock()
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	m, ok := defs[t]
-	if !ok || !m[name].IsValid() {
+	if !ok {
 		if def == nil {
 			return fmt.Errorf("not define %q", name)
 		}
-		d := reflect.ValueOf(def)
-		s.Set(d)
-		return nil
+	} else {
+		d = m[name]
 	}
-
-	d := reflect.ValueOf(m[name])
 	s.Set(d)
 	return nil
 }

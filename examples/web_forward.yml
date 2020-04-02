@@ -1,79 +1,103 @@
-'@Kind': Once@config
+'@Kind': sample@once.Once
 Components:
-- '@Kind': Service@stream
-  '@Name': server
-  Handler:
-    '@Kind': stream.Handler@http
+- '@Kind': def@service.Service
+  Def:
+    '@Kind': stream@service.Service
     Handler:
-      '@Kind': http.Handler@log
+      '@Kind': http@stream.Handler
       Handler:
-        '@Ref': balance
-      Output:
-        '@Kind': Output@file
-        Path: /dev/stderr
-    TLS: null
-  Listener:
-    '@Kind': stream.ListenConfig@network
-    Address: :80
-    Network: tcp
-- '@Kind': http.Handler@poller
-  '@Name': balance
-  Handlers:
-  - '@Kind': http.Handler@forward
-    RoundTripper: null
-    URL: http://127.0.0.1:8001
-  - '@Kind': http.Handler@forward
-    RoundTripper: null
-    URL: http://127.0.0.1:8002
-  Poller: round_robin
-- '@Kind': Service@stream
-  '@Name': host1
-  Handler:
-    '@Kind': stream.Handler@http
+        '@Kind': log@net/http.Handler
+        Handler:
+          '@Kind': def@net/http.Handler
+          Def: null
+          Name: balance
+        Output:
+          '@Kind': file@io.Writer
+          Path: /dev/stderr
+      TLS: null
+    Listener:
+      '@Kind': network@stream/listener.ListenConfig
+      Address: :80
+      Network: tcp
+  Name: server
+- '@Kind': def@net/http.Handler
+  Def:
+    '@Kind': poller@net/http.Handler
+    Handlers:
+    - '@Kind': forward@net/http.Handler
+      RoundTripper: null
+      URL: http://127.0.0.1:8001
+    - '@Kind': forward@net/http.Handler
+      RoundTripper: null
+      URL: http://127.0.0.1:8002
+    Poller: round_robin
+  Name: balance
+- '@Kind': def@service.Service
+  Def:
+    '@Kind': stream@service.Service
     Handler:
-      '@Kind': http.Handler@log
+      '@Kind': http@stream.Handler
       Handler:
-        '@Ref': page1
-      Output:
-        '@Kind': Output@file
-        Path: /dev/stderr
-    TLS: null
-  Listener:
-    '@Kind': stream.ListenConfig@network
-    Address: :8001
-    Network: tcp
-- '@Kind': http.Handler@direct
-  '@Name': page1
-  Body:
-    '@Kind': Input@inline
-    Data: <html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
-  Code: 200
-- '@Kind': Service@stream
-  '@Name': host2
-  Handler:
-    '@Kind': stream.Handler@http
+        '@Kind': log@net/http.Handler
+        Handler:
+          '@Kind': def@net/http.Handler
+          Def: null
+          Name: page1
+        Output:
+          '@Kind': file@io.Writer
+          Path: /dev/stderr
+      TLS: null
+    Listener:
+      '@Kind': network@stream/listener.ListenConfig
+      Address: :8001
+      Network: tcp
+  Name: host1
+- '@Kind': def@net/http.Handler
+  Def:
+    '@Kind': direct@net/http.Handler
+    Body:
+      '@Kind': inline@io.Reader
+      Data: <html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+    Code: 200
+  Name: page1
+- '@Kind': def@service.Service
+  Def:
+    '@Kind': stream@service.Service
     Handler:
-      '@Kind': http.Handler@log
+      '@Kind': http@stream.Handler
       Handler:
-        '@Ref': page2
-      Output:
-        '@Kind': Output@file
-        Path: /dev/stderr
-    TLS: null
-  Listener:
-    '@Kind': stream.ListenConfig@network
-    Address: :8002
-    Network: tcp
-- '@Kind': http.Handler@direct
-  '@Name': page2
-  Body:
-    '@Kind': Input@inline
-    Data: <html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
-  Code: 200
+        '@Kind': log@net/http.Handler
+        Handler:
+          '@Kind': def@net/http.Handler
+          Def: null
+          Name: page2
+        Output:
+          '@Kind': file@io.Writer
+          Path: /dev/stderr
+      TLS: null
+    Listener:
+      '@Kind': network@stream/listener.ListenConfig
+      Address: :8002
+      Network: tcp
+  Name: host2
+- '@Kind': def@net/http.Handler
+  Def:
+    '@Kind': direct@net/http.Handler
+    Body:
+      '@Kind': inline@io.Reader
+      Data: <html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+    Code: 200
+  Name: page2
 Init: null
 Pipe:
-  '@Kind': Service@multi
+  '@Kind': multi@service.Service
   Multi:
-  - '@Ref': host1
-  - '@Ref': host2
-  - '@Ref': gateway
+  - '@Kind': ref@service.Service
+    Def: null
+    Name: host1
+  - '@Kind': ref@service.Service
+    Def: null
+    Name: host2
+  - '@Kind': ref@service.Service
+    Def: null
+    Name: gateway

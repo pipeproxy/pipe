@@ -1,8 +1,6 @@
 package reference
 
 import (
-	"context"
-
 	"github.com/wzshiming/funcfg/define"
 	"github.com/wzshiming/pipe/components/common/register"
 )
@@ -25,10 +23,10 @@ type Config struct {
 	Def  define.Self
 }
 
-func DefWithConfig(ctx context.Context, conf *Config, i interface{}) error {
-	return Def(ctx, conf.Name, conf.Def, i)
+func DefWithConfig(conf *Config, i interface{}) error {
+	return Def(conf.Name, conf.Def, i)
 }
 
-func RefWithConfig(ctx context.Context, conf *Config, i interface{}) error {
-	return Ref(ctx, conf.Name, conf.Def, i)
+func RefWithConfig(conf *Config, i interface{}) error {
+	return Ref(conf.Name, conf.Def, i)
 }

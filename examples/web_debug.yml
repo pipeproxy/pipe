@@ -1,59 +1,60 @@
-'@Kind': Once@config
-Components:
-- '@Kind': Service@stream
-  '@Name': server
-  Handler:
-    '@Kind': stream.Handler@http
-    Handler:
-      '@Kind': http.Handler@log
+'@Kind': multi@once.Once
+Multi:
+- '@Kind': service@once.Once
+  Service:
+    '@Kind': multi@service.Service
+    Multi:
+    - '@Kind': stream@service.Service
       Handler:
-        '@Ref': debug
-      Output:
-        '@Kind': Output@file
-        Path: /dev/stderr
-    TLS: null
-  Listener:
-    '@Kind': stream.ListenConfig@network
-    Address: :80
-    Network: tcp
-- '@Kind': http.Handler@mux
-  '@Name': debug
-  NotFound: null
-  Routes:
-  - Handler:
-      '@Kind': http.Handler@multi
-      Multi:
-      - '@Kind': http.Handler@add_response_header
-        Key: Content-Type
-        Value: text/html; charset=utf-8
-      - '@Kind': http.Handler@direct
-        Body:
-          '@Kind': Input@inline
-          Data: |-
-            <pre>
-            <a href="./expvar/">./expvar/</a>
-            <a href="./pprof/">./pprof/</a>
-            <a href="./config_dump/">./config_dump/</a>
-            </pre>
-        Code: 200
-    Path: /
-    Prefix: ""
-    Regexp: ""
-  - Handler:
-      '@Kind': http.Handler@expvar
-    Path: /expvar/
-    Prefix: ""
-    Regexp: ""
-  - Handler:
-      '@Kind': http.Handler@pprof
-    Path: ""
-    Prefix: /pprof/
-    Regexp: ""
-  - Handler:
-      '@Kind': http.Handler@config_dump
-    Path: /config_dump/
-    Prefix: ""
-    Regexp: ""
-Init: null
-Pipe:
-  '@Ref': server
+        '@Kind': http@stream.Handler
+        Handler:
+          '@Kind': log@net/http.Handler
+          Handler:
+            '@Kind': def@net/http.Handler
+            Def:
+              '@Kind': mux@net/http.Handler
+              NotFound: null
+              Routes:
+              - Handler:
+                  '@Kind': multi@net/http.Handler
+                  Multi:
+                  - '@Kind': add_response_header@net/http.Handler
+                    Key: Content-Type
+                    Value: text/html; charset=utf-8
+                  - '@Kind': direct@net/http.Handler
+                    Body:
+                      '@Kind': inline@io.Reader
+                      Data: |-
+                        <pre>
+                        <a href="./expvar/">./expvar/</a>
+                        <a href="./pprof/">./pprof/</a>
+                        <a href="./config_dump/">./config_dump/</a>
+                        </pre>
+                    Code: 200
+                Path: /
+                Prefix: ""
+                Regexp: ""
+              - Handler:
+                  '@Kind': expvar@net/http.Handler
+                Path: /expvar/
+                Prefix: ""
+                Regexp: ""
+              - Handler:
+                  '@Kind': pprof@net/http.Handler
+                Path: ""
+                Prefix: /pprof/
+                Regexp: ""
+              - Handler:
+                  '@Kind': config_dump@net/http.Handler
+                Path: /config_dump/
+                Prefix: ""
+                Regexp: ""
+            Name: debug
+          Output:
+            '@Kind': file@io.Writer
+            Path: /dev/stderr
+        TLS: null
+      Listener:
+        '@Kind': network@stream/listener.ListenConfig
+        Address: :80
+        Network: tcp

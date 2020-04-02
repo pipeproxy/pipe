@@ -1,24 +1,25 @@
-'@Kind': Once@config
-Components:
-- '@Kind': Service@stream
-  '@Name': server
-  Handler:
-    '@Kind': stream.Handler@http
-    Handler:
-      '@Kind': http.Handler@log
-      Handler:
-        '@Ref': file
-      Output:
-        '@Kind': Output@file
-        Path: /dev/stderr
-    TLS: null
-  Listener:
-    '@Kind': stream.ListenConfig@network
-    Address: :80
-    Network: tcp
-- '@Kind': http.Handler@file
-  '@Name': file
-  Root: ""
-Init: null
-Pipe:
-  '@Ref': server
+'@Kind': multi@once.Once
+Multi:
+- '@Kind': service@once.Once
+  Service:
+    '@Kind': multi@service.Service
+    Multi:
+    - '@Kind': def@service.Service
+      Def:
+        '@Kind': stream@service.Service
+        Handler:
+          '@Kind': http@stream.Handler
+          Handler:
+            '@Kind': log@net/http.Handler
+            Handler:
+              '@Kind': file@net/http.Handler
+              Root: ""
+            Output:
+              '@Kind': file@io.Writer
+              Path: /dev/stderr
+          TLS: null
+        Listener:
+          '@Kind': network@stream/listener.ListenConfig
+          Address: :80
+          Network: tcp
+      Name: server

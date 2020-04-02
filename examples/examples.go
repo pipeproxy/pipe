@@ -16,21 +16,21 @@ var Examples = map[string]interface{}{
 }
 
 var (
-	debug = bind.NameHTTPHandler{
+	debug = bind.DefNetHTTPHandlerConfig{
 		Name: "debug",
-		HTTPHandler: bind.HTTPHandlerMuxConfig{
-			Routes: []bind.HTTPHandlerMuxRoute{
+		Def: bind.MuxNetHTTPHandlerConfig{
+			Routes: []bind.MuxNetHTTPHandlerRoute{
 				{
 					Path: "/",
-					Handler: bind.HTTPHandlerMultiConfig{
+					Handler: bind.MultiNetHTTPHandlerConfig{
 						Multi: []bind.HTTPHandler{
-							bind.HTTPHandlerAddResponseHeaderConfig{
+							bind.AddResponseHeaderNetHTTPHandlerConfig{
 								Key:   "Content-Type",
 								Value: "text/html; charset=utf-8",
 							},
-							bind.HTTPHandlerDirectConfig{
+							bind.DirectNetHTTPHandlerConfig{
 								Code: http.StatusOK,
-								Body: bind.InputInlineConfig{
+								Body: bind.InlineIoReaderConfig{
 									Data: `<pre>
 <a href="./expvar/">./expvar/</a>
 <a href="./pprof/">./pprof/</a>
@@ -43,96 +43,104 @@ var (
 				},
 				{
 					Path:    "/expvar/",
-					Handler: bind.HTTPHandlerExpvar{},
+					Handler: bind.ExpvarNetHTTPHandler{},
 				},
 				{
 					Prefix:  "/pprof/",
-					Handler: bind.HTTPHandlerPprof{},
+					Handler: bind.PprofNetHTTPHandler{},
 				},
 				{
 					Path:    "/config_dump/",
-					Handler: bind.HTTPHandlerConfigDump{},
+					Handler: bind.ConfigDumpNetHTTPHandler{},
 				},
 			},
 		},
 	}
 
-	ExampleDebug = bind.OnceConfigConfig{
-		Pipe: bind.RefService("server"),
-		Components: []bind.PipeComponent{
-			bind.NameService{
-				Name:    "server",
-				Service: addrToHTTP(":80", bind.RefHTTPHandler("debug"), nil),
-			},
-			debug,
-		},
-	}
-
-	ExampleFileServer = bind.OnceConfigConfig{
-		Pipe: bind.RefService("server"),
-		Components: []bind.PipeComponent{
-			bind.NameService{
-				Name:    "server",
-				Service: addrToHTTP(":80", bind.RefHTTPHandler("file"), nil),
-			},
-			bind.NameHTTPHandler{
-				Name: "file",
-				HTTPHandler: bind.HTTPHandlerFileConfig{
-					Root: "",
+	ExampleDebug = bind.MultiOnceConfig{
+		Multi: []bind.Once{
+			bind.ServiceOnceConfig{
+				Service: bind.MultiServiceConfig{
+					Multi: []bind.Service{
+						addrToHTTP(":80", debug, nil),
+					},
 				},
 			},
 		},
 	}
 
-	ExampleForward = bind.OnceConfigConfig{
-		Pipe: bind.ServiceMultiConfig{
+	ExampleFileServer = bind.MultiOnceConfig{
+		Multi: []bind.Once{
+			bind.ServiceOnceConfig{
+				Service: bind.MultiServiceConfig{
+					Multi: []bind.Service{
+						bind.DefServiceConfig{
+							Name: "server",
+							Def: addrToHTTP(":80", bind.FileNetHTTPHandlerConfig{
+								Root: "",
+							}, nil),
+						},
+					},
+				},
+			},
+		},
+	}
+
+	ExampleForward = bind.SampleOnceConfig{
+		Pipe: bind.MultiServiceConfig{
 			Multi: []bind.Service{
-				bind.RefService("host1"),
-				bind.RefService("host2"),
-				bind.RefService("gateway"),
+				bind.RefServiceConfig{Name: "host1"},
+				bind.RefServiceConfig{Name: "host2"},
+				bind.RefServiceConfig{Name: "gateway"},
 			},
 		},
-		Components: []bind.PipeComponent{
-			bind.NameService{
-				Name:    "server",
-				Service: addrToHTTP(":80", bind.RefHTTPHandler("balance"), nil),
+		Components: []bind.Component{
+			bind.DefServiceConfig{
+				Name: "server",
+				Def: addrToHTTP(":80", bind.DefNetHTTPHandlerConfig{
+					Name: "balance",
+				}, nil),
 			},
-			bind.NameHTTPHandler{
+			bind.DefNetHTTPHandlerConfig{
 				Name: "balance",
-				HTTPHandler: bind.HTTPHandlerPollerConfig{
-					Poller: bind.HTTPHandlerPollerPollerEnumEnumRoundRobin,
+				Def: bind.PollerNetHTTPHandlerConfig{
+					Poller: bind.PollerNetHTTPHandlerPollerEnumEnumRoundRobin,
 					Handlers: []bind.HTTPHandler{
-						bind.HTTPHandlerForwardConfig{
+						bind.ForwardNetHTTPHandlerConfig{
 							URL: "http://127.0.0.1:8001",
 						},
-						bind.HTTPHandlerForwardConfig{
+						bind.ForwardNetHTTPHandlerConfig{
 							URL: "http://127.0.0.1:8002",
 						},
 					},
 				},
 			},
-			bind.NameService{
-				Name:    "host1",
-				Service: addrToHTTP(":8001", bind.RefHTTPHandler("page1"), nil),
+			bind.DefServiceConfig{
+				Name: "host1",
+				Def: addrToHTTP(":8001", bind.DefNetHTTPHandlerConfig{
+					Name: "page1",
+				}, nil),
 			},
-			bind.NameHTTPHandler{
+			bind.DefNetHTTPHandlerConfig{
 				Name: "page1",
-				HTTPHandler: bind.HTTPHandlerDirectConfig{
+				Def: bind.DirectNetHTTPHandlerConfig{
 					Code: http.StatusOK,
-					Body: bind.InputInlineConfig{
+					Body: bind.InlineIoReaderConfig{
 						Data: `<html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
 					},
 				},
 			},
-			bind.NameService{
-				Name:    "host2",
-				Service: addrToHTTP(":8002", bind.RefHTTPHandler("page2"), nil),
+			bind.DefServiceConfig{
+				Name: "host2",
+				Def: addrToHTTP(":8002", bind.DefNetHTTPHandlerConfig{
+					Name: "page2",
+				}, nil),
 			},
-			bind.NameHTTPHandler{
+			bind.DefNetHTTPHandlerConfig{
 				Name: "page2",
-				HTTPHandler: bind.HTTPHandlerDirectConfig{
+				Def: bind.DirectNetHTTPHandlerConfig{
 					Code: http.StatusOK,
-					Body: bind.InputInlineConfig{
+					Body: bind.InlineIoReaderConfig{
 						Data: `<html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
 					},
 				},
@@ -140,36 +148,42 @@ var (
 		},
 	}
 
-	ExampleHTTPS = bind.OnceConfigConfig{
-		Pipe: bind.ServiceMultiConfig{
+	ExampleHTTPS = bind.SampleOnceConfig{
+		Pipe: bind.MultiServiceConfig{
 			Multi: []bind.Service{
-				bind.RefService("server"),
+				bind.DefServiceConfig{
+					Name: "server",
+				},
 			},
 		},
-		Components: []bind.PipeComponent{
-			bind.NameService{
+		Components: []bind.Component{
+			bind.DefServiceConfig{
 				Name: "server",
-				Service: bind.ServiceMultiConfig{
+				Def: bind.MultiServiceConfig{
 					Multi: []bind.Service{
-						addrToHTTP(":80", bind.RefHTTPHandler("redirect"), nil),
-						addrToHTTP(":443", bind.RefHTTPHandler("page"), bind.TLSSelfSigned{}),
+						addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
+							Name: "redirect",
+						}, nil),
+						addrToHTTP(":443", bind.RefNetHTTPHandlerConfig{
+							Name: "page",
+						}, bind.SelfSignedTLS{}),
 					},
 				},
 			},
 
-			bind.NameHTTPHandler{
+			bind.DefNetHTTPHandlerConfig{
 				Name: "redirect",
-				HTTPHandler: bind.HTTPHandlerRedirectConfig{
+				Def: bind.RedirectNetHTTPHandlerConfig{
 					Code:     http.StatusFound,
 					Location: "{{.Scheme}}s://{{.Host}}{{.RequestURI}}",
 				},
 			},
 
-			bind.NameHTTPHandler{
+			bind.DefNetHTTPHandlerConfig{
 				Name: "page",
-				HTTPHandler: bind.HTTPHandlerDirectConfig{
+				Def: bind.DirectNetHTTPHandlerConfig{
 					Code: http.StatusOK,
-					Body: bind.InputInlineConfig{
+					Body: bind.InlineIoReaderConfig{
 						Data: `<html><body>This is Pipe page {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
 					},
 				},
@@ -177,35 +191,39 @@ var (
 		},
 	}
 
-	ExampleWeighted = bind.OnceConfigConfig{
-		Pipe: bind.ServiceMultiConfig{
+	ExampleWeighted = bind.SampleOnceConfig{
+		Pipe: bind.MultiServiceConfig{
 			Multi: []bind.Service{
-				bind.RefService("gateway"),
+				bind.RefServiceConfig{
+					Name: "gateway",
+				},
 			},
 		},
-		Components: []bind.PipeComponent{
-			bind.NameService{
-				Name:    "gateway",
-				Service: addrToHTTP(":80", bind.RefHTTPHandler("weighted"), nil),
+		Components: []bind.Component{
+			bind.DefServiceConfig{
+				Name: "gateway",
+				Def: addrToHTTP(":80", bind.DefNetHTTPHandlerConfig{
+					Name: "weighted",
+				}, nil),
 			},
-			bind.NameHTTPHandler{
+			bind.DefNetHTTPHandlerConfig{
 				Name: "weighted",
-				HTTPHandler: bind.HTTPHandlerWeightedConfig{
-					Weighted: []bind.HTTPHandlerWeightedWeighted{
+				Def: bind.WeightedNetHTTPHandlerConfig{
+					Weighted: []bind.WeightedNetHTTPHandlerWeighted{
 						{
 							Weight: 2,
-							Handler: bind.HTTPHandlerDirectConfig{
+							Handler: bind.DirectNetHTTPHandlerConfig{
 								Code: http.StatusOK,
-								Body: bind.InputInlineConfig{
+								Body: bind.InlineIoReaderConfig{
 									Data: `<html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
 								},
 							},
 						},
 						{
 							Weight: 8,
-							Handler: bind.HTTPHandlerDirectConfig{
+							Handler: bind.DirectNetHTTPHandlerConfig{
 								Code: http.StatusOK,
-								Body: bind.InputInlineConfig{
+								Body: bind.InlineIoReaderConfig{
 									Data: `<html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
 								},
 							},
@@ -216,19 +234,25 @@ var (
 		},
 	}
 
-	ExampleBasic = bind.OnceConfigConfig{
-		Pipe: bind.ServiceMultiConfig{
+	ExampleBasic = bind.SampleOnceConfig{
+		Pipe: bind.MultiServiceConfig{
 			Multi: []bind.Service{
-				bind.RefService("server"),
+				bind.RefServiceConfig{
+					Name: "server",
+				},
 			},
 		},
-		Components: []bind.PipeComponent{
-			bind.NameService{
+		Components: []bind.Component{
+			bind.DefServiceConfig{
 				Name: "server",
-				Service: bind.ServiceMultiConfig{
+				Def: bind.MultiServiceConfig{
 					Multi: []bind.Service{
-						addrToHTTP(":80", bind.RefHTTPHandler("debug"), nil),
-						addrToHTTP(":443", bind.RefHTTPHandler("debug"), bind.TLSSelfSigned{}),
+						addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
+							Name: "debug",
+						}, nil),
+						addrToHTTP(":443", bind.RefNetHTTPHandlerConfig{
+							Name: "debug",
+						}, bind.SelfSignedTLS{}),
 					},
 				},
 			},
@@ -238,15 +262,15 @@ var (
 )
 
 func addrToHTTP(address string, handler bind.HTTPHandler, tls bind.TLS) bind.Service {
-	return bind.ServiceStreamConfig{
-		Listener: bind.StreamListenConfigNetworkConfig{
-			Network: bind.StreamListenConfigNetworkNetworkEnumEnumTCP,
+	return bind.StreamServiceConfig{
+		Listener: bind.NetworkStreamListenerListenConfigConfig{
+			Network: bind.NetworkStreamListenerListenConfigNetworkEnumEnumTCP,
 			Address: address,
 		},
-		Handler: bind.StreamHandlerHTTPConfig{
+		Handler: bind.HTTPStreamHandlerConfig{
 			TLS: tls,
-			Handler: bind.HTTPHandlerLogConfig{
-				Output: bind.OutputFileConfig{
+			Handler: bind.LogNetHTTPHandlerConfig{
+				Output: bind.FileIoWriterConfig{
 					Path: "/dev/stderr",
 				},
 				Handler: handler,

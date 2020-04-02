@@ -1,79 +1,89 @@
-'@Kind': Once@config
+'@Kind': sample@once.Once
 Components:
-- '@Kind': Service@multi
-  '@Name': server
-  Multi:
-  - '@Kind': Service@stream
-    Handler:
-      '@Kind': stream.Handler@http
+- '@Kind': def@service.Service
+  Def:
+    '@Kind': multi@service.Service
+    Multi:
+    - '@Kind': stream@service.Service
       Handler:
-        '@Kind': http.Handler@log
+        '@Kind': http@stream.Handler
         Handler:
-          '@Ref': debug
-        Output:
-          '@Kind': Output@file
-          Path: /dev/stderr
-      TLS: null
-    Listener:
-      '@Kind': stream.ListenConfig@network
-      Address: :80
-      Network: tcp
-  - '@Kind': Service@stream
-    Handler:
-      '@Kind': stream.Handler@http
+          '@Kind': log@net/http.Handler
+          Handler:
+            '@Kind': ref@net/http.Handler
+            Def: null
+            Name: debug
+          Output:
+            '@Kind': file@io.Writer
+            Path: /dev/stderr
+        TLS: null
+      Listener:
+        '@Kind': network@stream/listener.ListenConfig
+        Address: :80
+        Network: tcp
+    - '@Kind': stream@service.Service
       Handler:
-        '@Kind': http.Handler@log
+        '@Kind': http@stream.Handler
         Handler:
-          '@Ref': debug
-        Output:
-          '@Kind': Output@file
-          Path: /dev/stderr
-      TLS:
-        '@Kind': TLS@self_signed
-    Listener:
-      '@Kind': stream.ListenConfig@network
-      Address: :443
-      Network: tcp
-- '@Kind': http.Handler@mux
-  '@Name': debug
-  NotFound: null
-  Routes:
-  - Handler:
-      '@Kind': http.Handler@multi
-      Multi:
-      - '@Kind': http.Handler@add_response_header
-        Key: Content-Type
-        Value: text/html; charset=utf-8
-      - '@Kind': http.Handler@direct
-        Body:
-          '@Kind': Input@inline
-          Data: |-
-            <pre>
-            <a href="./expvar/">./expvar/</a>
-            <a href="./pprof/">./pprof/</a>
-            <a href="./config_dump/">./config_dump/</a>
-            </pre>
-        Code: 200
-    Path: /
-    Prefix: ""
-    Regexp: ""
-  - Handler:
-      '@Kind': http.Handler@expvar
-    Path: /expvar/
-    Prefix: ""
-    Regexp: ""
-  - Handler:
-      '@Kind': http.Handler@pprof
-    Path: ""
-    Prefix: /pprof/
-    Regexp: ""
-  - Handler:
-      '@Kind': http.Handler@config_dump
-    Path: /config_dump/
-    Prefix: ""
-    Regexp: ""
+          '@Kind': log@net/http.Handler
+          Handler:
+            '@Kind': ref@net/http.Handler
+            Def: null
+            Name: debug
+          Output:
+            '@Kind': file@io.Writer
+            Path: /dev/stderr
+        TLS:
+          '@Kind': self_signed@tls.TLS
+      Listener:
+        '@Kind': network@stream/listener.ListenConfig
+        Address: :443
+        Network: tcp
+  Name: server
+- '@Kind': def@net/http.Handler
+  Def:
+    '@Kind': mux@net/http.Handler
+    NotFound: null
+    Routes:
+    - Handler:
+        '@Kind': multi@net/http.Handler
+        Multi:
+        - '@Kind': add_response_header@net/http.Handler
+          Key: Content-Type
+          Value: text/html; charset=utf-8
+        - '@Kind': direct@net/http.Handler
+          Body:
+            '@Kind': inline@io.Reader
+            Data: |-
+              <pre>
+              <a href="./expvar/">./expvar/</a>
+              <a href="./pprof/">./pprof/</a>
+              <a href="./config_dump/">./config_dump/</a>
+              </pre>
+          Code: 200
+      Path: /
+      Prefix: ""
+      Regexp: ""
+    - Handler:
+        '@Kind': expvar@net/http.Handler
+      Path: /expvar/
+      Prefix: ""
+      Regexp: ""
+    - Handler:
+        '@Kind': pprof@net/http.Handler
+      Path: ""
+      Prefix: /pprof/
+      Regexp: ""
+    - Handler:
+        '@Kind': config_dump@net/http.Handler
+      Path: /config_dump/
+      Prefix: ""
+      Regexp: ""
+  Name: debug
 Init: null
 Pipe:
-  '@Kind': Service@multi
+  '@Kind': multi@service.Service
   Multi:
-  - '@Ref': server
+  - '@Kind': ref@service.Service
+    Def: null
+    Name: server
