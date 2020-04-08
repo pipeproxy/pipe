@@ -8,7 +8,7 @@ Components:
       Handler:
         '@Kind': log@net/http.Handler
         Handler:
-          '@Kind': def@net/http.Handler
+          '@Kind': ref@net/http.Handler
           Def: null
           Name: balance
         Output:
@@ -40,7 +40,7 @@ Components:
       Handler:
         '@Kind': log@net/http.Handler
         Handler:
-          '@Kind': def@net/http.Handler
+          '@Kind': ref@net/http.Handler
           Def: null
           Name: page1
         Output:
@@ -68,7 +68,7 @@ Components:
       Handler:
         '@Kind': log@net/http.Handler
         Handler:
-          '@Kind': def@net/http.Handler
+          '@Kind': ref@net/http.Handler
           Def: null
           Name: page2
         Output:

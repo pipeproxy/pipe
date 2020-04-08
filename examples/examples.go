@@ -97,7 +97,7 @@ var (
 		Components: []bind.Component{
 			bind.DefServiceConfig{
 				Name: "server",
-				Def: addrToHTTP(":80", bind.DefNetHTTPHandlerConfig{
+				Def: addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
 					Name: "balance",
 				}, nil),
 			},
@@ -117,7 +117,7 @@ var (
 			},
 			bind.DefServiceConfig{
 				Name: "host1",
-				Def: addrToHTTP(":8001", bind.DefNetHTTPHandlerConfig{
+				Def: addrToHTTP(":8001", bind.RefNetHTTPHandlerConfig{
 					Name: "page1",
 				}, nil),
 			},
@@ -132,7 +132,7 @@ var (
 			},
 			bind.DefServiceConfig{
 				Name: "host2",
-				Def: addrToHTTP(":8002", bind.DefNetHTTPHandlerConfig{
+				Def: addrToHTTP(":8002", bind.RefNetHTTPHandlerConfig{
 					Name: "page2",
 				}, nil),
 			},
@@ -202,7 +202,7 @@ var (
 		Components: []bind.Component{
 			bind.DefServiceConfig{
 				Name: "gateway",
-				Def: addrToHTTP(":80", bind.DefNetHTTPHandlerConfig{
+				Def: addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
 					Name: "weighted",
 				}, nil),
 			},

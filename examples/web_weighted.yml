@@ -8,7 +8,7 @@ Components:
       Handler:
         '@Kind': log@net/http.Handler
         Handler:
-          '@Kind': def@net/http.Handler
+          '@Kind': ref@net/http.Handler
           Def: null
           Name: weighted
         Output:
