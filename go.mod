@@ -1,13 +1,13 @@
 module github.com/wzshiming/pipe
 
-go 1.13
+go 1.14
 
 require (
 	github.com/gorilla/handlers v1.4.2
 	github.com/kubernetes-sigs/yaml v1.1.0
 	github.com/spf13/pflag v1.0.5
 	github.com/wzshiming/crun v0.3.3
-	github.com/wzshiming/funcfg v0.0.0-20200402103755-6a1a3d26a087
+	github.com/wzshiming/funcfg v0.0.1
 	github.com/wzshiming/lockfile v0.0.5
 	github.com/wzshiming/notify v0.0.5
 	github.com/wzshiming/trie v0.0.1
