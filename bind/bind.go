@@ -76,41 +76,6 @@ func appendKV(k, v string, data []byte) []byte {
 //
 // ========= End Common =========
 
-// ========= Begin tls.TLS =========
-//
-
-// TLS tls.TLS
-type TLS interface {
-	isTLS()
-	Component
-}
-
-// RawTLS is store raw bytes of TLS
-type RawTLS []byte
-
-func (RawTLS) isTLS()       {}
-func (RawTLS) isComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawTLS) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawTLS) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawTLS: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End tls.TLS =========
-
 // ========= Begin acme@tls.TLS =========
 //
 
@@ -147,41 +112,6 @@ func (m AcmeTLSConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End acme@tls.TLS =========
-
-// ========= Begin http.Handler =========
-//
-
-// HTTPHandler http.Handler
-type HTTPHandler interface {
-	isHTTPHandler()
-	Component
-}
-
-// RawHTTPHandler is store raw bytes of HTTPHandler
-type RawHTTPHandler []byte
-
-func (RawHTTPHandler) isHTTPHandler() {}
-func (RawHTTPHandler) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawHTTPHandler) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawHTTPHandler) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawHTTPHandler: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End http.Handler =========
 
 // ========= Begin add_request_header@net/http.Handler =========
 //
@@ -257,41 +187,6 @@ func (m AddResponseHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End add_response_header@net/http.Handler =========
 
-// ========= Begin codec.Decoder =========
-//
-
-// CodecDecoder codec.Decoder
-type CodecDecoder interface {
-	isCodecDecoder()
-	Component
-}
-
-// RawCodecDecoder is store raw bytes of CodecDecoder
-type RawCodecDecoder []byte
-
-func (RawCodecDecoder) isCodecDecoder() {}
-func (RawCodecDecoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawCodecDecoder) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawCodecDecoder) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawCodecDecoder: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End codec.Decoder =========
-
 // ========= Begin base32@codec.Decoder =========
 //
 
@@ -327,41 +222,6 @@ func (m Base32CodecDecoderConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End base32@codec.Decoder =========
-
-// ========= Begin codec.Encoder =========
-//
-
-// CodecEncoder codec.Encoder
-type CodecEncoder interface {
-	isCodecEncoder()
-	Component
-}
-
-// RawCodecEncoder is store raw bytes of CodecEncoder
-type RawCodecEncoder []byte
-
-func (RawCodecEncoder) isCodecEncoder() {}
-func (RawCodecEncoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawCodecEncoder) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawCodecEncoder) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawCodecEncoder: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End codec.Encoder =========
 
 // ========= Begin base32@codec.Encoder =========
 //
@@ -652,41 +512,6 @@ func (m DefCodecEncoderConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@codec.Encoder =========
 
-// ========= Begin codec.Marshaler =========
-//
-
-// CodecMarshaler codec.Marshaler
-type CodecMarshaler interface {
-	isCodecMarshaler()
-	Component
-}
-
-// RawCodecMarshaler is store raw bytes of CodecMarshaler
-type RawCodecMarshaler []byte
-
-func (RawCodecMarshaler) isCodecMarshaler() {}
-func (RawCodecMarshaler) isComponent()      {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawCodecMarshaler) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawCodecMarshaler) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawCodecMarshaler: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End codec.Marshaler =========
-
 // ========= Begin def@codec.Marshaler =========
 //
 
@@ -723,41 +548,6 @@ func (m DefCodecMarshalerConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End def@codec.Marshaler =========
-
-// ========= Begin codec.Unmarshaler =========
-//
-
-// CodecUnmarshaler codec.Unmarshaler
-type CodecUnmarshaler interface {
-	isCodecUnmarshaler()
-	Component
-}
-
-// RawCodecUnmarshaler is store raw bytes of CodecUnmarshaler
-type RawCodecUnmarshaler []byte
-
-func (RawCodecUnmarshaler) isCodecUnmarshaler() {}
-func (RawCodecUnmarshaler) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawCodecUnmarshaler) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawCodecUnmarshaler) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawCodecUnmarshaler: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End codec.Unmarshaler =========
 
 // ========= Begin def@codec.Unmarshaler =========
 //
@@ -796,41 +586,6 @@ func (m DefCodecUnmarshalerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@codec.Unmarshaler =========
 
-// ========= Begin io.Reader =========
-//
-
-// IoReader io.Reader
-type IoReader interface {
-	isIoReader()
-	Component
-}
-
-// RawIoReader is store raw bytes of IoReader
-type RawIoReader []byte
-
-func (RawIoReader) isIoReader()  {}
-func (RawIoReader) isComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawIoReader) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawIoReader) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawIoReader: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End io.Reader =========
-
 // ========= Begin def@io.Reader =========
 //
 
@@ -867,41 +622,6 @@ func (m DefIoReaderConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End def@io.Reader =========
-
-// ========= Begin io.Writer =========
-//
-
-// IoWriter io.Writer
-type IoWriter interface {
-	isIoWriter()
-	Component
-}
-
-// RawIoWriter is store raw bytes of IoWriter
-type RawIoWriter []byte
-
-func (RawIoWriter) isIoWriter()  {}
-func (RawIoWriter) isComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawIoWriter) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawIoWriter) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawIoWriter: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End io.Writer =========
 
 // ========= Begin def@io.Writer =========
 //
@@ -977,41 +697,6 @@ func (m DefNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@net/http.Handler =========
 
-// ========= Begin http.RoundTripper =========
-//
-
-// HTTPRoundTripper http.RoundTripper
-type HTTPRoundTripper interface {
-	isHTTPRoundTripper()
-	Component
-}
-
-// RawHTTPRoundTripper is store raw bytes of HTTPRoundTripper
-type RawHTTPRoundTripper []byte
-
-func (RawHTTPRoundTripper) isHTTPRoundTripper() {}
-func (RawHTTPRoundTripper) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawHTTPRoundTripper) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawHTTPRoundTripper) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawHTTPRoundTripper: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End http.RoundTripper =========
-
 // ========= Begin def@net/http.RoundTripper =========
 //
 
@@ -1048,41 +733,6 @@ func (m DefNetHTTPRoundTripperConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End def@net/http.RoundTripper =========
-
-// ========= Begin once.Once =========
-//
-
-// Once once.Once
-type Once interface {
-	isOnce()
-	Component
-}
-
-// RawOnce is store raw bytes of Once
-type RawOnce []byte
-
-func (RawOnce) isOnce()      {}
-func (RawOnce) isComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawOnce) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawOnce) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawOnce: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End once.Once =========
 
 // ========= Begin def@once.Once =========
 //
@@ -1121,41 +771,6 @@ func (m DefOnceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@once.Once =========
 
-// ========= Begin service.Service =========
-//
-
-// Service service.Service
-type Service interface {
-	isService()
-	Component
-}
-
-// RawService is store raw bytes of Service
-type RawService []byte
-
-func (RawService) isService()   {}
-func (RawService) isComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawService) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawService) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawService: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End service.Service =========
-
 // ========= Begin def@service.Service =========
 //
 
@@ -1192,41 +807,6 @@ func (m DefServiceConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End def@service.Service =========
-
-// ========= Begin stream.Handler =========
-//
-
-// StreamHandler stream.Handler
-type StreamHandler interface {
-	isStreamHandler()
-	Component
-}
-
-// RawStreamHandler is store raw bytes of StreamHandler
-type RawStreamHandler []byte
-
-func (RawStreamHandler) isStreamHandler() {}
-func (RawStreamHandler) isComponent()     {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawStreamHandler) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawStreamHandler) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawStreamHandler: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End stream.Handler =========
 
 // ========= Begin def@stream.Handler =========
 //
@@ -1265,41 +845,6 @@ func (m DefStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@stream.Handler =========
 
-// ========= Begin dialer.Dialer =========
-//
-
-// Dialer dialer.Dialer
-type Dialer interface {
-	isDialer()
-	Component
-}
-
-// RawDialer is store raw bytes of Dialer
-type RawDialer []byte
-
-func (RawDialer) isDialer()    {}
-func (RawDialer) isComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawDialer) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawDialer) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawDialer: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End dialer.Dialer =========
-
 // ========= Begin def@stream/dialer.Dialer =========
 //
 
@@ -1336,41 +881,6 @@ func (m DefStreamDialerConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End def@stream/dialer.Dialer =========
-
-// ========= Begin listener.ListenConfig =========
-//
-
-// ListenerListenConfig listener.ListenConfig
-type ListenerListenConfig interface {
-	isListenerListenConfig()
-	Component
-}
-
-// RawListenerListenConfig is store raw bytes of ListenerListenConfig
-type RawListenerListenConfig []byte
-
-func (RawListenerListenConfig) isListenerListenConfig() {}
-func (RawListenerListenConfig) isComponent()            {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawListenerListenConfig) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawListenerListenConfig) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawListenerListenConfig: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End listener.ListenConfig =========
 
 // ========= Begin def@stream/listener.ListenConfig =========
 //
@@ -4311,3 +3821,493 @@ func (m YamlCodecUnmarshaler) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End yaml@codec.Unmarshaler =========
+
+// ========= Begin tls.TLS =========
+//
+
+// TLS tls.TLS
+type TLS interface {
+	isTLS()
+	Component
+}
+
+// RawTLS is store raw bytes of TLS
+type RawTLS []byte
+
+func (RawTLS) isTLS()       {}
+func (RawTLS) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawTLS) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawTLS) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawTLS: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End tls.TLS =========
+
+// ========= Begin http.Handler =========
+//
+
+// HTTPHandler http.Handler
+type HTTPHandler interface {
+	isHTTPHandler()
+	Component
+}
+
+// RawHTTPHandler is store raw bytes of HTTPHandler
+type RawHTTPHandler []byte
+
+func (RawHTTPHandler) isHTTPHandler() {}
+func (RawHTTPHandler) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawHTTPHandler) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawHTTPHandler) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawHTTPHandler: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End http.Handler =========
+
+// ========= Begin codec.Decoder =========
+//
+
+// CodecDecoder codec.Decoder
+type CodecDecoder interface {
+	isCodecDecoder()
+	Component
+}
+
+// RawCodecDecoder is store raw bytes of CodecDecoder
+type RawCodecDecoder []byte
+
+func (RawCodecDecoder) isCodecDecoder() {}
+func (RawCodecDecoder) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawCodecDecoder) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawCodecDecoder) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawCodecDecoder: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End codec.Decoder =========
+
+// ========= Begin codec.Encoder =========
+//
+
+// CodecEncoder codec.Encoder
+type CodecEncoder interface {
+	isCodecEncoder()
+	Component
+}
+
+// RawCodecEncoder is store raw bytes of CodecEncoder
+type RawCodecEncoder []byte
+
+func (RawCodecEncoder) isCodecEncoder() {}
+func (RawCodecEncoder) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawCodecEncoder) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawCodecEncoder) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawCodecEncoder: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End codec.Encoder =========
+
+// ========= Begin codec.Marshaler =========
+//
+
+// CodecMarshaler codec.Marshaler
+type CodecMarshaler interface {
+	isCodecMarshaler()
+	Component
+}
+
+// RawCodecMarshaler is store raw bytes of CodecMarshaler
+type RawCodecMarshaler []byte
+
+func (RawCodecMarshaler) isCodecMarshaler() {}
+func (RawCodecMarshaler) isComponent()      {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawCodecMarshaler) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawCodecMarshaler) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawCodecMarshaler: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End codec.Marshaler =========
+
+// ========= Begin codec.Unmarshaler =========
+//
+
+// CodecUnmarshaler codec.Unmarshaler
+type CodecUnmarshaler interface {
+	isCodecUnmarshaler()
+	Component
+}
+
+// RawCodecUnmarshaler is store raw bytes of CodecUnmarshaler
+type RawCodecUnmarshaler []byte
+
+func (RawCodecUnmarshaler) isCodecUnmarshaler() {}
+func (RawCodecUnmarshaler) isComponent()        {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawCodecUnmarshaler) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawCodecUnmarshaler) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawCodecUnmarshaler: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End codec.Unmarshaler =========
+
+// ========= Begin io.Reader =========
+//
+
+// IoReader io.Reader
+type IoReader interface {
+	isIoReader()
+	Component
+}
+
+// RawIoReader is store raw bytes of IoReader
+type RawIoReader []byte
+
+func (RawIoReader) isIoReader()  {}
+func (RawIoReader) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawIoReader) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawIoReader) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawIoReader: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End io.Reader =========
+
+// ========= Begin io.Writer =========
+//
+
+// IoWriter io.Writer
+type IoWriter interface {
+	isIoWriter()
+	Component
+}
+
+// RawIoWriter is store raw bytes of IoWriter
+type RawIoWriter []byte
+
+func (RawIoWriter) isIoWriter()  {}
+func (RawIoWriter) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawIoWriter) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawIoWriter) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawIoWriter: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End io.Writer =========
+
+// ========= Begin http.RoundTripper =========
+//
+
+// HTTPRoundTripper http.RoundTripper
+type HTTPRoundTripper interface {
+	isHTTPRoundTripper()
+	Component
+}
+
+// RawHTTPRoundTripper is store raw bytes of HTTPRoundTripper
+type RawHTTPRoundTripper []byte
+
+func (RawHTTPRoundTripper) isHTTPRoundTripper() {}
+func (RawHTTPRoundTripper) isComponent()        {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawHTTPRoundTripper) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawHTTPRoundTripper) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawHTTPRoundTripper: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End http.RoundTripper =========
+
+// ========= Begin once.Once =========
+//
+
+// Once once.Once
+type Once interface {
+	isOnce()
+	Component
+}
+
+// RawOnce is store raw bytes of Once
+type RawOnce []byte
+
+func (RawOnce) isOnce()      {}
+func (RawOnce) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawOnce) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawOnce) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawOnce: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End once.Once =========
+
+// ========= Begin service.Service =========
+//
+
+// Service service.Service
+type Service interface {
+	isService()
+	Component
+}
+
+// RawService is store raw bytes of Service
+type RawService []byte
+
+func (RawService) isService()   {}
+func (RawService) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawService) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawService) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawService: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End service.Service =========
+
+// ========= Begin stream.Handler =========
+//
+
+// StreamHandler stream.Handler
+type StreamHandler interface {
+	isStreamHandler()
+	Component
+}
+
+// RawStreamHandler is store raw bytes of StreamHandler
+type RawStreamHandler []byte
+
+func (RawStreamHandler) isStreamHandler() {}
+func (RawStreamHandler) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawStreamHandler) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawStreamHandler) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawStreamHandler: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End stream.Handler =========
+
+// ========= Begin dialer.Dialer =========
+//
+
+// Dialer dialer.Dialer
+type Dialer interface {
+	isDialer()
+	Component
+}
+
+// RawDialer is store raw bytes of Dialer
+type RawDialer []byte
+
+func (RawDialer) isDialer()    {}
+func (RawDialer) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawDialer) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawDialer) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawDialer: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End dialer.Dialer =========
+
+// ========= Begin listener.ListenConfig =========
+//
+
+// ListenerListenConfig listener.ListenConfig
+type ListenerListenConfig interface {
+	isListenerListenConfig()
+	Component
+}
+
+// RawListenerListenConfig is store raw bytes of ListenerListenConfig
+type RawListenerListenConfig []byte
+
+func (RawListenerListenConfig) isListenerListenConfig() {}
+func (RawListenerListenConfig) isComponent()            {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawListenerListenConfig) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawListenerListenConfig) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawListenerListenConfig: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End listener.ListenConfig =========
