@@ -91,16 +91,10 @@ var (
 			Multi: []bind.Service{
 				bind.RefServiceConfig{Name: "host1"},
 				bind.RefServiceConfig{Name: "host2"},
-				bind.RefServiceConfig{Name: "gateway"},
+				bind.RefServiceConfig{Name: "server"},
 			},
 		},
 		Components: []bind.Component{
-			bind.DefServiceConfig{
-				Name: "server",
-				Def: addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
-					Name: "balance",
-				}, nil),
-			},
 			bind.DefNetHTTPHandlerConfig{
 				Name: "balance",
 				Def: bind.PollerNetHTTPHandlerConfig{
@@ -116,9 +110,9 @@ var (
 				},
 			},
 			bind.DefServiceConfig{
-				Name: "host1",
-				Def: addrToHTTP(":8001", bind.RefNetHTTPHandlerConfig{
-					Name: "page1",
+				Name: "server",
+				Def: addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
+					Name: "balance",
 				}, nil),
 			},
 			bind.DefNetHTTPHandlerConfig{
@@ -131,9 +125,9 @@ var (
 				},
 			},
 			bind.DefServiceConfig{
-				Name: "host2",
-				Def: addrToHTTP(":8002", bind.RefNetHTTPHandlerConfig{
-					Name: "page2",
+				Name: "host1",
+				Def: addrToHTTP(":8001", bind.RefNetHTTPHandlerConfig{
+					Name: "page1",
 				}, nil),
 			},
 			bind.DefNetHTTPHandlerConfig{
@@ -145,32 +139,24 @@ var (
 					},
 				},
 			},
+			bind.DefServiceConfig{
+				Name: "host2",
+				Def: addrToHTTP(":8002", bind.RefNetHTTPHandlerConfig{
+					Name: "page2",
+				}, nil),
+			},
 		},
 	}
 
 	ExampleHTTPS = bind.SampleOnceConfig{
 		Pipe: bind.MultiServiceConfig{
 			Multi: []bind.Service{
-				bind.DefServiceConfig{
+				bind.RefServiceConfig{
 					Name: "server",
 				},
 			},
 		},
 		Components: []bind.Component{
-			bind.DefServiceConfig{
-				Name: "server",
-				Def: bind.MultiServiceConfig{
-					Multi: []bind.Service{
-						addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
-							Name: "redirect",
-						}, nil),
-						addrToHTTP(":443", bind.RefNetHTTPHandlerConfig{
-							Name: "page",
-						}, bind.SelfSignedTLS{}),
-					},
-				},
-			},
-
 			bind.DefNetHTTPHandlerConfig{
 				Name: "redirect",
 				Def: bind.RedirectNetHTTPHandlerConfig{
@@ -188,6 +174,19 @@ var (
 					},
 				},
 			},
+			bind.DefServiceConfig{
+				Name: "server",
+				Def: bind.MultiServiceConfig{
+					Multi: []bind.Service{
+						addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
+							Name: "redirect",
+						}, nil),
+						addrToHTTP(":443", bind.RefNetHTTPHandlerConfig{
+							Name: "page",
+						}, bind.SelfSignedTLS{}),
+					},
+				},
+			},
 		},
 	}
 
@@ -200,12 +199,6 @@ var (
 			},
 		},
 		Components: []bind.Component{
-			bind.DefServiceConfig{
-				Name: "gateway",
-				Def: addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
-					Name: "weighted",
-				}, nil),
-			},
 			bind.DefNetHTTPHandlerConfig{
 				Name: "weighted",
 				Def: bind.WeightedNetHTTPHandlerConfig{
@@ -231,6 +224,12 @@ var (
 					},
 				},
 			},
+			bind.DefServiceConfig{
+				Name: "gateway",
+				Def: addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
+					Name: "weighted",
+				}, nil),
+			},
 		},
 	}
 
@@ -243,6 +242,7 @@ var (
 			},
 		},
 		Components: []bind.Component{
+			debug,
 			bind.DefServiceConfig{
 				Name: "server",
 				Def: bind.MultiServiceConfig{
@@ -256,7 +256,6 @@ var (
 					},
 				},
 			},
-			debug,
 		},
 	}
 )
