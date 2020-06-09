@@ -1,12 +1,10 @@
-package reference
+package ctxreference
 
 import (
 	"context"
 	"fmt"
 	"reflect"
 	"sync"
-
-	"github.com/wzshiming/funcfg/define"
 )
 
 var (
@@ -29,14 +27,14 @@ func With(ctx context.Context) context.Context {
 }
 
 func Err(ctx context.Context) error {
-	v, ok := get(ctx)
+	v, ok := Get(ctx)
 	if !ok {
 		return nil
 	}
 	return v.err()
 }
 
-func get(ctx context.Context) (*ctxVal, bool) {
+func Get(ctx context.Context) (*ctxVal, bool) {
 	v := ctx.Value(ctxKey(0))
 	if v == nil {
 		return nil, false
@@ -48,34 +46,7 @@ func get(ctx context.Context) (*ctxVal, bool) {
 	return nil, false
 }
 
-func Def(ctx context.Context, name string, def define.Self, i interface{}) error {
-	if def == nil {
-		return ErrDefEmpty
-	}
-	val, ok := get(ctx)
-	if !ok {
-		return ErrNotUse
-	}
-
-	s := reflect.ValueOf(i).Elem()
-	d := reflect.ValueOf(def)
-	s.Set(d)
-
-	return val.def(name, s, d)
-}
-
-func Ref(ctx context.Context, name string, def define.Self, i interface{}) error {
-	val, ok := get(ctx)
-	if !ok {
-		return ErrNotUse
-	}
-
-	s := reflect.ValueOf(i).Elem()
-
-	return val.ref(name, s)
-}
-
-func (c *ctxVal) def(name string, s, d reflect.Value) error {
+func (c *ctxVal) Def(name string, s, d reflect.Value) error {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
@@ -92,7 +63,7 @@ func (c *ctxVal) def(name string, s, d reflect.Value) error {
 	return c.check(name, d)
 }
 
-func (c *ctxVal) ref(name string, s reflect.Value) error {
+func (c *ctxVal) Ref(name string, s reflect.Value) error {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 

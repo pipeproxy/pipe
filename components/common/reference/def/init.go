@@ -1,4 +1,4 @@
-package reference
+package def
 
 import (
 	"context"
@@ -8,16 +8,11 @@ import (
 )
 
 const (
-	nameDef = "def"
-	nameRef = "ref"
+	name = "def"
 )
 
 func Register(i interface{}) error {
-	err := register.RegisterWithBuildFunc(nameDef, DefWithConfig, i)
-	if err != nil {
-		return err
-	}
-	return register.RegisterWithBuildFunc(nameRef, RefWithConfig, i)
+	return register.RegisterWithBuildFunc(name, DefWithConfig, i)
 }
 
 type Config struct {
@@ -27,8 +22,4 @@ type Config struct {
 
 func DefWithConfig(ctx context.Context, conf *Config, i interface{}) error {
 	return Def(ctx, conf.Name, conf.Def, i)
-}
-
-func RefWithConfig(ctx context.Context, conf *Config, i interface{}) error {
-	return Ref(ctx, conf.Name, conf.Def, i)
 }

@@ -9,11 +9,11 @@ import (
 	"github.com/wzshiming/funcfg/kinder"
 	"github.com/wzshiming/funcfg/types"
 	"github.com/wzshiming/funcfg/unmarshaler"
-	"github.com/wzshiming/pipe/components/common/reference"
+	"github.com/wzshiming/pipe/components/common/reference/ctxreference"
 )
 
 func Load(ctx context.Context, load io.Reader, i interface{}) error {
-	ctx = reference.With(ctx)
+	ctx = ctxreference.With(ctx)
 	data, err := ioutil.ReadAll(load)
 	if err != nil {
 		return err
@@ -31,7 +31,7 @@ func Load(ctx context.Context, load io.Reader, i interface{}) error {
 	if err != nil {
 		return err
 	}
-	err = reference.Err(ctx)
+	err = ctxreference.Err(ctx)
 	if err != nil {
 		return err
 	}
