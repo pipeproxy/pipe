@@ -993,6 +993,42 @@ func (m DirectNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End direct@net/http.Handler =========
 
+// ========= Begin env@io.Reader =========
+//
+
+const kindEnvIoReaderConfig = "env@io.Reader"
+
+// EnvIoReaderConfig env@io.Reader
+type EnvIoReaderConfig struct {
+	Name string
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindEnvIoReaderConfig,
+		func(r *EnvIoReaderConfig) IoReader {
+			return r
+		},
+	)
+}
+
+func (EnvIoReaderConfig) isIoReader()  {}
+func (EnvIoReaderConfig) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m EnvIoReaderConfig) MarshalJSON() ([]byte, error) {
+	type t EnvIoReaderConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = appendKV(kindKey, kindEnvIoReaderConfig, data)
+	return data, nil
+}
+
+//
+// ========= End env@io.Reader =========
+
 // ========= Begin expvar@net/http.Handler =========
 //
 
@@ -2545,6 +2581,41 @@ func (m NoneOnceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End none@once.Once =========
 
+// ========= Begin none@service.Service =========
+//
+
+const kindNoneService = "none@service.Service"
+
+// NoneService none@service.Service
+type NoneService struct {
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindNoneService,
+		func(r *NoneService) Service {
+			return r
+		},
+	)
+}
+
+func (NoneService) isService()   {}
+func (NoneService) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneService) MarshalJSON() ([]byte, error) {
+	type t NoneService
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = appendKV(kindKey, kindNoneService, data)
+	return data, nil
+}
+
+//
+// ========= End none@service.Service =========
+
 // ========= Begin poller@net/http.Handler =========
 //
 
@@ -2757,7 +2828,6 @@ const kindRefCodecDecoderConfig = "ref@codec.Decoder"
 // RefCodecDecoderConfig ref@codec.Decoder
 type RefCodecDecoderConfig struct {
 	Name string
-	Def  CodecDecoder
 }
 
 func init() {
@@ -2794,7 +2864,6 @@ const kindRefCodecEncoderConfig = "ref@codec.Encoder"
 // RefCodecEncoderConfig ref@codec.Encoder
 type RefCodecEncoderConfig struct {
 	Name string
-	Def  CodecEncoder
 }
 
 func init() {
@@ -2831,7 +2900,6 @@ const kindRefCodecMarshalerConfig = "ref@codec.Marshaler"
 // RefCodecMarshalerConfig ref@codec.Marshaler
 type RefCodecMarshalerConfig struct {
 	Name string
-	Def  CodecMarshaler
 }
 
 func init() {
@@ -2868,7 +2936,6 @@ const kindRefCodecUnmarshalerConfig = "ref@codec.Unmarshaler"
 // RefCodecUnmarshalerConfig ref@codec.Unmarshaler
 type RefCodecUnmarshalerConfig struct {
 	Name string
-	Def  CodecUnmarshaler
 }
 
 func init() {
@@ -2905,7 +2972,6 @@ const kindRefIoReaderConfig = "ref@io.Reader"
 // RefIoReaderConfig ref@io.Reader
 type RefIoReaderConfig struct {
 	Name string
-	Def  IoReader
 }
 
 func init() {
@@ -2942,7 +3008,6 @@ const kindRefIoWriterConfig = "ref@io.Writer"
 // RefIoWriterConfig ref@io.Writer
 type RefIoWriterConfig struct {
 	Name string
-	Def  IoWriter
 }
 
 func init() {
@@ -2979,7 +3044,6 @@ const kindRefNetHTTPHandlerConfig = "ref@net/http.Handler"
 // RefNetHTTPHandlerConfig ref@net/http.Handler
 type RefNetHTTPHandlerConfig struct {
 	Name string
-	Def  HTTPHandler
 }
 
 func init() {
@@ -3016,7 +3080,6 @@ const kindRefNetHTTPRoundTripperConfig = "ref@net/http.RoundTripper"
 // RefNetHTTPRoundTripperConfig ref@net/http.RoundTripper
 type RefNetHTTPRoundTripperConfig struct {
 	Name string
-	Def  HTTPRoundTripper
 }
 
 func init() {
@@ -3053,7 +3116,6 @@ const kindRefOnceConfig = "ref@once.Once"
 // RefOnceConfig ref@once.Once
 type RefOnceConfig struct {
 	Name string
-	Def  Once
 }
 
 func init() {
@@ -3090,7 +3152,6 @@ const kindRefServiceConfig = "ref@service.Service"
 // RefServiceConfig ref@service.Service
 type RefServiceConfig struct {
 	Name string
-	Def  Service
 }
 
 func init() {
@@ -3127,7 +3188,6 @@ const kindRefStreamHandlerConfig = "ref@stream.Handler"
 // RefStreamHandlerConfig ref@stream.Handler
 type RefStreamHandlerConfig struct {
 	Name string
-	Def  StreamHandler
 }
 
 func init() {
@@ -3164,7 +3224,6 @@ const kindRefStreamDialerConfig = "ref@stream/dialer.Dialer"
 // RefStreamDialerConfig ref@stream/dialer.Dialer
 type RefStreamDialerConfig struct {
 	Name string
-	Def  Dialer
 }
 
 func init() {
@@ -3201,7 +3260,6 @@ const kindRefStreamListenerListenConfigConfig = "ref@stream/listener.ListenConfi
 // RefStreamListenerListenConfigConfig ref@stream/listener.ListenConfig
 type RefStreamListenerListenConfigConfig struct {
 	Name string
-	Def  ListenerListenConfig
 }
 
 func init() {
@@ -3238,7 +3296,6 @@ const kindRefTLSConfig = "ref@tls.TLS"
 // RefTLSConfig ref@tls.TLS
 type RefTLSConfig struct {
 	Name string
-	Def  TLS
 }
 
 func init() {
