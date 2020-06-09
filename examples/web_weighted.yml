@@ -28,7 +28,6 @@ Components:
         '@Kind': log@net/http.Handler
         Handler:
           '@Kind': ref@net/http.Handler
-          Def: null
           Name: weighted
         Output:
           '@Kind': file@io.Writer
@@ -44,5 +43,4 @@ Pipe:
   '@Kind': multi@service.Service
   Multi:
   - '@Kind': ref@service.Service
-    Def: null
     Name: gateway

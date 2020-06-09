@@ -25,7 +25,6 @@ Components:
           '@Kind': log@net/http.Handler
           Handler:
             '@Kind': ref@net/http.Handler
-            Def: null
             Name: redirect
           Output:
             '@Kind': file@io.Writer
@@ -42,7 +41,6 @@ Components:
           '@Kind': log@net/http.Handler
           Handler:
             '@Kind': ref@net/http.Handler
-            Def: null
             Name: page
           Output:
             '@Kind': file@io.Writer
@@ -59,5 +57,4 @@ Pipe:
   '@Kind': multi@service.Service
   Multi:
   - '@Kind': ref@service.Service
-    Def: null
     Name: server
