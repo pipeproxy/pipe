@@ -27,8 +27,6 @@ func NewMulti(multi []service.Service) *Multi {
 func (m *Multi) Run(ctx context.Context) error {
 	switch len(m.multi) {
 	case 0:
-	case 1:
-		return m.multi[0].Run(ctx)
 	default:
 		m.wg.Add(len(m.multi))
 		for _, svc := range m.multi {
@@ -48,8 +46,6 @@ func (m *Multi) Run(ctx context.Context) error {
 func (m *Multi) Close() error {
 	switch len(m.multi) {
 	case 0:
-	case 1:
-		return m.multi[0].Close()
 	default:
 		for _, service := range m.multi {
 			err := service.Close()
