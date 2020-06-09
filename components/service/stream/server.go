@@ -3,10 +3,10 @@ package stream
 import (
 	"context"
 	"io"
-	"log"
 
 	"github.com/wzshiming/pipe/components/stream"
 	"github.com/wzshiming/pipe/components/stream/listener"
+	"github.com/wzshiming/pipe/internal/logger"
 )
 
 type Server struct {
@@ -53,7 +53,7 @@ func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
 	err := stm.Close()
 	if err != nil {
 		addr := stm.LocalAddr()
-		log.Printf("[ERROR] Close %s://%s error: %s", addr.Network(), addr.String(), err.Error())
+		logger.Errorf("Close %s://%s error: %s", addr.Network(), addr.String(), err.Error())
 		return
 	}
 }

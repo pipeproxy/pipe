@@ -3,7 +3,6 @@ package forward
 import (
 	"fmt"
 	"io"
-	"log"
 	"net"
 	"net/http"
 	"net/url"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/wzshiming/pipe/components/protocol/http/template"
 	"github.com/wzshiming/pipe/internal/joinio"
+	"github.com/wzshiming/pipe/internal/logger"
 	"golang.org/x/net/http/httpguts"
 )
 
@@ -231,7 +231,7 @@ func (p *ReverseProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	err = joinio.Copy(rw, res.Body)
 	if err != nil {
 		res.Body.Close()
-		log.Printf("[ERROR] suppressing panic for copyResponse error in test; copy error: %v", err)
+		logger.Errorf("suppressing panic for copyResponse error in test; copy error: %v", err)
 		return
 	}
 	res.Body.Close() // close now, instead of defer, to populate res.Trailer

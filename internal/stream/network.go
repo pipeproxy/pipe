@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"net"
 	"sync"
 	"sync/atomic"
 
 	"github.com/wzshiming/pipe/components/stream"
 	"github.com/wzshiming/pipe/components/stream/listener"
+	"github.com/wzshiming/pipe/internal/logger"
 )
 
 var (
@@ -30,7 +30,7 @@ func CloseExcess() {
 	}
 
 	for _, k := range dk {
-		log.Printf("[INFO] Close listen to %s", k)
+		logger.Infof("Close listen to %s", k)
 		delete(cache, k)
 	}
 }
@@ -41,11 +41,11 @@ func Listen(ctx context.Context, network, address string) (listener.StreamListen
 	key := fmt.Sprintf("%s://%s", network, address)
 	n, ok := cache[key]
 	if ok {
-		log.Printf("[INFO] Relisten to %s", key)
+		logger.Infof("Relisten to %s", key)
 		return n.Listener(ctx), nil
 	}
 
-	log.Printf("[INFO] Listen to %s", key)
+	logger.Infof("Listen to %s", key)
 	l, err := net.Listen(network, address)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func (h *Hub) run() {
 	for {
 		conn, err := h.listener.Accept()
 		if err != nil {
-			log.Printf("[ERROR] accept error %s", err)
+			logger.Errorf("accept error %s", err)
 			return
 		}
 		select {

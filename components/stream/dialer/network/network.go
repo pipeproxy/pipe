@@ -2,10 +2,10 @@ package network
 
 import (
 	"context"
-	"log"
 	"net"
 
 	"github.com/wzshiming/pipe/components/stream"
+	"github.com/wzshiming/pipe/internal/logger"
 )
 
 type Network struct {
@@ -24,7 +24,7 @@ func NewNetwork(network string, address string) *Network {
 func (n *Network) DialStream(ctx context.Context) (stream.Stream, error) {
 	stm, err := n.dialer.DialContext(ctx, n.network, n.address)
 	if err != nil {
-		log.Printf("[ERROR] Forward error: %s", err.Error())
+		logger.Errorf("Forward error: %s", err.Error())
 	}
 	return stm, err
 }

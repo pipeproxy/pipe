@@ -2,12 +2,13 @@ package message
 
 import (
 	"context"
-	"log"
+
+	"github.com/wzshiming/pipe/internal/logger"
 )
 
 type Message string
 
 func (m Message) Do(ctx context.Context) error {
-	log.Println(string(m))
+	logger.Info(string(m))
 	return nil
 }

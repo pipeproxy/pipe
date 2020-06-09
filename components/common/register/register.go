@@ -2,12 +2,12 @@ package register
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
 
 	"github.com/wzshiming/funcfg/types"
 	"github.com/wzshiming/funcfg/types/extra"
+	"github.com/wzshiming/pipe/internal/logger"
 )
 
 func Register(kind string, fun interface{}) error {
@@ -16,7 +16,7 @@ func Register(kind string, fun interface{}) error {
 		return err
 	}
 
-	log.Printf("[INFO] Register: %s ", kind)
+	logger.Infof("Register: %s ", kind)
 
 	return types.Register(kind, fun)
 }
@@ -25,7 +25,7 @@ func GetKindName(kind string, fun interface{}) (string, error) {
 
 	typ, err := types.CheckFunc(reflect.ValueOf(fun))
 	if err != nil {
-		log.Printf("[ERROR] CheckFunc: %s: %s", kind, err)
+		logger.Errorf("CheckFunc: %s: %s", kind, err)
 		return "", err
 	}
 	pkg := typ.PkgPath()

@@ -1,8 +1,6 @@
 package mux
 
-import (
-	"log"
-)
+import "github.com/wzshiming/pipe/internal/logger"
 
 var std = newPatternManager()
 
@@ -25,7 +23,7 @@ func newPatternManager() *patternManager {
 }
 
 func (h *patternManager) RegisterRegexp(name string, pattern string) error {
-	log.Printf("[INFO] Register stream mux pattern: %s: %q", name, pattern)
+	logger.Infof("Register stream mux pattern: %s: %q", name, pattern)
 	h.patterns[name] = pattern
 	return nil
 }

@@ -5,12 +5,12 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"log"
 	"strings"
 	"sync/atomic"
 
 	"github.com/wzshiming/crun"
 	"github.com/wzshiming/pipe/components/stream"
+	"github.com/wzshiming/pipe/internal/logger"
 	"github.com/wzshiming/trie"
 )
 
@@ -137,7 +137,7 @@ func (m *Mux) getHandler(index []byte) (stream.Handler, bool) {
 func (m *Mux) ServeStream(ctx context.Context, stm stream.Stream) {
 	connector, buf, err := m.Handler(stm)
 	if err != nil {
-		log.Printf("[ERROR] prefix %q: %s", buf, err.Error())
+		logger.Errorf("prefix %q: %s", buf, err.Error())
 		stm.Close()
 		return
 	}

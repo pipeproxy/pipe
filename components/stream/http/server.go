@@ -3,12 +3,12 @@ package http
 import (
 	"context"
 	"crypto/tls"
-	"log"
 	"net/http"
 	"sync"
 
 	"github.com/wzshiming/pipe/components/stream"
 	"github.com/wzshiming/pipe/components/stream/listener"
+	"github.com/wzshiming/pipe/internal/logger"
 )
 
 type server struct {
@@ -61,7 +61,7 @@ func (s *server) serve(ctx context.Context, listen listener.StreamListener, hand
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
 	err := s.serve(ctx, newSingleConnListener(stm), s.handler)
 	if err != nil {
-		log.Println("[ERROR] [http]", err)
+		logger.Error("[http]", err)
 		return
 	}
 }
