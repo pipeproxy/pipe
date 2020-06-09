@@ -1,7 +1,7 @@
 package inline
 
 import (
-	"strings"
+	"bytes"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/stdio/input"
@@ -18,5 +18,5 @@ type Config struct {
 }
 
 func NewInlineWithConfig(conf *Config) input.Input {
-	return strings.NewReader(conf.Data)
+	return bytes.NewBufferString(conf.Data)
 }

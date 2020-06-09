@@ -23,5 +23,5 @@ func NewFileWithConfig(conf *Config) (input.Input, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ioutil.NopCloser(bytes.NewReader(data)), nil
+	return bytes.NewBuffer(data), nil
 }

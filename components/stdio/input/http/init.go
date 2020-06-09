@@ -40,5 +40,5 @@ func NewHTTPWithConfig(conf *Config) (input.Input, error) {
 		return nil, err
 	}
 	resp.Body.Close()
-	return ioutil.NopCloser(bytes.NewReader(body)), nil
+	return bytes.NewBuffer(body), nil
 }
