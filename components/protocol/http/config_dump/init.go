@@ -12,6 +12,10 @@ func init() {
 	register.Register(name, NewConfigDumpWithConfig)
 }
 
-func NewConfigDumpWithConfig() http.Handler {
-	return &ConfigDump{}
+type Config struct {
+	ReadOnly bool
+}
+
+func NewConfigDumpWithConfig(conf *Config) http.Handler {
+	return NewConfigDump(conf.ReadOnly)
 }
