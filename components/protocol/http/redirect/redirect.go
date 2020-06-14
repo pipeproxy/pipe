@@ -3,7 +3,7 @@ package redirect
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/components/protocol/http/template"
+	"github.com/wzshiming/pipe/internal/http/template"
 )
 
 type Redirect struct {

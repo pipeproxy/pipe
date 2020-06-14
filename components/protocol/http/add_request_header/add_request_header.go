@@ -3,7 +3,7 @@ package add_request_header
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/components/protocol/http/template"
+	"github.com/wzshiming/pipe/internal/http/template"
 )
 
 type AddRequestHeader struct {

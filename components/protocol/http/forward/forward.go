@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/wzshiming/pipe/components/protocol/http/template"
+	"github.com/wzshiming/pipe/internal/http/template"
 	"github.com/wzshiming/pipe/internal/joinio"
 	"github.com/wzshiming/pipe/internal/logger"
 	"golang.org/x/net/http/httpguts"
