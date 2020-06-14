@@ -16,7 +16,7 @@ import (
 // ========= Begin Common =========
 //
 
-var kindKey = "@Kind"
+var kindKey = `@Kind`
 
 var defTypes = types.NewTypes()
 
@@ -62,12 +62,12 @@ func (m *RawComponent) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func appendKV(k, v string, data []byte) []byte {
+func prepend(k, v string, data []byte) []byte {
 	if data[0] == '{' {
 		if len(data) == 2 {
-			data = []byte(fmt.Sprintf("{\"%s\":%q}", k, v))
+			data = []byte(fmt.Sprintf(`{%q:%q}`, k, v))
 		} else {
-			data = append([]byte(fmt.Sprintf("{\"%s\":%q,", k, v)), data[1:]...)
+			data = append([]byte(fmt.Sprintf(`{%q:%q,`, k, v)), data[1:]...)
 		}
 	}
 	return data
@@ -76,10 +76,10 @@ func appendKV(k, v string, data []byte) []byte {
 //
 // ========= End Common =========
 
-// ========= Begin acme@tls.TLS =========
+// ========= Begin acme@tls.TLS type =========
 //
 
-const kindAcmeTLSConfig = "acme@tls.TLS"
+const kindAcmeTLSConfig = `acme@tls.TLS`
 
 // AcmeTLSConfig acme@tls.TLS
 type AcmeTLSConfig struct {
@@ -90,9 +90,7 @@ type AcmeTLSConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindAcmeTLSConfig,
-		func(r *AcmeTLSConfig) TLS {
-			return r
-		},
+		func(r *AcmeTLSConfig) TLS { return r },
 	)
 }
 
@@ -106,17 +104,17 @@ func (m AcmeTLSConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindAcmeTLSConfig, data)
+	data = prepend(kindKey, kindAcmeTLSConfig, data)
 	return data, nil
 }
 
 //
-// ========= End acme@tls.TLS =========
+// ========= End acme@tls.TLS type =========
 
-// ========= Begin add_request_header@net/http.Handler =========
+// ========= Begin add_request_header@net/http.Handler type =========
 //
 
-const kindAddRequestHeaderNetHTTPHandlerConfig = "add_request_header@net/http.Handler"
+const kindAddRequestHeaderNetHTTPHandlerConfig = `add_request_header@net/http.Handler`
 
 // AddRequestHeaderNetHTTPHandlerConfig add_request_header@net/http.Handler
 type AddRequestHeaderNetHTTPHandlerConfig struct {
@@ -127,9 +125,7 @@ type AddRequestHeaderNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindAddRequestHeaderNetHTTPHandlerConfig,
-		func(r *AddRequestHeaderNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *AddRequestHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -143,17 +139,17 @@ func (m AddRequestHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindAddRequestHeaderNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindAddRequestHeaderNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End add_request_header@net/http.Handler =========
+// ========= End add_request_header@net/http.Handler type =========
 
-// ========= Begin add_response_header@net/http.Handler =========
+// ========= Begin add_response_header@net/http.Handler type =========
 //
 
-const kindAddResponseHeaderNetHTTPHandlerConfig = "add_response_header@net/http.Handler"
+const kindAddResponseHeaderNetHTTPHandlerConfig = `add_response_header@net/http.Handler`
 
 // AddResponseHeaderNetHTTPHandlerConfig add_response_header@net/http.Handler
 type AddResponseHeaderNetHTTPHandlerConfig struct {
@@ -164,9 +160,7 @@ type AddResponseHeaderNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindAddResponseHeaderNetHTTPHandlerConfig,
-		func(r *AddResponseHeaderNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *AddResponseHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -180,17 +174,17 @@ func (m AddResponseHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindAddResponseHeaderNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindAddResponseHeaderNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End add_response_header@net/http.Handler =========
+// ========= End add_response_header@net/http.Handler type =========
 
-// ========= Begin base32@codec.Decoder =========
+// ========= Begin base32@codec.Decoder type =========
 //
 
-const kindBase32CodecDecoderConfig = "base32@codec.Decoder"
+const kindBase32CodecDecoderConfig = `base32@codec.Decoder`
 
 // Base32CodecDecoderConfig base32@codec.Decoder
 type Base32CodecDecoderConfig struct {
@@ -200,9 +194,7 @@ type Base32CodecDecoderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindBase32CodecDecoderConfig,
-		func(r *Base32CodecDecoderConfig) CodecDecoder {
-			return r
-		},
+		func(r *Base32CodecDecoderConfig) CodecDecoder { return r },
 	)
 }
 
@@ -216,17 +208,17 @@ func (m Base32CodecDecoderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindBase32CodecDecoderConfig, data)
+	data = prepend(kindKey, kindBase32CodecDecoderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End base32@codec.Decoder =========
+// ========= End base32@codec.Decoder type =========
 
-// ========= Begin base32@codec.Encoder =========
+// ========= Begin base32@codec.Encoder type =========
 //
 
-const kindBase32CodecEncoderConfig = "base32@codec.Encoder"
+const kindBase32CodecEncoderConfig = `base32@codec.Encoder`
 
 // Base32CodecEncoderConfig base32@codec.Encoder
 type Base32CodecEncoderConfig struct {
@@ -236,9 +228,7 @@ type Base32CodecEncoderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindBase32CodecEncoderConfig,
-		func(r *Base32CodecEncoderConfig) CodecEncoder {
-			return r
-		},
+		func(r *Base32CodecEncoderConfig) CodecEncoder { return r },
 	)
 }
 
@@ -252,17 +242,17 @@ func (m Base32CodecEncoderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindBase32CodecEncoderConfig, data)
+	data = prepend(kindKey, kindBase32CodecEncoderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End base32@codec.Encoder =========
+// ========= End base32@codec.Encoder type =========
 
-// ========= Begin base64@codec.Decoder =========
+// ========= Begin base64@codec.Decoder type =========
 //
 
-const kindBase64CodecDecoderConfig = "base64@codec.Decoder"
+const kindBase64CodecDecoderConfig = `base64@codec.Decoder`
 
 // Base64CodecDecoderConfig base64@codec.Decoder
 type Base64CodecDecoderConfig struct {
@@ -272,9 +262,7 @@ type Base64CodecDecoderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindBase64CodecDecoderConfig,
-		func(r *Base64CodecDecoderConfig) CodecDecoder {
-			return r
-		},
+		func(r *Base64CodecDecoderConfig) CodecDecoder { return r },
 	)
 }
 
@@ -288,17 +276,17 @@ func (m Base64CodecDecoderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindBase64CodecDecoderConfig, data)
+	data = prepend(kindKey, kindBase64CodecDecoderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End base64@codec.Decoder =========
+// ========= End base64@codec.Decoder type =========
 
-// ========= Begin base64@codec.Encoder =========
+// ========= Begin base64@codec.Encoder type =========
 //
 
-const kindBase64CodecEncoderConfig = "base64@codec.Encoder"
+const kindBase64CodecEncoderConfig = `base64@codec.Encoder`
 
 // Base64CodecEncoderConfig base64@codec.Encoder
 type Base64CodecEncoderConfig struct {
@@ -308,9 +296,7 @@ type Base64CodecEncoderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindBase64CodecEncoderConfig,
-		func(r *Base64CodecEncoderConfig) CodecEncoder {
-			return r
-		},
+		func(r *Base64CodecEncoderConfig) CodecEncoder { return r },
 	)
 }
 
@@ -324,17 +310,17 @@ func (m Base64CodecEncoderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindBase64CodecEncoderConfig, data)
+	data = prepend(kindKey, kindBase64CodecEncoderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End base64@codec.Encoder =========
+// ========= End base64@codec.Encoder type =========
 
-// ========= Begin bzip2@codec.Decoder =========
+// ========= Begin bzip2@codec.Decoder type =========
 //
 
-const kindBzip2CodecDecoder = "bzip2@codec.Decoder"
+const kindBzip2CodecDecoder = `bzip2@codec.Decoder`
 
 // Bzip2CodecDecoder bzip2@codec.Decoder
 type Bzip2CodecDecoder struct {
@@ -343,9 +329,7 @@ type Bzip2CodecDecoder struct {
 func init() {
 	_ = defTypes.Register(
 		kindBzip2CodecDecoder,
-		func(r *Bzip2CodecDecoder) CodecDecoder {
-			return r
-		},
+		func(r *Bzip2CodecDecoder) CodecDecoder { return r },
 	)
 }
 
@@ -359,17 +343,17 @@ func (m Bzip2CodecDecoder) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindBzip2CodecDecoder, data)
+	data = prepend(kindKey, kindBzip2CodecDecoder, data)
 	return data, nil
 }
 
 //
-// ========= End bzip2@codec.Decoder =========
+// ========= End bzip2@codec.Decoder type =========
 
-// ========= Begin compress@net/http.Handler =========
+// ========= Begin compress@net/http.Handler type =========
 //
 
-const kindCompressNetHTTPHandlerConfig = "compress@net/http.Handler"
+const kindCompressNetHTTPHandlerConfig = `compress@net/http.Handler`
 
 // CompressNetHTTPHandlerConfig compress@net/http.Handler
 type CompressNetHTTPHandlerConfig struct {
@@ -380,9 +364,7 @@ type CompressNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindCompressNetHTTPHandlerConfig,
-		func(r *CompressNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *CompressNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -396,52 +378,51 @@ func (m CompressNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindCompressNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindCompressNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End compress@net/http.Handler =========
+// ========= End compress@net/http.Handler type =========
 
-// ========= Begin config_dump@net/http.Handler =========
+// ========= Begin config_dump@net/http.Handler type =========
 //
 
-const kindConfigDumpNetHTTPHandler = "config_dump@net/http.Handler"
+const kindConfigDumpNetHTTPHandlerConfig = `config_dump@net/http.Handler`
 
-// ConfigDumpNetHTTPHandler config_dump@net/http.Handler
-type ConfigDumpNetHTTPHandler struct {
+// ConfigDumpNetHTTPHandlerConfig config_dump@net/http.Handler
+type ConfigDumpNetHTTPHandlerConfig struct {
+	ReadOnly bool
 }
 
 func init() {
 	_ = defTypes.Register(
-		kindConfigDumpNetHTTPHandler,
-		func(r *ConfigDumpNetHTTPHandler) HTTPHandler {
-			return r
-		},
+		kindConfigDumpNetHTTPHandlerConfig,
+		func(r *ConfigDumpNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
-func (ConfigDumpNetHTTPHandler) isHTTPHandler() {}
-func (ConfigDumpNetHTTPHandler) isComponent()   {}
+func (ConfigDumpNetHTTPHandlerConfig) isHTTPHandler() {}
+func (ConfigDumpNetHTTPHandlerConfig) isComponent()   {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m ConfigDumpNetHTTPHandler) MarshalJSON() ([]byte, error) {
-	type t ConfigDumpNetHTTPHandler
+func (m ConfigDumpNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t ConfigDumpNetHTTPHandlerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindConfigDumpNetHTTPHandler, data)
+	data = prepend(kindKey, kindConfigDumpNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End config_dump@net/http.Handler =========
+// ========= End config_dump@net/http.Handler type =========
 
-// ========= Begin def@codec.Decoder =========
+// ========= Begin def@codec.Decoder type =========
 //
 
-const kindDefCodecDecoderConfig = "def@codec.Decoder"
+const kindDefCodecDecoderConfig = `def@codec.Decoder`
 
 // DefCodecDecoderConfig def@codec.Decoder
 type DefCodecDecoderConfig struct {
@@ -452,9 +433,7 @@ type DefCodecDecoderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefCodecDecoderConfig,
-		func(r *DefCodecDecoderConfig) CodecDecoder {
-			return r
-		},
+		func(r *DefCodecDecoderConfig) CodecDecoder { return r },
 	)
 }
 
@@ -468,17 +447,17 @@ func (m DefCodecDecoderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefCodecDecoderConfig, data)
+	data = prepend(kindKey, kindDefCodecDecoderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@codec.Decoder =========
+// ========= End def@codec.Decoder type =========
 
-// ========= Begin def@codec.Encoder =========
+// ========= Begin def@codec.Encoder type =========
 //
 
-const kindDefCodecEncoderConfig = "def@codec.Encoder"
+const kindDefCodecEncoderConfig = `def@codec.Encoder`
 
 // DefCodecEncoderConfig def@codec.Encoder
 type DefCodecEncoderConfig struct {
@@ -489,9 +468,7 @@ type DefCodecEncoderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefCodecEncoderConfig,
-		func(r *DefCodecEncoderConfig) CodecEncoder {
-			return r
-		},
+		func(r *DefCodecEncoderConfig) CodecEncoder { return r },
 	)
 }
 
@@ -505,17 +482,17 @@ func (m DefCodecEncoderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefCodecEncoderConfig, data)
+	data = prepend(kindKey, kindDefCodecEncoderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@codec.Encoder =========
+// ========= End def@codec.Encoder type =========
 
-// ========= Begin def@codec.Marshaler =========
+// ========= Begin def@codec.Marshaler type =========
 //
 
-const kindDefCodecMarshalerConfig = "def@codec.Marshaler"
+const kindDefCodecMarshalerConfig = `def@codec.Marshaler`
 
 // DefCodecMarshalerConfig def@codec.Marshaler
 type DefCodecMarshalerConfig struct {
@@ -526,9 +503,7 @@ type DefCodecMarshalerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefCodecMarshalerConfig,
-		func(r *DefCodecMarshalerConfig) CodecMarshaler {
-			return r
-		},
+		func(r *DefCodecMarshalerConfig) CodecMarshaler { return r },
 	)
 }
 
@@ -542,17 +517,17 @@ func (m DefCodecMarshalerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefCodecMarshalerConfig, data)
+	data = prepend(kindKey, kindDefCodecMarshalerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@codec.Marshaler =========
+// ========= End def@codec.Marshaler type =========
 
-// ========= Begin def@codec.Unmarshaler =========
+// ========= Begin def@codec.Unmarshaler type =========
 //
 
-const kindDefCodecUnmarshalerConfig = "def@codec.Unmarshaler"
+const kindDefCodecUnmarshalerConfig = `def@codec.Unmarshaler`
 
 // DefCodecUnmarshalerConfig def@codec.Unmarshaler
 type DefCodecUnmarshalerConfig struct {
@@ -563,9 +538,7 @@ type DefCodecUnmarshalerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefCodecUnmarshalerConfig,
-		func(r *DefCodecUnmarshalerConfig) CodecUnmarshaler {
-			return r
-		},
+		func(r *DefCodecUnmarshalerConfig) CodecUnmarshaler { return r },
 	)
 }
 
@@ -579,17 +552,17 @@ func (m DefCodecUnmarshalerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefCodecUnmarshalerConfig, data)
+	data = prepend(kindKey, kindDefCodecUnmarshalerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@codec.Unmarshaler =========
+// ========= End def@codec.Unmarshaler type =========
 
-// ========= Begin def@io.Reader =========
+// ========= Begin def@io.Reader type =========
 //
 
-const kindDefIoReaderConfig = "def@io.Reader"
+const kindDefIoReaderConfig = `def@io.Reader`
 
 // DefIoReaderConfig def@io.Reader
 type DefIoReaderConfig struct {
@@ -600,9 +573,7 @@ type DefIoReaderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefIoReaderConfig,
-		func(r *DefIoReaderConfig) IoReader {
-			return r
-		},
+		func(r *DefIoReaderConfig) IoReader { return r },
 	)
 }
 
@@ -616,17 +587,17 @@ func (m DefIoReaderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefIoReaderConfig, data)
+	data = prepend(kindKey, kindDefIoReaderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@io.Reader =========
+// ========= End def@io.Reader type =========
 
-// ========= Begin def@io.Writer =========
+// ========= Begin def@io.Writer type =========
 //
 
-const kindDefIoWriterConfig = "def@io.Writer"
+const kindDefIoWriterConfig = `def@io.Writer`
 
 // DefIoWriterConfig def@io.Writer
 type DefIoWriterConfig struct {
@@ -637,9 +608,7 @@ type DefIoWriterConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefIoWriterConfig,
-		func(r *DefIoWriterConfig) IoWriter {
-			return r
-		},
+		func(r *DefIoWriterConfig) IoWriter { return r },
 	)
 }
 
@@ -653,17 +622,17 @@ func (m DefIoWriterConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefIoWriterConfig, data)
+	data = prepend(kindKey, kindDefIoWriterConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@io.Writer =========
+// ========= End def@io.Writer type =========
 
-// ========= Begin def@net/http.Handler =========
+// ========= Begin def@net/http.Handler type =========
 //
 
-const kindDefNetHTTPHandlerConfig = "def@net/http.Handler"
+const kindDefNetHTTPHandlerConfig = `def@net/http.Handler`
 
 // DefNetHTTPHandlerConfig def@net/http.Handler
 type DefNetHTTPHandlerConfig struct {
@@ -674,9 +643,7 @@ type DefNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefNetHTTPHandlerConfig,
-		func(r *DefNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *DefNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -690,17 +657,17 @@ func (m DefNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindDefNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@net/http.Handler =========
+// ========= End def@net/http.Handler type =========
 
-// ========= Begin def@net/http.RoundTripper =========
+// ========= Begin def@net/http.RoundTripper type =========
 //
 
-const kindDefNetHTTPRoundTripperConfig = "def@net/http.RoundTripper"
+const kindDefNetHTTPRoundTripperConfig = `def@net/http.RoundTripper`
 
 // DefNetHTTPRoundTripperConfig def@net/http.RoundTripper
 type DefNetHTTPRoundTripperConfig struct {
@@ -711,9 +678,7 @@ type DefNetHTTPRoundTripperConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefNetHTTPRoundTripperConfig,
-		func(r *DefNetHTTPRoundTripperConfig) HTTPRoundTripper {
-			return r
-		},
+		func(r *DefNetHTTPRoundTripperConfig) HTTPRoundTripper { return r },
 	)
 }
 
@@ -727,17 +692,17 @@ func (m DefNetHTTPRoundTripperConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefNetHTTPRoundTripperConfig, data)
+	data = prepend(kindKey, kindDefNetHTTPRoundTripperConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@net/http.RoundTripper =========
+// ========= End def@net/http.RoundTripper type =========
 
-// ========= Begin def@once.Once =========
+// ========= Begin def@once.Once type =========
 //
 
-const kindDefOnceConfig = "def@once.Once"
+const kindDefOnceConfig = `def@once.Once`
 
 // DefOnceConfig def@once.Once
 type DefOnceConfig struct {
@@ -748,9 +713,7 @@ type DefOnceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefOnceConfig,
-		func(r *DefOnceConfig) Once {
-			return r
-		},
+		func(r *DefOnceConfig) Once { return r },
 	)
 }
 
@@ -764,17 +727,17 @@ func (m DefOnceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefOnceConfig, data)
+	data = prepend(kindKey, kindDefOnceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@once.Once =========
+// ========= End def@once.Once type =========
 
-// ========= Begin def@service.Service =========
+// ========= Begin def@service.Service type =========
 //
 
-const kindDefServiceConfig = "def@service.Service"
+const kindDefServiceConfig = `def@service.Service`
 
 // DefServiceConfig def@service.Service
 type DefServiceConfig struct {
@@ -785,9 +748,7 @@ type DefServiceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefServiceConfig,
-		func(r *DefServiceConfig) Service {
-			return r
-		},
+		func(r *DefServiceConfig) Service { return r },
 	)
 }
 
@@ -801,17 +762,17 @@ func (m DefServiceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefServiceConfig, data)
+	data = prepend(kindKey, kindDefServiceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@service.Service =========
+// ========= End def@service.Service type =========
 
-// ========= Begin def@stream.Handler =========
+// ========= Begin def@stream.Handler type =========
 //
 
-const kindDefStreamHandlerConfig = "def@stream.Handler"
+const kindDefStreamHandlerConfig = `def@stream.Handler`
 
 // DefStreamHandlerConfig def@stream.Handler
 type DefStreamHandlerConfig struct {
@@ -822,9 +783,7 @@ type DefStreamHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefStreamHandlerConfig,
-		func(r *DefStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *DefStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -838,17 +797,17 @@ func (m DefStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefStreamHandlerConfig, data)
+	data = prepend(kindKey, kindDefStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@stream.Handler =========
+// ========= End def@stream.Handler type =========
 
-// ========= Begin def@stream/dialer.Dialer =========
+// ========= Begin def@stream/dialer.Dialer type =========
 //
 
-const kindDefStreamDialerConfig = "def@stream/dialer.Dialer"
+const kindDefStreamDialerConfig = `def@stream/dialer.Dialer`
 
 // DefStreamDialerConfig def@stream/dialer.Dialer
 type DefStreamDialerConfig struct {
@@ -859,9 +818,7 @@ type DefStreamDialerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefStreamDialerConfig,
-		func(r *DefStreamDialerConfig) Dialer {
-			return r
-		},
+		func(r *DefStreamDialerConfig) Dialer { return r },
 	)
 }
 
@@ -875,17 +832,17 @@ func (m DefStreamDialerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefStreamDialerConfig, data)
+	data = prepend(kindKey, kindDefStreamDialerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@stream/dialer.Dialer =========
+// ========= End def@stream/dialer.Dialer type =========
 
-// ========= Begin def@stream/listener.ListenConfig =========
+// ========= Begin def@stream/listener.ListenConfig type =========
 //
 
-const kindDefStreamListenerListenConfigConfig = "def@stream/listener.ListenConfig"
+const kindDefStreamListenerListenConfigConfig = `def@stream/listener.ListenConfig`
 
 // DefStreamListenerListenConfigConfig def@stream/listener.ListenConfig
 type DefStreamListenerListenConfigConfig struct {
@@ -896,9 +853,7 @@ type DefStreamListenerListenConfigConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefStreamListenerListenConfigConfig,
-		func(r *DefStreamListenerListenConfigConfig) ListenerListenConfig {
-			return r
-		},
+		func(r *DefStreamListenerListenConfigConfig) ListenerListenConfig { return r },
 	)
 }
 
@@ -912,17 +867,17 @@ func (m DefStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefStreamListenerListenConfigConfig, data)
+	data = prepend(kindKey, kindDefStreamListenerListenConfigConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@stream/listener.ListenConfig =========
+// ========= End def@stream/listener.ListenConfig type =========
 
-// ========= Begin def@tls.TLS =========
+// ========= Begin def@tls.TLS type =========
 //
 
-const kindDefTLSConfig = "def@tls.TLS"
+const kindDefTLSConfig = `def@tls.TLS`
 
 // DefTLSConfig def@tls.TLS
 type DefTLSConfig struct {
@@ -933,9 +888,7 @@ type DefTLSConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDefTLSConfig,
-		func(r *DefTLSConfig) TLS {
-			return r
-		},
+		func(r *DefTLSConfig) TLS { return r },
 	)
 }
 
@@ -949,17 +902,17 @@ func (m DefTLSConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDefTLSConfig, data)
+	data = prepend(kindKey, kindDefTLSConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@tls.TLS =========
+// ========= End def@tls.TLS type =========
 
-// ========= Begin direct@net/http.Handler =========
+// ========= Begin direct@net/http.Handler type =========
 //
 
-const kindDirectNetHTTPHandlerConfig = "direct@net/http.Handler"
+const kindDirectNetHTTPHandlerConfig = `direct@net/http.Handler`
 
 // DirectNetHTTPHandlerConfig direct@net/http.Handler
 type DirectNetHTTPHandlerConfig struct {
@@ -970,9 +923,7 @@ type DirectNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindDirectNetHTTPHandlerConfig,
-		func(r *DirectNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *DirectNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -986,17 +937,17 @@ func (m DirectNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindDirectNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindDirectNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End direct@net/http.Handler =========
+// ========= End direct@net/http.Handler type =========
 
-// ========= Begin env@io.Reader =========
+// ========= Begin env@io.Reader type =========
 //
 
-const kindEnvIoReaderConfig = "env@io.Reader"
+const kindEnvIoReaderConfig = `env@io.Reader`
 
 // EnvIoReaderConfig env@io.Reader
 type EnvIoReaderConfig struct {
@@ -1006,9 +957,7 @@ type EnvIoReaderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindEnvIoReaderConfig,
-		func(r *EnvIoReaderConfig) IoReader {
-			return r
-		},
+		func(r *EnvIoReaderConfig) IoReader { return r },
 	)
 }
 
@@ -1022,17 +971,17 @@ func (m EnvIoReaderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindEnvIoReaderConfig, data)
+	data = prepend(kindKey, kindEnvIoReaderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End env@io.Reader =========
+// ========= End env@io.Reader type =========
 
-// ========= Begin expvar@net/http.Handler =========
+// ========= Begin expvar@net/http.Handler type =========
 //
 
-const kindExpvarNetHTTPHandler = "expvar@net/http.Handler"
+const kindExpvarNetHTTPHandler = `expvar@net/http.Handler`
 
 // ExpvarNetHTTPHandler expvar@net/http.Handler
 type ExpvarNetHTTPHandler struct {
@@ -1041,9 +990,7 @@ type ExpvarNetHTTPHandler struct {
 func init() {
 	_ = defTypes.Register(
 		kindExpvarNetHTTPHandler,
-		func(r *ExpvarNetHTTPHandler) HTTPHandler {
-			return r
-		},
+		func(r *ExpvarNetHTTPHandler) HTTPHandler { return r },
 	)
 }
 
@@ -1057,17 +1004,17 @@ func (m ExpvarNetHTTPHandler) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindExpvarNetHTTPHandler, data)
+	data = prepend(kindKey, kindExpvarNetHTTPHandler, data)
 	return data, nil
 }
 
 //
-// ========= End expvar@net/http.Handler =========
+// ========= End expvar@net/http.Handler type =========
 
-// ========= Begin file@io.Reader =========
+// ========= Begin file@io.Reader type =========
 //
 
-const kindFileIoReaderConfig = "file@io.Reader"
+const kindFileIoReaderConfig = `file@io.Reader`
 
 // FileIoReaderConfig file@io.Reader
 type FileIoReaderConfig struct {
@@ -1077,9 +1024,7 @@ type FileIoReaderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindFileIoReaderConfig,
-		func(r *FileIoReaderConfig) IoReader {
-			return r
-		},
+		func(r *FileIoReaderConfig) IoReader { return r },
 	)
 }
 
@@ -1093,17 +1038,17 @@ func (m FileIoReaderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindFileIoReaderConfig, data)
+	data = prepend(kindKey, kindFileIoReaderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End file@io.Reader =========
+// ========= End file@io.Reader type =========
 
-// ========= Begin file@io.Writer =========
+// ========= Begin file@io.Writer type =========
 //
 
-const kindFileIoWriterConfig = "file@io.Writer"
+const kindFileIoWriterConfig = `file@io.Writer`
 
 // FileIoWriterConfig file@io.Writer
 type FileIoWriterConfig struct {
@@ -1113,9 +1058,7 @@ type FileIoWriterConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindFileIoWriterConfig,
-		func(r *FileIoWriterConfig) IoWriter {
-			return r
-		},
+		func(r *FileIoWriterConfig) IoWriter { return r },
 	)
 }
 
@@ -1129,17 +1072,17 @@ func (m FileIoWriterConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindFileIoWriterConfig, data)
+	data = prepend(kindKey, kindFileIoWriterConfig, data)
 	return data, nil
 }
 
 //
-// ========= End file@io.Writer =========
+// ========= End file@io.Writer type =========
 
-// ========= Begin file@net/http.Handler =========
+// ========= Begin file@net/http.Handler type =========
 //
 
-const kindFileNetHTTPHandlerConfig = "file@net/http.Handler"
+const kindFileNetHTTPHandlerConfig = `file@net/http.Handler`
 
 // FileNetHTTPHandlerConfig file@net/http.Handler
 type FileNetHTTPHandlerConfig struct {
@@ -1149,9 +1092,7 @@ type FileNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindFileNetHTTPHandlerConfig,
-		func(r *FileNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *FileNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -1165,17 +1106,17 @@ func (m FileNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindFileNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindFileNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End file@net/http.Handler =========
+// ========= End file@net/http.Handler type =========
 
-// ========= Begin forward@net/http.Handler =========
+// ========= Begin forward@net/http.Handler type =========
 //
 
-const kindForwardNetHTTPHandlerConfig = "forward@net/http.Handler"
+const kindForwardNetHTTPHandlerConfig = `forward@net/http.Handler`
 
 // ForwardNetHTTPHandlerConfig forward@net/http.Handler
 type ForwardNetHTTPHandlerConfig struct {
@@ -1186,9 +1127,7 @@ type ForwardNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindForwardNetHTTPHandlerConfig,
-		func(r *ForwardNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *ForwardNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -1202,17 +1141,17 @@ func (m ForwardNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindForwardNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindForwardNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End forward@net/http.Handler =========
+// ========= End forward@net/http.Handler type =========
 
-// ========= Begin forward@stream.Handler =========
+// ========= Begin forward@stream.Handler type =========
 //
 
-const kindForwardStreamHandlerConfig = "forward@stream.Handler"
+const kindForwardStreamHandlerConfig = `forward@stream.Handler`
 
 // ForwardStreamHandlerConfig forward@stream.Handler
 type ForwardStreamHandlerConfig struct {
@@ -1222,9 +1161,7 @@ type ForwardStreamHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindForwardStreamHandlerConfig,
-		func(r *ForwardStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *ForwardStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -1238,17 +1175,17 @@ func (m ForwardStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindForwardStreamHandlerConfig, data)
+	data = prepend(kindKey, kindForwardStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End forward@stream.Handler =========
+// ========= End forward@stream.Handler type =========
 
-// ========= Begin from@tls.TLS =========
+// ========= Begin from@tls.TLS type =========
 //
 
-const kindFromTLSConfig = "from@tls.TLS"
+const kindFromTLSConfig = `from@tls.TLS`
 
 // FromTLSConfig from@tls.TLS
 type FromTLSConfig struct {
@@ -1260,9 +1197,7 @@ type FromTLSConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindFromTLSConfig,
-		func(r *FromTLSConfig) TLS {
-			return r
-		},
+		func(r *FromTLSConfig) TLS { return r },
 	)
 }
 
@@ -1276,17 +1211,17 @@ func (m FromTLSConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindFromTLSConfig, data)
+	data = prepend(kindKey, kindFromTLSConfig, data)
 	return data, nil
 }
 
 //
-// ========= End from@tls.TLS =========
+// ========= End from@tls.TLS type =========
 
-// ========= Begin gzip@codec.Decoder =========
+// ========= Begin gzip@codec.Decoder type =========
 //
 
-const kindGzipCodecDecoder = "gzip@codec.Decoder"
+const kindGzipCodecDecoder = `gzip@codec.Decoder`
 
 // GzipCodecDecoder gzip@codec.Decoder
 type GzipCodecDecoder struct {
@@ -1295,9 +1230,7 @@ type GzipCodecDecoder struct {
 func init() {
 	_ = defTypes.Register(
 		kindGzipCodecDecoder,
-		func(r *GzipCodecDecoder) CodecDecoder {
-			return r
-		},
+		func(r *GzipCodecDecoder) CodecDecoder { return r },
 	)
 }
 
@@ -1311,17 +1244,17 @@ func (m GzipCodecDecoder) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindGzipCodecDecoder, data)
+	data = prepend(kindKey, kindGzipCodecDecoder, data)
 	return data, nil
 }
 
 //
-// ========= End gzip@codec.Decoder =========
+// ========= End gzip@codec.Decoder type =========
 
-// ========= Begin gzip@codec.Encoder =========
+// ========= Begin gzip@codec.Encoder type =========
 //
 
-const kindGzipCodecEncoder = "gzip@codec.Encoder"
+const kindGzipCodecEncoder = `gzip@codec.Encoder`
 
 // GzipCodecEncoder gzip@codec.Encoder
 type GzipCodecEncoder struct {
@@ -1330,9 +1263,7 @@ type GzipCodecEncoder struct {
 func init() {
 	_ = defTypes.Register(
 		kindGzipCodecEncoder,
-		func(r *GzipCodecEncoder) CodecEncoder {
-			return r
-		},
+		func(r *GzipCodecEncoder) CodecEncoder { return r },
 	)
 }
 
@@ -1346,17 +1277,17 @@ func (m GzipCodecEncoder) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindGzipCodecEncoder, data)
+	data = prepend(kindKey, kindGzipCodecEncoder, data)
 	return data, nil
 }
 
 //
-// ========= End gzip@codec.Encoder =========
+// ========= End gzip@codec.Encoder type =========
 
-// ========= Begin h2c@net/http.Handler =========
+// ========= Begin h2c@net/http.Handler type =========
 //
 
-const kindH2CNetHTTPHandlerConfig = "h2c@net/http.Handler"
+const kindH2CNetHTTPHandlerConfig = `h2c@net/http.Handler`
 
 // H2CNetHTTPHandlerConfig h2c@net/http.Handler
 type H2CNetHTTPHandlerConfig struct {
@@ -1366,9 +1297,7 @@ type H2CNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindH2CNetHTTPHandlerConfig,
-		func(r *H2CNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *H2CNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -1382,17 +1311,17 @@ func (m H2CNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindH2CNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindH2CNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End h2c@net/http.Handler =========
+// ========= End h2c@net/http.Handler type =========
 
-// ========= Begin hex@codec.Decoder =========
+// ========= Begin hex@codec.Decoder type =========
 //
 
-const kindHexCodecDecoder = "hex@codec.Decoder"
+const kindHexCodecDecoder = `hex@codec.Decoder`
 
 // HexCodecDecoder hex@codec.Decoder
 type HexCodecDecoder struct {
@@ -1401,9 +1330,7 @@ type HexCodecDecoder struct {
 func init() {
 	_ = defTypes.Register(
 		kindHexCodecDecoder,
-		func(r *HexCodecDecoder) CodecDecoder {
-			return r
-		},
+		func(r *HexCodecDecoder) CodecDecoder { return r },
 	)
 }
 
@@ -1417,17 +1344,17 @@ func (m HexCodecDecoder) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindHexCodecDecoder, data)
+	data = prepend(kindKey, kindHexCodecDecoder, data)
 	return data, nil
 }
 
 //
-// ========= End hex@codec.Decoder =========
+// ========= End hex@codec.Decoder type =========
 
-// ========= Begin hex@codec.Encoder =========
+// ========= Begin hex@codec.Encoder type =========
 //
 
-const kindHexCodecEncoder = "hex@codec.Encoder"
+const kindHexCodecEncoder = `hex@codec.Encoder`
 
 // HexCodecEncoder hex@codec.Encoder
 type HexCodecEncoder struct {
@@ -1436,9 +1363,7 @@ type HexCodecEncoder struct {
 func init() {
 	_ = defTypes.Register(
 		kindHexCodecEncoder,
-		func(r *HexCodecEncoder) CodecEncoder {
-			return r
-		},
+		func(r *HexCodecEncoder) CodecEncoder { return r },
 	)
 }
 
@@ -1452,17 +1377,17 @@ func (m HexCodecEncoder) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindHexCodecEncoder, data)
+	data = prepend(kindKey, kindHexCodecEncoder, data)
 	return data, nil
 }
 
 //
-// ========= End hex@codec.Encoder =========
+// ========= End hex@codec.Encoder type =========
 
-// ========= Begin host@net/http.Handler =========
+// ========= Begin host@net/http.Handler type =========
 //
 
-const kindHostNetHTTPHandlerConfig = "host@net/http.Handler"
+const kindHostNetHTTPHandlerConfig = `host@net/http.Handler`
 
 // HostNetHTTPHandlerConfig host@net/http.Handler
 type HostNetHTTPHandlerConfig struct {
@@ -1478,9 +1403,7 @@ type HostNetHTTPHandlerRoute struct {
 func init() {
 	_ = defTypes.Register(
 		kindHostNetHTTPHandlerConfig,
-		func(r *HostNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *HostNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -1494,17 +1417,17 @@ func (m HostNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindHostNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindHostNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End host@net/http.Handler =========
+// ========= End host@net/http.Handler type =========
 
-// ========= Begin http@stream.Handler =========
+// ========= Begin http@stream.Handler type =========
 //
 
-const kindHTTPStreamHandlerConfig = "http@stream.Handler"
+const kindHTTPStreamHandlerConfig = `http@stream.Handler`
 
 // HTTPStreamHandlerConfig http@stream.Handler
 type HTTPStreamHandlerConfig struct {
@@ -1515,9 +1438,7 @@ type HTTPStreamHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindHTTPStreamHandlerConfig,
-		func(r *HTTPStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *HTTPStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -1531,17 +1452,17 @@ func (m HTTPStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindHTTPStreamHandlerConfig, data)
+	data = prepend(kindKey, kindHTTPStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End http@stream.Handler =========
+// ========= End http@stream.Handler type =========
 
-// ========= Begin inline@io.Reader =========
+// ========= Begin inline@io.Reader type =========
 //
 
-const kindInlineIoReaderConfig = "inline@io.Reader"
+const kindInlineIoReaderConfig = `inline@io.Reader`
 
 // InlineIoReaderConfig inline@io.Reader
 type InlineIoReaderConfig struct {
@@ -1551,9 +1472,7 @@ type InlineIoReaderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindInlineIoReaderConfig,
-		func(r *InlineIoReaderConfig) IoReader {
-			return r
-		},
+		func(r *InlineIoReaderConfig) IoReader { return r },
 	)
 }
 
@@ -1567,17 +1486,17 @@ func (m InlineIoReaderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindInlineIoReaderConfig, data)
+	data = prepend(kindKey, kindInlineIoReaderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End inline@io.Reader =========
+// ========= End inline@io.Reader type =========
 
-// ========= Begin json@codec.Marshaler =========
+// ========= Begin json@codec.Marshaler type =========
 //
 
-const kindJSONCodecMarshaler = "json@codec.Marshaler"
+const kindJSONCodecMarshaler = `json@codec.Marshaler`
 
 // JSONCodecMarshaler json@codec.Marshaler
 type JSONCodecMarshaler struct {
@@ -1586,9 +1505,7 @@ type JSONCodecMarshaler struct {
 func init() {
 	_ = defTypes.Register(
 		kindJSONCodecMarshaler,
-		func(r *JSONCodecMarshaler) CodecMarshaler {
-			return r
-		},
+		func(r *JSONCodecMarshaler) CodecMarshaler { return r },
 	)
 }
 
@@ -1602,17 +1519,17 @@ func (m JSONCodecMarshaler) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindJSONCodecMarshaler, data)
+	data = prepend(kindKey, kindJSONCodecMarshaler, data)
 	return data, nil
 }
 
 //
-// ========= End json@codec.Marshaler =========
+// ========= End json@codec.Marshaler type =========
 
-// ========= Begin json@codec.Unmarshaler =========
+// ========= Begin json@codec.Unmarshaler type =========
 //
 
-const kindJSONCodecUnmarshaler = "json@codec.Unmarshaler"
+const kindJSONCodecUnmarshaler = `json@codec.Unmarshaler`
 
 // JSONCodecUnmarshaler json@codec.Unmarshaler
 type JSONCodecUnmarshaler struct {
@@ -1621,9 +1538,7 @@ type JSONCodecUnmarshaler struct {
 func init() {
 	_ = defTypes.Register(
 		kindJSONCodecUnmarshaler,
-		func(r *JSONCodecUnmarshaler) CodecUnmarshaler {
-			return r
-		},
+		func(r *JSONCodecUnmarshaler) CodecUnmarshaler { return r },
 	)
 }
 
@@ -1637,17 +1552,17 @@ func (m JSONCodecUnmarshaler) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindJSONCodecUnmarshaler, data)
+	data = prepend(kindKey, kindJSONCodecUnmarshaler, data)
 	return data, nil
 }
 
 //
-// ========= End json@codec.Unmarshaler =========
+// ========= End json@codec.Unmarshaler type =========
 
-// ========= Begin load@codec.Decoder =========
+// ========= Begin load@codec.Decoder type =========
 //
 
-const kindLoadCodecDecoderConfig = "load@codec.Decoder"
+const kindLoadCodecDecoderConfig = `load@codec.Decoder`
 
 // LoadCodecDecoderConfig load@codec.Decoder
 type LoadCodecDecoderConfig struct {
@@ -1657,9 +1572,7 @@ type LoadCodecDecoderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadCodecDecoderConfig,
-		func(r *LoadCodecDecoderConfig) CodecDecoder {
-			return r
-		},
+		func(r *LoadCodecDecoderConfig) CodecDecoder { return r },
 	)
 }
 
@@ -1673,17 +1586,17 @@ func (m LoadCodecDecoderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadCodecDecoderConfig, data)
+	data = prepend(kindKey, kindLoadCodecDecoderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@codec.Decoder =========
+// ========= End load@codec.Decoder type =========
 
-// ========= Begin load@codec.Encoder =========
+// ========= Begin load@codec.Encoder type =========
 //
 
-const kindLoadCodecEncoderConfig = "load@codec.Encoder"
+const kindLoadCodecEncoderConfig = `load@codec.Encoder`
 
 // LoadCodecEncoderConfig load@codec.Encoder
 type LoadCodecEncoderConfig struct {
@@ -1693,9 +1606,7 @@ type LoadCodecEncoderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadCodecEncoderConfig,
-		func(r *LoadCodecEncoderConfig) CodecEncoder {
-			return r
-		},
+		func(r *LoadCodecEncoderConfig) CodecEncoder { return r },
 	)
 }
 
@@ -1709,17 +1620,17 @@ func (m LoadCodecEncoderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadCodecEncoderConfig, data)
+	data = prepend(kindKey, kindLoadCodecEncoderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@codec.Encoder =========
+// ========= End load@codec.Encoder type =========
 
-// ========= Begin load@codec.Marshaler =========
+// ========= Begin load@codec.Marshaler type =========
 //
 
-const kindLoadCodecMarshalerConfig = "load@codec.Marshaler"
+const kindLoadCodecMarshalerConfig = `load@codec.Marshaler`
 
 // LoadCodecMarshalerConfig load@codec.Marshaler
 type LoadCodecMarshalerConfig struct {
@@ -1729,9 +1640,7 @@ type LoadCodecMarshalerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadCodecMarshalerConfig,
-		func(r *LoadCodecMarshalerConfig) CodecMarshaler {
-			return r
-		},
+		func(r *LoadCodecMarshalerConfig) CodecMarshaler { return r },
 	)
 }
 
@@ -1745,17 +1654,17 @@ func (m LoadCodecMarshalerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadCodecMarshalerConfig, data)
+	data = prepend(kindKey, kindLoadCodecMarshalerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@codec.Marshaler =========
+// ========= End load@codec.Marshaler type =========
 
-// ========= Begin load@codec.Unmarshaler =========
+// ========= Begin load@codec.Unmarshaler type =========
 //
 
-const kindLoadCodecUnmarshalerConfig = "load@codec.Unmarshaler"
+const kindLoadCodecUnmarshalerConfig = `load@codec.Unmarshaler`
 
 // LoadCodecUnmarshalerConfig load@codec.Unmarshaler
 type LoadCodecUnmarshalerConfig struct {
@@ -1765,9 +1674,7 @@ type LoadCodecUnmarshalerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadCodecUnmarshalerConfig,
-		func(r *LoadCodecUnmarshalerConfig) CodecUnmarshaler {
-			return r
-		},
+		func(r *LoadCodecUnmarshalerConfig) CodecUnmarshaler { return r },
 	)
 }
 
@@ -1781,17 +1688,17 @@ func (m LoadCodecUnmarshalerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadCodecUnmarshalerConfig, data)
+	data = prepend(kindKey, kindLoadCodecUnmarshalerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@codec.Unmarshaler =========
+// ========= End load@codec.Unmarshaler type =========
 
-// ========= Begin load@io.Reader =========
+// ========= Begin load@io.Reader type =========
 //
 
-const kindLoadIoReaderConfig = "load@io.Reader"
+const kindLoadIoReaderConfig = `load@io.Reader`
 
 // LoadIoReaderConfig load@io.Reader
 type LoadIoReaderConfig struct {
@@ -1801,9 +1708,7 @@ type LoadIoReaderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadIoReaderConfig,
-		func(r *LoadIoReaderConfig) IoReader {
-			return r
-		},
+		func(r *LoadIoReaderConfig) IoReader { return r },
 	)
 }
 
@@ -1817,17 +1722,17 @@ func (m LoadIoReaderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadIoReaderConfig, data)
+	data = prepend(kindKey, kindLoadIoReaderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@io.Reader =========
+// ========= End load@io.Reader type =========
 
-// ========= Begin load@io.Writer =========
+// ========= Begin load@io.Writer type =========
 //
 
-const kindLoadIoWriterConfig = "load@io.Writer"
+const kindLoadIoWriterConfig = `load@io.Writer`
 
 // LoadIoWriterConfig load@io.Writer
 type LoadIoWriterConfig struct {
@@ -1837,9 +1742,7 @@ type LoadIoWriterConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadIoWriterConfig,
-		func(r *LoadIoWriterConfig) IoWriter {
-			return r
-		},
+		func(r *LoadIoWriterConfig) IoWriter { return r },
 	)
 }
 
@@ -1853,17 +1756,17 @@ func (m LoadIoWriterConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadIoWriterConfig, data)
+	data = prepend(kindKey, kindLoadIoWriterConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@io.Writer =========
+// ========= End load@io.Writer type =========
 
-// ========= Begin load@net/http.Handler =========
+// ========= Begin load@net/http.Handler type =========
 //
 
-const kindLoadNetHTTPHandlerConfig = "load@net/http.Handler"
+const kindLoadNetHTTPHandlerConfig = `load@net/http.Handler`
 
 // LoadNetHTTPHandlerConfig load@net/http.Handler
 type LoadNetHTTPHandlerConfig struct {
@@ -1873,9 +1776,7 @@ type LoadNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadNetHTTPHandlerConfig,
-		func(r *LoadNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *LoadNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -1889,17 +1790,17 @@ func (m LoadNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindLoadNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@net/http.Handler =========
+// ========= End load@net/http.Handler type =========
 
-// ========= Begin load@net/http.RoundTripper =========
+// ========= Begin load@net/http.RoundTripper type =========
 //
 
-const kindLoadNetHTTPRoundTripperConfig = "load@net/http.RoundTripper"
+const kindLoadNetHTTPRoundTripperConfig = `load@net/http.RoundTripper`
 
 // LoadNetHTTPRoundTripperConfig load@net/http.RoundTripper
 type LoadNetHTTPRoundTripperConfig struct {
@@ -1909,9 +1810,7 @@ type LoadNetHTTPRoundTripperConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadNetHTTPRoundTripperConfig,
-		func(r *LoadNetHTTPRoundTripperConfig) HTTPRoundTripper {
-			return r
-		},
+		func(r *LoadNetHTTPRoundTripperConfig) HTTPRoundTripper { return r },
 	)
 }
 
@@ -1925,17 +1824,17 @@ func (m LoadNetHTTPRoundTripperConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadNetHTTPRoundTripperConfig, data)
+	data = prepend(kindKey, kindLoadNetHTTPRoundTripperConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@net/http.RoundTripper =========
+// ========= End load@net/http.RoundTripper type =========
 
-// ========= Begin load@once.Once =========
+// ========= Begin load@once.Once type =========
 //
 
-const kindLoadOnceConfig = "load@once.Once"
+const kindLoadOnceConfig = `load@once.Once`
 
 // LoadOnceConfig load@once.Once
 type LoadOnceConfig struct {
@@ -1945,9 +1844,7 @@ type LoadOnceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadOnceConfig,
-		func(r *LoadOnceConfig) Once {
-			return r
-		},
+		func(r *LoadOnceConfig) Once { return r },
 	)
 }
 
@@ -1961,17 +1858,17 @@ func (m LoadOnceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadOnceConfig, data)
+	data = prepend(kindKey, kindLoadOnceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@once.Once =========
+// ========= End load@once.Once type =========
 
-// ========= Begin load@service.Service =========
+// ========= Begin load@service.Service type =========
 //
 
-const kindLoadServiceConfig = "load@service.Service"
+const kindLoadServiceConfig = `load@service.Service`
 
 // LoadServiceConfig load@service.Service
 type LoadServiceConfig struct {
@@ -1981,9 +1878,7 @@ type LoadServiceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadServiceConfig,
-		func(r *LoadServiceConfig) Service {
-			return r
-		},
+		func(r *LoadServiceConfig) Service { return r },
 	)
 }
 
@@ -1997,17 +1892,17 @@ func (m LoadServiceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadServiceConfig, data)
+	data = prepend(kindKey, kindLoadServiceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@service.Service =========
+// ========= End load@service.Service type =========
 
-// ========= Begin load@stream.Handler =========
+// ========= Begin load@stream.Handler type =========
 //
 
-const kindLoadStreamHandlerConfig = "load@stream.Handler"
+const kindLoadStreamHandlerConfig = `load@stream.Handler`
 
 // LoadStreamHandlerConfig load@stream.Handler
 type LoadStreamHandlerConfig struct {
@@ -2017,9 +1912,7 @@ type LoadStreamHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadStreamHandlerConfig,
-		func(r *LoadStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *LoadStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -2033,17 +1926,17 @@ func (m LoadStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadStreamHandlerConfig, data)
+	data = prepend(kindKey, kindLoadStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@stream.Handler =========
+// ========= End load@stream.Handler type =========
 
-// ========= Begin load@stream/dialer.Dialer =========
+// ========= Begin load@stream/dialer.Dialer type =========
 //
 
-const kindLoadStreamDialerConfig = "load@stream/dialer.Dialer"
+const kindLoadStreamDialerConfig = `load@stream/dialer.Dialer`
 
 // LoadStreamDialerConfig load@stream/dialer.Dialer
 type LoadStreamDialerConfig struct {
@@ -2053,9 +1946,7 @@ type LoadStreamDialerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadStreamDialerConfig,
-		func(r *LoadStreamDialerConfig) Dialer {
-			return r
-		},
+		func(r *LoadStreamDialerConfig) Dialer { return r },
 	)
 }
 
@@ -2069,17 +1960,17 @@ func (m LoadStreamDialerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadStreamDialerConfig, data)
+	data = prepend(kindKey, kindLoadStreamDialerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@stream/dialer.Dialer =========
+// ========= End load@stream/dialer.Dialer type =========
 
-// ========= Begin load@stream/listener.ListenConfig =========
+// ========= Begin load@stream/listener.ListenConfig type =========
 //
 
-const kindLoadStreamListenerListenConfigConfig = "load@stream/listener.ListenConfig"
+const kindLoadStreamListenerListenConfigConfig = `load@stream/listener.ListenConfig`
 
 // LoadStreamListenerListenConfigConfig load@stream/listener.ListenConfig
 type LoadStreamListenerListenConfigConfig struct {
@@ -2089,9 +1980,7 @@ type LoadStreamListenerListenConfigConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadStreamListenerListenConfigConfig,
-		func(r *LoadStreamListenerListenConfigConfig) ListenerListenConfig {
-			return r
-		},
+		func(r *LoadStreamListenerListenConfigConfig) ListenerListenConfig { return r },
 	)
 }
 
@@ -2105,17 +1994,17 @@ func (m LoadStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadStreamListenerListenConfigConfig, data)
+	data = prepend(kindKey, kindLoadStreamListenerListenConfigConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@stream/listener.ListenConfig =========
+// ========= End load@stream/listener.ListenConfig type =========
 
-// ========= Begin load@tls.TLS =========
+// ========= Begin load@tls.TLS type =========
 //
 
-const kindLoadTLSConfig = "load@tls.TLS"
+const kindLoadTLSConfig = `load@tls.TLS`
 
 // LoadTLSConfig load@tls.TLS
 type LoadTLSConfig struct {
@@ -2125,9 +2014,7 @@ type LoadTLSConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLoadTLSConfig,
-		func(r *LoadTLSConfig) TLS {
-			return r
-		},
+		func(r *LoadTLSConfig) TLS { return r },
 	)
 }
 
@@ -2141,17 +2028,17 @@ func (m LoadTLSConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLoadTLSConfig, data)
+	data = prepend(kindKey, kindLoadTLSConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@tls.TLS =========
+// ========= End load@tls.TLS type =========
 
-// ========= Begin log@net/http.Handler =========
+// ========= Begin log@net/http.Handler type =========
 //
 
-const kindLogNetHTTPHandlerConfig = "log@net/http.Handler"
+const kindLogNetHTTPHandlerConfig = `log@net/http.Handler`
 
 // LogNetHTTPHandlerConfig log@net/http.Handler
 type LogNetHTTPHandlerConfig struct {
@@ -2162,9 +2049,7 @@ type LogNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindLogNetHTTPHandlerConfig,
-		func(r *LogNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *LogNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -2178,17 +2063,17 @@ func (m LogNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindLogNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindLogNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End log@net/http.Handler =========
+// ========= End log@net/http.Handler type =========
 
-// ========= Begin message@once.Once =========
+// ========= Begin message@once.Once type =========
 //
 
-const kindMessageOnceConfig = "message@once.Once"
+const kindMessageOnceConfig = `message@once.Once`
 
 // MessageOnceConfig message@once.Once
 type MessageOnceConfig struct {
@@ -2198,9 +2083,7 @@ type MessageOnceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindMessageOnceConfig,
-		func(r *MessageOnceConfig) Once {
-			return r
-		},
+		func(r *MessageOnceConfig) Once { return r },
 	)
 }
 
@@ -2214,17 +2097,17 @@ func (m MessageOnceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindMessageOnceConfig, data)
+	data = prepend(kindKey, kindMessageOnceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End message@once.Once =========
+// ========= End message@once.Once type =========
 
-// ========= Begin multi@net/http.Handler =========
+// ========= Begin multi@net/http.Handler type =========
 //
 
-const kindMultiNetHTTPHandlerConfig = "multi@net/http.Handler"
+const kindMultiNetHTTPHandlerConfig = `multi@net/http.Handler`
 
 // MultiNetHTTPHandlerConfig multi@net/http.Handler
 type MultiNetHTTPHandlerConfig struct {
@@ -2234,9 +2117,7 @@ type MultiNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindMultiNetHTTPHandlerConfig,
-		func(r *MultiNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *MultiNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -2250,17 +2131,17 @@ func (m MultiNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindMultiNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindMultiNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End multi@net/http.Handler =========
+// ========= End multi@net/http.Handler type =========
 
-// ========= Begin multi@once.Once =========
+// ========= Begin multi@once.Once type =========
 //
 
-const kindMultiOnceConfig = "multi@once.Once"
+const kindMultiOnceConfig = `multi@once.Once`
 
 // MultiOnceConfig multi@once.Once
 type MultiOnceConfig struct {
@@ -2270,9 +2151,7 @@ type MultiOnceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindMultiOnceConfig,
-		func(r *MultiOnceConfig) Once {
-			return r
-		},
+		func(r *MultiOnceConfig) Once { return r },
 	)
 }
 
@@ -2286,17 +2165,17 @@ func (m MultiOnceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindMultiOnceConfig, data)
+	data = prepend(kindKey, kindMultiOnceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End multi@once.Once =========
+// ========= End multi@once.Once type =========
 
-// ========= Begin multi@service.Service =========
+// ========= Begin multi@service.Service type =========
 //
 
-const kindMultiServiceConfig = "multi@service.Service"
+const kindMultiServiceConfig = `multi@service.Service`
 
 // MultiServiceConfig multi@service.Service
 type MultiServiceConfig struct {
@@ -2306,9 +2185,7 @@ type MultiServiceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindMultiServiceConfig,
-		func(r *MultiServiceConfig) Service {
-			return r
-		},
+		func(r *MultiServiceConfig) Service { return r },
 	)
 }
 
@@ -2322,17 +2199,17 @@ func (m MultiServiceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindMultiServiceConfig, data)
+	data = prepend(kindKey, kindMultiServiceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End multi@service.Service =========
+// ========= End multi@service.Service type =========
 
-// ========= Begin multi@stream.Handler =========
+// ========= Begin multi@stream.Handler type =========
 //
 
-const kindMultiStreamHandlerConfig = "multi@stream.Handler"
+const kindMultiStreamHandlerConfig = `multi@stream.Handler`
 
 // MultiStreamHandlerConfig multi@stream.Handler
 type MultiStreamHandlerConfig struct {
@@ -2342,9 +2219,7 @@ type MultiStreamHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindMultiStreamHandlerConfig,
-		func(r *MultiStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *MultiStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -2358,17 +2233,17 @@ func (m MultiStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindMultiStreamHandlerConfig, data)
+	data = prepend(kindKey, kindMultiStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End multi@stream.Handler =========
+// ========= End multi@stream.Handler type =========
 
-// ========= Begin mux@net/http.Handler =========
+// ========= Begin mux@net/http.Handler type =========
 //
 
-const kindMuxNetHTTPHandlerConfig = "mux@net/http.Handler"
+const kindMuxNetHTTPHandlerConfig = `mux@net/http.Handler`
 
 // MuxNetHTTPHandlerConfig mux@net/http.Handler
 type MuxNetHTTPHandlerConfig struct {
@@ -2386,9 +2261,7 @@ type MuxNetHTTPHandlerRoute struct {
 func init() {
 	_ = defTypes.Register(
 		kindMuxNetHTTPHandlerConfig,
-		func(r *MuxNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *MuxNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -2402,17 +2275,17 @@ func (m MuxNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindMuxNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindMuxNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End mux@net/http.Handler =========
+// ========= End mux@net/http.Handler type =========
 
-// ========= Begin mux@stream.Handler =========
+// ========= Begin mux@stream.Handler type =========
 //
 
-const kindMuxStreamHandlerConfig = "mux@stream.Handler"
+const kindMuxStreamHandlerConfig = `mux@stream.Handler`
 
 // MuxStreamHandlerConfig mux@stream.Handler
 type MuxStreamHandlerConfig struct {
@@ -2430,9 +2303,7 @@ type MuxStreamHandlerRoute struct {
 func init() {
 	_ = defTypes.Register(
 		kindMuxStreamHandlerConfig,
-		func(r *MuxStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *MuxStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -2446,17 +2317,17 @@ func (m MuxStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindMuxStreamHandlerConfig, data)
+	data = prepend(kindKey, kindMuxStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End mux@stream.Handler =========
+// ========= End mux@stream.Handler type =========
 
-// ========= Begin network@stream/dialer.Dialer =========
+// ========= Begin network@stream/dialer.Dialer type =========
 //
 
-const kindNetworkStreamDialerConfig = "network@stream/dialer.Dialer"
+const kindNetworkStreamDialerConfig = `network@stream/dialer.Dialer`
 
 // NetworkStreamDialerConfig network@stream/dialer.Dialer
 type NetworkStreamDialerConfig struct {
@@ -2476,9 +2347,7 @@ const (
 func init() {
 	_ = defTypes.Register(
 		kindNetworkStreamDialerConfig,
-		func(r *NetworkStreamDialerConfig) Dialer {
-			return r
-		},
+		func(r *NetworkStreamDialerConfig) Dialer { return r },
 	)
 }
 
@@ -2492,17 +2361,17 @@ func (m NetworkStreamDialerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindNetworkStreamDialerConfig, data)
+	data = prepend(kindKey, kindNetworkStreamDialerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End network@stream/dialer.Dialer =========
+// ========= End network@stream/dialer.Dialer type =========
 
-// ========= Begin network@stream/listener.ListenConfig =========
+// ========= Begin network@stream/listener.ListenConfig type =========
 //
 
-const kindNetworkStreamListenerListenConfigConfig = "network@stream/listener.ListenConfig"
+const kindNetworkStreamListenerListenConfigConfig = `network@stream/listener.ListenConfig`
 
 // NetworkStreamListenerListenConfigConfig network@stream/listener.ListenConfig
 type NetworkStreamListenerListenConfigConfig struct {
@@ -2522,9 +2391,7 @@ const (
 func init() {
 	_ = defTypes.Register(
 		kindNetworkStreamListenerListenConfigConfig,
-		func(r *NetworkStreamListenerListenConfigConfig) ListenerListenConfig {
-			return r
-		},
+		func(r *NetworkStreamListenerListenConfigConfig) ListenerListenConfig { return r },
 	)
 }
 
@@ -2538,17 +2405,17 @@ func (m NetworkStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindNetworkStreamListenerListenConfigConfig, data)
+	data = prepend(kindKey, kindNetworkStreamListenerListenConfigConfig, data)
 	return data, nil
 }
 
 //
-// ========= End network@stream/listener.ListenConfig =========
+// ========= End network@stream/listener.ListenConfig type =========
 
-// ========= Begin none@once.Once =========
+// ========= Begin none@once.Once type =========
 //
 
-const kindNoneOnceConfig = "none@once.Once"
+const kindNoneOnceConfig = `none@once.Once`
 
 // NoneOnceConfig none@once.Once
 type NoneOnceConfig struct {
@@ -2558,9 +2425,7 @@ type NoneOnceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindNoneOnceConfig,
-		func(r *NoneOnceConfig) Once {
-			return r
-		},
+		func(r *NoneOnceConfig) Once { return r },
 	)
 }
 
@@ -2574,17 +2439,17 @@ func (m NoneOnceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindNoneOnceConfig, data)
+	data = prepend(kindKey, kindNoneOnceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End none@once.Once =========
+// ========= End none@once.Once type =========
 
-// ========= Begin none@service.Service =========
+// ========= Begin none@service.Service type =========
 //
 
-const kindNoneService = "none@service.Service"
+const kindNoneService = `none@service.Service`
 
 // NoneService none@service.Service
 type NoneService struct {
@@ -2593,9 +2458,7 @@ type NoneService struct {
 func init() {
 	_ = defTypes.Register(
 		kindNoneService,
-		func(r *NoneService) Service {
-			return r
-		},
+		func(r *NoneService) Service { return r },
 	)
 }
 
@@ -2609,17 +2472,17 @@ func (m NoneService) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindNoneService, data)
+	data = prepend(kindKey, kindNoneService, data)
 	return data, nil
 }
 
 //
-// ========= End none@service.Service =========
+// ========= End none@service.Service type =========
 
-// ========= Begin poller@net/http.Handler =========
+// ========= Begin poller@net/http.Handler type =========
 //
 
-const kindPollerNetHTTPHandlerConfig = "poller@net/http.Handler"
+const kindPollerNetHTTPHandlerConfig = `poller@net/http.Handler`
 
 // PollerNetHTTPHandlerConfig poller@net/http.Handler
 type PollerNetHTTPHandlerConfig struct {
@@ -2637,9 +2500,7 @@ const (
 func init() {
 	_ = defTypes.Register(
 		kindPollerNetHTTPHandlerConfig,
-		func(r *PollerNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *PollerNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -2653,17 +2514,17 @@ func (m PollerNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindPollerNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindPollerNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End poller@net/http.Handler =========
+// ========= End poller@net/http.Handler type =========
 
-// ========= Begin poller@stream.Handler =========
+// ========= Begin poller@stream.Handler type =========
 //
 
-const kindPollerStreamHandlerConfig = "poller@stream.Handler"
+const kindPollerStreamHandlerConfig = `poller@stream.Handler`
 
 // PollerStreamHandlerConfig poller@stream.Handler
 type PollerStreamHandlerConfig struct {
@@ -2681,9 +2542,7 @@ const (
 func init() {
 	_ = defTypes.Register(
 		kindPollerStreamHandlerConfig,
-		func(r *PollerStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *PollerStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -2697,17 +2556,17 @@ func (m PollerStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindPollerStreamHandlerConfig, data)
+	data = prepend(kindKey, kindPollerStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End poller@stream.Handler =========
+// ========= End poller@stream.Handler type =========
 
-// ========= Begin poller@stream/dialer.Dialer =========
+// ========= Begin poller@stream/dialer.Dialer type =========
 //
 
-const kindPollerStreamDialerConfig = "poller@stream/dialer.Dialer"
+const kindPollerStreamDialerConfig = `poller@stream/dialer.Dialer`
 
 // PollerStreamDialerConfig poller@stream/dialer.Dialer
 type PollerStreamDialerConfig struct {
@@ -2725,9 +2584,7 @@ const (
 func init() {
 	_ = defTypes.Register(
 		kindPollerStreamDialerConfig,
-		func(r *PollerStreamDialerConfig) Dialer {
-			return r
-		},
+		func(r *PollerStreamDialerConfig) Dialer { return r },
 	)
 }
 
@@ -2741,17 +2598,17 @@ func (m PollerStreamDialerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindPollerStreamDialerConfig, data)
+	data = prepend(kindKey, kindPollerStreamDialerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End poller@stream/dialer.Dialer =========
+// ========= End poller@stream/dialer.Dialer type =========
 
-// ========= Begin pprof@net/http.Handler =========
+// ========= Begin pprof@net/http.Handler type =========
 //
 
-const kindPprofNetHTTPHandler = "pprof@net/http.Handler"
+const kindPprofNetHTTPHandler = `pprof@net/http.Handler`
 
 // PprofNetHTTPHandler pprof@net/http.Handler
 type PprofNetHTTPHandler struct {
@@ -2760,9 +2617,7 @@ type PprofNetHTTPHandler struct {
 func init() {
 	_ = defTypes.Register(
 		kindPprofNetHTTPHandler,
-		func(r *PprofNetHTTPHandler) HTTPHandler {
-			return r
-		},
+		func(r *PprofNetHTTPHandler) HTTPHandler { return r },
 	)
 }
 
@@ -2776,17 +2631,17 @@ func (m PprofNetHTTPHandler) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindPprofNetHTTPHandler, data)
+	data = prepend(kindKey, kindPprofNetHTTPHandler, data)
 	return data, nil
 }
 
 //
-// ========= End pprof@net/http.Handler =========
+// ========= End pprof@net/http.Handler type =========
 
-// ========= Begin redirect@net/http.Handler =========
+// ========= Begin redirect@net/http.Handler type =========
 //
 
-const kindRedirectNetHTTPHandlerConfig = "redirect@net/http.Handler"
+const kindRedirectNetHTTPHandlerConfig = `redirect@net/http.Handler`
 
 // RedirectNetHTTPHandlerConfig redirect@net/http.Handler
 type RedirectNetHTTPHandlerConfig struct {
@@ -2797,9 +2652,7 @@ type RedirectNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRedirectNetHTTPHandlerConfig,
-		func(r *RedirectNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *RedirectNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -2813,17 +2666,17 @@ func (m RedirectNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRedirectNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindRedirectNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End redirect@net/http.Handler =========
+// ========= End redirect@net/http.Handler type =========
 
-// ========= Begin ref@codec.Decoder =========
+// ========= Begin ref@codec.Decoder type =========
 //
 
-const kindRefCodecDecoderConfig = "ref@codec.Decoder"
+const kindRefCodecDecoderConfig = `ref@codec.Decoder`
 
 // RefCodecDecoderConfig ref@codec.Decoder
 type RefCodecDecoderConfig struct {
@@ -2833,9 +2686,7 @@ type RefCodecDecoderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefCodecDecoderConfig,
-		func(r *RefCodecDecoderConfig) CodecDecoder {
-			return r
-		},
+		func(r *RefCodecDecoderConfig) CodecDecoder { return r },
 	)
 }
 
@@ -2849,17 +2700,17 @@ func (m RefCodecDecoderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefCodecDecoderConfig, data)
+	data = prepend(kindKey, kindRefCodecDecoderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@codec.Decoder =========
+// ========= End ref@codec.Decoder type =========
 
-// ========= Begin ref@codec.Encoder =========
+// ========= Begin ref@codec.Encoder type =========
 //
 
-const kindRefCodecEncoderConfig = "ref@codec.Encoder"
+const kindRefCodecEncoderConfig = `ref@codec.Encoder`
 
 // RefCodecEncoderConfig ref@codec.Encoder
 type RefCodecEncoderConfig struct {
@@ -2869,9 +2720,7 @@ type RefCodecEncoderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefCodecEncoderConfig,
-		func(r *RefCodecEncoderConfig) CodecEncoder {
-			return r
-		},
+		func(r *RefCodecEncoderConfig) CodecEncoder { return r },
 	)
 }
 
@@ -2885,17 +2734,17 @@ func (m RefCodecEncoderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefCodecEncoderConfig, data)
+	data = prepend(kindKey, kindRefCodecEncoderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@codec.Encoder =========
+// ========= End ref@codec.Encoder type =========
 
-// ========= Begin ref@codec.Marshaler =========
+// ========= Begin ref@codec.Marshaler type =========
 //
 
-const kindRefCodecMarshalerConfig = "ref@codec.Marshaler"
+const kindRefCodecMarshalerConfig = `ref@codec.Marshaler`
 
 // RefCodecMarshalerConfig ref@codec.Marshaler
 type RefCodecMarshalerConfig struct {
@@ -2905,9 +2754,7 @@ type RefCodecMarshalerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefCodecMarshalerConfig,
-		func(r *RefCodecMarshalerConfig) CodecMarshaler {
-			return r
-		},
+		func(r *RefCodecMarshalerConfig) CodecMarshaler { return r },
 	)
 }
 
@@ -2921,17 +2768,17 @@ func (m RefCodecMarshalerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefCodecMarshalerConfig, data)
+	data = prepend(kindKey, kindRefCodecMarshalerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@codec.Marshaler =========
+// ========= End ref@codec.Marshaler type =========
 
-// ========= Begin ref@codec.Unmarshaler =========
+// ========= Begin ref@codec.Unmarshaler type =========
 //
 
-const kindRefCodecUnmarshalerConfig = "ref@codec.Unmarshaler"
+const kindRefCodecUnmarshalerConfig = `ref@codec.Unmarshaler`
 
 // RefCodecUnmarshalerConfig ref@codec.Unmarshaler
 type RefCodecUnmarshalerConfig struct {
@@ -2941,9 +2788,7 @@ type RefCodecUnmarshalerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefCodecUnmarshalerConfig,
-		func(r *RefCodecUnmarshalerConfig) CodecUnmarshaler {
-			return r
-		},
+		func(r *RefCodecUnmarshalerConfig) CodecUnmarshaler { return r },
 	)
 }
 
@@ -2957,17 +2802,17 @@ func (m RefCodecUnmarshalerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefCodecUnmarshalerConfig, data)
+	data = prepend(kindKey, kindRefCodecUnmarshalerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@codec.Unmarshaler =========
+// ========= End ref@codec.Unmarshaler type =========
 
-// ========= Begin ref@io.Reader =========
+// ========= Begin ref@io.Reader type =========
 //
 
-const kindRefIoReaderConfig = "ref@io.Reader"
+const kindRefIoReaderConfig = `ref@io.Reader`
 
 // RefIoReaderConfig ref@io.Reader
 type RefIoReaderConfig struct {
@@ -2977,9 +2822,7 @@ type RefIoReaderConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefIoReaderConfig,
-		func(r *RefIoReaderConfig) IoReader {
-			return r
-		},
+		func(r *RefIoReaderConfig) IoReader { return r },
 	)
 }
 
@@ -2993,17 +2836,17 @@ func (m RefIoReaderConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefIoReaderConfig, data)
+	data = prepend(kindKey, kindRefIoReaderConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@io.Reader =========
+// ========= End ref@io.Reader type =========
 
-// ========= Begin ref@io.Writer =========
+// ========= Begin ref@io.Writer type =========
 //
 
-const kindRefIoWriterConfig = "ref@io.Writer"
+const kindRefIoWriterConfig = `ref@io.Writer`
 
 // RefIoWriterConfig ref@io.Writer
 type RefIoWriterConfig struct {
@@ -3013,9 +2856,7 @@ type RefIoWriterConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefIoWriterConfig,
-		func(r *RefIoWriterConfig) IoWriter {
-			return r
-		},
+		func(r *RefIoWriterConfig) IoWriter { return r },
 	)
 }
 
@@ -3029,17 +2870,17 @@ func (m RefIoWriterConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefIoWriterConfig, data)
+	data = prepend(kindKey, kindRefIoWriterConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@io.Writer =========
+// ========= End ref@io.Writer type =========
 
-// ========= Begin ref@net/http.Handler =========
+// ========= Begin ref@net/http.Handler type =========
 //
 
-const kindRefNetHTTPHandlerConfig = "ref@net/http.Handler"
+const kindRefNetHTTPHandlerConfig = `ref@net/http.Handler`
 
 // RefNetHTTPHandlerConfig ref@net/http.Handler
 type RefNetHTTPHandlerConfig struct {
@@ -3049,9 +2890,7 @@ type RefNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefNetHTTPHandlerConfig,
-		func(r *RefNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *RefNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -3065,17 +2904,17 @@ func (m RefNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindRefNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@net/http.Handler =========
+// ========= End ref@net/http.Handler type =========
 
-// ========= Begin ref@net/http.RoundTripper =========
+// ========= Begin ref@net/http.RoundTripper type =========
 //
 
-const kindRefNetHTTPRoundTripperConfig = "ref@net/http.RoundTripper"
+const kindRefNetHTTPRoundTripperConfig = `ref@net/http.RoundTripper`
 
 // RefNetHTTPRoundTripperConfig ref@net/http.RoundTripper
 type RefNetHTTPRoundTripperConfig struct {
@@ -3085,9 +2924,7 @@ type RefNetHTTPRoundTripperConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefNetHTTPRoundTripperConfig,
-		func(r *RefNetHTTPRoundTripperConfig) HTTPRoundTripper {
-			return r
-		},
+		func(r *RefNetHTTPRoundTripperConfig) HTTPRoundTripper { return r },
 	)
 }
 
@@ -3101,17 +2938,17 @@ func (m RefNetHTTPRoundTripperConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefNetHTTPRoundTripperConfig, data)
+	data = prepend(kindKey, kindRefNetHTTPRoundTripperConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@net/http.RoundTripper =========
+// ========= End ref@net/http.RoundTripper type =========
 
-// ========= Begin ref@once.Once =========
+// ========= Begin ref@once.Once type =========
 //
 
-const kindRefOnceConfig = "ref@once.Once"
+const kindRefOnceConfig = `ref@once.Once`
 
 // RefOnceConfig ref@once.Once
 type RefOnceConfig struct {
@@ -3121,9 +2958,7 @@ type RefOnceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefOnceConfig,
-		func(r *RefOnceConfig) Once {
-			return r
-		},
+		func(r *RefOnceConfig) Once { return r },
 	)
 }
 
@@ -3137,17 +2972,17 @@ func (m RefOnceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefOnceConfig, data)
+	data = prepend(kindKey, kindRefOnceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@once.Once =========
+// ========= End ref@once.Once type =========
 
-// ========= Begin ref@service.Service =========
+// ========= Begin ref@service.Service type =========
 //
 
-const kindRefServiceConfig = "ref@service.Service"
+const kindRefServiceConfig = `ref@service.Service`
 
 // RefServiceConfig ref@service.Service
 type RefServiceConfig struct {
@@ -3157,9 +2992,7 @@ type RefServiceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefServiceConfig,
-		func(r *RefServiceConfig) Service {
-			return r
-		},
+		func(r *RefServiceConfig) Service { return r },
 	)
 }
 
@@ -3173,17 +3006,17 @@ func (m RefServiceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefServiceConfig, data)
+	data = prepend(kindKey, kindRefServiceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@service.Service =========
+// ========= End ref@service.Service type =========
 
-// ========= Begin ref@stream.Handler =========
+// ========= Begin ref@stream.Handler type =========
 //
 
-const kindRefStreamHandlerConfig = "ref@stream.Handler"
+const kindRefStreamHandlerConfig = `ref@stream.Handler`
 
 // RefStreamHandlerConfig ref@stream.Handler
 type RefStreamHandlerConfig struct {
@@ -3193,9 +3026,7 @@ type RefStreamHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefStreamHandlerConfig,
-		func(r *RefStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *RefStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -3209,17 +3040,17 @@ func (m RefStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefStreamHandlerConfig, data)
+	data = prepend(kindKey, kindRefStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@stream.Handler =========
+// ========= End ref@stream.Handler type =========
 
-// ========= Begin ref@stream/dialer.Dialer =========
+// ========= Begin ref@stream/dialer.Dialer type =========
 //
 
-const kindRefStreamDialerConfig = "ref@stream/dialer.Dialer"
+const kindRefStreamDialerConfig = `ref@stream/dialer.Dialer`
 
 // RefStreamDialerConfig ref@stream/dialer.Dialer
 type RefStreamDialerConfig struct {
@@ -3229,9 +3060,7 @@ type RefStreamDialerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefStreamDialerConfig,
-		func(r *RefStreamDialerConfig) Dialer {
-			return r
-		},
+		func(r *RefStreamDialerConfig) Dialer { return r },
 	)
 }
 
@@ -3245,17 +3074,17 @@ func (m RefStreamDialerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefStreamDialerConfig, data)
+	data = prepend(kindKey, kindRefStreamDialerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@stream/dialer.Dialer =========
+// ========= End ref@stream/dialer.Dialer type =========
 
-// ========= Begin ref@stream/listener.ListenConfig =========
+// ========= Begin ref@stream/listener.ListenConfig type =========
 //
 
-const kindRefStreamListenerListenConfigConfig = "ref@stream/listener.ListenConfig"
+const kindRefStreamListenerListenConfigConfig = `ref@stream/listener.ListenConfig`
 
 // RefStreamListenerListenConfigConfig ref@stream/listener.ListenConfig
 type RefStreamListenerListenConfigConfig struct {
@@ -3265,9 +3094,7 @@ type RefStreamListenerListenConfigConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefStreamListenerListenConfigConfig,
-		func(r *RefStreamListenerListenConfigConfig) ListenerListenConfig {
-			return r
-		},
+		func(r *RefStreamListenerListenConfigConfig) ListenerListenConfig { return r },
 	)
 }
 
@@ -3281,17 +3108,17 @@ func (m RefStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefStreamListenerListenConfigConfig, data)
+	data = prepend(kindKey, kindRefStreamListenerListenConfigConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@stream/listener.ListenConfig =========
+// ========= End ref@stream/listener.ListenConfig type =========
 
-// ========= Begin ref@tls.TLS =========
+// ========= Begin ref@tls.TLS type =========
 //
 
-const kindRefTLSConfig = "ref@tls.TLS"
+const kindRefTLSConfig = `ref@tls.TLS`
 
 // RefTLSConfig ref@tls.TLS
 type RefTLSConfig struct {
@@ -3301,9 +3128,7 @@ type RefTLSConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRefTLSConfig,
-		func(r *RefTLSConfig) TLS {
-			return r
-		},
+		func(r *RefTLSConfig) TLS { return r },
 	)
 }
 
@@ -3317,17 +3142,17 @@ func (m RefTLSConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRefTLSConfig, data)
+	data = prepend(kindKey, kindRefTLSConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@tls.TLS =========
+// ========= End ref@tls.TLS type =========
 
-// ========= Begin remove_request_header@net/http.Handler =========
+// ========= Begin remove_request_header@net/http.Handler type =========
 //
 
-const kindRemoveRequestHeaderNetHTTPHandlerConfig = "remove_request_header@net/http.Handler"
+const kindRemoveRequestHeaderNetHTTPHandlerConfig = `remove_request_header@net/http.Handler`
 
 // RemoveRequestHeaderNetHTTPHandlerConfig remove_request_header@net/http.Handler
 type RemoveRequestHeaderNetHTTPHandlerConfig struct {
@@ -3337,9 +3162,7 @@ type RemoveRequestHeaderNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRemoveRequestHeaderNetHTTPHandlerConfig,
-		func(r *RemoveRequestHeaderNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *RemoveRequestHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -3353,17 +3176,17 @@ func (m RemoveRequestHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRemoveRequestHeaderNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindRemoveRequestHeaderNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End remove_request_header@net/http.Handler =========
+// ========= End remove_request_header@net/http.Handler type =========
 
-// ========= Begin remove_response_header@net/http.Handler =========
+// ========= Begin remove_response_header@net/http.Handler type =========
 //
 
-const kindRemoveResponseHeaderNetHTTPHandlerConfig = "remove_response_header@net/http.Handler"
+const kindRemoveResponseHeaderNetHTTPHandlerConfig = `remove_response_header@net/http.Handler`
 
 // RemoveResponseHeaderNetHTTPHandlerConfig remove_response_header@net/http.Handler
 type RemoveResponseHeaderNetHTTPHandlerConfig struct {
@@ -3373,9 +3196,7 @@ type RemoveResponseHeaderNetHTTPHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindRemoveResponseHeaderNetHTTPHandlerConfig,
-		func(r *RemoveResponseHeaderNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *RemoveResponseHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -3389,17 +3210,17 @@ func (m RemoveResponseHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) 
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindRemoveResponseHeaderNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindRemoveResponseHeaderNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End remove_response_header@net/http.Handler =========
+// ========= End remove_response_header@net/http.Handler type =========
 
-// ========= Begin sample@once.Once =========
+// ========= Begin sample@once.Once type =========
 //
 
-const kindSampleOnceConfig = "sample@once.Once"
+const kindSampleOnceConfig = `sample@once.Once`
 
 // SampleOnceConfig sample@once.Once
 type SampleOnceConfig struct {
@@ -3411,9 +3232,7 @@ type SampleOnceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindSampleOnceConfig,
-		func(r *SampleOnceConfig) Once {
-			return r
-		},
+		func(r *SampleOnceConfig) Once { return r },
 	)
 }
 
@@ -3427,17 +3246,17 @@ func (m SampleOnceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindSampleOnceConfig, data)
+	data = prepend(kindKey, kindSampleOnceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End sample@once.Once =========
+// ========= End sample@once.Once type =========
 
-// ========= Begin self_signed@tls.TLS =========
+// ========= Begin self_signed@tls.TLS type =========
 //
 
-const kindSelfSignedTLS = "self_signed@tls.TLS"
+const kindSelfSignedTLS = `self_signed@tls.TLS`
 
 // SelfSignedTLS self_signed@tls.TLS
 type SelfSignedTLS struct {
@@ -3446,9 +3265,7 @@ type SelfSignedTLS struct {
 func init() {
 	_ = defTypes.Register(
 		kindSelfSignedTLS,
-		func(r *SelfSignedTLS) TLS {
-			return r
-		},
+		func(r *SelfSignedTLS) TLS { return r },
 	)
 }
 
@@ -3462,17 +3279,17 @@ func (m SelfSignedTLS) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindSelfSignedTLS, data)
+	data = prepend(kindKey, kindSelfSignedTLS, data)
 	return data, nil
 }
 
 //
-// ========= End self_signed@tls.TLS =========
+// ========= End self_signed@tls.TLS type =========
 
-// ========= Begin service@once.Once =========
+// ========= Begin service@once.Once type =========
 //
 
-const kindServiceOnceConfig = "service@once.Once"
+const kindServiceOnceConfig = `service@once.Once`
 
 // ServiceOnceConfig service@once.Once
 type ServiceOnceConfig struct {
@@ -3482,9 +3299,7 @@ type ServiceOnceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindServiceOnceConfig,
-		func(r *ServiceOnceConfig) Once {
-			return r
-		},
+		func(r *ServiceOnceConfig) Once { return r },
 	)
 }
 
@@ -3498,17 +3313,17 @@ func (m ServiceOnceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindServiceOnceConfig, data)
+	data = prepend(kindKey, kindServiceOnceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End service@once.Once =========
+// ========= End service@once.Once type =========
 
-// ========= Begin stream@service.Service =========
+// ========= Begin stream@service.Service type =========
 //
 
-const kindStreamServiceConfig = "stream@service.Service"
+const kindStreamServiceConfig = `stream@service.Service`
 
 // StreamServiceConfig stream@service.Service
 type StreamServiceConfig struct {
@@ -3519,9 +3334,7 @@ type StreamServiceConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindStreamServiceConfig,
-		func(r *StreamServiceConfig) Service {
-			return r
-		},
+		func(r *StreamServiceConfig) Service { return r },
 	)
 }
 
@@ -3535,17 +3348,17 @@ func (m StreamServiceConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindStreamServiceConfig, data)
+	data = prepend(kindKey, kindStreamServiceConfig, data)
 	return data, nil
 }
 
 //
-// ========= End stream@service.Service =========
+// ========= End stream@service.Service type =========
 
-// ========= Begin tls@stream/dialer.Dialer =========
+// ========= Begin tls@stream/dialer.Dialer type =========
 //
 
-const kindTLSStreamDialerConfig = "tls@stream/dialer.Dialer"
+const kindTLSStreamDialerConfig = `tls@stream/dialer.Dialer`
 
 // TLSStreamDialerConfig tls@stream/dialer.Dialer
 type TLSStreamDialerConfig struct {
@@ -3556,9 +3369,7 @@ type TLSStreamDialerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindTLSStreamDialerConfig,
-		func(r *TLSStreamDialerConfig) Dialer {
-			return r
-		},
+		func(r *TLSStreamDialerConfig) Dialer { return r },
 	)
 }
 
@@ -3572,17 +3383,17 @@ func (m TLSStreamDialerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindTLSStreamDialerConfig, data)
+	data = prepend(kindKey, kindTLSStreamDialerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End tls@stream/dialer.Dialer =========
+// ========= End tls@stream/dialer.Dialer type =========
 
-// ========= Begin tls@stream/listener.ListenConfig =========
+// ========= Begin tls@stream/listener.ListenConfig type =========
 //
 
-const kindTLSStreamListenerListenConfigConfig = "tls@stream/listener.ListenConfig"
+const kindTLSStreamListenerListenConfigConfig = `tls@stream/listener.ListenConfig`
 
 // TLSStreamListenerListenConfigConfig tls@stream/listener.ListenConfig
 type TLSStreamListenerListenConfigConfig struct {
@@ -3593,9 +3404,7 @@ type TLSStreamListenerListenConfigConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindTLSStreamListenerListenConfigConfig,
-		func(r *TLSStreamListenerListenConfigConfig) ListenerListenConfig {
-			return r
-		},
+		func(r *TLSStreamListenerListenConfigConfig) ListenerListenConfig { return r },
 	)
 }
 
@@ -3609,17 +3418,17 @@ func (m TLSStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindTLSStreamListenerListenConfigConfig, data)
+	data = prepend(kindKey, kindTLSStreamListenerListenConfigConfig, data)
 	return data, nil
 }
 
 //
-// ========= End tls@stream/listener.ListenConfig =========
+// ========= End tls@stream/listener.ListenConfig type =========
 
-// ========= Begin tls_down@stream.Handler =========
+// ========= Begin tls_down@stream.Handler type =========
 //
 
-const kindTLSDownStreamHandlerConfig = "tls_down@stream.Handler"
+const kindTLSDownStreamHandlerConfig = `tls_down@stream.Handler`
 
 // TLSDownStreamHandlerConfig tls_down@stream.Handler
 type TLSDownStreamHandlerConfig struct {
@@ -3630,9 +3439,7 @@ type TLSDownStreamHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindTLSDownStreamHandlerConfig,
-		func(r *TLSDownStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *TLSDownStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -3646,17 +3453,17 @@ func (m TLSDownStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindTLSDownStreamHandlerConfig, data)
+	data = prepend(kindKey, kindTLSDownStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End tls_down@stream.Handler =========
+// ========= End tls_down@stream.Handler type =========
 
-// ========= Begin tls_up@stream.Handler =========
+// ========= Begin tls_up@stream.Handler type =========
 //
 
-const kindTLSUpStreamHandlerConfig = "tls_up@stream.Handler"
+const kindTLSUpStreamHandlerConfig = `tls_up@stream.Handler`
 
 // TLSUpStreamHandlerConfig tls_up@stream.Handler
 type TLSUpStreamHandlerConfig struct {
@@ -3667,9 +3474,7 @@ type TLSUpStreamHandlerConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindTLSUpStreamHandlerConfig,
-		func(r *TLSUpStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *TLSUpStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -3683,17 +3488,17 @@ func (m TLSUpStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindTLSUpStreamHandlerConfig, data)
+	data = prepend(kindKey, kindTLSUpStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End tls_up@stream.Handler =========
+// ========= End tls_up@stream.Handler type =========
 
-// ========= Begin transport@net/http.RoundTripper =========
+// ========= Begin transport@net/http.RoundTripper type =========
 //
 
-const kindTransportNetHTTPRoundTripperConfig = "transport@net/http.RoundTripper"
+const kindTransportNetHTTPRoundTripperConfig = `transport@net/http.RoundTripper`
 
 // TransportNetHTTPRoundTripperConfig transport@net/http.RoundTripper
 type TransportNetHTTPRoundTripperConfig struct {
@@ -3704,9 +3509,7 @@ type TransportNetHTTPRoundTripperConfig struct {
 func init() {
 	_ = defTypes.Register(
 		kindTransportNetHTTPRoundTripperConfig,
-		func(r *TransportNetHTTPRoundTripperConfig) HTTPRoundTripper {
-			return r
-		},
+		func(r *TransportNetHTTPRoundTripperConfig) HTTPRoundTripper { return r },
 	)
 }
 
@@ -3720,17 +3523,17 @@ func (m TransportNetHTTPRoundTripperConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindTransportNetHTTPRoundTripperConfig, data)
+	data = prepend(kindKey, kindTransportNetHTTPRoundTripperConfig, data)
 	return data, nil
 }
 
 //
-// ========= End transport@net/http.RoundTripper =========
+// ========= End transport@net/http.RoundTripper type =========
 
-// ========= Begin weighted@net/http.Handler =========
+// ========= Begin weighted@net/http.Handler type =========
 //
 
-const kindWeightedNetHTTPHandlerConfig = "weighted@net/http.Handler"
+const kindWeightedNetHTTPHandlerConfig = `weighted@net/http.Handler`
 
 // WeightedNetHTTPHandlerConfig weighted@net/http.Handler
 type WeightedNetHTTPHandlerConfig struct {
@@ -3745,9 +3548,7 @@ type WeightedNetHTTPHandlerWeighted struct {
 func init() {
 	_ = defTypes.Register(
 		kindWeightedNetHTTPHandlerConfig,
-		func(r *WeightedNetHTTPHandlerConfig) HTTPHandler {
-			return r
-		},
+		func(r *WeightedNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
@@ -3761,17 +3562,17 @@ func (m WeightedNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindWeightedNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindWeightedNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End weighted@net/http.Handler =========
+// ========= End weighted@net/http.Handler type =========
 
-// ========= Begin weighted@stream.Handler =========
+// ========= Begin weighted@stream.Handler type =========
 //
 
-const kindWeightedStreamHandlerConfig = "weighted@stream.Handler"
+const kindWeightedStreamHandlerConfig = `weighted@stream.Handler`
 
 // WeightedStreamHandlerConfig weighted@stream.Handler
 type WeightedStreamHandlerConfig struct {
@@ -3786,9 +3587,7 @@ type WeightedStreamHandlerWeighted struct {
 func init() {
 	_ = defTypes.Register(
 		kindWeightedStreamHandlerConfig,
-		func(r *WeightedStreamHandlerConfig) StreamHandler {
-			return r
-		},
+		func(r *WeightedStreamHandlerConfig) StreamHandler { return r },
 	)
 }
 
@@ -3802,17 +3601,17 @@ func (m WeightedStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindWeightedStreamHandlerConfig, data)
+	data = prepend(kindKey, kindWeightedStreamHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End weighted@stream.Handler =========
+// ========= End weighted@stream.Handler type =========
 
-// ========= Begin yaml@codec.Marshaler =========
+// ========= Begin yaml@codec.Marshaler type =========
 //
 
-const kindYamlCodecMarshaler = "yaml@codec.Marshaler"
+const kindYamlCodecMarshaler = `yaml@codec.Marshaler`
 
 // YamlCodecMarshaler yaml@codec.Marshaler
 type YamlCodecMarshaler struct {
@@ -3821,9 +3620,7 @@ type YamlCodecMarshaler struct {
 func init() {
 	_ = defTypes.Register(
 		kindYamlCodecMarshaler,
-		func(r *YamlCodecMarshaler) CodecMarshaler {
-			return r
-		},
+		func(r *YamlCodecMarshaler) CodecMarshaler { return r },
 	)
 }
 
@@ -3837,17 +3634,17 @@ func (m YamlCodecMarshaler) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindYamlCodecMarshaler, data)
+	data = prepend(kindKey, kindYamlCodecMarshaler, data)
 	return data, nil
 }
 
 //
-// ========= End yaml@codec.Marshaler =========
+// ========= End yaml@codec.Marshaler type =========
 
-// ========= Begin yaml@codec.Unmarshaler =========
+// ========= Begin yaml@codec.Unmarshaler type =========
 //
 
-const kindYamlCodecUnmarshaler = "yaml@codec.Unmarshaler"
+const kindYamlCodecUnmarshaler = `yaml@codec.Unmarshaler`
 
 // YamlCodecUnmarshaler yaml@codec.Unmarshaler
 type YamlCodecUnmarshaler struct {
@@ -3856,9 +3653,7 @@ type YamlCodecUnmarshaler struct {
 func init() {
 	_ = defTypes.Register(
 		kindYamlCodecUnmarshaler,
-		func(r *YamlCodecUnmarshaler) CodecUnmarshaler {
-			return r
-		},
+		func(r *YamlCodecUnmarshaler) CodecUnmarshaler { return r },
 	)
 }
 
@@ -3872,14 +3667,14 @@ func (m YamlCodecUnmarshaler) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data = appendKV(kindKey, kindYamlCodecUnmarshaler, data)
+	data = prepend(kindKey, kindYamlCodecUnmarshaler, data)
 	return data, nil
 }
 
 //
-// ========= End yaml@codec.Unmarshaler =========
+// ========= End yaml@codec.Unmarshaler type =========
 
-// ========= Begin tls.TLS =========
+// ========= Begin tls.TLS interface =========
 //
 
 // TLS tls.TLS
@@ -3912,9 +3707,9 @@ func (m *RawTLS) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End tls.TLS =========
+// ========= End tls.TLS interface =========
 
-// ========= Begin http.Handler =========
+// ========= Begin http.Handler interface =========
 //
 
 // HTTPHandler http.Handler
@@ -3947,9 +3742,9 @@ func (m *RawHTTPHandler) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End http.Handler =========
+// ========= End http.Handler interface =========
 
-// ========= Begin codec.Decoder =========
+// ========= Begin codec.Decoder interface =========
 //
 
 // CodecDecoder codec.Decoder
@@ -3982,9 +3777,9 @@ func (m *RawCodecDecoder) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End codec.Decoder =========
+// ========= End codec.Decoder interface =========
 
-// ========= Begin codec.Encoder =========
+// ========= Begin codec.Encoder interface =========
 //
 
 // CodecEncoder codec.Encoder
@@ -4017,9 +3812,9 @@ func (m *RawCodecEncoder) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End codec.Encoder =========
+// ========= End codec.Encoder interface =========
 
-// ========= Begin codec.Marshaler =========
+// ========= Begin codec.Marshaler interface =========
 //
 
 // CodecMarshaler codec.Marshaler
@@ -4052,9 +3847,9 @@ func (m *RawCodecMarshaler) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End codec.Marshaler =========
+// ========= End codec.Marshaler interface =========
 
-// ========= Begin codec.Unmarshaler =========
+// ========= Begin codec.Unmarshaler interface =========
 //
 
 // CodecUnmarshaler codec.Unmarshaler
@@ -4087,9 +3882,9 @@ func (m *RawCodecUnmarshaler) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End codec.Unmarshaler =========
+// ========= End codec.Unmarshaler interface =========
 
-// ========= Begin io.Reader =========
+// ========= Begin io.Reader interface =========
 //
 
 // IoReader io.Reader
@@ -4122,9 +3917,9 @@ func (m *RawIoReader) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End io.Reader =========
+// ========= End io.Reader interface =========
 
-// ========= Begin io.Writer =========
+// ========= Begin io.Writer interface =========
 //
 
 // IoWriter io.Writer
@@ -4157,9 +3952,9 @@ func (m *RawIoWriter) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End io.Writer =========
+// ========= End io.Writer interface =========
 
-// ========= Begin http.RoundTripper =========
+// ========= Begin http.RoundTripper interface =========
 //
 
 // HTTPRoundTripper http.RoundTripper
@@ -4192,9 +3987,9 @@ func (m *RawHTTPRoundTripper) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End http.RoundTripper =========
+// ========= End http.RoundTripper interface =========
 
-// ========= Begin once.Once =========
+// ========= Begin once.Once interface =========
 //
 
 // Once once.Once
@@ -4227,9 +4022,9 @@ func (m *RawOnce) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End once.Once =========
+// ========= End once.Once interface =========
 
-// ========= Begin service.Service =========
+// ========= Begin service.Service interface =========
 //
 
 // Service service.Service
@@ -4262,9 +4057,9 @@ func (m *RawService) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End service.Service =========
+// ========= End service.Service interface =========
 
-// ========= Begin stream.Handler =========
+// ========= Begin stream.Handler interface =========
 //
 
 // StreamHandler stream.Handler
@@ -4297,9 +4092,9 @@ func (m *RawStreamHandler) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End stream.Handler =========
+// ========= End stream.Handler interface =========
 
-// ========= Begin dialer.Dialer =========
+// ========= Begin dialer.Dialer interface =========
 //
 
 // Dialer dialer.Dialer
@@ -4332,9 +4127,9 @@ func (m *RawDialer) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End dialer.Dialer =========
+// ========= End dialer.Dialer interface =========
 
-// ========= Begin listener.ListenConfig =========
+// ========= Begin listener.ListenConfig interface =========
 //
 
 // ListenerListenConfig listener.ListenConfig
@@ -4367,4 +4162,4 @@ func (m *RawListenerListenConfig) UnmarshalJSON(data []byte) error {
 }
 
 //
-// ========= End listener.ListenConfig =========
+// ========= End listener.ListenConfig interface =========
