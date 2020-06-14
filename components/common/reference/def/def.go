@@ -5,16 +5,16 @@ import (
 	"reflect"
 
 	"github.com/wzshiming/funcfg/define"
-	"github.com/wzshiming/pipe/components/common/reference/ctxreference"
+	"github.com/wzshiming/pipe/internal/refctx"
 )
 
 func Def(ctx context.Context, name string, def define.Self, i interface{}) error {
 	if def == nil {
-		return ctxreference.ErrDefEmpty
+		return refctx.ErrDefEmpty
 	}
-	val, ok := ctxreference.Get(ctx)
+	val, ok := refctx.Get(ctx)
 	if !ok {
-		return ctxreference.ErrNotUse
+		return refctx.ErrNotUse
 	}
 
 	s := reflect.ValueOf(i).Elem()
