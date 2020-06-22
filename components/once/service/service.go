@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/wzshiming/pipe/components/service"
+	"github.com/wzshiming/pipe/internal/logger"
 )
 
 type Service struct {
@@ -17,5 +18,12 @@ func NewService(svc service.Service) *Service {
 }
 
 func (m *Service) Do(ctx context.Context) error {
+	go func() {
+		<-ctx.Done()
+		err := m.svc.Close()
+		if err != nil {
+			logger.Error(err)
+		}
+	}()
 	return m.svc.Run(ctx)
 }

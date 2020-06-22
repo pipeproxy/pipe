@@ -26,13 +26,15 @@ func NewServer(handler http.Handler, tls *tls.Config) *server {
 }
 
 func (s *server) serve(ctx context.Context, listen listener.StreamListener, handler http.Handler) error {
+	baseContext := func(listener.StreamListener) context.Context {
+		return ctx
+	}
 	if s.tls == nil {
 		var svc = http.Server{
-			Handler: handler,
-			BaseContext: func(listener.StreamListener) context.Context {
-				return ctx
-			},
+			Handler:     handler,
+			BaseContext: baseContext,
 		}
+
 		err := svc.Serve(listen)
 		if err != nil && err != http.ErrServerClosed {
 			return err
@@ -44,12 +46,11 @@ func (s *server) serve(ctx context.Context, listen listener.StreamListener, hand
 		}
 		defer s.pool.Put(tls)
 		var svc = http.Server{
-			Handler:   handler,
-			TLSConfig: tls,
-			BaseContext: func(listener.StreamListener) context.Context {
-				return ctx
-			},
+			Handler:     handler,
+			TLSConfig:   tls,
+			BaseContext: baseContext,
 		}
+
 		err := svc.ServeTLS(listen, "", "")
 		if err != nil && err != http.ErrServerClosed {
 			return err

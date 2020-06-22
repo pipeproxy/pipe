@@ -14,10 +14,11 @@ func init() {
 }
 
 type Config struct {
-	Listener listener.ListenConfig
-	Handler  stream.Handler
+	Listener          listener.ListenConfig
+	Handler           stream.Handler
+	DisconnectOnClose bool
 }
 
 func NewServerWithConfig(conf *Config) (service.Service, error) {
-	return NewServer(conf.Listener, conf.Handler)
+	return NewServer(conf.Listener, conf.Handler, conf.DisconnectOnClose)
 }

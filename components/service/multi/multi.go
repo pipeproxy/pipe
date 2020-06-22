@@ -33,7 +33,7 @@ func (m *Multi) Run(ctx context.Context) error {
 			go func(svc service.Service) {
 				err := svc.Run(ctx)
 				if err != nil {
-					logger.Errorf("service start error: %s", err.Error())
+					logger.Errorf("service start error: %s", err)
 				}
 				m.wg.Done()
 			}(svc)
@@ -50,7 +50,7 @@ func (m *Multi) Close() error {
 		for _, service := range m.multi {
 			err := service.Close()
 			if err != nil {
-				logger.Errorf("service close error: %s", err.Error())
+				logger.Errorf("service close error: %s", err)
 			}
 		}
 	}

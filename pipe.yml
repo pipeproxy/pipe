@@ -36,6 +36,7 @@ Components:
       Regexp: ""
     - Handler:
         '@Kind': config_dump@net/http.Handler
+        ReadOnly: false
       Path: /config_dump/
       Prefix: ""
       Regexp: ""
@@ -45,6 +46,7 @@ Components:
     '@Kind': multi@service.Service
     Multi:
     - '@Kind': stream@service.Service
+      DisconnectOnClose: false
       Handler:
         '@Kind': http@stream.Handler
         Handler:
@@ -61,6 +63,7 @@ Components:
         Address: :80
         Network: tcp
     - '@Kind': stream@service.Service
+      DisconnectOnClose: false
       Handler:
         '@Kind': http@stream.Handler
         Handler:

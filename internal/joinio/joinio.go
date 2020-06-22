@@ -13,8 +13,8 @@ func BothCopy(p1, p2 io.ReadWriter) error {
 }
 
 func Copy(p1 io.Writer, p2 io.Reader) error {
-	buf := pool.Buffer.Get()
+	buf := pool.GetBytes()
 	io.CopyBuffer(p1, p2, buf[:])
-	pool.Buffer.Put(buf)
+	pool.PutBytes(buf)
 	return nil
 }

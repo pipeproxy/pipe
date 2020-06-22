@@ -51,7 +51,7 @@ var (
 				},
 				{
 					Path:    "/config_dump/",
-					Handler: bind.ConfigDumpNetHTTPHandler{},
+					Handler: bind.ConfigDumpNetHTTPHandlerConfig{},
 				},
 			},
 		},

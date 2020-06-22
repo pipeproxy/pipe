@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/wzshiming/pipe"
+	"github.com/wzshiming/pipe/internal/stream"
 )
 
 func NewConfigDump(ro bool) *ConfigDump {
@@ -62,5 +63,6 @@ func (c *ConfigDump) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 			return
 		}
 		rw.WriteHeader(http.StatusOK)
+		stream.CloseExcess()
 	}
 }

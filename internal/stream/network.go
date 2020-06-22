@@ -35,24 +35,63 @@ func CloseExcess() {
 	}
 }
 
+func ListenList() []string {
+	mut.Lock()
+	defer mut.Unlock()
+	dk := []string{}
+	for k := range cache {
+		dk = append(dk, k)
+	}
+	return dk
+}
+
 func Listen(ctx context.Context, network, address string) (listener.StreamListener, error) {
 	mut.Lock()
 	defer mut.Unlock()
-	key := fmt.Sprintf("%s://%s", network, address)
-	n, ok := cache[key]
-	if ok {
-		logger.Infof("Relisten to %s", key)
-		return n.Listener(ctx), nil
+
+	if _, port, _ := net.SplitHostPort(address); port != "" && port != "0" {
+		key := fmt.Sprintf("%s://%s", network, address)
+		n, ok := cache[key]
+		if ok {
+			logger.Infof("Relisten to %s", key)
+			return n.Listener(ctx), nil
+		}
 	}
 
-	logger.Infof("Listen to %s", key)
-	l, err := net.Listen(network, address)
+	var lc net.ListenConfig
+	l, err := lc.Listen(ctx, network, address)
 	if err != nil {
 		return nil, err
 	}
-	n = newHub(l)
+
+	address = sameAddress(address, l.Addr().String())
+	key := fmt.Sprintf("%s://%s", network, address)
+	logger.Infof("Listen to %s", key)
+	n := newHub(l)
 	cache[key] = n
 	return n.Listener(ctx), nil
+}
+
+func sameAddress(a1, a2 string) string {
+	host1, port1, err := net.SplitHostPort(a1)
+	if err != nil {
+		return a1
+	}
+
+	switch host1 {
+	case "0.0.0.0", "[::]":
+		host1 = ""
+	}
+
+	switch port1 {
+	case "0":
+		_, port2, err := net.SplitHostPort(a2)
+		if err != nil {
+			return a1
+		}
+		port1 = port2
+	}
+	return fmt.Sprintf("%s:%s", host1, port1)
 }
 
 type Hub struct {
@@ -79,10 +118,15 @@ func (h *Hub) run() {
 			logger.Errorf("accept error %s", err)
 			return
 		}
+		if atomic.LoadInt32(&h.size) == 0 {
+			conn.Close()
+			return
+		}
 		select {
 		case h.ch <- conn:
 		case <-h.exit:
 			conn.Close()
+			return
 		}
 	}
 }
@@ -115,13 +159,9 @@ func (l *Listener) Accept() (stream.Stream, error) {
 	select {
 	case <-l.ctx.Done():
 		l.Close()
-		err := l.ctx.Err()
-		if err != nil {
-			return nil, err
-		}
 		return nil, io.ErrClosedPipe
-	case conn := <-l.hub.ch:
-		if conn == nil {
+	case conn, ok := <-l.hub.ch:
+		if !ok || conn == nil {
 			l.Close()
 			return nil, io.ErrClosedPipe
 		}

@@ -3,6 +3,7 @@ package http
 import (
 	"net"
 	"net/http"
+	"sync"
 
 	"github.com/wzshiming/pipe/components/stream"
 )
@@ -10,6 +11,7 @@ import (
 type singleConnListener struct {
 	addr net.Addr
 	ch   chan stream.Stream
+	once sync.Once
 }
 
 func newSingleConnListener(conn stream.Stream) *singleConnListener {
@@ -22,8 +24,8 @@ func newSingleConnListener(conn stream.Stream) *singleConnListener {
 }
 
 func (l *singleConnListener) Accept() (stream.Stream, error) {
-	conn := <-l.ch
-	if conn == nil {
+	conn, ok := <-l.ch
+	if !ok || conn == nil {
 		return nil, http.ErrServerClosed
 	}
 	return &connCloser{
@@ -33,7 +35,9 @@ func (l *singleConnListener) Accept() (stream.Stream, error) {
 }
 
 func (l *singleConnListener) shutdown() error {
-	close(l.ch)
+	l.once.Do(func() {
+		close(l.ch)
+	})
 	return nil
 }
 
@@ -51,5 +55,6 @@ type connCloser struct {
 }
 
 func (c *connCloser) Close() error {
-	return c.l.shutdown()
+	c.l.shutdown()
+	return c.Stream.Close()
 }

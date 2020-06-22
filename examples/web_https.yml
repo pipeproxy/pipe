@@ -19,6 +19,7 @@ Components:
     '@Kind': multi@service.Service
     Multi:
     - '@Kind': stream@service.Service
+      DisconnectOnClose: false
       Handler:
         '@Kind': http@stream.Handler
         Handler:
@@ -35,6 +36,7 @@ Components:
         Address: :80
         Network: tcp
     - '@Kind': stream@service.Service
+      DisconnectOnClose: false
       Handler:
         '@Kind': http@stream.Handler
         Handler:

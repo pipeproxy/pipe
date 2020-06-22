@@ -22,6 +22,7 @@ Components:
 - '@Kind': def@service.Service
   Def:
     '@Kind': stream@service.Service
+    DisconnectOnClose: false
     Handler:
       '@Kind': http@stream.Handler
       Handler:

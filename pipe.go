@@ -49,18 +49,29 @@ func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 	return c, nil
 }
 
-func (c *Pipe) Run() error {
+func (c *Pipe) Start() error {
 	c.mut.Lock()
-	err := c.run(c.once)
+	defer c.mut.Unlock()
+	err := c.start(c.once)
 	if err != nil {
-		c.mut.Unlock()
 		return err
 	}
-	c.mut.Unlock()
+	return nil
+}
+
+func (c *Pipe) Run() error {
+	err := c.Start()
+	if err != nil {
+		return err
+	}
+	return c.Wait()
+}
+
+func (c *Pipe) Wait() error {
 	return c.group.Wait()
 }
 
-func (c *Pipe) run(o once.Once) error {
+func (c *Pipe) start(o once.Once) error {
 	ctx, cancel := context.WithCancel(c.ctx)
 	run := func() error {
 		return o.Do(ctx)
@@ -87,7 +98,7 @@ func (c *Pipe) Reload(config []byte) error {
 
 	c.mut.Lock()
 	defer c.mut.Unlock()
-	err = c.run(o)
+	err = c.start(o)
 	if err != nil {
 		return err
 	}

@@ -1,7 +1,6 @@
 package self_signed
 
 import (
-	"bytes"
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/rand"
@@ -14,6 +13,8 @@ import (
 	"math/big"
 	"net"
 	"time"
+
+	"github.com/wzshiming/pipe/internal/pool"
 )
 
 func NewSelfSigned() (*tls.Config, error) {
@@ -76,12 +77,14 @@ func GenerateSelfSigned(organization string, host []string, notBefore time.Time,
 		return nil, nil, fmt.Errorf("failed to create certificate: %w", err)
 	}
 
-	certOut := bytes.NewBuffer(nil)
+	certOut := pool.GetBuffer()
+	defer pool.PutBuffer(certOut)
 	if err := pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes}); err != nil {
 		return nil, nil, fmt.Errorf("failed to write data to cert: %w", err)
 	}
 
-	keyOut := bytes.NewBuffer(nil)
+	keyOut := pool.GetBuffer()
+	defer pool.PutBuffer(keyOut)
 	privBytes, err := x509.MarshalPKCS8PrivateKey(priv)
 	if err != nil {
 		return nil, nil, fmt.Errorf("unable to marshal private key: %w", err)

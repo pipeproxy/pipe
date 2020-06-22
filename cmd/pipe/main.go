@@ -121,13 +121,13 @@ func start(conf string) {
 
 	c, err := getConfig(conf)
 	if err != nil {
-		logger.Errorf("read config file %q error: %s", conf, err.Error())
+		logger.Errorf("read config file %q error: %s", conf, err)
 		return
 	}
 
 	svc, err := pipe.NewPipeWithConfig(context.Background(), c)
 	if err != nil {
-		logger.Errorf("configure config error: %s", err.Error())
+		logger.Errorf("configure config error: %s", err)
 		return
 	}
 
@@ -138,7 +138,7 @@ func start(conf string) {
 
 		err := svc.Close()
 		if svc == nil {
-			logger.Errorf("service close error: %s", err.Error())
+			logger.Errorf("service close error: %s", err)
 			return
 		}
 	})
@@ -149,20 +149,20 @@ func start(conf string) {
 
 		c, err := getConfig(conf)
 		if err != nil {
-			logger.Errorf("read config file %q error: %s", conf, err.Error())
+			logger.Errorf("read config file %q error: %s", conf, err)
 			return
 		}
 
 		err = svc.Reload(c)
 		if err != nil {
-			logger.Errorf("reload error: %s", err.Error())
+			logger.Errorf("reload error: %s", err)
 			return
 		}
 	})
 
 	err = svc.Run()
 	if err != nil {
-		logger.Errorf("start error: %s", err.Error())
+		logger.Errorf("start error: %s", err)
 		return
 	}
 

@@ -137,7 +137,7 @@ func (m *Mux) getHandler(index []byte) (stream.Handler, bool) {
 func (m *Mux) ServeStream(ctx context.Context, stm stream.Stream) {
 	connector, buf, err := m.Handler(stm)
 	if err != nil {
-		logger.Errorf("prefix %q: %s", buf, err.Error())
+		logger.Errorf("prefix %q: %s", buf, err)
 		stm.Close()
 		return
 	}

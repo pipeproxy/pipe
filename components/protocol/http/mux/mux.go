@@ -8,6 +8,7 @@ import (
 	"sync/atomic"
 
 	"github.com/wzshiming/pipe/internal/pool"
+
 	"github.com/wzshiming/trie"
 )
 
@@ -91,8 +92,8 @@ func (m *Mux) Handler(path string) (handler http.Handler, err error) {
 		return nil, ErrNotFound
 	}
 
-	buf := pool.Buffer.Get()
-	defer pool.Buffer.Put(buf)
+	buf := pool.GetBytes()
+	defer pool.PutBytes(buf)
 	i := copy(buf, path[:])
 	data, _, _ := m.trie.Mapping().Get(buf[:i])
 	if len(data) != 0 {

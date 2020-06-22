@@ -2,10 +2,12 @@ package none
 
 import (
 	"context"
+	"sync"
 )
 
 type none struct {
-	ch chan struct{}
+	ch   chan struct{}
+	once sync.Once
 }
 
 func newNone() *none {
@@ -24,6 +26,8 @@ func (n *none) Run(ctx context.Context) error {
 }
 
 func (n *none) Close() error {
-	close(n.ch)
+	n.once.Do(func() {
+		close(n.ch)
+	})
 	return nil
 }

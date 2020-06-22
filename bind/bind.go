@@ -734,6 +734,76 @@ func (m DefOnceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@once.Once type =========
 
+// ========= Begin def@packet.Handler type =========
+//
+
+const kindDefPacketHandlerConfig = `def@packet.Handler`
+
+// DefPacketHandlerConfig def@packet.Handler
+type DefPacketHandlerConfig struct {
+	Name string
+	Def  PacketHandler
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindDefPacketHandlerConfig,
+		func(r *DefPacketHandlerConfig) PacketHandler { return r },
+	)
+}
+
+func (DefPacketHandlerConfig) isPacketHandler() {}
+func (DefPacketHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DefPacketHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t DefPacketHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindDefPacketHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End def@packet.Handler type =========
+
+// ========= Begin def@protocol.Handler type =========
+//
+
+const kindDefProtocolHandlerConfig = `def@protocol.Handler`
+
+// DefProtocolHandlerConfig def@protocol.Handler
+type DefProtocolHandlerConfig struct {
+	Name string
+	Def  ProtocolHandler
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindDefProtocolHandlerConfig,
+		func(r *DefProtocolHandlerConfig) ProtocolHandler { return r },
+	)
+}
+
+func (DefProtocolHandlerConfig) isProtocolHandler() {}
+func (DefProtocolHandlerConfig) isComponent()       {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DefProtocolHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t DefProtocolHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindDefProtocolHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End def@protocol.Handler type =========
+
 // ========= Begin def@service.Service type =========
 //
 
@@ -1424,6 +1494,41 @@ func (m HostNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End host@net/http.Handler type =========
 
+// ========= Begin http@io.Reader type =========
+//
+
+const kindHTTPIoReaderConfig = `http@io.Reader`
+
+// HTTPIoReaderConfig http@io.Reader
+type HTTPIoReaderConfig struct {
+	RoundTripper HTTPRoundTripper
+	URL          string
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindHTTPIoReaderConfig,
+		func(r *HTTPIoReaderConfig) IoReader { return r },
+	)
+}
+
+func (HTTPIoReaderConfig) isIoReader()  {}
+func (HTTPIoReaderConfig) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m HTTPIoReaderConfig) MarshalJSON() ([]byte, error) {
+	type t HTTPIoReaderConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindHTTPIoReaderConfig, data)
+	return data, nil
+}
+
+//
+// ========= End http@io.Reader type =========
+
 // ========= Begin http@stream.Handler type =========
 //
 
@@ -1865,6 +1970,74 @@ func (m LoadOnceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End load@once.Once type =========
 
+// ========= Begin load@packet.Handler type =========
+//
+
+const kindLoadPacketHandlerConfig = `load@packet.Handler`
+
+// LoadPacketHandlerConfig load@packet.Handler
+type LoadPacketHandlerConfig struct {
+	Load IoReader
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindLoadPacketHandlerConfig,
+		func(r *LoadPacketHandlerConfig) PacketHandler { return r },
+	)
+}
+
+func (LoadPacketHandlerConfig) isPacketHandler() {}
+func (LoadPacketHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LoadPacketHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t LoadPacketHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLoadPacketHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End load@packet.Handler type =========
+
+// ========= Begin load@protocol.Handler type =========
+//
+
+const kindLoadProtocolHandlerConfig = `load@protocol.Handler`
+
+// LoadProtocolHandlerConfig load@protocol.Handler
+type LoadProtocolHandlerConfig struct {
+	Load IoReader
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindLoadProtocolHandlerConfig,
+		func(r *LoadProtocolHandlerConfig) ProtocolHandler { return r },
+	)
+}
+
+func (LoadProtocolHandlerConfig) isProtocolHandler() {}
+func (LoadProtocolHandlerConfig) isComponent()       {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LoadProtocolHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t LoadProtocolHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLoadProtocolHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End load@protocol.Handler type =========
+
 // ========= Begin load@service.Service type =========
 //
 
@@ -2069,6 +2242,40 @@ func (m LogNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End log@net/http.Handler type =========
+
+// ========= Begin merge@tls.TLS type =========
+//
+
+const kindMergeTLSConfig = `merge@tls.TLS`
+
+// MergeTLSConfig merge@tls.TLS
+type MergeTLSConfig struct {
+	Merge []TLS
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindMergeTLSConfig,
+		func(r *MergeTLSConfig) TLS { return r },
+	)
+}
+
+func (MergeTLSConfig) isTLS()       {}
+func (MergeTLSConfig) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m MergeTLSConfig) MarshalJSON() ([]byte, error) {
+	type t MergeTLSConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindMergeTLSConfig, data)
+	return data, nil
+}
+
+//
+// ========= End merge@tls.TLS type =========
 
 // ========= Begin message@once.Once type =========
 //
@@ -2979,6 +3186,74 @@ func (m RefOnceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End ref@once.Once type =========
 
+// ========= Begin ref@packet.Handler type =========
+//
+
+const kindRefPacketHandlerConfig = `ref@packet.Handler`
+
+// RefPacketHandlerConfig ref@packet.Handler
+type RefPacketHandlerConfig struct {
+	Name string
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindRefPacketHandlerConfig,
+		func(r *RefPacketHandlerConfig) PacketHandler { return r },
+	)
+}
+
+func (RefPacketHandlerConfig) isPacketHandler() {}
+func (RefPacketHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RefPacketHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t RefPacketHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindRefPacketHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End ref@packet.Handler type =========
+
+// ========= Begin ref@protocol.Handler type =========
+//
+
+const kindRefProtocolHandlerConfig = `ref@protocol.Handler`
+
+// RefProtocolHandlerConfig ref@protocol.Handler
+type RefProtocolHandlerConfig struct {
+	Name string
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindRefProtocolHandlerConfig,
+		func(r *RefProtocolHandlerConfig) ProtocolHandler { return r },
+	)
+}
+
+func (RefProtocolHandlerConfig) isProtocolHandler() {}
+func (RefProtocolHandlerConfig) isComponent()       {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RefProtocolHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t RefProtocolHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindRefProtocolHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End ref@protocol.Handler type =========
+
 // ========= Begin ref@service.Service type =========
 //
 
@@ -3327,8 +3602,9 @@ const kindStreamServiceConfig = `stream@service.Service`
 
 // StreamServiceConfig stream@service.Service
 type StreamServiceConfig struct {
-	Listener ListenerListenConfig
-	Handler  StreamHandler
+	Listener          ListenerListenConfig
+	Handler           StreamHandler
+	DisconnectOnClose bool
 }
 
 func init() {
@@ -3529,6 +3805,40 @@ func (m TransportNetHTTPRoundTripperConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End transport@net/http.RoundTripper type =========
+
+// ========= Begin validation@tls.TLS type =========
+//
+
+const kindValidationTLSConfig = `validation@tls.TLS`
+
+// ValidationTLSConfig validation@tls.TLS
+type ValidationTLSConfig struct {
+	Ca IoReader
+}
+
+func init() {
+	_ = defTypes.Register(
+		kindValidationTLSConfig,
+		func(r *ValidationTLSConfig) TLS { return r },
+	)
+}
+
+func (ValidationTLSConfig) isTLS()       {}
+func (ValidationTLSConfig) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m ValidationTLSConfig) MarshalJSON() ([]byte, error) {
+	type t ValidationTLSConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindValidationTLSConfig, data)
+	return data, nil
+}
+
+//
+// ========= End validation@tls.TLS type =========
 
 // ========= Begin weighted@net/http.Handler type =========
 //
@@ -4023,6 +4333,76 @@ func (m *RawOnce) UnmarshalJSON(data []byte) error {
 
 //
 // ========= End once.Once interface =========
+
+// ========= Begin packet.Handler interface =========
+//
+
+// PacketHandler packet.Handler
+type PacketHandler interface {
+	isPacketHandler()
+	Component
+}
+
+// RawPacketHandler is store raw bytes of PacketHandler
+type RawPacketHandler []byte
+
+func (RawPacketHandler) isPacketHandler() {}
+func (RawPacketHandler) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawPacketHandler) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawPacketHandler) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawPacketHandler: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End packet.Handler interface =========
+
+// ========= Begin protocol.Handler interface =========
+//
+
+// ProtocolHandler protocol.Handler
+type ProtocolHandler interface {
+	isProtocolHandler()
+	Component
+}
+
+// RawProtocolHandler is store raw bytes of ProtocolHandler
+type RawProtocolHandler []byte
+
+func (RawProtocolHandler) isProtocolHandler() {}
+func (RawProtocolHandler) isComponent()       {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawProtocolHandler) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawProtocolHandler) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawProtocolHandler: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End protocol.Handler interface =========
 
 // ========= Begin service.Service interface =========
 //
