@@ -12,7 +12,7 @@ import (
 const name = "sample"
 
 func init() {
-	register.Register(name, NewConfigWithConfig)
+	register.Register(name, NewSampleWithConfig)
 }
 
 type Config struct {
@@ -21,6 +21,6 @@ type Config struct {
 	Init       []once.Once
 }
 
-func NewConfigWithConfig(conf *Config) once.Once {
+func NewSampleWithConfig(conf *Config) once.Once {
 	return multi.NewMulti(append(conf.Init, osvc.NewService(conf.Pipe)))
 }

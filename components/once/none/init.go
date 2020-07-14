@@ -9,13 +9,13 @@ import (
 const name = "none"
 
 func init() {
-	register.Register(name, NewMultiWithConfig)
+	register.Register(name, NewNoneWithConfig)
 }
 
 type Config struct {
 	Any define.Any
 }
 
-func NewMultiWithConfig(conf *Config) (once.Once, error) {
+func NewNoneWithConfig(conf *Config) (once.Once, error) {
 	return None{}, nil
 }
