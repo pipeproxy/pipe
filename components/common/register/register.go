@@ -18,7 +18,7 @@ func Register(kind string, fun interface{}) error {
 
 	logger.Infof("Register: %s ", kind)
 
-	return types.Register(kind, fun)
+	return types.Default.Register(kind, fun)
 }
 
 func GetKindName(kind string, fun interface{}) (string, error) {

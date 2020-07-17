@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/wzshiming/funcfg/kinder"
 	"github.com/wzshiming/funcfg/types"
 	"github.com/wzshiming/funcfg/unmarshaler"
 )
@@ -18,14 +17,13 @@ import (
 
 var kindKey = `@Kind`
 
-var defTypes = types.NewTypes()
+var provider = types.NewEmptyProvider()
 
 // Unmarshal parses the encoded data and stores the result
 func Unmarshal(config []byte, v interface{}) error {
 	u := unmarshaler.Unmarshaler{
-		Ctx:  context.Background(),
-		Get:  defTypes.Get,
-		Kind: kinder.Kind,
+		Ctx:      context.Background(),
+		Provider: provider,
 	}
 	return u.Unmarshal(config, v)
 }
@@ -88,7 +86,7 @@ type AcmeTLSConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindAcmeTLSConfig,
 		func(r *AcmeTLSConfig) TLS { return r },
 	)
@@ -123,7 +121,7 @@ type AddRequestHeaderNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindAddRequestHeaderNetHTTPHandlerConfig,
 		func(r *AddRequestHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -158,7 +156,7 @@ type AddResponseHeaderNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindAddResponseHeaderNetHTTPHandlerConfig,
 		func(r *AddResponseHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -192,7 +190,7 @@ type Base32CodecDecoderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindBase32CodecDecoderConfig,
 		func(r *Base32CodecDecoderConfig) CodecDecoder { return r },
 	)
@@ -226,7 +224,7 @@ type Base32CodecEncoderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindBase32CodecEncoderConfig,
 		func(r *Base32CodecEncoderConfig) CodecEncoder { return r },
 	)
@@ -260,7 +258,7 @@ type Base64CodecDecoderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindBase64CodecDecoderConfig,
 		func(r *Base64CodecDecoderConfig) CodecDecoder { return r },
 	)
@@ -294,7 +292,7 @@ type Base64CodecEncoderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindBase64CodecEncoderConfig,
 		func(r *Base64CodecEncoderConfig) CodecEncoder { return r },
 	)
@@ -327,7 +325,7 @@ type Bzip2CodecDecoder struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindBzip2CodecDecoder,
 		func(r *Bzip2CodecDecoder) CodecDecoder { return r },
 	)
@@ -362,7 +360,7 @@ type CompressNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindCompressNetHTTPHandlerConfig,
 		func(r *CompressNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -396,7 +394,7 @@ type ConfigDumpNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindConfigDumpNetHTTPHandlerConfig,
 		func(r *ConfigDumpNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -431,7 +429,7 @@ type DefCodecDecoderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefCodecDecoderConfig,
 		func(r *DefCodecDecoderConfig) CodecDecoder { return r },
 	)
@@ -466,7 +464,7 @@ type DefCodecEncoderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefCodecEncoderConfig,
 		func(r *DefCodecEncoderConfig) CodecEncoder { return r },
 	)
@@ -501,7 +499,7 @@ type DefCodecMarshalerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefCodecMarshalerConfig,
 		func(r *DefCodecMarshalerConfig) CodecMarshaler { return r },
 	)
@@ -536,7 +534,7 @@ type DefCodecUnmarshalerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefCodecUnmarshalerConfig,
 		func(r *DefCodecUnmarshalerConfig) CodecUnmarshaler { return r },
 	)
@@ -571,7 +569,7 @@ type DefIoReaderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefIoReaderConfig,
 		func(r *DefIoReaderConfig) IoReader { return r },
 	)
@@ -606,7 +604,7 @@ type DefIoWriterConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefIoWriterConfig,
 		func(r *DefIoWriterConfig) IoWriter { return r },
 	)
@@ -641,7 +639,7 @@ type DefNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefNetHTTPHandlerConfig,
 		func(r *DefNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -676,7 +674,7 @@ type DefNetHTTPRoundTripperConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefNetHTTPRoundTripperConfig,
 		func(r *DefNetHTTPRoundTripperConfig) HTTPRoundTripper { return r },
 	)
@@ -711,7 +709,7 @@ type DefOnceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefOnceConfig,
 		func(r *DefOnceConfig) Once { return r },
 	)
@@ -746,7 +744,7 @@ type DefPacketHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefPacketHandlerConfig,
 		func(r *DefPacketHandlerConfig) PacketHandler { return r },
 	)
@@ -781,7 +779,7 @@ type DefProtocolHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefProtocolHandlerConfig,
 		func(r *DefProtocolHandlerConfig) ProtocolHandler { return r },
 	)
@@ -816,7 +814,7 @@ type DefServiceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefServiceConfig,
 		func(r *DefServiceConfig) Service { return r },
 	)
@@ -851,7 +849,7 @@ type DefStreamHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefStreamHandlerConfig,
 		func(r *DefStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -886,7 +884,7 @@ type DefStreamDialerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefStreamDialerConfig,
 		func(r *DefStreamDialerConfig) Dialer { return r },
 	)
@@ -921,7 +919,7 @@ type DefStreamListenerListenConfigConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefStreamListenerListenConfigConfig,
 		func(r *DefStreamListenerListenConfigConfig) ListenerListenConfig { return r },
 	)
@@ -956,7 +954,7 @@ type DefTLSConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDefTLSConfig,
 		func(r *DefTLSConfig) TLS { return r },
 	)
@@ -991,7 +989,7 @@ type DirectNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindDirectNetHTTPHandlerConfig,
 		func(r *DirectNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -1025,7 +1023,7 @@ type EnvIoReaderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindEnvIoReaderConfig,
 		func(r *EnvIoReaderConfig) IoReader { return r },
 	)
@@ -1058,7 +1056,7 @@ type ExpvarNetHTTPHandler struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindExpvarNetHTTPHandler,
 		func(r *ExpvarNetHTTPHandler) HTTPHandler { return r },
 	)
@@ -1092,7 +1090,7 @@ type FileIoReaderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindFileIoReaderConfig,
 		func(r *FileIoReaderConfig) IoReader { return r },
 	)
@@ -1126,7 +1124,7 @@ type FileIoWriterConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindFileIoWriterConfig,
 		func(r *FileIoWriterConfig) IoWriter { return r },
 	)
@@ -1160,7 +1158,7 @@ type FileNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindFileNetHTTPHandlerConfig,
 		func(r *FileNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -1195,7 +1193,7 @@ type ForwardNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindForwardNetHTTPHandlerConfig,
 		func(r *ForwardNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -1229,7 +1227,7 @@ type ForwardStreamHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindForwardStreamHandlerConfig,
 		func(r *ForwardStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -1265,7 +1263,7 @@ type FromTLSConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindFromTLSConfig,
 		func(r *FromTLSConfig) TLS { return r },
 	)
@@ -1298,7 +1296,7 @@ type GzipCodecDecoder struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindGzipCodecDecoder,
 		func(r *GzipCodecDecoder) CodecDecoder { return r },
 	)
@@ -1331,7 +1329,7 @@ type GzipCodecEncoder struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindGzipCodecEncoder,
 		func(r *GzipCodecEncoder) CodecEncoder { return r },
 	)
@@ -1365,7 +1363,7 @@ type H2CNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindH2CNetHTTPHandlerConfig,
 		func(r *H2CNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -1398,7 +1396,7 @@ type HexCodecDecoder struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindHexCodecDecoder,
 		func(r *HexCodecDecoder) CodecDecoder { return r },
 	)
@@ -1431,7 +1429,7 @@ type HexCodecEncoder struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindHexCodecEncoder,
 		func(r *HexCodecEncoder) CodecEncoder { return r },
 	)
@@ -1471,7 +1469,7 @@ type HostNetHTTPHandlerRoute struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindHostNetHTTPHandlerConfig,
 		func(r *HostNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -1506,7 +1504,7 @@ type HTTPIoReaderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindHTTPIoReaderConfig,
 		func(r *HTTPIoReaderConfig) IoReader { return r },
 	)
@@ -1541,7 +1539,7 @@ type HTTPStreamHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindHTTPStreamHandlerConfig,
 		func(r *HTTPStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -1575,7 +1573,7 @@ type InlineIoReaderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindInlineIoReaderConfig,
 		func(r *InlineIoReaderConfig) IoReader { return r },
 	)
@@ -1608,7 +1606,7 @@ type JSONCodecMarshaler struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindJSONCodecMarshaler,
 		func(r *JSONCodecMarshaler) CodecMarshaler { return r },
 	)
@@ -1641,7 +1639,7 @@ type JSONCodecUnmarshaler struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindJSONCodecUnmarshaler,
 		func(r *JSONCodecUnmarshaler) CodecUnmarshaler { return r },
 	)
@@ -1675,7 +1673,7 @@ type LoadCodecDecoderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadCodecDecoderConfig,
 		func(r *LoadCodecDecoderConfig) CodecDecoder { return r },
 	)
@@ -1709,7 +1707,7 @@ type LoadCodecEncoderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadCodecEncoderConfig,
 		func(r *LoadCodecEncoderConfig) CodecEncoder { return r },
 	)
@@ -1743,7 +1741,7 @@ type LoadCodecMarshalerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadCodecMarshalerConfig,
 		func(r *LoadCodecMarshalerConfig) CodecMarshaler { return r },
 	)
@@ -1777,7 +1775,7 @@ type LoadCodecUnmarshalerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadCodecUnmarshalerConfig,
 		func(r *LoadCodecUnmarshalerConfig) CodecUnmarshaler { return r },
 	)
@@ -1811,7 +1809,7 @@ type LoadIoReaderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadIoReaderConfig,
 		func(r *LoadIoReaderConfig) IoReader { return r },
 	)
@@ -1845,7 +1843,7 @@ type LoadIoWriterConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadIoWriterConfig,
 		func(r *LoadIoWriterConfig) IoWriter { return r },
 	)
@@ -1879,7 +1877,7 @@ type LoadNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadNetHTTPHandlerConfig,
 		func(r *LoadNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -1913,7 +1911,7 @@ type LoadNetHTTPRoundTripperConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadNetHTTPRoundTripperConfig,
 		func(r *LoadNetHTTPRoundTripperConfig) HTTPRoundTripper { return r },
 	)
@@ -1947,7 +1945,7 @@ type LoadOnceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadOnceConfig,
 		func(r *LoadOnceConfig) Once { return r },
 	)
@@ -1981,7 +1979,7 @@ type LoadPacketHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadPacketHandlerConfig,
 		func(r *LoadPacketHandlerConfig) PacketHandler { return r },
 	)
@@ -2015,7 +2013,7 @@ type LoadProtocolHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadProtocolHandlerConfig,
 		func(r *LoadProtocolHandlerConfig) ProtocolHandler { return r },
 	)
@@ -2049,7 +2047,7 @@ type LoadServiceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadServiceConfig,
 		func(r *LoadServiceConfig) Service { return r },
 	)
@@ -2083,7 +2081,7 @@ type LoadStreamHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadStreamHandlerConfig,
 		func(r *LoadStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -2117,7 +2115,7 @@ type LoadStreamDialerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadStreamDialerConfig,
 		func(r *LoadStreamDialerConfig) Dialer { return r },
 	)
@@ -2151,7 +2149,7 @@ type LoadStreamListenerListenConfigConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadStreamListenerListenConfigConfig,
 		func(r *LoadStreamListenerListenConfigConfig) ListenerListenConfig { return r },
 	)
@@ -2185,7 +2183,7 @@ type LoadTLSConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLoadTLSConfig,
 		func(r *LoadTLSConfig) TLS { return r },
 	)
@@ -2220,7 +2218,7 @@ type LogNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindLogNetHTTPHandlerConfig,
 		func(r *LogNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -2254,7 +2252,7 @@ type MergeTLSConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindMergeTLSConfig,
 		func(r *MergeTLSConfig) TLS { return r },
 	)
@@ -2288,7 +2286,7 @@ type MessageOnceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindMessageOnceConfig,
 		func(r *MessageOnceConfig) Once { return r },
 	)
@@ -2322,7 +2320,7 @@ type MultiNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindMultiNetHTTPHandlerConfig,
 		func(r *MultiNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -2356,7 +2354,7 @@ type MultiOnceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindMultiOnceConfig,
 		func(r *MultiOnceConfig) Once { return r },
 	)
@@ -2390,7 +2388,7 @@ type MultiServiceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindMultiServiceConfig,
 		func(r *MultiServiceConfig) Service { return r },
 	)
@@ -2424,7 +2422,7 @@ type MultiStreamHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindMultiStreamHandlerConfig,
 		func(r *MultiStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -2466,7 +2464,7 @@ type MuxNetHTTPHandlerRoute struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindMuxNetHTTPHandlerConfig,
 		func(r *MuxNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -2508,7 +2506,7 @@ type MuxStreamHandlerRoute struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindMuxStreamHandlerConfig,
 		func(r *MuxStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -2552,7 +2550,7 @@ const (
 )
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindNetworkStreamDialerConfig,
 		func(r *NetworkStreamDialerConfig) Dialer { return r },
 	)
@@ -2596,7 +2594,7 @@ const (
 )
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindNetworkStreamListenerListenConfigConfig,
 		func(r *NetworkStreamListenerListenConfigConfig) ListenerListenConfig { return r },
 	)
@@ -2630,7 +2628,7 @@ type NoneOnceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindNoneOnceConfig,
 		func(r *NoneOnceConfig) Once { return r },
 	)
@@ -2663,7 +2661,7 @@ type NoneService struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindNoneService,
 		func(r *NoneService) Service { return r },
 	)
@@ -2705,7 +2703,7 @@ const (
 )
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindPollerNetHTTPHandlerConfig,
 		func(r *PollerNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -2747,7 +2745,7 @@ const (
 )
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindPollerStreamHandlerConfig,
 		func(r *PollerStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -2789,7 +2787,7 @@ const (
 )
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindPollerStreamDialerConfig,
 		func(r *PollerStreamDialerConfig) Dialer { return r },
 	)
@@ -2822,7 +2820,7 @@ type PprofNetHTTPHandler struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindPprofNetHTTPHandler,
 		func(r *PprofNetHTTPHandler) HTTPHandler { return r },
 	)
@@ -2857,7 +2855,7 @@ type RedirectNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRedirectNetHTTPHandlerConfig,
 		func(r *RedirectNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -2891,7 +2889,7 @@ type RefCodecDecoderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefCodecDecoderConfig,
 		func(r *RefCodecDecoderConfig) CodecDecoder { return r },
 	)
@@ -2925,7 +2923,7 @@ type RefCodecEncoderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefCodecEncoderConfig,
 		func(r *RefCodecEncoderConfig) CodecEncoder { return r },
 	)
@@ -2959,7 +2957,7 @@ type RefCodecMarshalerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefCodecMarshalerConfig,
 		func(r *RefCodecMarshalerConfig) CodecMarshaler { return r },
 	)
@@ -2993,7 +2991,7 @@ type RefCodecUnmarshalerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefCodecUnmarshalerConfig,
 		func(r *RefCodecUnmarshalerConfig) CodecUnmarshaler { return r },
 	)
@@ -3027,7 +3025,7 @@ type RefIoReaderConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefIoReaderConfig,
 		func(r *RefIoReaderConfig) IoReader { return r },
 	)
@@ -3061,7 +3059,7 @@ type RefIoWriterConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefIoWriterConfig,
 		func(r *RefIoWriterConfig) IoWriter { return r },
 	)
@@ -3095,7 +3093,7 @@ type RefNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefNetHTTPHandlerConfig,
 		func(r *RefNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -3129,7 +3127,7 @@ type RefNetHTTPRoundTripperConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefNetHTTPRoundTripperConfig,
 		func(r *RefNetHTTPRoundTripperConfig) HTTPRoundTripper { return r },
 	)
@@ -3163,7 +3161,7 @@ type RefOnceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefOnceConfig,
 		func(r *RefOnceConfig) Once { return r },
 	)
@@ -3197,7 +3195,7 @@ type RefPacketHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefPacketHandlerConfig,
 		func(r *RefPacketHandlerConfig) PacketHandler { return r },
 	)
@@ -3231,7 +3229,7 @@ type RefProtocolHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefProtocolHandlerConfig,
 		func(r *RefProtocolHandlerConfig) ProtocolHandler { return r },
 	)
@@ -3265,7 +3263,7 @@ type RefServiceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefServiceConfig,
 		func(r *RefServiceConfig) Service { return r },
 	)
@@ -3299,7 +3297,7 @@ type RefStreamHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefStreamHandlerConfig,
 		func(r *RefStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -3333,7 +3331,7 @@ type RefStreamDialerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefStreamDialerConfig,
 		func(r *RefStreamDialerConfig) Dialer { return r },
 	)
@@ -3367,7 +3365,7 @@ type RefStreamListenerListenConfigConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefStreamListenerListenConfigConfig,
 		func(r *RefStreamListenerListenConfigConfig) ListenerListenConfig { return r },
 	)
@@ -3401,7 +3399,7 @@ type RefTLSConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRefTLSConfig,
 		func(r *RefTLSConfig) TLS { return r },
 	)
@@ -3435,7 +3433,7 @@ type RemoveRequestHeaderNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRemoveRequestHeaderNetHTTPHandlerConfig,
 		func(r *RemoveRequestHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -3469,7 +3467,7 @@ type RemoveResponseHeaderNetHTTPHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindRemoveResponseHeaderNetHTTPHandlerConfig,
 		func(r *RemoveResponseHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -3505,7 +3503,7 @@ type SampleOnceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindSampleOnceConfig,
 		func(r *SampleOnceConfig) Once { return r },
 	)
@@ -3538,7 +3536,7 @@ type SelfSignedTLS struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindSelfSignedTLS,
 		func(r *SelfSignedTLS) TLS { return r },
 	)
@@ -3572,7 +3570,7 @@ type ServiceOnceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindServiceOnceConfig,
 		func(r *ServiceOnceConfig) Once { return r },
 	)
@@ -3608,7 +3606,7 @@ type StreamServiceConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindStreamServiceConfig,
 		func(r *StreamServiceConfig) Service { return r },
 	)
@@ -3643,7 +3641,7 @@ type TLSStreamDialerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindTLSStreamDialerConfig,
 		func(r *TLSStreamDialerConfig) Dialer { return r },
 	)
@@ -3678,7 +3676,7 @@ type TLSStreamListenerListenConfigConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindTLSStreamListenerListenConfigConfig,
 		func(r *TLSStreamListenerListenConfigConfig) ListenerListenConfig { return r },
 	)
@@ -3713,7 +3711,7 @@ type TLSDownStreamHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindTLSDownStreamHandlerConfig,
 		func(r *TLSDownStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -3748,7 +3746,7 @@ type TLSUpStreamHandlerConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindTLSUpStreamHandlerConfig,
 		func(r *TLSUpStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -3783,7 +3781,7 @@ type TransportNetHTTPRoundTripperConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindTransportNetHTTPRoundTripperConfig,
 		func(r *TransportNetHTTPRoundTripperConfig) HTTPRoundTripper { return r },
 	)
@@ -3817,7 +3815,7 @@ type ValidationTLSConfig struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindValidationTLSConfig,
 		func(r *ValidationTLSConfig) TLS { return r },
 	)
@@ -3856,7 +3854,7 @@ type WeightedNetHTTPHandlerWeighted struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindWeightedNetHTTPHandlerConfig,
 		func(r *WeightedNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
@@ -3895,7 +3893,7 @@ type WeightedStreamHandlerWeighted struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindWeightedStreamHandlerConfig,
 		func(r *WeightedStreamHandlerConfig) StreamHandler { return r },
 	)
@@ -3928,7 +3926,7 @@ type YamlCodecMarshaler struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindYamlCodecMarshaler,
 		func(r *YamlCodecMarshaler) CodecMarshaler { return r },
 	)
@@ -3961,7 +3959,7 @@ type YamlCodecUnmarshaler struct {
 }
 
 func init() {
-	_ = defTypes.Register(
+	_ = provider.Register(
 		kindYamlCodecUnmarshaler,
 		func(r *YamlCodecUnmarshaler) CodecUnmarshaler { return r },
 	)

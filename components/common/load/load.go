@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 
 	"github.com/kubernetes-sigs/yaml"
-	"github.com/wzshiming/funcfg/kinder"
 	"github.com/wzshiming/funcfg/types"
 	"github.com/wzshiming/funcfg/unmarshaler"
 	"github.com/wzshiming/pipe/internal/refctx"
@@ -23,9 +22,8 @@ func Load(ctx context.Context, load io.Reader, i interface{}) error {
 		return err
 	}
 	u := unmarshaler.Unmarshaler{
-		Ctx:  ctx,
-		Get:  types.Get,
-		Kind: kinder.Kind,
+		Ctx:      ctx,
+		Provider: types.Default,
 	}
 	err = u.Unmarshal(data, i)
 	if err != nil {
