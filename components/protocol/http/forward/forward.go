@@ -9,8 +9,9 @@ import (
 	"strings"
 
 	"github.com/wzshiming/pipe/internal/http/template"
-	"github.com/wzshiming/pipe/internal/joinio"
 	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/wzshiming/pipe/internal/pool"
+	"github.com/wzshiming/pipe/internal/tunnel"
 	"golang.org/x/net/http/httpguts"
 )
 
@@ -228,7 +229,9 @@ func (p *ReverseProxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 	rw.WriteHeader(res.StatusCode)
 
-	err = joinio.Copy(rw, res.Body)
+	buf := pool.GetBytes()
+	defer pool.PutBytes(buf)
+	_, err = io.CopyBuffer(rw, res.Body, buf)
 	if err != nil {
 		res.Body.Close()
 		logger.Errorf("suppressing panic for copyResponse error in test; copy error: %v", err)
@@ -314,6 +317,10 @@ func (p *ReverseProxy) handleUpgradeResponse(rw http.ResponseWriter, req *http.R
 		return
 	}
 
-	joinio.BothCopy(conn, backConn)
+	err = tunnel.Tunnel(req.Context(), conn, backConn)
+	if err != nil {
+		p.getErrorHandler()(rw, req, fmt.Errorf("tunnel connect: %v", err))
+		return
+	}
 	return
 }

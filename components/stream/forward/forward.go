@@ -5,7 +5,8 @@ import (
 
 	"github.com/wzshiming/pipe/components/stream"
 	"github.com/wzshiming/pipe/components/stream/dialer"
-	"github.com/wzshiming/pipe/internal/joinio"
+	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/wzshiming/pipe/internal/tunnel"
 )
 
 type Forward struct {
@@ -21,8 +22,13 @@ func NewForward(dialer dialer.Dialer) *Forward {
 func (f *Forward) ServeStream(ctx context.Context, stm stream.Stream) {
 	conn, err := f.dialer.DialStream(ctx)
 	if err != nil {
+		logger.Error(err)
 		return
 	}
 	defer conn.Close()
-	joinio.BothCopy(stm, conn)
+	err = tunnel.Tunnel(ctx, stm, conn)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
 }
