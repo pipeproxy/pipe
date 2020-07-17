@@ -9,7 +9,9 @@ import (
 	"github.com/wzshiming/pipe/internal/http/template"
 )
 
-const name = "direct"
+const (
+	name = "direct"
+)
 
 func init() {
 	register.Register(name, NewDirectWithConfig)

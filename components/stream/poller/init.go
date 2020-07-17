@@ -12,7 +12,9 @@ var (
 	ErrNotRoller  = fmt.Errorf("error not poller")
 )
 
-const name = "poller"
+const (
+	name = "poller"
+)
 
 func init() {
 	register.Register(name, NewPollerWithConfig)

@@ -7,7 +7,9 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 )
 
-const name = "mux"
+const (
+	name = "mux"
+)
 
 func init() {
 	register.Register(name, NewMuxWithConfig)

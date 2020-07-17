@@ -13,7 +13,9 @@ var (
 	ErrNotWeighted = fmt.Errorf("error not weighted")
 )
 
-const name = "weighted"
+const (
+	name = "weighted"
+)
 
 func init() {
 	register.Register(name, NewWeightedWithConfig)

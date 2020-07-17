@@ -5,7 +5,9 @@ import (
 	"github.com/wzshiming/pipe/components/once"
 )
 
-const name = "message"
+const (
+	name = "message"
+)
 
 func init() {
 	register.Register(name, NewMessageWithConfig)

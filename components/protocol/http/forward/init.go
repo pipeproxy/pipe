@@ -7,7 +7,9 @@ import (
 	"github.com/wzshiming/pipe/components/protocol/http/round_tripper"
 )
 
-const name = "forward"
+const (
+	name = "forward"
+)
 
 func init() {
 	register.Register(name, NewForwardWithConfig)

@@ -8,7 +8,9 @@ import (
 	"github.com/wzshiming/pipe/components/tls"
 )
 
-const name = "validation"
+const (
+	name = "validation"
+)
 
 func init() {
 	register.Register(name, NewValidationWithConfig)

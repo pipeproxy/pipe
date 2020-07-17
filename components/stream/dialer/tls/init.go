@@ -6,7 +6,9 @@ import (
 	"github.com/wzshiming/pipe/components/tls"
 )
 
-const name = "tls"
+const (
+	name = "tls"
+)
 
 func init() {
 	register.Register(name, NewTlsWithConfig)

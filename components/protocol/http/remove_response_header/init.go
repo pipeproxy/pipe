@@ -6,7 +6,9 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 )
 
-const name = "remove_response_header"
+const (
+	name = "remove_response_header"
+)
 
 func init() {
 	register.Register(name, NewRemoveResponseHeaderWithConfig)

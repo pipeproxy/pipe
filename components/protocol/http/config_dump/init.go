@@ -6,7 +6,9 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 )
 
-const name = "config_dump"
+const (
+	name = "config_dump"
+)
 
 func init() {
 	register.Register(name, NewConfigDumpWithConfig)

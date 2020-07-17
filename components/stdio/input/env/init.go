@@ -8,7 +8,9 @@ import (
 	"github.com/wzshiming/pipe/components/stdio/input"
 )
 
-const name = "env"
+const (
+	name = "env"
+)
 
 func init() {
 	register.Register(name, NewEnvWithConfig)

@@ -8,7 +8,9 @@ import (
 	"github.com/wzshiming/pipe/components/stdio/input"
 )
 
-const name = "file"
+const (
+	name = "file"
+)
 
 func init() {
 	register.Register(name, NewFileWithConfig)

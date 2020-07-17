@@ -11,7 +11,9 @@ import (
 	"github.com/wzshiming/pipe/components/tls"
 )
 
-const name = "transport"
+const (
+	name = "transport"
+)
 
 func init() {
 	register.Register(name, NewTransportWithConfig)

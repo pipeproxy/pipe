@@ -9,7 +9,9 @@ import (
 	"github.com/wzshiming/pipe/components/service"
 )
 
-const name = "sample"
+const (
+	name = "sample"
+)
 
 func init() {
 	register.Register(name, NewSampleWithConfig)

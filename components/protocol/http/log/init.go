@@ -8,7 +8,9 @@ import (
 	"github.com/wzshiming/pipe/components/stdio/output"
 )
 
-const name = "log"
+const (
+	name = "log"
+)
 
 func init() {
 	register.Register(name, NewLogWithConfig)

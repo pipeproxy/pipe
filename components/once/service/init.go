@@ -6,7 +6,9 @@ import (
 	"github.com/wzshiming/pipe/components/service"
 )
 
-const name = "service"
+const (
+	name = "service"
+)
 
 func init() {
 	register.Register(name, NewServiceWithConfig)

@@ -8,7 +8,9 @@ import (
 	"golang.org/x/net/http2/h2c"
 )
 
-const name = "h2c"
+const (
+	name = "h2c"
+)
 
 func init() {
 	register.Register(name, NewH2cWithConfig)

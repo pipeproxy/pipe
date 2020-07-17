@@ -5,7 +5,9 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 )
 
-const name = "yaml"
+const (
+	name = "yaml"
+)
 
 func init() {
 	register.Register(name, NewUnmarshaler)

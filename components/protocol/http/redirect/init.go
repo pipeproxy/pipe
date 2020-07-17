@@ -7,7 +7,9 @@ import (
 	"github.com/wzshiming/pipe/internal/http/template"
 )
 
-const name = "redirect"
+const (
+	name = "redirect"
+)
 
 func init() {
 	register.Register(name, NewRedirectWithConfig)

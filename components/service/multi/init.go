@@ -5,7 +5,9 @@ import (
 	"github.com/wzshiming/pipe/components/service"
 )
 
-const name = "multi"
+const (
+	name = "multi"
+)
 
 func init() {
 	register.Register(name, NewMultiWithConfig)

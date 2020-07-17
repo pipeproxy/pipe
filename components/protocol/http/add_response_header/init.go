@@ -7,7 +7,9 @@ import (
 	"github.com/wzshiming/pipe/internal/http/template"
 )
 
-const name = "add_response_header"
+const (
+	name = "add_response_header"
+)
 
 func init() {
 	register.Register(name, NewAddResponseHeaderWithConfig)

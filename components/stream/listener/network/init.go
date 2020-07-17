@@ -7,11 +7,13 @@ import (
 	"github.com/wzshiming/pipe/components/stream/listener"
 )
 
+const (
+	name = "network"
+)
+
 func init() {
 	register.Register(name, NewNetworkWithConfig)
 }
-
-const name = "network"
 
 type NetworkEnum string
 

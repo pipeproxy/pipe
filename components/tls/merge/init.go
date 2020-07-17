@@ -5,7 +5,9 @@ import (
 	"github.com/wzshiming/pipe/components/tls"
 )
 
-const name = "merge"
+const (
+	name = "merge"
+)
 
 func init() {
 	register.Register(name, NewMergeWithConfig)

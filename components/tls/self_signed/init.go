@@ -5,7 +5,9 @@ import (
 	"github.com/wzshiming/pipe/components/tls"
 )
 
-const name = "self_signed"
+const (
+	name = "self_signed"
+)
 
 func init() {
 	register.Register(name, NewSelfSignedWithConfig)

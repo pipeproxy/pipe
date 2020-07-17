@@ -6,7 +6,9 @@ import (
 	"github.com/wzshiming/pipe/components/once"
 )
 
-const name = "none"
+const (
+	name = "none"
+)
 
 func init() {
 	register.Register(name, NewNoneWithConfig)

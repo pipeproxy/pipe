@@ -7,7 +7,9 @@ import (
 	"github.com/wzshiming/pipe/components/stdio/input"
 )
 
-const name = "inline"
+const (
+	name = "inline"
+)
 
 func init() {
 	register.Register(name, NewInlineWithConfig)

@@ -7,7 +7,9 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 )
 
-const name = "host"
+const (
+	name = "host"
+)
 
 func init() {
 	register.Register(name, NewHostWithConfig)

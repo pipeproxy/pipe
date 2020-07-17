@@ -6,7 +6,9 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 )
 
-const name = "remove_request_header"
+const (
+	name = "remove_request_header"
+)
 
 func init() {
 	register.Register(name, NewRemoveRequestHeaderWithConfig)

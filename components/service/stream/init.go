@@ -7,7 +7,9 @@ import (
 	"github.com/wzshiming/pipe/components/stream/listener"
 )
 
-const name = "stream"
+const (
+	name = "stream"
+)
 
 func init() {
 	register.Register(name, NewServerWithConfig)

@@ -8,7 +8,9 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 )
 
-const name = "compress"
+const (
+	name = "compress"
+)
 
 func init() {
 	register.Register(name, NewLogWithConfig)

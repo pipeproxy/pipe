@@ -5,11 +5,13 @@ import (
 	"github.com/wzshiming/pipe/components/stream/dialer"
 )
 
+const (
+	name = "network"
+)
+
 func init() {
 	register.Register(name, NewNetworkWithConfig)
 }
-
-const name = "network"
 
 type NetworkEnum string
 

@@ -10,7 +10,9 @@ import (
 	"github.com/wzshiming/pipe/components/stdio/input"
 )
 
-const name = "http"
+const (
+	name = "http"
+)
 
 func init() {
 	register.Register(name, NewHTTPWithConfig)

@@ -7,7 +7,9 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 )
 
-const name = "load"
+const (
+	name = "load"
+)
 
 func Register(i interface{}) error {
 	return register.RegisterWithBuildFunc(name, LoadWithConfig, i)

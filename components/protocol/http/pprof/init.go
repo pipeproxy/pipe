@@ -6,7 +6,9 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 )
 
-const name = "pprof"
+const (
+	name = "pprof"
+)
 
 func init() {
 	register.Register(name, NewPprofWithConfig)

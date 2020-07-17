@@ -6,8 +6,10 @@ import (
 	"github.com/wzshiming/pipe/components/tls"
 )
 
-const nameUp = "tls_up"
-const nameDown = "tls_down"
+const (
+	nameUp   = "tls_up"
+	nameDown = "tls_down"
+)
 
 func init() {
 	register.Register(nameUp, NewTlsUpWithConfig)

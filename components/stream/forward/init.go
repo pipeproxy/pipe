@@ -6,7 +6,9 @@ import (
 	"github.com/wzshiming/pipe/components/stream/dialer"
 )
 
-const name = "forward"
+const (
+	name = "forward"
+)
 
 func init() {
 	register.Register(name, NewForwardWithConfig)
