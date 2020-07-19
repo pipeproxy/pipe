@@ -425,7 +425,7 @@ const kindDefCodecDecoderConfig = `def@codec.Decoder`
 // DefCodecDecoderConfig def@codec.Decoder
 type DefCodecDecoderConfig struct {
 	Name string
-	Def  CodecDecoder
+	Def  CodecDecoder `json:",omitempty"`
 }
 
 func init() {
@@ -460,7 +460,7 @@ const kindDefCodecEncoderConfig = `def@codec.Encoder`
 // DefCodecEncoderConfig def@codec.Encoder
 type DefCodecEncoderConfig struct {
 	Name string
-	Def  CodecEncoder
+	Def  CodecEncoder `json:",omitempty"`
 }
 
 func init() {
@@ -495,7 +495,7 @@ const kindDefCodecMarshalerConfig = `def@codec.Marshaler`
 // DefCodecMarshalerConfig def@codec.Marshaler
 type DefCodecMarshalerConfig struct {
 	Name string
-	Def  CodecMarshaler
+	Def  CodecMarshaler `json:",omitempty"`
 }
 
 func init() {
@@ -530,7 +530,7 @@ const kindDefCodecUnmarshalerConfig = `def@codec.Unmarshaler`
 // DefCodecUnmarshalerConfig def@codec.Unmarshaler
 type DefCodecUnmarshalerConfig struct {
 	Name string
-	Def  CodecUnmarshaler
+	Def  CodecUnmarshaler `json:",omitempty"`
 }
 
 func init() {
@@ -565,7 +565,7 @@ const kindDefIoReaderConfig = `def@io.Reader`
 // DefIoReaderConfig def@io.Reader
 type DefIoReaderConfig struct {
 	Name string
-	Def  IoReader
+	Def  IoReader `json:",omitempty"`
 }
 
 func init() {
@@ -600,7 +600,7 @@ const kindDefIoWriterConfig = `def@io.Writer`
 // DefIoWriterConfig def@io.Writer
 type DefIoWriterConfig struct {
 	Name string
-	Def  IoWriter
+	Def  IoWriter `json:",omitempty"`
 }
 
 func init() {
@@ -635,7 +635,7 @@ const kindDefNetHTTPHandlerConfig = `def@net/http.Handler`
 // DefNetHTTPHandlerConfig def@net/http.Handler
 type DefNetHTTPHandlerConfig struct {
 	Name string
-	Def  HTTPHandler
+	Def  HTTPHandler `json:",omitempty"`
 }
 
 func init() {
@@ -670,7 +670,7 @@ const kindDefNetHTTPRoundTripperConfig = `def@net/http.RoundTripper`
 // DefNetHTTPRoundTripperConfig def@net/http.RoundTripper
 type DefNetHTTPRoundTripperConfig struct {
 	Name string
-	Def  HTTPRoundTripper
+	Def  HTTPRoundTripper `json:",omitempty"`
 }
 
 func init() {
@@ -705,7 +705,7 @@ const kindDefOnceConfig = `def@once.Once`
 // DefOnceConfig def@once.Once
 type DefOnceConfig struct {
 	Name string
-	Def  Once
+	Def  Once `json:",omitempty"`
 }
 
 func init() {
@@ -740,7 +740,7 @@ const kindDefPacketHandlerConfig = `def@packet.Handler`
 // DefPacketHandlerConfig def@packet.Handler
 type DefPacketHandlerConfig struct {
 	Name string
-	Def  PacketHandler
+	Def  PacketHandler `json:",omitempty"`
 }
 
 func init() {
@@ -775,7 +775,7 @@ const kindDefProtocolHandlerConfig = `def@protocol.Handler`
 // DefProtocolHandlerConfig def@protocol.Handler
 type DefProtocolHandlerConfig struct {
 	Name string
-	Def  ProtocolHandler
+	Def  ProtocolHandler `json:",omitempty"`
 }
 
 func init() {
@@ -810,7 +810,7 @@ const kindDefServiceConfig = `def@service.Service`
 // DefServiceConfig def@service.Service
 type DefServiceConfig struct {
 	Name string
-	Def  Service
+	Def  Service `json:",omitempty"`
 }
 
 func init() {
@@ -845,7 +845,7 @@ const kindDefStreamHandlerConfig = `def@stream.Handler`
 // DefStreamHandlerConfig def@stream.Handler
 type DefStreamHandlerConfig struct {
 	Name string
-	Def  StreamHandler
+	Def  StreamHandler `json:",omitempty"`
 }
 
 func init() {
@@ -880,7 +880,7 @@ const kindDefStreamDialerConfig = `def@stream/dialer.Dialer`
 // DefStreamDialerConfig def@stream/dialer.Dialer
 type DefStreamDialerConfig struct {
 	Name string
-	Def  Dialer
+	Def  Dialer `json:",omitempty"`
 }
 
 func init() {
@@ -915,7 +915,7 @@ const kindDefStreamListenerListenConfigConfig = `def@stream/listener.ListenConfi
 // DefStreamListenerListenConfigConfig def@stream/listener.ListenConfig
 type DefStreamListenerListenConfigConfig struct {
 	Name string
-	Def  ListenerListenConfig
+	Def  ListenerListenConfig `json:",omitempty"`
 }
 
 func init() {
@@ -950,7 +950,7 @@ const kindDefTLSConfig = `def@tls.TLS`
 // DefTLSConfig def@tls.TLS
 type DefTLSConfig struct {
 	Name string
-	Def  TLS
+	Def  TLS `json:",omitempty"`
 }
 
 func init() {
@@ -2617,39 +2617,368 @@ func (m NetworkStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End network@stream/listener.ListenConfig type =========
 
-// ========= Begin none@once.Once type =========
+// ========= Begin none@codec.Decoder type =========
 //
 
-const kindNoneOnceConfig = `none@once.Once`
+const kindNoneCodecDecoder = `none@codec.Decoder`
 
-// NoneOnceConfig none@once.Once
-type NoneOnceConfig struct {
-	Any Component
+// NoneCodecDecoder none@codec.Decoder
+type NoneCodecDecoder struct {
 }
 
 func init() {
 	_ = provider.Register(
-		kindNoneOnceConfig,
-		func(r *NoneOnceConfig) Once { return r },
+		kindNoneCodecDecoder,
+		func(r *NoneCodecDecoder) CodecDecoder { return r },
 	)
 }
 
-func (NoneOnceConfig) isOnce()      {}
-func (NoneOnceConfig) isComponent() {}
+func (NoneCodecDecoder) isCodecDecoder() {}
+func (NoneCodecDecoder) isComponent()    {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m NoneOnceConfig) MarshalJSON() ([]byte, error) {
-	type t NoneOnceConfig
+func (m NoneCodecDecoder) MarshalJSON() ([]byte, error) {
+	type t NoneCodecDecoder
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindNoneOnceConfig, data)
+	data = prepend(kindKey, kindNoneCodecDecoder, data)
+	return data, nil
+}
+
+//
+// ========= End none@codec.Decoder type =========
+
+// ========= Begin none@codec.Encoder type =========
+//
+
+const kindNoneCodecEncoder = `none@codec.Encoder`
+
+// NoneCodecEncoder none@codec.Encoder
+type NoneCodecEncoder struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneCodecEncoder,
+		func(r *NoneCodecEncoder) CodecEncoder { return r },
+	)
+}
+
+func (NoneCodecEncoder) isCodecEncoder() {}
+func (NoneCodecEncoder) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneCodecEncoder) MarshalJSON() ([]byte, error) {
+	type t NoneCodecEncoder
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneCodecEncoder, data)
+	return data, nil
+}
+
+//
+// ========= End none@codec.Encoder type =========
+
+// ========= Begin none@codec.Marshaler type =========
+//
+
+const kindNoneCodecMarshaler = `none@codec.Marshaler`
+
+// NoneCodecMarshaler none@codec.Marshaler
+type NoneCodecMarshaler struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneCodecMarshaler,
+		func(r *NoneCodecMarshaler) CodecMarshaler { return r },
+	)
+}
+
+func (NoneCodecMarshaler) isCodecMarshaler() {}
+func (NoneCodecMarshaler) isComponent()      {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneCodecMarshaler) MarshalJSON() ([]byte, error) {
+	type t NoneCodecMarshaler
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneCodecMarshaler, data)
+	return data, nil
+}
+
+//
+// ========= End none@codec.Marshaler type =========
+
+// ========= Begin none@codec.Unmarshaler type =========
+//
+
+const kindNoneCodecUnmarshaler = `none@codec.Unmarshaler`
+
+// NoneCodecUnmarshaler none@codec.Unmarshaler
+type NoneCodecUnmarshaler struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneCodecUnmarshaler,
+		func(r *NoneCodecUnmarshaler) CodecUnmarshaler { return r },
+	)
+}
+
+func (NoneCodecUnmarshaler) isCodecUnmarshaler() {}
+func (NoneCodecUnmarshaler) isComponent()        {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneCodecUnmarshaler) MarshalJSON() ([]byte, error) {
+	type t NoneCodecUnmarshaler
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneCodecUnmarshaler, data)
+	return data, nil
+}
+
+//
+// ========= End none@codec.Unmarshaler type =========
+
+// ========= Begin none@io.Reader type =========
+//
+
+const kindNoneIoReader = `none@io.Reader`
+
+// NoneIoReader none@io.Reader
+type NoneIoReader struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneIoReader,
+		func(r *NoneIoReader) IoReader { return r },
+	)
+}
+
+func (NoneIoReader) isIoReader()  {}
+func (NoneIoReader) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneIoReader) MarshalJSON() ([]byte, error) {
+	type t NoneIoReader
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneIoReader, data)
+	return data, nil
+}
+
+//
+// ========= End none@io.Reader type =========
+
+// ========= Begin none@io.Writer type =========
+//
+
+const kindNoneIoWriter = `none@io.Writer`
+
+// NoneIoWriter none@io.Writer
+type NoneIoWriter struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneIoWriter,
+		func(r *NoneIoWriter) IoWriter { return r },
+	)
+}
+
+func (NoneIoWriter) isIoWriter()  {}
+func (NoneIoWriter) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneIoWriter) MarshalJSON() ([]byte, error) {
+	type t NoneIoWriter
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneIoWriter, data)
+	return data, nil
+}
+
+//
+// ========= End none@io.Writer type =========
+
+// ========= Begin none@net/http.Handler type =========
+//
+
+const kindNoneNetHTTPHandler = `none@net/http.Handler`
+
+// NoneNetHTTPHandler none@net/http.Handler
+type NoneNetHTTPHandler struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneNetHTTPHandler,
+		func(r *NoneNetHTTPHandler) HTTPHandler { return r },
+	)
+}
+
+func (NoneNetHTTPHandler) isHTTPHandler() {}
+func (NoneNetHTTPHandler) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneNetHTTPHandler) MarshalJSON() ([]byte, error) {
+	type t NoneNetHTTPHandler
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneNetHTTPHandler, data)
+	return data, nil
+}
+
+//
+// ========= End none@net/http.Handler type =========
+
+// ========= Begin none@net/http.RoundTripper type =========
+//
+
+const kindNoneNetHTTPRoundTripper = `none@net/http.RoundTripper`
+
+// NoneNetHTTPRoundTripper none@net/http.RoundTripper
+type NoneNetHTTPRoundTripper struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneNetHTTPRoundTripper,
+		func(r *NoneNetHTTPRoundTripper) HTTPRoundTripper { return r },
+	)
+}
+
+func (NoneNetHTTPRoundTripper) isHTTPRoundTripper() {}
+func (NoneNetHTTPRoundTripper) isComponent()        {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneNetHTTPRoundTripper) MarshalJSON() ([]byte, error) {
+	type t NoneNetHTTPRoundTripper
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneNetHTTPRoundTripper, data)
+	return data, nil
+}
+
+//
+// ========= End none@net/http.RoundTripper type =========
+
+// ========= Begin none@once.Once type =========
+//
+
+const kindNoneOnce = `none@once.Once`
+
+// NoneOnce none@once.Once
+type NoneOnce struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneOnce,
+		func(r *NoneOnce) Once { return r },
+	)
+}
+
+func (NoneOnce) isOnce()      {}
+func (NoneOnce) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneOnce) MarshalJSON() ([]byte, error) {
+	type t NoneOnce
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneOnce, data)
 	return data, nil
 }
 
 //
 // ========= End none@once.Once type =========
+
+// ========= Begin none@packet.Handler type =========
+//
+
+const kindNonePacketHandler = `none@packet.Handler`
+
+// NonePacketHandler none@packet.Handler
+type NonePacketHandler struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNonePacketHandler,
+		func(r *NonePacketHandler) PacketHandler { return r },
+	)
+}
+
+func (NonePacketHandler) isPacketHandler() {}
+func (NonePacketHandler) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NonePacketHandler) MarshalJSON() ([]byte, error) {
+	type t NonePacketHandler
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNonePacketHandler, data)
+	return data, nil
+}
+
+//
+// ========= End none@packet.Handler type =========
+
+// ========= Begin none@protocol.Handler type =========
+//
+
+const kindNoneProtocolHandler = `none@protocol.Handler`
+
+// NoneProtocolHandler none@protocol.Handler
+type NoneProtocolHandler struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneProtocolHandler,
+		func(r *NoneProtocolHandler) ProtocolHandler { return r },
+	)
+}
+
+func (NoneProtocolHandler) isProtocolHandler() {}
+func (NoneProtocolHandler) isComponent()       {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneProtocolHandler) MarshalJSON() ([]byte, error) {
+	type t NoneProtocolHandler
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneProtocolHandler, data)
+	return data, nil
+}
+
+//
+// ========= End none@protocol.Handler type =========
 
 // ========= Begin none@service.Service type =========
 //
@@ -2683,6 +3012,138 @@ func (m NoneService) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End none@service.Service type =========
+
+// ========= Begin none@stream.Handler type =========
+//
+
+const kindNoneStreamHandler = `none@stream.Handler`
+
+// NoneStreamHandler none@stream.Handler
+type NoneStreamHandler struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneStreamHandler,
+		func(r *NoneStreamHandler) StreamHandler { return r },
+	)
+}
+
+func (NoneStreamHandler) isStreamHandler() {}
+func (NoneStreamHandler) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneStreamHandler) MarshalJSON() ([]byte, error) {
+	type t NoneStreamHandler
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneStreamHandler, data)
+	return data, nil
+}
+
+//
+// ========= End none@stream.Handler type =========
+
+// ========= Begin none@stream/dialer.Dialer type =========
+//
+
+const kindNoneStreamDialer = `none@stream/dialer.Dialer`
+
+// NoneStreamDialer none@stream/dialer.Dialer
+type NoneStreamDialer struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneStreamDialer,
+		func(r *NoneStreamDialer) Dialer { return r },
+	)
+}
+
+func (NoneStreamDialer) isDialer()    {}
+func (NoneStreamDialer) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneStreamDialer) MarshalJSON() ([]byte, error) {
+	type t NoneStreamDialer
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneStreamDialer, data)
+	return data, nil
+}
+
+//
+// ========= End none@stream/dialer.Dialer type =========
+
+// ========= Begin none@stream/listener.ListenConfig type =========
+//
+
+const kindNoneStreamListenerListenConfig = `none@stream/listener.ListenConfig`
+
+// NoneStreamListenerListenConfig none@stream/listener.ListenConfig
+type NoneStreamListenerListenConfig struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneStreamListenerListenConfig,
+		func(r *NoneStreamListenerListenConfig) ListenerListenConfig { return r },
+	)
+}
+
+func (NoneStreamListenerListenConfig) isListenerListenConfig() {}
+func (NoneStreamListenerListenConfig) isComponent()            {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneStreamListenerListenConfig) MarshalJSON() ([]byte, error) {
+	type t NoneStreamListenerListenConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneStreamListenerListenConfig, data)
+	return data, nil
+}
+
+//
+// ========= End none@stream/listener.ListenConfig type =========
+
+// ========= Begin none@tls.TLS type =========
+//
+
+const kindNoneTLS = `none@tls.TLS`
+
+// NoneTLS none@tls.TLS
+type NoneTLS struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneTLS,
+		func(r *NoneTLS) TLS { return r },
+	)
+}
+
+func (NoneTLS) isTLS()       {}
+func (NoneTLS) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneTLS) MarshalJSON() ([]byte, error) {
+	type t NoneTLS
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneTLS, data)
+	return data, nil
+}
+
+//
+// ========= End none@tls.TLS type =========
 
 // ========= Begin poller@net/http.Handler type =========
 //
@@ -2886,6 +3347,7 @@ const kindRefCodecDecoderConfig = `ref@codec.Decoder`
 // RefCodecDecoderConfig ref@codec.Decoder
 type RefCodecDecoderConfig struct {
 	Name string
+	Def  CodecDecoder `json:",omitempty"`
 }
 
 func init() {
@@ -2920,6 +3382,7 @@ const kindRefCodecEncoderConfig = `ref@codec.Encoder`
 // RefCodecEncoderConfig ref@codec.Encoder
 type RefCodecEncoderConfig struct {
 	Name string
+	Def  CodecEncoder `json:",omitempty"`
 }
 
 func init() {
@@ -2954,6 +3417,7 @@ const kindRefCodecMarshalerConfig = `ref@codec.Marshaler`
 // RefCodecMarshalerConfig ref@codec.Marshaler
 type RefCodecMarshalerConfig struct {
 	Name string
+	Def  CodecMarshaler `json:",omitempty"`
 }
 
 func init() {
@@ -2988,6 +3452,7 @@ const kindRefCodecUnmarshalerConfig = `ref@codec.Unmarshaler`
 // RefCodecUnmarshalerConfig ref@codec.Unmarshaler
 type RefCodecUnmarshalerConfig struct {
 	Name string
+	Def  CodecUnmarshaler `json:",omitempty"`
 }
 
 func init() {
@@ -3022,6 +3487,7 @@ const kindRefIoReaderConfig = `ref@io.Reader`
 // RefIoReaderConfig ref@io.Reader
 type RefIoReaderConfig struct {
 	Name string
+	Def  IoReader `json:",omitempty"`
 }
 
 func init() {
@@ -3056,6 +3522,7 @@ const kindRefIoWriterConfig = `ref@io.Writer`
 // RefIoWriterConfig ref@io.Writer
 type RefIoWriterConfig struct {
 	Name string
+	Def  IoWriter `json:",omitempty"`
 }
 
 func init() {
@@ -3090,6 +3557,7 @@ const kindRefNetHTTPHandlerConfig = `ref@net/http.Handler`
 // RefNetHTTPHandlerConfig ref@net/http.Handler
 type RefNetHTTPHandlerConfig struct {
 	Name string
+	Def  HTTPHandler `json:",omitempty"`
 }
 
 func init() {
@@ -3124,6 +3592,7 @@ const kindRefNetHTTPRoundTripperConfig = `ref@net/http.RoundTripper`
 // RefNetHTTPRoundTripperConfig ref@net/http.RoundTripper
 type RefNetHTTPRoundTripperConfig struct {
 	Name string
+	Def  HTTPRoundTripper `json:",omitempty"`
 }
 
 func init() {
@@ -3158,6 +3627,7 @@ const kindRefOnceConfig = `ref@once.Once`
 // RefOnceConfig ref@once.Once
 type RefOnceConfig struct {
 	Name string
+	Def  Once `json:",omitempty"`
 }
 
 func init() {
@@ -3192,6 +3662,7 @@ const kindRefPacketHandlerConfig = `ref@packet.Handler`
 // RefPacketHandlerConfig ref@packet.Handler
 type RefPacketHandlerConfig struct {
 	Name string
+	Def  PacketHandler `json:",omitempty"`
 }
 
 func init() {
@@ -3226,6 +3697,7 @@ const kindRefProtocolHandlerConfig = `ref@protocol.Handler`
 // RefProtocolHandlerConfig ref@protocol.Handler
 type RefProtocolHandlerConfig struct {
 	Name string
+	Def  ProtocolHandler `json:",omitempty"`
 }
 
 func init() {
@@ -3260,6 +3732,7 @@ const kindRefServiceConfig = `ref@service.Service`
 // RefServiceConfig ref@service.Service
 type RefServiceConfig struct {
 	Name string
+	Def  Service `json:",omitempty"`
 }
 
 func init() {
@@ -3294,6 +3767,7 @@ const kindRefStreamHandlerConfig = `ref@stream.Handler`
 // RefStreamHandlerConfig ref@stream.Handler
 type RefStreamHandlerConfig struct {
 	Name string
+	Def  StreamHandler `json:",omitempty"`
 }
 
 func init() {
@@ -3328,6 +3802,7 @@ const kindRefStreamDialerConfig = `ref@stream/dialer.Dialer`
 // RefStreamDialerConfig ref@stream/dialer.Dialer
 type RefStreamDialerConfig struct {
 	Name string
+	Def  Dialer `json:",omitempty"`
 }
 
 func init() {
@@ -3362,6 +3837,7 @@ const kindRefStreamListenerListenConfigConfig = `ref@stream/listener.ListenConfi
 // RefStreamListenerListenConfigConfig ref@stream/listener.ListenConfig
 type RefStreamListenerListenConfigConfig struct {
 	Name string
+	Def  ListenerListenConfig `json:",omitempty"`
 }
 
 func init() {
@@ -3396,6 +3872,7 @@ const kindRefTLSConfig = `ref@tls.TLS`
 // RefTLSConfig ref@tls.TLS
 type RefTLSConfig struct {
 	Name string
+	Def  TLS `json:",omitempty"`
 }
 
 func init() {
