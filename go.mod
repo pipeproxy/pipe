@@ -7,7 +7,7 @@ require (
 	github.com/kubernetes-sigs/yaml v1.1.0
 	github.com/spf13/pflag v1.0.5
 	github.com/wzshiming/crun v0.3.3
-	github.com/wzshiming/funcfg v0.1.1
+	github.com/wzshiming/funcfg v0.1.2
 	github.com/wzshiming/lockfile v0.0.5
 	github.com/wzshiming/notify v0.0.5
 	github.com/wzshiming/trie v0.0.1
