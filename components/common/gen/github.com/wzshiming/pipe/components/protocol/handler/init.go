@@ -3,6 +3,7 @@ package reference
 
 import (
 	"context"
+	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/protocol"
@@ -12,7 +13,7 @@ import (
 func init() {
 	register.Register("ref", NewHandlerRefWithConfig)
 	register.Register("def", NewHandlerDefWithConfig)
-	register.Register("none", NewHandlerNone)
+	register.Register("none", newHandlerNone)
 }
 
 type Config struct {
@@ -20,39 +21,55 @@ type Config struct {
 	Def  protocol.Handler `json:",omitempty"`
 }
 
-func NewHandlerRefWithConfig(conf *Config) (protocol.Handler, error) {
+func NewHandlerRefWithConfig(conf *Config) protocol.Handler {
 	o := &Handler{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
-	return o, nil
+	return o
 }
 
-func NewHandlerDefWithConfig(conf *Config) (protocol.Handler, error) {
-	HandlerStore[conf.Name] = conf.Def
-	return conf.Def, nil
+func NewHandlerDefWithConfig(conf *Config) protocol.Handler {
+	return HandlerPut(conf.Name, conf.Def)
 }
 
-var HandlerStore = map[string]protocol.Handler{}
+var (
+	mut           sync.RWMutex
+	_HandlerStore = map[string]protocol.Handler{}
+)
 
-func HandlerFind(name string, defaults protocol.Handler) protocol.Handler {
-	o, ok := HandlerStore[name]
+func HandlerPut(name string, def protocol.Handler) protocol.Handler {
+	if def == nil {
+		def = HandlerNone
+	}
+	mut.Lock()
+	_HandlerStore[name] = def
+	mut.Unlock()
+	return def
+}
+
+func HandlerGet(name string, defaults protocol.Handler) protocol.Handler {
+	mut.RLock()
+	o, ok := _HandlerStore[name]
+	mut.RUnlock()
 	if ok {
 		return o
 	}
 	if defaults != nil {
 		return defaults
 	}
-	return HandlerNone{}
+	return HandlerNone
 }
 
-type HandlerNone struct{}
+var HandlerNone _HandlerNone
 
-func NewHandlerNone() protocol.Handler {
-	return HandlerNone{}
+type _HandlerNone struct{}
+
+func newHandlerNone() protocol.Handler {
+	return HandlerNone
 }
 
-func (HandlerNone) ServeProtocol(_ context.Context, _ protocol.Protocol) {
+func (_HandlerNone) ServeProtocol(_ context.Context, _ protocol.Protocol) {
 	logger.Warn("this is none of protocol.Handler")
 	return
 }
@@ -63,5 +80,5 @@ type Handler struct {
 }
 
 func (o *Handler) ServeProtocol(context context.Context, protocol protocol.Protocol) {
-	HandlerFind(o.Name, o.Def).ServeProtocol(context, protocol)
+	HandlerGet(o.Name, o.Def).ServeProtocol(context, protocol)
 }

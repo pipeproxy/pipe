@@ -2,6 +2,8 @@
 package reference
 
 import (
+	"sync"
+
 	"github.com/wzshiming/pipe/components/codec"
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/internal/logger"
@@ -10,7 +12,7 @@ import (
 func init() {
 	register.Register("ref", NewMarshalerRefWithConfig)
 	register.Register("def", NewMarshalerDefWithConfig)
-	register.Register("none", NewMarshalerNone)
+	register.Register("none", newMarshalerNone)
 }
 
 type Config struct {
@@ -18,39 +20,55 @@ type Config struct {
 	Def  codec.Marshaler `json:",omitempty"`
 }
 
-func NewMarshalerRefWithConfig(conf *Config) (codec.Marshaler, error) {
+func NewMarshalerRefWithConfig(conf *Config) codec.Marshaler {
 	o := &Marshaler{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
-	return o, nil
+	return o
 }
 
-func NewMarshalerDefWithConfig(conf *Config) (codec.Marshaler, error) {
-	MarshalerStore[conf.Name] = conf.Def
-	return conf.Def, nil
+func NewMarshalerDefWithConfig(conf *Config) codec.Marshaler {
+	return MarshalerPut(conf.Name, conf.Def)
 }
 
-var MarshalerStore = map[string]codec.Marshaler{}
+var (
+	mut             sync.RWMutex
+	_MarshalerStore = map[string]codec.Marshaler{}
+)
 
-func MarshalerFind(name string, defaults codec.Marshaler) codec.Marshaler {
-	o, ok := MarshalerStore[name]
+func MarshalerPut(name string, def codec.Marshaler) codec.Marshaler {
+	if def == nil {
+		def = MarshalerNone
+	}
+	mut.Lock()
+	_MarshalerStore[name] = def
+	mut.Unlock()
+	return def
+}
+
+func MarshalerGet(name string, defaults codec.Marshaler) codec.Marshaler {
+	mut.RLock()
+	o, ok := _MarshalerStore[name]
+	mut.RUnlock()
 	if ok {
 		return o
 	}
 	if defaults != nil {
 		return defaults
 	}
-	return MarshalerNone{}
+	return MarshalerNone
 }
 
-type MarshalerNone struct{}
+var MarshalerNone _MarshalerNone
 
-func NewMarshalerNone() codec.Marshaler {
-	return MarshalerNone{}
+type _MarshalerNone struct{}
+
+func newMarshalerNone() codec.Marshaler {
+	return MarshalerNone
 }
 
-func (MarshalerNone) Marshal(_ interface{}) (_ []uint8, _ error) {
+func (_MarshalerNone) Marshal(_ interface{}) (_ []uint8, _ error) {
 	logger.Warn("this is none of codec.Marshaler")
 	return
 }
@@ -61,5 +79,5 @@ type Marshaler struct {
 }
 
 func (o *Marshaler) Marshal(a interface{}) ([]uint8, error) {
-	return MarshalerFind(o.Name, o.Def).Marshal(a)
+	return MarshalerGet(o.Name, o.Def).Marshal(a)
 }

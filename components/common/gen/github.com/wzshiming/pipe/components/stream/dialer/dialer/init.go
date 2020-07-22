@@ -4,6 +4,7 @@ package reference
 import (
 	"context"
 	"net"
+	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/stream/dialer"
@@ -13,7 +14,7 @@ import (
 func init() {
 	register.Register("ref", NewDialerRefWithConfig)
 	register.Register("def", NewDialerDefWithConfig)
-	register.Register("none", NewDialerNone)
+	register.Register("none", newDialerNone)
 }
 
 type Config struct {
@@ -21,39 +22,55 @@ type Config struct {
 	Def  dialer.Dialer `json:",omitempty"`
 }
 
-func NewDialerRefWithConfig(conf *Config) (dialer.Dialer, error) {
+func NewDialerRefWithConfig(conf *Config) dialer.Dialer {
 	o := &Dialer{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
-	return o, nil
+	return o
 }
 
-func NewDialerDefWithConfig(conf *Config) (dialer.Dialer, error) {
-	DialerStore[conf.Name] = conf.Def
-	return conf.Def, nil
+func NewDialerDefWithConfig(conf *Config) dialer.Dialer {
+	return DialerPut(conf.Name, conf.Def)
 }
 
-var DialerStore = map[string]dialer.Dialer{}
+var (
+	mut          sync.RWMutex
+	_DialerStore = map[string]dialer.Dialer{}
+)
 
-func DialerFind(name string, defaults dialer.Dialer) dialer.Dialer {
-	o, ok := DialerStore[name]
+func DialerPut(name string, def dialer.Dialer) dialer.Dialer {
+	if def == nil {
+		def = DialerNone
+	}
+	mut.Lock()
+	_DialerStore[name] = def
+	mut.Unlock()
+	return def
+}
+
+func DialerGet(name string, defaults dialer.Dialer) dialer.Dialer {
+	mut.RLock()
+	o, ok := _DialerStore[name]
+	mut.RUnlock()
 	if ok {
 		return o
 	}
 	if defaults != nil {
 		return defaults
 	}
-	return DialerNone{}
+	return DialerNone
 }
 
-type DialerNone struct{}
+var DialerNone _DialerNone
 
-func NewDialerNone() dialer.Dialer {
-	return DialerNone{}
+type _DialerNone struct{}
+
+func newDialerNone() dialer.Dialer {
+	return DialerNone
 }
 
-func (DialerNone) DialStream(_ context.Context) (_ net.Conn, _ error) {
+func (_DialerNone) DialStream(_ context.Context) (_ net.Conn, _ error) {
 	logger.Warn("this is none of dialer.Dialer")
 	return
 }
@@ -64,5 +81,5 @@ type Dialer struct {
 }
 
 func (o *Dialer) DialStream(context context.Context) (net.Conn, error) {
-	return DialerFind(o.Name, o.Def).DialStream(context)
+	return DialerGet(o.Name, o.Def).DialStream(context)
 }

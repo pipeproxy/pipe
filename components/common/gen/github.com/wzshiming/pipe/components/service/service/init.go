@@ -3,6 +3,7 @@ package reference
 
 import (
 	"context"
+	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/service"
@@ -12,7 +13,7 @@ import (
 func init() {
 	register.Register("ref", NewServiceRefWithConfig)
 	register.Register("def", NewServiceDefWithConfig)
-	register.Register("none", NewServiceNone)
+	register.Register("none", newServiceNone)
 }
 
 type Config struct {
@@ -20,44 +21,60 @@ type Config struct {
 	Def  service.Service `json:",omitempty"`
 }
 
-func NewServiceRefWithConfig(conf *Config) (service.Service, error) {
+func NewServiceRefWithConfig(conf *Config) service.Service {
 	o := &Service{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
-	return o, nil
+	return o
 }
 
-func NewServiceDefWithConfig(conf *Config) (service.Service, error) {
-	ServiceStore[conf.Name] = conf.Def
-	return conf.Def, nil
+func NewServiceDefWithConfig(conf *Config) service.Service {
+	return ServicePut(conf.Name, conf.Def)
 }
 
-var ServiceStore = map[string]service.Service{}
+var (
+	mut           sync.RWMutex
+	_ServiceStore = map[string]service.Service{}
+)
 
-func ServiceFind(name string, defaults service.Service) service.Service {
-	o, ok := ServiceStore[name]
+func ServicePut(name string, def service.Service) service.Service {
+	if def == nil {
+		def = ServiceNone
+	}
+	mut.Lock()
+	_ServiceStore[name] = def
+	mut.Unlock()
+	return def
+}
+
+func ServiceGet(name string, defaults service.Service) service.Service {
+	mut.RLock()
+	o, ok := _ServiceStore[name]
+	mut.RUnlock()
 	if ok {
 		return o
 	}
 	if defaults != nil {
 		return defaults
 	}
-	return ServiceNone{}
+	return ServiceNone
 }
 
-type ServiceNone struct{}
+var ServiceNone _ServiceNone
 
-func NewServiceNone() service.Service {
-	return ServiceNone{}
+type _ServiceNone struct{}
+
+func newServiceNone() service.Service {
+	return ServiceNone
 }
 
-func (ServiceNone) Close() (_ error) {
+func (_ServiceNone) Close() (_ error) {
 	logger.Warn("this is none of service.Service")
 	return
 }
 
-func (ServiceNone) Run(_ context.Context) (_ error) {
+func (_ServiceNone) Run(_ context.Context) (_ error) {
 	logger.Warn("this is none of service.Service")
 	return
 }
@@ -68,9 +85,9 @@ type Service struct {
 }
 
 func (o *Service) Close() error {
-	return ServiceFind(o.Name, o.Def).Close()
+	return ServiceGet(o.Name, o.Def).Close()
 }
 
 func (o *Service) Run(context context.Context) error {
-	return ServiceFind(o.Name, o.Def).Run(context)
+	return ServiceGet(o.Name, o.Def).Run(context)
 }

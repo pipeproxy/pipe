@@ -4,6 +4,7 @@ package reference
 import (
 	"context"
 	"net"
+	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/packet"
@@ -13,7 +14,7 @@ import (
 func init() {
 	register.Register("ref", NewHandlerRefWithConfig)
 	register.Register("def", NewHandlerDefWithConfig)
-	register.Register("none", NewHandlerNone)
+	register.Register("none", newHandlerNone)
 }
 
 type Config struct {
@@ -21,39 +22,55 @@ type Config struct {
 	Def  packet.Handler `json:",omitempty"`
 }
 
-func NewHandlerRefWithConfig(conf *Config) (packet.Handler, error) {
+func NewHandlerRefWithConfig(conf *Config) packet.Handler {
 	o := &Handler{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
-	return o, nil
+	return o
 }
 
-func NewHandlerDefWithConfig(conf *Config) (packet.Handler, error) {
-	HandlerStore[conf.Name] = conf.Def
-	return conf.Def, nil
+func NewHandlerDefWithConfig(conf *Config) packet.Handler {
+	return HandlerPut(conf.Name, conf.Def)
 }
 
-var HandlerStore = map[string]packet.Handler{}
+var (
+	mut           sync.RWMutex
+	_HandlerStore = map[string]packet.Handler{}
+)
 
-func HandlerFind(name string, defaults packet.Handler) packet.Handler {
-	o, ok := HandlerStore[name]
+func HandlerPut(name string, def packet.Handler) packet.Handler {
+	if def == nil {
+		def = HandlerNone
+	}
+	mut.Lock()
+	_HandlerStore[name] = def
+	mut.Unlock()
+	return def
+}
+
+func HandlerGet(name string, defaults packet.Handler) packet.Handler {
+	mut.RLock()
+	o, ok := _HandlerStore[name]
+	mut.RUnlock()
 	if ok {
 		return o
 	}
 	if defaults != nil {
 		return defaults
 	}
-	return HandlerNone{}
+	return HandlerNone
 }
 
-type HandlerNone struct{}
+var HandlerNone _HandlerNone
 
-func NewHandlerNone() packet.Handler {
-	return HandlerNone{}
+type _HandlerNone struct{}
+
+func newHandlerNone() packet.Handler {
+	return HandlerNone
 }
 
-func (HandlerNone) ServePacket(_ context.Context, _ net.PacketConn) {
+func (_HandlerNone) ServePacket(_ context.Context, _ net.PacketConn) {
 	logger.Warn("this is none of packet.Handler")
 	return
 }
@@ -64,5 +81,5 @@ type Handler struct {
 }
 
 func (o *Handler) ServePacket(context context.Context, packetconn net.PacketConn) {
-	HandlerFind(o.Name, o.Def).ServePacket(context, packetconn)
+	HandlerGet(o.Name, o.Def).ServePacket(context, packetconn)
 }

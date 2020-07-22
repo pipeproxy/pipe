@@ -2,6 +2,8 @@
 package reference
 
 import (
+	"sync"
+
 	"github.com/wzshiming/pipe/components/codec"
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/internal/logger"
@@ -10,7 +12,7 @@ import (
 func init() {
 	register.Register("ref", NewUnmarshalerRefWithConfig)
 	register.Register("def", NewUnmarshalerDefWithConfig)
-	register.Register("none", NewUnmarshalerNone)
+	register.Register("none", newUnmarshalerNone)
 }
 
 type Config struct {
@@ -18,39 +20,55 @@ type Config struct {
 	Def  codec.Unmarshaler `json:",omitempty"`
 }
 
-func NewUnmarshalerRefWithConfig(conf *Config) (codec.Unmarshaler, error) {
+func NewUnmarshalerRefWithConfig(conf *Config) codec.Unmarshaler {
 	o := &Unmarshaler{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
-	return o, nil
+	return o
 }
 
-func NewUnmarshalerDefWithConfig(conf *Config) (codec.Unmarshaler, error) {
-	UnmarshalerStore[conf.Name] = conf.Def
-	return conf.Def, nil
+func NewUnmarshalerDefWithConfig(conf *Config) codec.Unmarshaler {
+	return UnmarshalerPut(conf.Name, conf.Def)
 }
 
-var UnmarshalerStore = map[string]codec.Unmarshaler{}
+var (
+	mut               sync.RWMutex
+	_UnmarshalerStore = map[string]codec.Unmarshaler{}
+)
 
-func UnmarshalerFind(name string, defaults codec.Unmarshaler) codec.Unmarshaler {
-	o, ok := UnmarshalerStore[name]
+func UnmarshalerPut(name string, def codec.Unmarshaler) codec.Unmarshaler {
+	if def == nil {
+		def = UnmarshalerNone
+	}
+	mut.Lock()
+	_UnmarshalerStore[name] = def
+	mut.Unlock()
+	return def
+}
+
+func UnmarshalerGet(name string, defaults codec.Unmarshaler) codec.Unmarshaler {
+	mut.RLock()
+	o, ok := _UnmarshalerStore[name]
+	mut.RUnlock()
 	if ok {
 		return o
 	}
 	if defaults != nil {
 		return defaults
 	}
-	return UnmarshalerNone{}
+	return UnmarshalerNone
 }
 
-type UnmarshalerNone struct{}
+var UnmarshalerNone _UnmarshalerNone
 
-func NewUnmarshalerNone() codec.Unmarshaler {
-	return UnmarshalerNone{}
+type _UnmarshalerNone struct{}
+
+func newUnmarshalerNone() codec.Unmarshaler {
+	return UnmarshalerNone
 }
 
-func (UnmarshalerNone) Unmarshal(_ []uint8, _ interface{}) (_ error) {
+func (_UnmarshalerNone) Unmarshal(_ []uint8, _ interface{}) (_ error) {
 	logger.Warn("this is none of codec.Unmarshaler")
 	return
 }
@@ -61,5 +79,5 @@ type Unmarshaler struct {
 }
 
 func (o *Unmarshaler) Unmarshal(a []uint8, b interface{}) error {
-	return UnmarshalerFind(o.Name, o.Def).Unmarshal(a, b)
+	return UnmarshalerGet(o.Name, o.Def).Unmarshal(a, b)
 }

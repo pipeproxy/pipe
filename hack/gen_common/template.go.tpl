@@ -10,7 +10,7 @@ import (
 func init() {
 	register.Register("ref", New{{.Type}}RefWithConfig)
 	register.Register("def", New{{.Type}}DefWithConfig)
-	register.Register("none", New{{.Type}}None)
+	register.Register("none", new{{.Type}}None)
 }
 
 {{$Type := .Type}}
@@ -21,40 +21,56 @@ type Config struct {
 	Def  {{.Pkg}}.{{.Type}} `json:",omitempty"`
 }
 
-func New{{.Type}}RefWithConfig(conf *Config) ({{.Pkg}}.{{.Type}}, error) {
+func New{{.Type}}RefWithConfig(conf *Config) {{.Pkg}}.{{.Type}} {
 	o := &{{.Type}}{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
-	return o, nil
+	return o
 }
 
-func New{{.Type}}DefWithConfig(conf *Config) ({{.Pkg}}.{{.Type}}, error) {
-	{{.Type}}Store[conf.Name] = conf.Def
-	return conf.Def, nil
+func New{{.Type}}DefWithConfig(conf *Config) {{.Pkg}}.{{.Type}} {
+	return {{.Type}}Put(conf.Name, conf.Def)
 }
 
-var {{.Type}}Store = map[string]{{.Pkg}}.{{.Type}}{}
+var (
+    mut sync.RWMutex
+    _{{.Type}}Store = map[string]{{.Pkg}}.{{.Type}}{}
+)
 
-func {{.Type}}Find(name string, defaults {{.Pkg}}.{{.Type}}) {{.Pkg}}.{{.Type}} {
-	o, ok := {{.Type}}Store[name]
+func {{.Type}}Put(name string, def {{.Pkg}}.{{.Type}}) {{.Pkg}}.{{.Type}} {
+    if def == nil {
+        def = {{.Type}}None
+    }
+    mut.Lock()
+	_{{.Type}}Store[name] = def
+	mut.Unlock()
+	return def
+}
+
+func {{.Type}}Get(name string, defaults {{.Pkg}}.{{.Type}}) {{.Pkg}}.{{.Type}} {
+    mut.RLock()
+	o, ok := _{{.Type}}Store[name]
+	mut.RUnlock()
 	if ok {
 		return o
 	}
 	if defaults != nil {
 		return defaults
 	}
-	return {{.Type}}None{}
+	return {{.Type}}None
 }
 
-type {{.Type}}None struct{}
+var {{.Type}}None _{{.Type}}None
 
-func New{{.Type}}None() {{.Pkg}}.{{.Type}} {
-	return {{.Type}}None{}
+type _{{.Type}}None struct{}
+
+func new{{.Type}}None() {{.Pkg}}.{{.Type}} {
+	return {{.Type}}None
 }
 
 {{range .Methods}}
-	func ({{$Type}}None) {{.FuncName}}(
+func (_{{$Type}}None) {{.FuncName}}(
     {{- range .Args -}}
 		_ {{.Type}},
     {{- end -}}
@@ -62,10 +78,10 @@ func New{{.Type}}None() {{.Pkg}}.{{.Type}} {
     {{- range .Results -}}
 		_ {{.Type}},
     {{- end -}}
-	)  {
+	) {
 	logger.Warn("this is none of {{$Pkg}}.{{$Type}}")
 	return
-	}
+}
 {{end}}
 
 type {{.Type}} struct {
@@ -74,7 +90,7 @@ type {{.Type}} struct {
 }
 
 {{range .Methods}}
-	func (o *{{$Type}}) {{.FuncName}}(
+func (o *{{$Type}}) {{.FuncName}}(
     {{- range .Args -}}
         {{- .Name }} {{.Type}},
     {{- end -}}
@@ -83,10 +99,10 @@ type {{.Type}} struct {
         {{.Type}},
     {{- end -}}
 	) {
-    {{if .Results}}return{{end}} {{$Type}}Find(o.Name, o.Def).{{.FuncName}}(
+    {{if .Results}}return{{end}} {{$Type}}Get(o.Name, o.Def).{{.FuncName}}(
     {{- range .Args -}}
         {{- .Name }},
     {{- end -}}
 	)
-	}
+}
 {{end}}

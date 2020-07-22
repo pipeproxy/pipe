@@ -3,6 +3,7 @@ package reference
 
 import (
 	"io"
+	"sync"
 
 	"github.com/wzshiming/pipe/components/codec"
 	"github.com/wzshiming/pipe/components/common/register"
@@ -12,7 +13,7 @@ import (
 func init() {
 	register.Register("ref", NewDecoderRefWithConfig)
 	register.Register("def", NewDecoderDefWithConfig)
-	register.Register("none", NewDecoderNone)
+	register.Register("none", newDecoderNone)
 }
 
 type Config struct {
@@ -20,39 +21,55 @@ type Config struct {
 	Def  codec.Decoder `json:",omitempty"`
 }
 
-func NewDecoderRefWithConfig(conf *Config) (codec.Decoder, error) {
+func NewDecoderRefWithConfig(conf *Config) codec.Decoder {
 	o := &Decoder{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
-	return o, nil
+	return o
 }
 
-func NewDecoderDefWithConfig(conf *Config) (codec.Decoder, error) {
-	DecoderStore[conf.Name] = conf.Def
-	return conf.Def, nil
+func NewDecoderDefWithConfig(conf *Config) codec.Decoder {
+	return DecoderPut(conf.Name, conf.Def)
 }
 
-var DecoderStore = map[string]codec.Decoder{}
+var (
+	mut           sync.RWMutex
+	_DecoderStore = map[string]codec.Decoder{}
+)
 
-func DecoderFind(name string, defaults codec.Decoder) codec.Decoder {
-	o, ok := DecoderStore[name]
+func DecoderPut(name string, def codec.Decoder) codec.Decoder {
+	if def == nil {
+		def = DecoderNone
+	}
+	mut.Lock()
+	_DecoderStore[name] = def
+	mut.Unlock()
+	return def
+}
+
+func DecoderGet(name string, defaults codec.Decoder) codec.Decoder {
+	mut.RLock()
+	o, ok := _DecoderStore[name]
+	mut.RUnlock()
 	if ok {
 		return o
 	}
 	if defaults != nil {
 		return defaults
 	}
-	return DecoderNone{}
+	return DecoderNone
 }
 
-type DecoderNone struct{}
+var DecoderNone _DecoderNone
 
-func NewDecoderNone() codec.Decoder {
-	return DecoderNone{}
+type _DecoderNone struct{}
+
+func newDecoderNone() codec.Decoder {
+	return DecoderNone
 }
 
-func (DecoderNone) Decode(_ io.Reader) (_ io.Reader, _ error) {
+func (_DecoderNone) Decode(_ io.Reader) (_ io.Reader, _ error) {
 	logger.Warn("this is none of codec.Decoder")
 	return
 }
@@ -63,5 +80,5 @@ type Decoder struct {
 }
 
 func (o *Decoder) Decode(reader io.Reader) (io.Reader, error) {
-	return DecoderFind(o.Name, o.Def).Decode(reader)
+	return DecoderGet(o.Name, o.Def).Decode(reader)
 }

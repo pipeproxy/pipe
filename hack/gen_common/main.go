@@ -41,8 +41,14 @@ type gen struct {
 func (g *gen) data() interface{} {
 
 	imports := map[string]struct{}{}
-	imports["github.com/wzshiming/pipe/components/common/register"] = struct{}{}
-	imports["github.com/wzshiming/pipe/internal/logger"] = struct{}{}
+	dep := []string{
+		"github.com/wzshiming/pipe/components/common/register",
+		"github.com/wzshiming/pipe/internal/logger",
+		"sync",
+	}
+	for _, d := range dep {
+		imports[d] = struct{}{}
+	}
 	methods := []interface{}{}
 	pkgPath := g.typ.PkgPath()
 	imports[pkgPath] = struct{}{}

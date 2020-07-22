@@ -4,6 +4,7 @@ package reference
 import (
 	"context"
 	"net"
+	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/stream/listener"
@@ -13,7 +14,7 @@ import (
 func init() {
 	register.Register("ref", NewListenConfigRefWithConfig)
 	register.Register("def", NewListenConfigDefWithConfig)
-	register.Register("none", NewListenConfigNone)
+	register.Register("none", newListenConfigNone)
 }
 
 type Config struct {
@@ -21,39 +22,55 @@ type Config struct {
 	Def  listener.ListenConfig `json:",omitempty"`
 }
 
-func NewListenConfigRefWithConfig(conf *Config) (listener.ListenConfig, error) {
+func NewListenConfigRefWithConfig(conf *Config) listener.ListenConfig {
 	o := &ListenConfig{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
-	return o, nil
+	return o
 }
 
-func NewListenConfigDefWithConfig(conf *Config) (listener.ListenConfig, error) {
-	ListenConfigStore[conf.Name] = conf.Def
-	return conf.Def, nil
+func NewListenConfigDefWithConfig(conf *Config) listener.ListenConfig {
+	return ListenConfigPut(conf.Name, conf.Def)
 }
 
-var ListenConfigStore = map[string]listener.ListenConfig{}
+var (
+	mut                sync.RWMutex
+	_ListenConfigStore = map[string]listener.ListenConfig{}
+)
 
-func ListenConfigFind(name string, defaults listener.ListenConfig) listener.ListenConfig {
-	o, ok := ListenConfigStore[name]
+func ListenConfigPut(name string, def listener.ListenConfig) listener.ListenConfig {
+	if def == nil {
+		def = ListenConfigNone
+	}
+	mut.Lock()
+	_ListenConfigStore[name] = def
+	mut.Unlock()
+	return def
+}
+
+func ListenConfigGet(name string, defaults listener.ListenConfig) listener.ListenConfig {
+	mut.RLock()
+	o, ok := _ListenConfigStore[name]
+	mut.RUnlock()
 	if ok {
 		return o
 	}
 	if defaults != nil {
 		return defaults
 	}
-	return ListenConfigNone{}
+	return ListenConfigNone
 }
 
-type ListenConfigNone struct{}
+var ListenConfigNone _ListenConfigNone
 
-func NewListenConfigNone() listener.ListenConfig {
-	return ListenConfigNone{}
+type _ListenConfigNone struct{}
+
+func newListenConfigNone() listener.ListenConfig {
+	return ListenConfigNone
 }
 
-func (ListenConfigNone) ListenStream(_ context.Context) (_ net.Listener, _ error) {
+func (_ListenConfigNone) ListenStream(_ context.Context) (_ net.Listener, _ error) {
 	logger.Warn("this is none of listener.ListenConfig")
 	return
 }
@@ -64,5 +81,5 @@ type ListenConfig struct {
 }
 
 func (o *ListenConfig) ListenStream(context context.Context) (net.Listener, error) {
-	return ListenConfigFind(o.Name, o.Def).ListenStream(context)
+	return ListenConfigGet(o.Name, o.Def).ListenStream(context)
 }

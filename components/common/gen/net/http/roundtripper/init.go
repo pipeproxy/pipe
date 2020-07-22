@@ -3,6 +3,7 @@ package reference
 
 import (
 	"net/http"
+	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/internal/logger"
@@ -11,7 +12,7 @@ import (
 func init() {
 	register.Register("ref", NewRoundTripperRefWithConfig)
 	register.Register("def", NewRoundTripperDefWithConfig)
-	register.Register("none", NewRoundTripperNone)
+	register.Register("none", newRoundTripperNone)
 }
 
 type Config struct {
@@ -19,39 +20,55 @@ type Config struct {
 	Def  http.RoundTripper `json:",omitempty"`
 }
 
-func NewRoundTripperRefWithConfig(conf *Config) (http.RoundTripper, error) {
+func NewRoundTripperRefWithConfig(conf *Config) http.RoundTripper {
 	o := &RoundTripper{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
-	return o, nil
+	return o
 }
 
-func NewRoundTripperDefWithConfig(conf *Config) (http.RoundTripper, error) {
-	RoundTripperStore[conf.Name] = conf.Def
-	return conf.Def, nil
+func NewRoundTripperDefWithConfig(conf *Config) http.RoundTripper {
+	return RoundTripperPut(conf.Name, conf.Def)
 }
 
-var RoundTripperStore = map[string]http.RoundTripper{}
+var (
+	mut                sync.RWMutex
+	_RoundTripperStore = map[string]http.RoundTripper{}
+)
 
-func RoundTripperFind(name string, defaults http.RoundTripper) http.RoundTripper {
-	o, ok := RoundTripperStore[name]
+func RoundTripperPut(name string, def http.RoundTripper) http.RoundTripper {
+	if def == nil {
+		def = RoundTripperNone
+	}
+	mut.Lock()
+	_RoundTripperStore[name] = def
+	mut.Unlock()
+	return def
+}
+
+func RoundTripperGet(name string, defaults http.RoundTripper) http.RoundTripper {
+	mut.RLock()
+	o, ok := _RoundTripperStore[name]
+	mut.RUnlock()
 	if ok {
 		return o
 	}
 	if defaults != nil {
 		return defaults
 	}
-	return RoundTripperNone{}
+	return RoundTripperNone
 }
 
-type RoundTripperNone struct{}
+var RoundTripperNone _RoundTripperNone
 
-func NewRoundTripperNone() http.RoundTripper {
-	return RoundTripperNone{}
+type _RoundTripperNone struct{}
+
+func newRoundTripperNone() http.RoundTripper {
+	return RoundTripperNone
 }
 
-func (RoundTripperNone) RoundTrip(_ *http.Request) (_ *http.Response, _ error) {
+func (_RoundTripperNone) RoundTrip(_ *http.Request) (_ *http.Response, _ error) {
 	logger.Warn("this is none of http.RoundTripper")
 	return
 }
@@ -62,5 +79,5 @@ type RoundTripper struct {
 }
 
 func (o *RoundTripper) RoundTrip(a *http.Request) (*http.Response, error) {
-	return RoundTripperFind(o.Name, o.Def).RoundTrip(a)
+	return RoundTripperGet(o.Name, o.Def).RoundTrip(a)
 }
