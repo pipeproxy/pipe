@@ -5,6 +5,8 @@ import (
 	"sync"
 )
 
+const DefaultSize = 32 * 1024
+
 func GetBytes() []byte {
 	return pool.GetBytes()
 }
@@ -21,40 +23,45 @@ func PutBuffer(buf *bytes.Buffer) {
 	pool.PutBuffer(buf)
 }
 
-var pool = &bufferPool{
-	sync.Pool{
-		New: func() interface{} {
-			return make([]byte, 64*1024)
-		},
-	},
+var pool = newPools()
+
+type pools struct {
+	bytes  sync.Pool
+	buffer sync.Pool
 }
 
-type bufferPool struct {
-	pool sync.Pool
+func newPools() *pools {
+	b := &pools{}
+	b.bytes.New = func() interface{} {
+		return make([]byte, DefaultSize)
+	}
+	b.buffer.New = func() interface{} {
+		return bytes.NewBuffer(b.GetBytes())
+	}
+	return b
 }
 
-func (b *bufferPool) GetBytes() []byte {
-	return b.pool.Get().([]byte)
+func (b *pools) GetBytes() []byte {
+	return b.bytes.Get().([]byte)
 }
 
-func (b *bufferPool) PutBytes(d []byte) {
-	if d == nil {
+func (b *pools) PutBytes(d []byte) {
+	if d == nil || len(d) < DefaultSize {
 		return
 	}
 	d = d[:cap(d)]
-	b.pool.Put(d)
+	b.bytes.Put(d)
 }
 
-func (b *bufferPool) GetBuffer() *bytes.Buffer {
-	buf := bytes.NewBuffer(b.GetBytes())
+func (b *pools) GetBuffer() *bytes.Buffer {
+	buf := b.buffer.Get().(*bytes.Buffer)
 	buf.Reset()
 	return buf
 }
 
-func (b *bufferPool) PutBuffer(buf *bytes.Buffer) {
+func (b *pools) PutBuffer(buf *bytes.Buffer) {
 	if buf == nil {
 		return
 	}
-	buf.Reset()
-	b.PutBytes(buf.Bytes())
+	b.buffer.Put(buf)
 }
