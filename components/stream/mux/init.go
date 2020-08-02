@@ -14,9 +14,9 @@ func init() {
 }
 
 type Route struct {
-	Pattern string
-	Regexp  string
-	Prefix  string
+	Pattern string `json:",omitempty"`
+	Regexp  string `json:",omitempty"`
+	Prefix  string `json:",omitempty"`
 	Handler stream.Handler
 }
 

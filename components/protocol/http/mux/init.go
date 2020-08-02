@@ -21,9 +21,9 @@ var (
 )
 
 type Route struct {
-	Prefix  string
-	Path    string
-	Regexp  string
+	Prefix  string `json:",omitempty"`
+	Path    string `json:",omitempty"`
+	Regexp  string `json:",omitempty"`
 	Handler http.Handler
 }
 

@@ -1,62 +1,61 @@
-'@Kind': multi@once.Once
-Multi:
-- '@Kind': service@once.Once
-  Service:
-    '@Kind': multi@service.Service
-    Multi:
-    - '@Kind': stream@service.Service
-      DisconnectOnClose: false
+'@Kind': service@once.Once
+Service:
+  '@Kind': multi@service.Service
+  Multi:
+  - '@Kind': stream@service.Service
+    DisconnectOnClose: false
+    Handler:
+      '@Kind': http@stream.Handler
       Handler:
-        '@Kind': http@stream.Handler
+        '@Kind': log@net/http.Handler
         Handler:
-          '@Kind': log@net/http.Handler
-          Handler:
-            '@Kind': def@net/http.Handler
-            Def:
-              '@Kind': mux@net/http.Handler
-              NotFound: null
-              Routes:
-              - Handler:
-                  '@Kind': multi@net/http.Handler
-                  Multi:
-                  - '@Kind': add_response_header@net/http.Handler
-                    Key: Content-Type
-                    Value: text/html; charset=utf-8
-                  - '@Kind': direct@net/http.Handler
-                    Body:
-                      '@Kind': inline@io.Reader
-                      Data: |-
-                        <pre>
-                        <a href="./expvar/">./expvar/</a>
-                        <a href="./pprof/">./pprof/</a>
-                        <a href="./config_dump/">./config_dump/</a>
-                        </pre>
-                    Code: 200
-                Path: /
-                Prefix: ""
-                Regexp: ""
-              - Handler:
-                  '@Kind': expvar@net/http.Handler
-                Path: /expvar/
-                Prefix: ""
-                Regexp: ""
-              - Handler:
-                  '@Kind': pprof@net/http.Handler
-                Path: ""
-                Prefix: /pprof/
-                Regexp: ""
-              - Handler:
-                  '@Kind': config_dump@net/http.Handler
-                  ReadOnly: false
-                Path: /config_dump/
-                Prefix: ""
-                Regexp: ""
-            Name: debug
-          Output:
-            '@Kind': file@io.Writer
-            Path: /dev/stderr
-        TLS: null
-      Listener:
-        '@Kind': network@stream/listener.ListenConfig
-        Address: :80
-        Network: tcp
+          '@Kind': mux@net/http.Handler
+          NotFound: null
+          Routes:
+          - Handler:
+              '@Kind': multi@net/http.Handler
+              Multi:
+              - '@Kind': add_response_header@net/http.Handler
+                Key: Content-Type
+                Value: text/html; charset=utf-8
+              - '@Kind': direct@net/http.Handler
+                Body:
+                  '@Kind': inline@io.Reader
+                  Data: |-
+                    <pre>
+                    {{.Scheme}}://{{.Host}}{{.RequestURI}}
+                    <a href="{{.Scheme}}://{{.Host}}{{.Path}}pprof/">{{.Path}}pprof/</a>
+                    <a href="{{.Scheme}}://{{.Host}}{{.Path}}expvar">{{.Path}}expvar</a>
+                    <a href="{{.Scheme}}://{{.Host}}{{.Path}}config_dump">{{.Path}}config_dump</a>
+                    <a href="{{.Scheme}}://{{.Host}}{{.Path}}must_quit">{{.Path}}must_quit</a>
+                    <a href="{{.Scheme}}://{{.Host}}{{.Path}}healthy">{{.Path}}healthy</a>
+                    </pre>
+                Code: 200
+            Path: /
+          - Handler:
+              '@Kind': pprof@net/http.Handler
+            Prefix: /pprof/
+          - Handler:
+              '@Kind': expvar@net/http.Handler
+            Path: /expvar
+          - Handler:
+              '@Kind': config_dump@net/http.Handler
+              ReadOnly: false
+            Path: /config_dump
+          - Handler:
+              '@Kind': quit@net/http.Handler
+            Path: /must_quit
+          - Handler:
+              '@Kind': direct@net/http.Handler
+              Body:
+                '@Kind': inline@io.Reader
+                Data: healthy
+              Code: 200
+            Path: /healthy
+        Output:
+          '@Kind': file@io.Writer
+          Path: /dev/stderr
+    Listener:
+      '@Kind': network@stream/listener.ListenConfig
+      Address: :8088
+      Network: tcp

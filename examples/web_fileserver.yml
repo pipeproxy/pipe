@@ -18,7 +18,6 @@ Multi:
             Output:
               '@Kind': file@io.Writer
               Path: /dev/stderr
-          TLS: null
         Listener:
           '@Kind': network@stream/listener.ListenConfig
           Address: :80

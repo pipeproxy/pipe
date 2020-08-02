@@ -1,89 +1,82 @@
-'@Kind': sample@once.Once
-Components:
-- '@Kind': def@net/http.Handler
-  Def:
-    '@Kind': mux@net/http.Handler
-    NotFound: null
-    Routes:
-    - Handler:
-        '@Kind': multi@net/http.Handler
-        Multi:
-        - '@Kind': add_response_header@net/http.Handler
-          Key: Content-Type
-          Value: text/html; charset=utf-8
-        - '@Kind': direct@net/http.Handler
-          Body:
-            '@Kind': inline@io.Reader
-            Data: |-
-              <pre>
-              <a href="./expvar/">./expvar/</a>
-              <a href="./pprof/">./pprof/</a>
-              <a href="./config_dump/">./config_dump/</a>
-              </pre>
-          Code: 200
-      Path: /
-      Prefix: ""
-      Regexp: ""
-    - Handler:
-        '@Kind': expvar@net/http.Handler
-      Path: /expvar/
-      Prefix: ""
-      Regexp: ""
-    - Handler:
-        '@Kind': pprof@net/http.Handler
-      Path: ""
-      Prefix: /pprof/
-      Regexp: ""
-    - Handler:
-        '@Kind': config_dump@net/http.Handler
-        ReadOnly: false
-      Path: /config_dump/
-      Prefix: ""
-      Regexp: ""
-  Name: debug
-- '@Kind': def@service.Service
-  Def:
+'@Kind': multi@once.Once
+Multi:
+- '@Kind': components@once.Once
+  Components:
+  - '@Kind': def@net/http.Handler
+    Def:
+      '@Kind': direct@net/http.Handler
+      Body:
+        '@Kind': inline@io.Reader
+        Data: |-
+          <!DOCTYPE html>
+          <html>
+          <head><title>Welcome to Pipe</title></head>
+          <body>
+          <center><h1>Welcome to Pipe</h1></center>
+          <hr><center>Pipe</center>
+          </body>
+          </html>
+      Code: 200
+    Name: page
+  - '@Kind': def@service.Service
+    Def:
+      '@Kind': multi@service.Service
+      Multi:
+      - '@Kind': stream@service.Service
+        DisconnectOnClose: false
+        Handler:
+          '@Kind': http@stream.Handler
+          Handler:
+            '@Kind': log@net/http.Handler
+            Handler:
+              '@Kind': ref@net/http.Handler
+              Name: page
+            Output:
+              '@Kind': file@io.Writer
+              Path: /dev/stderr
+        Listener:
+          '@Kind': network@stream/listener.ListenConfig
+          Address: :80
+          Network: tcp
+      - '@Kind': stream@service.Service
+        DisconnectOnClose: false
+        Handler:
+          '@Kind': mux@stream.Handler
+          NotFound:
+            '@Kind': http@stream.Handler
+            Handler:
+              '@Kind': log@net/http.Handler
+              Handler:
+                '@Kind': ref@net/http.Handler
+                Name: page
+              Output:
+                '@Kind': file@io.Writer
+                Path: /dev/stderr
+            TLS:
+              '@Kind': self_signed@tls.TLS
+          Routes:
+          - Handler:
+              '@Kind': http@stream.Handler
+              Handler:
+                '@Kind': direct@net/http.Handler
+                Body:
+                  '@Kind': inline@io.Reader
+                  Data: |-
+                    <!DOCTYPE html>
+                    <html>
+                    <head><meta http-equiv="refresh" content="1; url={{.Scheme}}s://{{.Host}}{{.RequestURI}}"/></head>
+                    <body>Redirect to {{.Scheme}}s://{{.Host}}{{.RequestURI}} in 1s</body>
+                    </html>
+                Code: 200
+            Pattern: http
+        Listener:
+          '@Kind': network@stream/listener.ListenConfig
+          Address: :443
+          Network: tcp
+    Name: server
+- '@Kind': service@once.Once
+  Service:
     '@Kind': multi@service.Service
     Multi:
-    - '@Kind': stream@service.Service
-      DisconnectOnClose: false
-      Handler:
-        '@Kind': http@stream.Handler
-        Handler:
-          '@Kind': log@net/http.Handler
-          Handler:
-            '@Kind': ref@net/http.Handler
-            Name: debug
-          Output:
-            '@Kind': file@io.Writer
-            Path: /dev/stderr
-        TLS: null
-      Listener:
-        '@Kind': network@stream/listener.ListenConfig
-        Address: :80
-        Network: tcp
-    - '@Kind': stream@service.Service
-      DisconnectOnClose: false
-      Handler:
-        '@Kind': http@stream.Handler
-        Handler:
-          '@Kind': log@net/http.Handler
-          Handler:
-            '@Kind': ref@net/http.Handler
-            Name: debug
-          Output:
-            '@Kind': file@io.Writer
-            Path: /dev/stderr
-        TLS:
-          '@Kind': self_signed@tls.TLS
-      Listener:
-        '@Kind': network@stream/listener.ListenConfig
-        Address: :443
-        Network: tcp
-  Name: server
-Init: null
-Pipe:
-  '@Kind': multi@service.Service
-  Multi:
-  - '@Kind': ref@service.Service
-    Name: server
+    - '@Kind': ref@service.Service
+      Name: server

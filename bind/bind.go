@@ -348,6 +348,40 @@ func (m Bzip2CodecDecoder) MarshalJSON() ([]byte, error) {
 //
 // ========= End bzip2@codec.Decoder type =========
 
+// ========= Begin components@once.Once type =========
+//
+
+const kindComponentsOnceConfig = `components@once.Once`
+
+// ComponentsOnceConfig components@once.Once
+type ComponentsOnceConfig struct {
+	Components []Component
+}
+
+func init() {
+	_ = provider.Register(
+		kindComponentsOnceConfig,
+		func(r *ComponentsOnceConfig) Once { return r },
+	)
+}
+
+func (ComponentsOnceConfig) isOnce()      {}
+func (ComponentsOnceConfig) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m ComponentsOnceConfig) MarshalJSON() ([]byte, error) {
+	type t ComponentsOnceConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindComponentsOnceConfig, data)
+	return data, nil
+}
+
+//
+// ========= End components@once.Once type =========
+
 // ========= Begin compress@net/http.Handler type =========
 //
 
@@ -1535,7 +1569,7 @@ const kindHTTPStreamHandlerConfig = `http@stream.Handler`
 // HTTPStreamHandlerConfig http@stream.Handler
 type HTTPStreamHandlerConfig struct {
 	Handler HTTPHandler
-	TLS     TLS
+	TLS     TLS `json:",omitempty"`
 }
 
 func init() {
@@ -2309,6 +2343,60 @@ func (m MessageOnceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End message@once.Once type =========
 
+// ========= Begin method@net/http.Handler type =========
+//
+
+const kindMethodNetHTTPHandlerConfig = `method@net/http.Handler`
+
+// MethodNetHTTPHandlerConfig method@net/http.Handler
+type MethodNetHTTPHandlerConfig struct {
+	Methods  []MethodNetHTTPHandlerRoute
+	NotFound HTTPHandler
+}
+
+type MethodNetHTTPHandlerRoute struct {
+	Method  MethodNetHTTPHandlerMethodEnum
+	Handler HTTPHandler
+}
+
+type MethodNetHTTPHandlerMethodEnum string
+
+const (
+	MethodNetHTTPHandlerMethodEnumMethodTrace   MethodNetHTTPHandlerMethodEnum = "TRACE"
+	MethodNetHTTPHandlerMethodEnumMethodPut     MethodNetHTTPHandlerMethodEnum = "PUT"
+	MethodNetHTTPHandlerMethodEnumMethodPost    MethodNetHTTPHandlerMethodEnum = "POST"
+	MethodNetHTTPHandlerMethodEnumMethodPatch   MethodNetHTTPHandlerMethodEnum = "PATCH"
+	MethodNetHTTPHandlerMethodEnumMethodOptions MethodNetHTTPHandlerMethodEnum = "OPTIONS"
+	MethodNetHTTPHandlerMethodEnumMethodHead    MethodNetHTTPHandlerMethodEnum = "HEAD"
+	MethodNetHTTPHandlerMethodEnumMethodGet     MethodNetHTTPHandlerMethodEnum = "GET"
+	MethodNetHTTPHandlerMethodEnumMethodDelete  MethodNetHTTPHandlerMethodEnum = "DELETE"
+	MethodNetHTTPHandlerMethodEnumMethodConnect MethodNetHTTPHandlerMethodEnum = "CONNECT"
+)
+
+func init() {
+	_ = provider.Register(
+		kindMethodNetHTTPHandlerConfig,
+		func(r *MethodNetHTTPHandlerConfig) HTTPHandler { return r },
+	)
+}
+
+func (MethodNetHTTPHandlerConfig) isHTTPHandler() {}
+func (MethodNetHTTPHandlerConfig) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m MethodNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t MethodNetHTTPHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindMethodNetHTTPHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End method@net/http.Handler type =========
+
 // ========= Begin multi@net/http.Handler type =========
 //
 
@@ -2457,9 +2545,9 @@ type MuxNetHTTPHandlerConfig struct {
 }
 
 type MuxNetHTTPHandlerRoute struct {
-	Prefix  string
-	Path    string
-	Regexp  string
+	Prefix  string `json:",omitempty"`
+	Path    string `json:",omitempty"`
+	Regexp  string `json:",omitempty"`
 	Handler HTTPHandler
 }
 
@@ -2499,9 +2587,9 @@ type MuxStreamHandlerConfig struct {
 }
 
 type MuxStreamHandlerRoute struct {
-	Pattern string
-	Regexp  string
-	Prefix  string
+	Pattern string `json:",omitempty"`
+	Regexp  string `json:",omitempty"`
+	Prefix  string `json:",omitempty"`
 	Handler StreamHandler
 }
 
@@ -3304,6 +3392,39 @@ func (m PprofNetHTTPHandler) MarshalJSON() ([]byte, error) {
 //
 // ========= End pprof@net/http.Handler type =========
 
+// ========= Begin quit@net/http.Handler type =========
+//
+
+const kindQuitNetHTTPHandler = `quit@net/http.Handler`
+
+// QuitNetHTTPHandler quit@net/http.Handler
+type QuitNetHTTPHandler struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindQuitNetHTTPHandler,
+		func(r *QuitNetHTTPHandler) HTTPHandler { return r },
+	)
+}
+
+func (QuitNetHTTPHandler) isHTTPHandler() {}
+func (QuitNetHTTPHandler) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m QuitNetHTTPHandler) MarshalJSON() ([]byte, error) {
+	type t QuitNetHTTPHandler
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindQuitNetHTTPHandler, data)
+	return data, nil
+}
+
+//
+// ========= End quit@net/http.Handler type =========
+
 // ========= Begin redirect@net/http.Handler type =========
 //
 
@@ -3967,42 +4088,6 @@ func (m RemoveResponseHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) 
 //
 // ========= End remove_response_header@net/http.Handler type =========
 
-// ========= Begin sample@once.Once type =========
-//
-
-const kindSampleOnceConfig = `sample@once.Once`
-
-// SampleOnceConfig sample@once.Once
-type SampleOnceConfig struct {
-	Components []Component
-	Pipe       Service
-	Init       []Once
-}
-
-func init() {
-	_ = provider.Register(
-		kindSampleOnceConfig,
-		func(r *SampleOnceConfig) Once { return r },
-	)
-}
-
-func (SampleOnceConfig) isOnce()      {}
-func (SampleOnceConfig) isComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m SampleOnceConfig) MarshalJSON() ([]byte, error) {
-	type t SampleOnceConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindSampleOnceConfig, data)
-	return data, nil
-}
-
-//
-// ========= End sample@once.Once type =========
-
 // ========= Begin self_signed@tls.TLS type =========
 //
 
@@ -4599,6 +4684,41 @@ func (m *RawCodecEncoder) UnmarshalJSON(data []byte) error {
 //
 // ========= End codec.Encoder interface =========
 
+// ========= Begin once.Once interface =========
+//
+
+// Once once.Once
+type Once interface {
+	isOnce()
+	Component
+}
+
+// RawOnce is store raw bytes of Once
+type RawOnce []byte
+
+func (RawOnce) isOnce()      {}
+func (RawOnce) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawOnce) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawOnce) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawOnce: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End once.Once interface =========
+
 // ========= Begin codec.Marshaler interface =========
 //
 
@@ -4773,41 +4893,6 @@ func (m *RawHTTPRoundTripper) UnmarshalJSON(data []byte) error {
 
 //
 // ========= End http.RoundTripper interface =========
-
-// ========= Begin once.Once interface =========
-//
-
-// Once once.Once
-type Once interface {
-	isOnce()
-	Component
-}
-
-// RawOnce is store raw bytes of Once
-type RawOnce []byte
-
-func (RawOnce) isOnce()      {}
-func (RawOnce) isComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawOnce) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawOnce) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawOnce: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End once.Once interface =========
 
 // ========= Begin packet.Handler interface =========
 //

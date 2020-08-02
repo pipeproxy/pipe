@@ -19,7 +19,7 @@ func init() {
 
 type Config struct {
 	Handler http.Handler
-	TLS     tls.TLS
+	TLS     tls.TLS `json:",omitempty"`
 }
 
 func NewServerWithConfig(conf *Config) (stream.Handler, error) {
