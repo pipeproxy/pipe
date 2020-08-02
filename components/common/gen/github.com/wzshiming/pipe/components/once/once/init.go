@@ -3,6 +3,7 @@ package reference
 
 import (
 	"context"
+	"fmt"
 	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
@@ -69,8 +70,11 @@ func newOnceNone() once.Once {
 	return OnceNone
 }
 
-func (_OnceNone) Do(_ context.Context) (_ error) {
+func (_OnceNone) Do(_ context.Context) (error error) {
 	logger.Warn("this is none of once.Once")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 

@@ -3,6 +3,7 @@ package reference
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"sync"
 
@@ -70,8 +71,11 @@ func newListenConfigNone() listener.ListenConfig {
 	return ListenConfigNone
 }
 
-func (_ListenConfigNone) ListenStream(_ context.Context) (_ net.Listener, _ error) {
+func (_ListenConfigNone) ListenStream(_ context.Context) (_ net.Listener, error error) {
 	logger.Warn("this is none of listener.ListenConfig")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 

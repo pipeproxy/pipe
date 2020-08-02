@@ -2,6 +2,7 @@
 package reference
 
 import (
+	"fmt"
 	"io"
 	"sync"
 
@@ -68,8 +69,11 @@ func newReaderNone() io.Reader {
 	return ReaderNone
 }
 
-func (_ReaderNone) Read(_ []uint8) (_ int, _ error) {
+func (_ReaderNone) Read(_ []uint8) (_ int, error error) {
 	logger.Warn("this is none of io.Reader")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 

@@ -71,6 +71,7 @@ func newHandlerNone() protocol.Handler {
 
 func (_HandlerNone) ServeProtocol(_ context.Context, _ protocol.Protocol) {
 	logger.Warn("this is none of protocol.Handler")
+
 	return
 }
 

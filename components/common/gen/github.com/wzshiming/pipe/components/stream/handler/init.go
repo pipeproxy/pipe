@@ -72,6 +72,7 @@ func newHandlerNone() stream.Handler {
 
 func (_HandlerNone) ServeStream(_ context.Context, _ net.Conn) {
 	logger.Warn("this is none of stream.Handler")
+
 	return
 }
 

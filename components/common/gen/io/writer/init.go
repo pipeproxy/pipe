@@ -2,6 +2,7 @@
 package reference
 
 import (
+	"fmt"
 	"io"
 	"sync"
 
@@ -68,8 +69,11 @@ func newWriterNone() io.Writer {
 	return WriterNone
 }
 
-func (_WriterNone) Write(_ []uint8) (_ int, _ error) {
+func (_WriterNone) Write(_ []uint8) (_ int, error error) {
 	logger.Warn("this is none of io.Writer")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 

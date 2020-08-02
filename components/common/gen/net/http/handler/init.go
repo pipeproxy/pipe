@@ -70,6 +70,7 @@ func newHandlerNone() http.Handler {
 
 func (_HandlerNone) ServeHTTP(_ http.ResponseWriter, _ *http.Request) {
 	logger.Warn("this is none of http.Handler")
+
 	return
 }
 

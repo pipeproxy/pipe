@@ -3,6 +3,7 @@ package reference
 
 import (
 	"context"
+	"fmt"
 	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
@@ -69,13 +70,19 @@ func newServiceNone() service.Service {
 	return ServiceNone
 }
 
-func (_ServiceNone) Close() (_ error) {
+func (_ServiceNone) Close() (error error) {
 	logger.Warn("this is none of service.Service")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 
-func (_ServiceNone) Run(_ context.Context) (_ error) {
+func (_ServiceNone) Run(_ context.Context) (error error) {
 	logger.Warn("this is none of service.Service")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 

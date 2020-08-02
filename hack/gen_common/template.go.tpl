@@ -2,55 +2,55 @@
 package reference
 
 import (
-	{{range .Imports}}
-    {{- .Alias}} "{{.PkgPath}}"
-	{{end}}
+	{{ range .Imports }}
+    {{- .Alias }} "{{ .PkgPath }}"
+	{{ end }}
 )
 
 func init() {
-	register.Register("ref", New{{.Type}}RefWithConfig)
-	register.Register("def", New{{.Type}}DefWithConfig)
-	register.Register("none", new{{.Type}}None)
+	register.Register("ref", New{{ .Type }}RefWithConfig)
+	register.Register("def", New{{ .Type }}DefWithConfig)
+	register.Register("none", new{{ .Type }}None)
 }
 
-{{$Type := .Type}}
-{{$Pkg := .Pkg}}
+{{ $Type := .Type }}
+{{ $Pkg := .Pkg }}
 
 type Config struct {
 	Name string
-	Def  {{.Pkg}}.{{.Type}} `json:",omitempty"`
+	Def  {{ .Pkg }}.{{ .Type }} `json:",omitempty"`
 }
 
-func New{{.Type}}RefWithConfig(conf *Config) {{.Pkg}}.{{.Type}} {
-	o := &{{.Type}}{
+func New{{ .Type }}RefWithConfig(conf *Config) {{ .Pkg }}.{{ .Type }} {
+	o := &{{ .Type }}{
 		Name: conf.Name,
 		Def:  conf.Def,
 	}
 	return o
 }
 
-func New{{.Type}}DefWithConfig(conf *Config) {{.Pkg}}.{{.Type}} {
-	return {{.Type}}Put(conf.Name, conf.Def)
+func New{{ .Type }}DefWithConfig(conf *Config) {{ .Pkg }}.{{ .Type }} {
+	return {{ .Type }}Put(conf.Name, conf.Def)
 }
 
 var (
     mut sync.RWMutex
-    _{{.Type}}Store = map[string]{{.Pkg}}.{{.Type}}{}
+    _{{ .Type }}Store = map[string]{{ .Pkg }}.{{ .Type }}{}
 )
 
-func {{.Type}}Put(name string, def {{.Pkg}}.{{.Type}}) {{.Pkg}}.{{.Type}} {
+func {{ .Type }}Put(name string, def {{ .Pkg }}.{{ .Type }}) {{ .Pkg }}.{{ .Type }} {
     if def == nil {
-        def = {{.Type}}None
+        def = {{ .Type }}None
     }
     mut.Lock()
-	_{{.Type}}Store[name] = def
+	_{{ .Type }}Store[name] = def
 	mut.Unlock()
 	return def
 }
 
-func {{.Type}}Get(name string, defaults {{.Pkg}}.{{.Type}}) {{.Pkg}}.{{.Type}} {
+func {{ .Type }}Get(name string, defaults {{ .Pkg }}.{{ .Type }}) {{ .Pkg }}.{{ .Type }} {
     mut.RLock()
-	o, ok := _{{.Type}}Store[name]
+	o, ok := _{{ .Type }}Store[name]
 	mut.RUnlock()
 	if ok {
 		return o
@@ -58,51 +58,54 @@ func {{.Type}}Get(name string, defaults {{.Pkg}}.{{.Type}}) {{.Pkg}}.{{.Type}} {
 	if defaults != nil {
 		return defaults
 	}
-	return {{.Type}}None
+	return {{ .Type }}None
 }
 
-var {{.Type}}None _{{.Type}}None
+var {{ .Type }}None _{{ .Type }}None
 
-type _{{.Type}}None struct{}
+type _{{ .Type }}None struct{}
 
-func new{{.Type}}None() {{.Pkg}}.{{.Type}} {
-	return {{.Type}}None
+func new{{ .Type }}None() {{ .Pkg }}.{{ .Type }} {
+	return {{ .Type }}None
 }
 
-{{range .Methods}}
-func (_{{$Type}}None) {{.FuncName}}(
+{{ range .Methods }}
+func (_{{ $Type }}None) {{ .FuncName }}(
     {{- range .Args -}}
-		_ {{.Type}},
+		_ {{ .Type }},
     {{- end -}}
 	) (
     {{- range .Results -}}
-		_ {{.Type}},
+		{{ if .Value }} {{ .Name }} {{ else }} _ {{ end }} {{ .Type }},
     {{- end -}}
 	) {
-	logger.Warn("this is none of {{$Pkg}}.{{$Type}}")
+	logger.Warn("this is none of {{ $Pkg }}.{{ $Type }}")
+	{{ range .Results }}
+    {{ if .Value }} {{ .Name }} = {{ .Value }} {{ end }}
+    {{ end }}
 	return
 }
-{{end}}
+{{ end }}
 
-type {{.Type}} struct {
+type {{ .Type }} struct {
 	Name string
-	Def  {{.Pkg}}.{{.Type}}
+	Def  {{ .Pkg }}.{{ .Type }}
 }
 
-{{range .Methods}}
-func (o *{{$Type}}) {{.FuncName}}(
+{{ range .Methods }}
+func (o *{{ $Type }}) {{ .FuncName }}(
     {{- range .Args -}}
-        {{- .Name }} {{.Type}},
+        {{- .Name }} {{ .Type }},
     {{- end -}}
 	) (
     {{- range .Results -}}
-        {{.Type}},
+        {{ .Type }},
     {{- end -}}
 	) {
-    {{if .Results}}return{{end}} {{$Type}}Get(o.Name, o.Def).{{.FuncName}}(
+    {{ if .Results }}return{{ end }} {{ $Type }}Get(o.Name, o.Def).{{ .FuncName }}(
     {{- range .Args -}}
         {{- .Name }},
     {{- end -}}
 	)
 }
-{{end}}
+{{ end }}

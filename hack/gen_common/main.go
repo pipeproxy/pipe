@@ -66,10 +66,12 @@ func (g *gen) data() interface{} {
 			if name == "" {
 				name = string([]byte{'a' + byte(i)})
 			}
-			args = append(args, map[string]string{
+			t := typ.String()
+			m := map[string]string{
 				"Name": name,
-				"Type": typ.String(),
-			})
+				"Type": t,
+			}
+			args = append(args, m)
 		}
 		results := []interface{}{}
 		outNum := m.Type.NumOut()
@@ -77,10 +79,16 @@ func (g *gen) data() interface{} {
 			typ := m.Type.Out(i)
 			imports[typ.PkgPath()] = struct{}{}
 			name := strings.ToLower(typ.Name())
-			results = append(results, map[string]string{
+			t := typ.String()
+			m := map[string]string{
 				"Name": name,
-				"Type": typ.String(),
-			})
+				"Type": t,
+			}
+			if t == "error" {
+				imports["fmt"] = struct{}{}
+				m["Value"] = `fmt.Errorf("error none")`
+			}
+			results = append(results, m)
 		}
 		methods = append(methods, map[string]interface{}{
 			"FuncName": m.Name,

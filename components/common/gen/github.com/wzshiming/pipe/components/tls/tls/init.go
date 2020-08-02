@@ -70,6 +70,7 @@ func newTLSNone() tls.TLS {
 
 func (_TLSNone) TLS() (_ *tls.Config) {
 	logger.Warn("this is none of tls.TLS")
+
 	return
 }
 

@@ -72,6 +72,7 @@ func newHandlerNone() packet.Handler {
 
 func (_HandlerNone) ServePacket(_ context.Context, _ net.PacketConn) {
 	logger.Warn("this is none of packet.Handler")
+
 	return
 }
 

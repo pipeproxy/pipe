@@ -2,6 +2,7 @@
 package reference
 
 import (
+	"fmt"
 	"io"
 	"sync"
 
@@ -69,8 +70,11 @@ func newEncoderNone() codec.Encoder {
 	return EncoderNone
 }
 
-func (_EncoderNone) Encode(_ io.Writer) (_ io.Writer, _ error) {
+func (_EncoderNone) Encode(_ io.Writer) (_ io.Writer, error error) {
 	logger.Warn("this is none of codec.Encoder")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 

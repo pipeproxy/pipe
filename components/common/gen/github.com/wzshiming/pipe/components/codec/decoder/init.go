@@ -2,6 +2,7 @@
 package reference
 
 import (
+	"fmt"
 	"io"
 	"sync"
 
@@ -69,8 +70,11 @@ func newDecoderNone() codec.Decoder {
 	return DecoderNone
 }
 
-func (_DecoderNone) Decode(_ io.Reader) (_ io.Reader, _ error) {
+func (_DecoderNone) Decode(_ io.Reader) (_ io.Reader, error error) {
 	logger.Warn("this is none of codec.Decoder")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 

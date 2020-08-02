@@ -2,6 +2,7 @@
 package reference
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/wzshiming/pipe/components/codec"
@@ -68,8 +69,11 @@ func newUnmarshalerNone() codec.Unmarshaler {
 	return UnmarshalerNone
 }
 
-func (_UnmarshalerNone) Unmarshal(_ []uint8, _ interface{}) (_ error) {
+func (_UnmarshalerNone) Unmarshal(_ []uint8, _ interface{}) (error error) {
 	logger.Warn("this is none of codec.Unmarshaler")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 

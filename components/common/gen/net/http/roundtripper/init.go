@@ -2,6 +2,7 @@
 package reference
 
 import (
+	"fmt"
 	"net/http"
 	"sync"
 
@@ -68,8 +69,11 @@ func newRoundTripperNone() http.RoundTripper {
 	return RoundTripperNone
 }
 
-func (_RoundTripperNone) RoundTrip(_ *http.Request) (_ *http.Response, _ error) {
+func (_RoundTripperNone) RoundTrip(_ *http.Request) (_ *http.Response, error error) {
 	logger.Warn("this is none of http.RoundTripper")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 

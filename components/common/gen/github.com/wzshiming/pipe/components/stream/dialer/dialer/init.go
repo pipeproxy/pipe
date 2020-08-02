@@ -3,6 +3,7 @@ package reference
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"sync"
 
@@ -70,8 +71,11 @@ func newDialerNone() dialer.Dialer {
 	return DialerNone
 }
 
-func (_DialerNone) DialStream(_ context.Context) (_ net.Conn, _ error) {
+func (_DialerNone) DialStream(_ context.Context) (_ net.Conn, error error) {
 	logger.Warn("this is none of dialer.Dialer")
+
+	error = fmt.Errorf("error none")
+
 	return
 }
 
