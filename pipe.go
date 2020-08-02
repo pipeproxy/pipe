@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/kubernetes-sigs/yaml"
 	"github.com/wzshiming/pipe/components/common/load"
 	"github.com/wzshiming/pipe/components/once"
 	"github.com/wzshiming/pipe/components/stdio/input/inline"
@@ -32,12 +33,16 @@ func GetPipeWithContext(ctx context.Context) (*Pipe, bool) {
 }
 
 func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
+	config, err := yaml.YAMLToJSONStrict(config)
+	if err != nil {
+		return nil, err
+	}
 	conf := string(config)
 	c := &Pipe{}
 	c.group, c.ctx = errgroup.WithContext(ctx)
 	c.ctx = context.WithValue(c.ctx, pipeCtxKeyType(0), c)
 	var o once.Once
-	err := load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
+	err = load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
 	if err != nil {
 		return nil, err
 	}
@@ -86,9 +91,13 @@ func (c *Pipe) start(o once.Once) error {
 }
 
 func (c *Pipe) Reload(config []byte) error {
+	config, err := yaml.YAMLToJSONStrict(config)
+	if err != nil {
+		return err
+	}
 	conf := string(config)
 	var o once.Once
-	err := load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
+	err = load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
 	if err != nil {
 		return err
 	}

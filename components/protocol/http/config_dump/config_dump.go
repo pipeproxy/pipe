@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/kubernetes-sigs/yaml"
 	"github.com/wzshiming/pipe"
 	"github.com/wzshiming/pipe/internal/stream"
 )
@@ -46,6 +47,11 @@ func (c *ConfigDump) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 			return
 		}
 		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusBadRequest)
+			return
+		}
+		body, err = yaml.JSONToYAML(body)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusBadRequest)
 			return
