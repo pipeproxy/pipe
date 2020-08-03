@@ -13,20 +13,17 @@ func BuildAdminWithHTTPHandler() bind.HTTPHandler {
 				Path: "/",
 				Handler: bind.MultiNetHTTPHandlerConfig{
 					Multi: []bind.HTTPHandler{
-						bind.AddResponseHeaderNetHTTPHandlerConfig{
-							Key:   "Content-Type",
-							Value: "text/html; charset=utf-8",
-						},
+						BuildContentTypeHTMLWithHTTPHandler(),
 						bind.DirectNetHTTPHandlerConfig{
 							Code: http.StatusOK,
 							Body: bind.InlineIoReaderConfig{
 								Data: `<pre>
-{{.Scheme}}://{{.Host}}{{.RequestURI}}
-<a href="{{.Scheme}}://{{.Host}}{{.Path}}pprof/">{{.Path}}pprof/</a>
-<a href="{{.Scheme}}://{{.Host}}{{.Path}}expvar">{{.Path}}expvar</a>
-<a href="{{.Scheme}}://{{.Host}}{{.Path}}config_dump">{{.Path}}config_dump</a>
-<a href="{{.Scheme}}://{{.Host}}{{.Path}}must_quit">{{.Path}}must_quit</a>
-<a href="{{.Scheme}}://{{.Host}}{{.Path}}healthy">{{.Path}}healthy</a>
+<a href="pprof/">{{.Path}}pprof/</a>
+<a href="expvar">{{.Path}}expvar</a>
+<a href="must_quit">{{.Path}}must_quit</a>
+<a href="healthy">{{.Path}}healthy</a>
+<a href="config_dump">{{.Path}}config_dump</a>
+<a href="config_dump_edit.sh">{{.Path}}config_dump_edit.sh</a>
 </pre>`,
 							},
 						},
@@ -42,10 +39,6 @@ func BuildAdminWithHTTPHandler() bind.HTTPHandler {
 				Handler: bind.ExpvarNetHTTPHandler{},
 			},
 			{
-				Path:    "/config_dump",
-				Handler: bind.ConfigDumpNetHTTPHandlerConfig{},
-			},
-			{
 				Path:    "/must_quit",
 				Handler: bind.QuitNetHTTPHandler{},
 			},
@@ -55,6 +48,40 @@ func BuildAdminWithHTTPHandler() bind.HTTPHandler {
 					Code: http.StatusOK,
 					Body: bind.InlineIoReaderConfig{
 						Data: `healthy`,
+					},
+				},
+			},
+			{
+				Path:    "/config_dump",
+				Handler: bind.ConfigDumpNetHTTPHandlerConfig{},
+			},
+			{
+				Path: "/config_dump_edit.sh",
+				Handler: bind.MultiNetHTTPHandlerConfig{
+					Multi: []bind.HTTPHandler{
+						bind.DirectNetHTTPHandlerConfig{
+							Code: http.StatusOK,
+							Body: bind.InlineIoReaderConfig{
+								Data: `#!/bin/sh
+URL="{{.Scheme}}://{{.Host}}"
+RESOURCE="$URL/config_dump"
+TMP=.pipe_edit_tmp_file.yaml
+
+# Check if editing is allowed
+curl -sL -v -X OPTIONS "$RESOURCE" 2>&1 | \
+grep "< Allow:" | grep "PUT" > /dev/null || \
+{ echo "Editing Not Allowed"; exit 1;}
+
+# Editing
+curl -sL "$RESOURCE?yaml" > $TMP && \
+vi $TMP && \
+curl -sL -X PUT "$RESOURCE" -d "$(cat $TMP)" && \
+rm $TMP
+
+# sh -c "$(curl -sL {{.Scheme}}://{{.Host}}{{.Path}})"
+`,
+							},
+						},
 					},
 				},
 			},

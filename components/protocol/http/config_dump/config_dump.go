@@ -1,9 +1,11 @@
 package config_dump
 
 import (
-	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/kubernetes-sigs/yaml"
 	"github.com/wzshiming/pipe"
@@ -20,30 +22,52 @@ type ConfigDump struct {
 	readOnly bool
 }
 
+var (
+	allowRW = strings.Join([]string{http.MethodHead, http.MethodGet, http.MethodPut}, ",")
+	allowRO = strings.Join([]string{http.MethodHead, http.MethodGet}, ",")
+)
+
 func (c *ConfigDump) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	default:
-		http.NotFound(rw, r)
-	case http.MethodGet:
+		http.Error(rw, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+	case http.MethodOptions:
+		header := rw.Header()
+		if c.readOnly {
+			header.Set("Allow", allowRO)
+		} else {
+			header.Set("Allow", allowRW)
+		}
+	case http.MethodGet, http.MethodHead:
+		contentType := "application/json; charset=utf-8"
 		ctx := r.Context()
 		pip, ok := pipe.GetPipeWithContext(ctx)
-		config := []byte("{}")
-		if ok {
-			config = pip.Config()
+		if !ok {
+			http.Error(rw, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
+			return
 		}
 
-		config = bytes.TrimSpace(config)
-
-		contentType := "application/json; charset=utf-8"
-		if config[0] != '{' {
-			contentType = "text/x-yaml; charset=utf-8"
+		config := pip.Config()
+		if len(r.URL.RawQuery) >= 4 {
+			query := r.URL.Query()
+			if _, ok := query["yaml"]; ok {
+				config, _ = yaml.JSONToYAML(config)
+				contentType = "text/x-yaml; charset=utf-8"
+			} else if _, ok := query["pretty"]; ok {
+				var raw json.RawMessage
+				json.Unmarshal(config, &raw)
+				config, _ = json.MarshalIndent(raw, "", "  ")
+			}
 		}
-
-		rw.Header().Set("Content-Type", contentType)
-		rw.Write(config)
+		header := rw.Header()
+		header.Set("Content-Type", contentType)
+		header.Set("Content-Length", strconv.FormatInt(int64(len(config)), 10))
+		if http.MethodHead != r.Method {
+			rw.Write(config)
+		}
 	case http.MethodPut:
 		if c.readOnly {
-			http.NotFound(rw, r)
+			http.Error(rw, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 			return
 		}
 		body, err := ioutil.ReadAll(r.Body)
@@ -59,7 +83,7 @@ func (c *ConfigDump) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		pip, ok := pipe.GetPipeWithContext(ctx)
 		if !ok {
-			http.Error(rw, "bad context", http.StatusBadGateway)
+			http.Error(rw, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
 			return
 		}
 

@@ -8,6 +8,13 @@ import (
 	"github.com/wzshiming/pipe/bind"
 )
 
+func BuildContentTypeHTMLWithHTTPHandler() bind.HTTPHandler {
+	return bind.AddResponseHeaderNetHTTPHandlerConfig{
+		Key:   "Content-Type",
+		Value: "text/html; charset=utf-8",
+	}
+}
+
 func BuildHTTPRedirectWithHTTPHandler(location string, wait time.Duration) bind.StreamHandler {
 	if wait == 0 {
 		return bind.HTTPStreamHandlerConfig{
@@ -17,15 +24,19 @@ func BuildHTTPRedirectWithHTTPHandler(location string, wait time.Duration) bind.
 			},
 		}
 	}
+
 	return bind.HTTPStreamHandlerConfig{
-		Handler: bind.DirectNetHTTPHandlerConfig{
-			Code: http.StatusOK,
-			Body: bind.InlineIoReaderConfig{
-				Data: fmt.Sprintf(`<!DOCTYPE html>
-<html>
-<head><meta http-equiv="refresh" content="%.f; url={{.Scheme}}s://{{.Host}}{{.RequestURI}}"/></head>
-<body>Redirect to %s in %s</body>
-</html>`, float64(wait)/float64(time.Second), location, wait),
+		Handler: bind.MultiNetHTTPHandlerConfig{
+			Multi: []bind.HTTPHandler{
+				BuildContentTypeHTMLWithHTTPHandler(),
+				bind.DirectNetHTTPHandlerConfig{
+					Code: http.StatusOK,
+					Body: bind.InlineIoReaderConfig{
+						Data: fmt.Sprintf(`<meta http-equiv="refresh" content="%.f; url={{.Scheme}}s://{{.Host}}{{.RequestURI}}"/>
+<p>Redirect to %s in %s</p>
+`, float64(wait)/float64(time.Second), location, wait),
+					},
+				},
 			},
 		},
 	}
