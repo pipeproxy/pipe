@@ -12,7 +12,7 @@ import (
 
 	"github.com/wzshiming/pipe"
 	"github.com/wzshiming/pipe/bind"
-	"github.com/wzshiming/pipe/internal/stream"
+	"github.com/wzshiming/pipe/internal/network"
 )
 
 func getDirect(port, info string) []byte {
@@ -71,9 +71,8 @@ func TestReload(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer p.Close()
-
-	time.Sleep(time.Second / 10)
-	d := stream.ListenList()
+	time.Sleep(time.Second / 100)
+	d := network.ListenList()
 	if len(d) != 1 {
 		t.Fail()
 	}
@@ -93,14 +92,13 @@ func TestReload(t *testing.T) {
 		t.FailNow()
 	}
 
-	for i := 0; i != 10; i++ {
+	for i := 0; i != 60; i++ {
 		data := fmt.Sprintf("data%d", i)
 		err := p.Reload(getDirect(fmt.Sprintf(":%s", port), data))
 		if err != nil {
 			t.Fatal(err)
 		}
-		time.Sleep(time.Second / 10)
-		stream.CloseExcess()
+		time.Sleep(time.Second / 100)
 
 		body, err := httpGet(uri)
 		if err != nil {
@@ -117,13 +115,41 @@ func TestReload(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		time.Sleep(time.Second / 10)
-		stream.CloseExcess()
+		time.Sleep(time.Second / 100)
 
 		body, err = httpGet(uri)
 		if err == nil && string(body) == data {
 			err = fmt.Errorf("port not closed")
 			t.Errorf("reload configuration failed times %d, error %s", i, err)
+		}
+
+		err = p.Reload(getDirect(":0", data))
+		if err != nil {
+			t.Fatal(err)
+		}
+		time.Sleep(time.Second / 100)
+
+		body, err = httpGet(uri)
+		if err == nil && string(body) == data {
+			err = fmt.Errorf("port not closed")
+			t.Errorf("reload configuration failed times %d, error %s", i, err)
+		}
+
+		err = p.Reload(getDirect(fmt.Sprintf(":%s", port), data))
+		if err != nil {
+			t.Fatal(err)
+		}
+		time.Sleep(time.Second / 100)
+
+		body, err = httpGet(uri)
+		if err != nil {
+			t.Errorf("reload configuration failed times %d, error %s", i, err)
+			continue
+		}
+
+		if string(body) != data {
+			t.Errorf("reload configuration failed times %d, got %q, want %q", i, string(body), data)
+			continue
 		}
 	}
 }
@@ -133,7 +159,7 @@ func httpGet(url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	ctx, _ := context.WithDeadline(context.Background(), time.Now().Add(time.Second))
+	ctx, _ := context.WithDeadline(context.Background(), time.Now().Add(time.Second/5))
 	req = req.WithContext(ctx)
 	resp, err := httpClient.Do(req)
 	if err != nil {

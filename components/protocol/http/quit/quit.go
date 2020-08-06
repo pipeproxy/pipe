@@ -5,7 +5,6 @@ import (
 
 	"github.com/wzshiming/pipe"
 	"github.com/wzshiming/pipe/internal/logger"
-	"github.com/wzshiming/pipe/internal/stream"
 )
 
 func NewQuit() *ConfigQuit {
@@ -28,5 +27,4 @@ func (c *ConfigQuit) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		logger.Errorf("service close error: %s", err)
 		return
 	}
-	stream.CloseExcess()
 }

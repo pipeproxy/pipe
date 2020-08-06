@@ -14,7 +14,6 @@ import (
 	"github.com/wzshiming/pipe"
 	"github.com/wzshiming/pipe/internal/logger"
 	"github.com/wzshiming/pipe/internal/notify"
-	"github.com/wzshiming/pipe/internal/stream"
 )
 
 var signal string
@@ -134,7 +133,6 @@ func start(conf string) {
 	notify.On(notify.Stop, func() {
 		logger.Info("[close] start")
 		defer logger.Info("[close] end")
-		defer stream.CloseExcess()
 
 		err := svc.Close()
 		if svc == nil {
@@ -145,7 +143,6 @@ func start(conf string) {
 	notify.On(notify.Reload, func() {
 		logger.Info("[reload] start")
 		defer logger.Info("[reload] end")
-		defer stream.CloseExcess()
 
 		c, err := getConfig(conf)
 		if err != nil {

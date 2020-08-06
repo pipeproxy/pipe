@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/wzshiming/pipe/components/stream/listener"
-	"github.com/wzshiming/pipe/internal/stream"
+	"github.com/wzshiming/pipe/internal/network"
 )
 
 type Network struct {
@@ -20,5 +20,5 @@ func NewNetwork(network string, address string) *Network {
 }
 
 func (n *Network) ListenStream(ctx context.Context) (listener.StreamListener, error) {
-	return stream.Listen(ctx, n.network, n.address)
+	return network.Listen(ctx, n.network, n.address)
 }

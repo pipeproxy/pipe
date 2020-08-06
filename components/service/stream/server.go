@@ -2,13 +2,13 @@ package stream
 
 import (
 	"context"
-	"io"
 	"sync"
 	"time"
 
 	"github.com/wzshiming/pipe/components/stream"
 	"github.com/wzshiming/pipe/components/stream/listener"
 	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/wzshiming/pipe/internal/network"
 )
 
 type Server struct {
@@ -38,7 +38,7 @@ func (s *Server) Run(ctx context.Context) error {
 	for {
 		conn, err := s.listener.Accept()
 		if err != nil {
-			if err == io.ErrClosedPipe || err == context.Canceled {
+			if network.IsClosedConnError(err) || err == context.Canceled {
 				return nil
 			}
 			return err
