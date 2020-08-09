@@ -1,11 +1,12 @@
 // DO NOT EDIT! Code generated.
-package reference
+package handler
 
 import (
+	"context"
 	"net/http"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -20,40 +21,43 @@ type Config struct {
 	Def  http.Handler `json:",omitempty"`
 }
 
-func NewHandlerRefWithConfig(conf *Config) http.Handler {
+func NewHandlerRefWithConfig(ctx context.Context, conf *Config) http.Handler {
 	o := &Handler{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewHandlerDefWithConfig(conf *Config) http.Handler {
-	return HandlerPut(conf.Name, conf.Def)
+func NewHandlerDefWithConfig(ctx context.Context, conf *Config) http.Handler {
+	return HandlerPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut           sync.RWMutex
-	_HandlerStore = map[string]http.Handler{}
-)
-
-func HandlerPut(name string, def http.Handler) http.Handler {
+func HandlerPut(ctx context.Context, name string, def http.Handler) http.Handler {
 	if def == nil {
 		def = HandlerNone
 	}
-	mut.Lock()
-	_HandlerStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return HandlerNone
+	}
+	store, _ := m.LoadOrStore("http.Handler", map[string]http.Handler{})
+	store.(map[string]http.Handler)[name] = def
 	return def
 }
 
-func HandlerGet(name string, defaults http.Handler) http.Handler {
-	mut.RLock()
-	o, ok := _HandlerStore[name]
-	mut.RUnlock()
+func HandlerGet(ctx context.Context, name string, defaults http.Handler) http.Handler {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("http.Handler", map[string]http.Handler{})
+		o, ok := store.(map[string]http.Handler)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -77,8 +81,9 @@ func (_HandlerNone) ServeHTTP(_ http.ResponseWriter, _ *http.Request) {
 type Handler struct {
 	Name string
 	Def  http.Handler
+	Ctx  context.Context
 }
 
 func (o *Handler) ServeHTTP(responsewriter http.ResponseWriter, b *http.Request) {
-	HandlerGet(o.Name, o.Def).ServeHTTP(responsewriter, b)
+	HandlerGet(o.Ctx, o.Name, o.Def).ServeHTTP(responsewriter, b)
 }

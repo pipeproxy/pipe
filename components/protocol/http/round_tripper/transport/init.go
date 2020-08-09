@@ -7,7 +7,6 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/protocol/http/round_tripper"
 	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/components/stream/dialer"
 	"github.com/wzshiming/pipe/components/tls"
 )
 
@@ -21,7 +20,7 @@ func init() {
 
 type Config struct {
 	TLS    tls.TLS
-	Dialer dialer.Dialer
+	Dialer stream.Dialer
 }
 
 var defaultTransport = http.DefaultTransport.(*http.Transport)

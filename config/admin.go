@@ -22,6 +22,7 @@ func BuildAdminWithHTTPHandler() bind.HTTPHandler {
 <a href="expvar">{{.Path}}expvar</a>
 <a href="must_quit">{{.Path}}must_quit</a>
 <a href="healthy">{{.Path}}healthy</a>
+<a href="metrics">{{.Path}}metrics</a>
 <a href="config_dump">{{.Path}}config_dump</a>
 <a href="config_dump_edit.sh">{{.Path}}config_dump_edit.sh</a>
 </pre>`,
@@ -54,6 +55,10 @@ func BuildAdminWithHTTPHandler() bind.HTTPHandler {
 			{
 				Path:    "/config_dump",
 				Handler: bind.ConfigDumpNetHTTPHandlerConfig{},
+			},
+			{
+				Path:    "/metrics",
+				Handler: bind.MetricsNetHTTPHandler{},
 			},
 			{
 				Path: "/config_dump_edit.sh",

@@ -1,13 +1,13 @@
 // DO NOT EDIT! Code generated.
-package reference
+package once
 
 import (
 	"context"
 	"fmt"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/once"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -22,40 +22,43 @@ type Config struct {
 	Def  once.Once `json:",omitempty"`
 }
 
-func NewOnceRefWithConfig(conf *Config) once.Once {
+func NewOnceRefWithConfig(ctx context.Context, conf *Config) once.Once {
 	o := &Once{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewOnceDefWithConfig(conf *Config) once.Once {
-	return OncePut(conf.Name, conf.Def)
+func NewOnceDefWithConfig(ctx context.Context, conf *Config) once.Once {
+	return OncePut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut        sync.RWMutex
-	_OnceStore = map[string]once.Once{}
-)
-
-func OncePut(name string, def once.Once) once.Once {
+func OncePut(ctx context.Context, name string, def once.Once) once.Once {
 	if def == nil {
 		def = OnceNone
 	}
-	mut.Lock()
-	_OnceStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return OnceNone
+	}
+	store, _ := m.LoadOrStore("once.Once", map[string]once.Once{})
+	store.(map[string]once.Once)[name] = def
 	return def
 }
 
-func OnceGet(name string, defaults once.Once) once.Once {
-	mut.RLock()
-	o, ok := _OnceStore[name]
-	mut.RUnlock()
+func OnceGet(ctx context.Context, name string, defaults once.Once) once.Once {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("once.Once", map[string]once.Once{})
+		o, ok := store.(map[string]once.Once)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -81,8 +84,9 @@ func (_OnceNone) Do(_ context.Context) (error error) {
 type Once struct {
 	Name string
 	Def  once.Once
+	Ctx  context.Context
 }
 
 func (o *Once) Do(context context.Context) error {
-	return OnceGet(o.Name, o.Def).Do(context)
+	return OnceGet(o.Ctx, o.Name, o.Def).Do(context)
 }

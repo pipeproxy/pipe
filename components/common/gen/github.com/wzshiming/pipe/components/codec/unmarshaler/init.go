@@ -1,12 +1,13 @@
 // DO NOT EDIT! Code generated.
-package reference
+package unmarshaler
 
 import (
+	"context"
 	"fmt"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/codec"
 	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -21,40 +22,43 @@ type Config struct {
 	Def  codec.Unmarshaler `json:",omitempty"`
 }
 
-func NewUnmarshalerRefWithConfig(conf *Config) codec.Unmarshaler {
+func NewUnmarshalerRefWithConfig(ctx context.Context, conf *Config) codec.Unmarshaler {
 	o := &Unmarshaler{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewUnmarshalerDefWithConfig(conf *Config) codec.Unmarshaler {
-	return UnmarshalerPut(conf.Name, conf.Def)
+func NewUnmarshalerDefWithConfig(ctx context.Context, conf *Config) codec.Unmarshaler {
+	return UnmarshalerPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut               sync.RWMutex
-	_UnmarshalerStore = map[string]codec.Unmarshaler{}
-)
-
-func UnmarshalerPut(name string, def codec.Unmarshaler) codec.Unmarshaler {
+func UnmarshalerPut(ctx context.Context, name string, def codec.Unmarshaler) codec.Unmarshaler {
 	if def == nil {
 		def = UnmarshalerNone
 	}
-	mut.Lock()
-	_UnmarshalerStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return UnmarshalerNone
+	}
+	store, _ := m.LoadOrStore("codec.Unmarshaler", map[string]codec.Unmarshaler{})
+	store.(map[string]codec.Unmarshaler)[name] = def
 	return def
 }
 
-func UnmarshalerGet(name string, defaults codec.Unmarshaler) codec.Unmarshaler {
-	mut.RLock()
-	o, ok := _UnmarshalerStore[name]
-	mut.RUnlock()
+func UnmarshalerGet(ctx context.Context, name string, defaults codec.Unmarshaler) codec.Unmarshaler {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("codec.Unmarshaler", map[string]codec.Unmarshaler{})
+		o, ok := store.(map[string]codec.Unmarshaler)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -80,8 +84,9 @@ func (_UnmarshalerNone) Unmarshal(_ []uint8, _ interface{}) (error error) {
 type Unmarshaler struct {
 	Name string
 	Def  codec.Unmarshaler
+	Ctx  context.Context
 }
 
 func (o *Unmarshaler) Unmarshal(a []uint8, b interface{}) error {
-	return UnmarshalerGet(o.Name, o.Def).Unmarshal(a, b)
+	return UnmarshalerGet(o.Ctx, o.Name, o.Def).Unmarshal(a, b)
 }

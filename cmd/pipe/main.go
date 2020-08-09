@@ -54,46 +54,46 @@ func main() {
 	case "":
 		err := lf.Lock()
 		if err != nil {
-			logger.Fatal("start error:", err)
+			logger.Fatalln("start error:", err)
 			return
 		}
 		start(conf)
 		err = lf.Unlock()
 		if err != nil {
-			logger.Fatal("end error:", err)
+			logger.Fatalln("end error:", err)
 			return
 		}
 	case "reload":
 		pid, err := lf.Get()
 		if err != nil {
-			logger.Fatal("reload error:", err)
+			logger.Fatalln("reload error:", err)
 			return
 		}
 		err = notify.Kill(pid, notify.Reload)
 		if err != nil {
-			logger.Fatal("send error:", err)
+			logger.Fatalln("send error:", err)
 			return
 		}
 	case "stop":
 		pid, err := lf.Get()
 		if err != nil {
-			logger.Fatal("stop error:", err)
+			logger.Fatalln("stop error:", err)
 			return
 		}
 		err = notify.Kill(pid, notify.Stop)
 		if err != nil {
-			logger.Fatal("send error:", err)
+			logger.Fatalln("send error:", err)
 			return
 		}
 	case "reopen":
 		pid, err := lf.Get()
 		if err != nil {
-			logger.Fatal("reopen error:", err)
+			logger.Fatalln("reopen error:", err)
 			return
 		}
 		err = notify.Kill(pid, notify.Reopen)
 		if err != nil {
-			logger.Fatal("send error:", err)
+			logger.Fatalln("send error:", err)
 			return
 		}
 	default:
@@ -131,8 +131,7 @@ func start(conf string) {
 	}
 
 	notify.On(notify.Stop, func() {
-		logger.Info("[close] start")
-		defer logger.Info("[close] end")
+		logger.Info("Closing")
 
 		err := svc.Close()
 		if svc == nil {
@@ -141,8 +140,7 @@ func start(conf string) {
 		}
 	})
 	notify.On(notify.Reload, func() {
-		logger.Info("[reload] start")
-		defer logger.Info("[reload] end")
+		logger.Info("Reloading")
 
 		c, err := getConfig(conf)
 		if err != nil {

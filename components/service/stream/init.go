@@ -4,7 +4,6 @@ import (
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/service"
 	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/components/stream/listener"
 )
 
 const (
@@ -16,9 +15,9 @@ func init() {
 }
 
 type Config struct {
-	Listener          listener.ListenConfig
+	Listener          stream.ListenConfig
 	Handler           stream.Handler
-	DisconnectOnClose bool
+	DisconnectOnClose bool `json:",omitempty"`
 }
 
 func NewServerWithConfig(conf *Config) (service.Service, error) {

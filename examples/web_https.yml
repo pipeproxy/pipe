@@ -15,27 +15,21 @@ Multi:
       '@Kind': multi@service.Service
       Multi:
       - '@Kind': stream@service.Service
-        DisconnectOnClose: false
         Handler:
-          '@Kind': http@stream.Handler
+          '@Kind': http1@stream.Handler
           Handler:
-            '@Kind': log@net/http.Handler
-            Handler:
-              '@Kind': ref@net/http.Handler
-              Name: page
-            Output:
-              '@Kind': file@io.Writer
-              Path: /dev/stderr
+            '@Kind': redirect@net/http.Handler
+            Code: 302
+            Location: '{{.Scheme}}s://{{.Host}}{{.RequestURI}}'
         Listener:
-          '@Kind': network@stream/listener.ListenConfig
+          '@Kind': listener@stream.ListenConfig
           Address: :80
           Network: tcp
       - '@Kind': stream@service.Service
-        DisconnectOnClose: false
         Handler:
           '@Kind': mux@stream.Handler
           NotFound:
-            '@Kind': http@stream.Handler
+            '@Kind': http2@stream.Handler
             Handler:
               '@Kind': log@net/http.Handler
               Handler:
@@ -48,23 +42,14 @@ Multi:
               '@Kind': self_signed@tls.TLS
           Routes:
           - Handler:
-              '@Kind': http@stream.Handler
+              '@Kind': http1@stream.Handler
               Handler:
-                '@Kind': multi@net/http.Handler
-                Multi:
-                - '@Kind': add_response_header@net/http.Handler
-                  Key: Content-Type
-                  Value: text/html; charset=utf-8
-                - '@Kind': direct@net/http.Handler
-                  Body:
-                    '@Kind': inline@io.Reader
-                    Data: |
-                      <meta http-equiv="refresh" content="1; url={{.Scheme}}s://{{.Host}}{{.RequestURI}}"/>
-                      <p>Redirect to {{.Scheme}}s://{{.Host}}{{.RequestURI}} in 1s</p>
-                  Code: 200
+                '@Kind': redirect@net/http.Handler
+                Code: 302
+                Location: '{{.Scheme}}s://{{.Host}}{{.RequestURI}}'
             Pattern: http
         Listener:
-          '@Kind': network@stream/listener.ListenConfig
+          '@Kind': listener@stream.ListenConfig
           Address: :443
           Network: tcp
     Name: server

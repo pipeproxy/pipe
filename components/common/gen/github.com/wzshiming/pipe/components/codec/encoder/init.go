@@ -1,13 +1,14 @@
 // DO NOT EDIT! Code generated.
-package reference
+package encoder
 
 import (
+	"context"
 	"fmt"
 	"io"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/codec"
 	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -22,40 +23,43 @@ type Config struct {
 	Def  codec.Encoder `json:",omitempty"`
 }
 
-func NewEncoderRefWithConfig(conf *Config) codec.Encoder {
+func NewEncoderRefWithConfig(ctx context.Context, conf *Config) codec.Encoder {
 	o := &Encoder{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewEncoderDefWithConfig(conf *Config) codec.Encoder {
-	return EncoderPut(conf.Name, conf.Def)
+func NewEncoderDefWithConfig(ctx context.Context, conf *Config) codec.Encoder {
+	return EncoderPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut           sync.RWMutex
-	_EncoderStore = map[string]codec.Encoder{}
-)
-
-func EncoderPut(name string, def codec.Encoder) codec.Encoder {
+func EncoderPut(ctx context.Context, name string, def codec.Encoder) codec.Encoder {
 	if def == nil {
 		def = EncoderNone
 	}
-	mut.Lock()
-	_EncoderStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return EncoderNone
+	}
+	store, _ := m.LoadOrStore("codec.Encoder", map[string]codec.Encoder{})
+	store.(map[string]codec.Encoder)[name] = def
 	return def
 }
 
-func EncoderGet(name string, defaults codec.Encoder) codec.Encoder {
-	mut.RLock()
-	o, ok := _EncoderStore[name]
-	mut.RUnlock()
+func EncoderGet(ctx context.Context, name string, defaults codec.Encoder) codec.Encoder {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("codec.Encoder", map[string]codec.Encoder{})
+		o, ok := store.(map[string]codec.Encoder)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -81,8 +85,9 @@ func (_EncoderNone) Encode(_ io.Writer) (_ io.Writer, error error) {
 type Encoder struct {
 	Name string
 	Def  codec.Encoder
+	Ctx  context.Context
 }
 
 func (o *Encoder) Encode(writer io.Writer) (io.Writer, error) {
-	return EncoderGet(o.Name, o.Def).Encode(writer)
+	return EncoderGet(o.Ctx, o.Name, o.Def).Encode(writer)
 }

@@ -16,7 +16,7 @@ func init() {
 }
 
 type Config struct {
-	RoundTripper round_tripper.RoundTripper
+	RoundTripper round_tripper.RoundTripper `json:",omitempty"`
 	URL          string
 }
 

@@ -2,7 +2,6 @@ package examples
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/wzshiming/pipe/bind"
 	"github.com/wzshiming/pipe/config"
@@ -18,13 +17,18 @@ var Examples = map[string]interface{}{
 }
 
 var (
-	ExampleDebug = bind.ServiceOnceConfig{
-		Service: bind.MultiServiceConfig{
-			Multi: []bind.Service{
-				addrToHTTP(":8088", config.BuildAdminWithHTTPHandler(), nil),
+	ExampleDebug = config.BuildSampleWithOnce(
+		bind.RefServiceConfig{
+			Name: "server",
+		}, bind.DefServiceConfig{
+			Name: "server",
+			Def: bind.MultiServiceConfig{
+				Multi: []bind.Service{
+					config.BuildH1WithService(":8088",
+						config.BuildHTTPLogStderr(config.BuildAdminWithHTTPHandler())),
+				},
 			},
-		},
-	}
+		})
 
 	ExampleFileServer = bind.MultiOnceConfig{
 		Multi: []bind.Once{
@@ -33,9 +37,10 @@ var (
 					Multi: []bind.Service{
 						bind.DefServiceConfig{
 							Name: "server",
-							Def: addrToHTTP(":80", bind.FileNetHTTPHandlerConfig{
-								Root: "",
-							}, nil),
+							Def: config.BuildH1WithService(":80",
+								config.BuildHTTPLogStderr(bind.FileNetHTTPHandlerConfig{
+									Root: "",
+								})),
 						},
 					},
 				},
@@ -50,6 +55,13 @@ var (
 				bind.RefServiceConfig{Name: "host2"},
 				bind.RefServiceConfig{Name: "server"},
 			},
+		},
+		bind.DefServiceConfig{
+			Name: "server",
+			Def: config.BuildH1WithService(":80",
+				config.BuildHTTPLogStderr(bind.RefNetHTTPHandlerConfig{
+					Name: "balance",
+				})),
 		},
 		bind.DefNetHTTPHandlerConfig{
 			Name: "balance",
@@ -66,40 +78,24 @@ var (
 			},
 		},
 		bind.DefServiceConfig{
-			Name: "server",
-			Def: addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
-				Name: "balance",
-			}, nil),
-		},
-		bind.DefNetHTTPHandlerConfig{
-			Name: "page1",
-			Def: bind.DirectNetHTTPHandlerConfig{
-				Code: http.StatusOK,
-				Body: bind.InlineIoReaderConfig{
-					Data: `<html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
-				},
-			},
-		},
-		bind.DefServiceConfig{
 			Name: "host1",
-			Def: addrToHTTP(":8001", bind.RefNetHTTPHandlerConfig{
-				Name: "page1",
-			}, nil),
-		},
-		bind.DefNetHTTPHandlerConfig{
-			Name: "page2",
-			Def: bind.DirectNetHTTPHandlerConfig{
-				Code: http.StatusOK,
-				Body: bind.InlineIoReaderConfig{
-					Data: `<html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
-				},
-			},
+			Def: config.BuildH1WithService(":8001",
+				bind.DirectNetHTTPHandlerConfig{
+					Code: http.StatusOK,
+					Body: bind.InlineIoReaderConfig{
+						Data: `<html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
+					},
+				}),
 		},
 		bind.DefServiceConfig{
 			Name: "host2",
-			Def: addrToHTTP(":8002", bind.RefNetHTTPHandlerConfig{
-				Name: "page2",
-			}, nil),
+			Def: config.BuildH1WithService(":8002",
+				bind.DirectNetHTTPHandlerConfig{
+					Code: http.StatusOK,
+					Body: bind.InlineIoReaderConfig{
+						Data: `<html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
+					},
+				}),
 		},
 	)
 
@@ -124,12 +120,11 @@ var (
 			Name: "server",
 			Def: bind.MultiServiceConfig{
 				Multi: []bind.Service{
-					addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
-						Name: "page",
-					}, nil),
-					addrToHTTP(":443", bind.RefNetHTTPHandlerConfig{
-						Name: "page",
-					}, bind.SelfSignedTLS{}),
+					config.BuildHTTPRedirectToHTTPSWithService(":80"),
+					config.BuildH2WithService(":443",
+						config.BuildHTTPLogStderr(bind.RefNetHTTPHandlerConfig{
+							Name: "page",
+						}), bind.SelfSignedTLS{}),
 				},
 			},
 		},
@@ -170,54 +165,51 @@ var (
 		},
 		bind.DefServiceConfig{
 			Name: "gateway",
-			Def: addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
-				Name: "weighted",
-			}, nil),
+			Def: config.BuildH1WithService(":80",
+				config.BuildHTTPLogStderr(
+					bind.RefNetHTTPHandlerConfig{
+						Name: "weighted",
+					}),
+			),
 		},
 	)
 
 	ExampleBasic = config.BuildSampleWithOnce(
-		bind.MultiServiceConfig{
-			Multi: []bind.Service{
-				bind.RefServiceConfig{
-					Name: "server",
-				},
-			},
+		bind.RefServiceConfig{
+			Name: "server",
 		},
 		bind.DefNetHTTPHandlerConfig{
 			Name: "page",
 			Def:  config.BuildHomeWithHTTPHandler(),
 		},
+
+		bind.DefTLSConfig{
+			Name: "tls",
+			Def:  bind.SelfSignedTLS{},
+		},
 		bind.DefServiceConfig{
 			Name: "server",
 			Def: bind.MultiServiceConfig{
 				Multi: []bind.Service{
-					addrToHTTP(":80", bind.RefNetHTTPHandlerConfig{
-						Name: "page",
-					}, nil),
-					addrToHTTP(":443", bind.RefNetHTTPHandlerConfig{
-						Name: "page",
-					}, bind.SelfSignedTLS{}),
+					config.BuildH1WithService(":80",
+						config.BuildHTTPLogStderr(bind.RefNetHTTPHandlerConfig{
+							Name: "page",
+						}),
+					),
+					config.BuildH2WithService(":443",
+						config.BuildHTTPLogStderr(bind.RefNetHTTPHandlerConfig{
+							Name: "page",
+						}), bind.RefTLSConfig{
+							Name: "tls",
+						}),
+					config.BuildH3WithService(":443",
+						config.BuildHTTPLogStderr(bind.RefNetHTTPHandlerConfig{
+							Name: "page",
+						}), bind.RefTLSConfig{
+							Name: "tls",
+						}),
 				},
 			},
 		},
 	)
 )
-
-func addrToHTTP(address string, handler bind.HTTPHandler, tls bind.TLS) bind.Service {
-	output := bind.FileIoWriterConfig{
-		Path: "/dev/stderr",
-	}
-	listen := bind.NetworkStreamListenerListenConfigConfig{
-		Network: bind.NetworkStreamListenerListenConfigNetworkEnumEnumTCP,
-		Address: address,
-	}
-	handle := bind.LogNetHTTPHandlerConfig{
-		Output:  output,
-		Handler: handler,
-	}
-	return bind.StreamServiceConfig{
-		Listener: listen,
-		Handler:  config.BuildHTTP443ToHTTPSWithStreamHandler(handle, tls, time.Second),
-	}
-}

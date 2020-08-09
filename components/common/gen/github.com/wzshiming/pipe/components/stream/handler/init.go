@@ -1,13 +1,13 @@
 // DO NOT EDIT! Code generated.
-package reference
+package handler
 
 import (
 	"context"
 	"net"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/stream"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -22,40 +22,43 @@ type Config struct {
 	Def  stream.Handler `json:",omitempty"`
 }
 
-func NewHandlerRefWithConfig(conf *Config) stream.Handler {
+func NewHandlerRefWithConfig(ctx context.Context, conf *Config) stream.Handler {
 	o := &Handler{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewHandlerDefWithConfig(conf *Config) stream.Handler {
-	return HandlerPut(conf.Name, conf.Def)
+func NewHandlerDefWithConfig(ctx context.Context, conf *Config) stream.Handler {
+	return HandlerPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut           sync.RWMutex
-	_HandlerStore = map[string]stream.Handler{}
-)
-
-func HandlerPut(name string, def stream.Handler) stream.Handler {
+func HandlerPut(ctx context.Context, name string, def stream.Handler) stream.Handler {
 	if def == nil {
 		def = HandlerNone
 	}
-	mut.Lock()
-	_HandlerStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return HandlerNone
+	}
+	store, _ := m.LoadOrStore("stream.Handler", map[string]stream.Handler{})
+	store.(map[string]stream.Handler)[name] = def
 	return def
 }
 
-func HandlerGet(name string, defaults stream.Handler) stream.Handler {
-	mut.RLock()
-	o, ok := _HandlerStore[name]
-	mut.RUnlock()
+func HandlerGet(ctx context.Context, name string, defaults stream.Handler) stream.Handler {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("stream.Handler", map[string]stream.Handler{})
+		o, ok := store.(map[string]stream.Handler)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -79,8 +82,9 @@ func (_HandlerNone) ServeStream(_ context.Context, _ net.Conn) {
 type Handler struct {
 	Name string
 	Def  stream.Handler
+	Ctx  context.Context
 }
 
 func (o *Handler) ServeStream(context context.Context, conn net.Conn) {
-	HandlerGet(o.Name, o.Def).ServeStream(context, conn)
+	HandlerGet(o.Ctx, o.Name, o.Def).ServeStream(context, conn)
 }

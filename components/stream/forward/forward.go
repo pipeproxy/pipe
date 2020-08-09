@@ -4,16 +4,15 @@ import (
 	"context"
 
 	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/components/stream/dialer"
 	"github.com/wzshiming/pipe/internal/logger"
 	"github.com/wzshiming/pipe/internal/tunnel"
 )
 
 type Forward struct {
-	dialer dialer.Dialer
+	dialer stream.Dialer
 }
 
-func NewForward(dialer dialer.Dialer) *Forward {
+func NewForward(dialer stream.Dialer) *Forward {
 	return &Forward{
 		dialer: dialer,
 	}

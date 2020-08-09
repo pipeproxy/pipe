@@ -1,12 +1,12 @@
 // DO NOT EDIT! Code generated.
-package reference
+package handler
 
 import (
 	"context"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/protocol"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -21,40 +21,43 @@ type Config struct {
 	Def  protocol.Handler `json:",omitempty"`
 }
 
-func NewHandlerRefWithConfig(conf *Config) protocol.Handler {
+func NewHandlerRefWithConfig(ctx context.Context, conf *Config) protocol.Handler {
 	o := &Handler{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewHandlerDefWithConfig(conf *Config) protocol.Handler {
-	return HandlerPut(conf.Name, conf.Def)
+func NewHandlerDefWithConfig(ctx context.Context, conf *Config) protocol.Handler {
+	return HandlerPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut           sync.RWMutex
-	_HandlerStore = map[string]protocol.Handler{}
-)
-
-func HandlerPut(name string, def protocol.Handler) protocol.Handler {
+func HandlerPut(ctx context.Context, name string, def protocol.Handler) protocol.Handler {
 	if def == nil {
 		def = HandlerNone
 	}
-	mut.Lock()
-	_HandlerStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return HandlerNone
+	}
+	store, _ := m.LoadOrStore("protocol.Handler", map[string]protocol.Handler{})
+	store.(map[string]protocol.Handler)[name] = def
 	return def
 }
 
-func HandlerGet(name string, defaults protocol.Handler) protocol.Handler {
-	mut.RLock()
-	o, ok := _HandlerStore[name]
-	mut.RUnlock()
+func HandlerGet(ctx context.Context, name string, defaults protocol.Handler) protocol.Handler {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("protocol.Handler", map[string]protocol.Handler{})
+		o, ok := store.(map[string]protocol.Handler)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -78,8 +81,9 @@ func (_HandlerNone) ServeProtocol(_ context.Context, _ protocol.Protocol) {
 type Handler struct {
 	Name string
 	Def  protocol.Handler
+	Ctx  context.Context
 }
 
 func (o *Handler) ServeProtocol(context context.Context, protocol protocol.Protocol) {
-	HandlerGet(o.Name, o.Def).ServeProtocol(context, protocol)
+	HandlerGet(o.Ctx, o.Name, o.Def).ServeProtocol(context, protocol)
 }

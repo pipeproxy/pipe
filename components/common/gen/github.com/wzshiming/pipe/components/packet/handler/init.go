@@ -1,13 +1,13 @@
 // DO NOT EDIT! Code generated.
-package reference
+package handler
 
 import (
 	"context"
 	"net"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/packet"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -22,40 +22,43 @@ type Config struct {
 	Def  packet.Handler `json:",omitempty"`
 }
 
-func NewHandlerRefWithConfig(conf *Config) packet.Handler {
+func NewHandlerRefWithConfig(ctx context.Context, conf *Config) packet.Handler {
 	o := &Handler{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewHandlerDefWithConfig(conf *Config) packet.Handler {
-	return HandlerPut(conf.Name, conf.Def)
+func NewHandlerDefWithConfig(ctx context.Context, conf *Config) packet.Handler {
+	return HandlerPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut           sync.RWMutex
-	_HandlerStore = map[string]packet.Handler{}
-)
-
-func HandlerPut(name string, def packet.Handler) packet.Handler {
+func HandlerPut(ctx context.Context, name string, def packet.Handler) packet.Handler {
 	if def == nil {
 		def = HandlerNone
 	}
-	mut.Lock()
-	_HandlerStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return HandlerNone
+	}
+	store, _ := m.LoadOrStore("packet.Handler", map[string]packet.Handler{})
+	store.(map[string]packet.Handler)[name] = def
 	return def
 }
 
-func HandlerGet(name string, defaults packet.Handler) packet.Handler {
-	mut.RLock()
-	o, ok := _HandlerStore[name]
-	mut.RUnlock()
+func HandlerGet(ctx context.Context, name string, defaults packet.Handler) packet.Handler {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("packet.Handler", map[string]packet.Handler{})
+		o, ok := store.(map[string]packet.Handler)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -79,8 +82,9 @@ func (_HandlerNone) ServePacket(_ context.Context, _ net.PacketConn) {
 type Handler struct {
 	Name string
 	Def  packet.Handler
+	Ctx  context.Context
 }
 
 func (o *Handler) ServePacket(context context.Context, packetconn net.PacketConn) {
-	HandlerGet(o.Name, o.Def).ServePacket(context, packetconn)
+	HandlerGet(o.Ctx, o.Name, o.Def).ServePacket(context, packetconn)
 }

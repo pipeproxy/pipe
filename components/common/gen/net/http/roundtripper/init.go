@@ -1,12 +1,13 @@
 // DO NOT EDIT! Code generated.
-package reference
+package roundtripper
 
 import (
+	"context"
 	"fmt"
 	"net/http"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -21,40 +22,43 @@ type Config struct {
 	Def  http.RoundTripper `json:",omitempty"`
 }
 
-func NewRoundTripperRefWithConfig(conf *Config) http.RoundTripper {
+func NewRoundTripperRefWithConfig(ctx context.Context, conf *Config) http.RoundTripper {
 	o := &RoundTripper{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewRoundTripperDefWithConfig(conf *Config) http.RoundTripper {
-	return RoundTripperPut(conf.Name, conf.Def)
+func NewRoundTripperDefWithConfig(ctx context.Context, conf *Config) http.RoundTripper {
+	return RoundTripperPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut                sync.RWMutex
-	_RoundTripperStore = map[string]http.RoundTripper{}
-)
-
-func RoundTripperPut(name string, def http.RoundTripper) http.RoundTripper {
+func RoundTripperPut(ctx context.Context, name string, def http.RoundTripper) http.RoundTripper {
 	if def == nil {
 		def = RoundTripperNone
 	}
-	mut.Lock()
-	_RoundTripperStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return RoundTripperNone
+	}
+	store, _ := m.LoadOrStore("http.RoundTripper", map[string]http.RoundTripper{})
+	store.(map[string]http.RoundTripper)[name] = def
 	return def
 }
 
-func RoundTripperGet(name string, defaults http.RoundTripper) http.RoundTripper {
-	mut.RLock()
-	o, ok := _RoundTripperStore[name]
-	mut.RUnlock()
+func RoundTripperGet(ctx context.Context, name string, defaults http.RoundTripper) http.RoundTripper {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("http.RoundTripper", map[string]http.RoundTripper{})
+		o, ok := store.(map[string]http.RoundTripper)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -80,8 +84,9 @@ func (_RoundTripperNone) RoundTrip(_ *http.Request) (_ *http.Response, error err
 type RoundTripper struct {
 	Name string
 	Def  http.RoundTripper
+	Ctx  context.Context
 }
 
 func (o *RoundTripper) RoundTrip(a *http.Request) (*http.Response, error) {
-	return RoundTripperGet(o.Name, o.Def).RoundTrip(a)
+	return RoundTripperGet(o.Ctx, o.Name, o.Def).RoundTrip(a)
 }

@@ -1,11 +1,12 @@
 // DO NOT EDIT! Code generated.
-package reference
+package tls
 
 import (
-	"sync"
+	"context"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/tls"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -20,40 +21,43 @@ type Config struct {
 	Def  tls.TLS `json:",omitempty"`
 }
 
-func NewTLSRefWithConfig(conf *Config) tls.TLS {
+func NewTLSRefWithConfig(ctx context.Context, conf *Config) tls.TLS {
 	o := &TLS{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewTLSDefWithConfig(conf *Config) tls.TLS {
-	return TLSPut(conf.Name, conf.Def)
+func NewTLSDefWithConfig(ctx context.Context, conf *Config) tls.TLS {
+	return TLSPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut       sync.RWMutex
-	_TLSStore = map[string]tls.TLS{}
-)
-
-func TLSPut(name string, def tls.TLS) tls.TLS {
+func TLSPut(ctx context.Context, name string, def tls.TLS) tls.TLS {
 	if def == nil {
 		def = TLSNone
 	}
-	mut.Lock()
-	_TLSStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return TLSNone
+	}
+	store, _ := m.LoadOrStore("tls.TLS", map[string]tls.TLS{})
+	store.(map[string]tls.TLS)[name] = def
 	return def
 }
 
-func TLSGet(name string, defaults tls.TLS) tls.TLS {
-	mut.RLock()
-	o, ok := _TLSStore[name]
-	mut.RUnlock()
+func TLSGet(ctx context.Context, name string, defaults tls.TLS) tls.TLS {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("tls.TLS", map[string]tls.TLS{})
+		o, ok := store.(map[string]tls.TLS)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -77,8 +81,9 @@ func (_TLSNone) TLS() (_ *tls.Config) {
 type TLS struct {
 	Name string
 	Def  tls.TLS
+	Ctx  context.Context
 }
 
 func (o *TLS) TLS() *tls.Config {
-	return TLSGet(o.Name, o.Def).TLS()
+	return TLSGet(o.Ctx, o.Name, o.Def).TLS()
 }

@@ -1,13 +1,14 @@
 // DO NOT EDIT! Code generated.
-package reference
+package decoder
 
 import (
+	"context"
 	"fmt"
 	"io"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/codec"
 	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -22,40 +23,43 @@ type Config struct {
 	Def  codec.Decoder `json:",omitempty"`
 }
 
-func NewDecoderRefWithConfig(conf *Config) codec.Decoder {
+func NewDecoderRefWithConfig(ctx context.Context, conf *Config) codec.Decoder {
 	o := &Decoder{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewDecoderDefWithConfig(conf *Config) codec.Decoder {
-	return DecoderPut(conf.Name, conf.Def)
+func NewDecoderDefWithConfig(ctx context.Context, conf *Config) codec.Decoder {
+	return DecoderPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut           sync.RWMutex
-	_DecoderStore = map[string]codec.Decoder{}
-)
-
-func DecoderPut(name string, def codec.Decoder) codec.Decoder {
+func DecoderPut(ctx context.Context, name string, def codec.Decoder) codec.Decoder {
 	if def == nil {
 		def = DecoderNone
 	}
-	mut.Lock()
-	_DecoderStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return DecoderNone
+	}
+	store, _ := m.LoadOrStore("codec.Decoder", map[string]codec.Decoder{})
+	store.(map[string]codec.Decoder)[name] = def
 	return def
 }
 
-func DecoderGet(name string, defaults codec.Decoder) codec.Decoder {
-	mut.RLock()
-	o, ok := _DecoderStore[name]
-	mut.RUnlock()
+func DecoderGet(ctx context.Context, name string, defaults codec.Decoder) codec.Decoder {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("codec.Decoder", map[string]codec.Decoder{})
+		o, ok := store.(map[string]codec.Decoder)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -81,8 +85,9 @@ func (_DecoderNone) Decode(_ io.Reader) (_ io.Reader, error error) {
 type Decoder struct {
 	Name string
 	Def  codec.Decoder
+	Ctx  context.Context
 }
 
 func (o *Decoder) Decode(reader io.Reader) (io.Reader, error) {
-	return DecoderGet(o.Name, o.Def).Decode(reader)
+	return DecoderGet(o.Ctx, o.Name, o.Def).Decode(reader)
 }

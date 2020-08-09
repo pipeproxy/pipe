@@ -2,18 +2,33 @@ package listener
 
 import (
 	"context"
-	"net"
+	"crypto/tls"
 
-	"github.com/wzshiming/pipe/components/common/types"
+	"github.com/wzshiming/pipe/components/stream"
+	"github.com/wzshiming/pipe/internal/listener"
 )
 
-func init() {
-	var listenConfig ListenConfig
-	types.Register(&listenConfig)
+type Listener struct {
+	network   string
+	address   string
+	tlsConfig *tls.Config
 }
 
-type StreamListener = net.Listener
+func NewListener(network string, address string, tlsConfig *tls.Config) *Listener {
+	return &Listener{
+		network:   network,
+		address:   address,
+		tlsConfig: tlsConfig,
+	}
+}
 
-type ListenConfig interface {
-	ListenStream(ctx context.Context) (StreamListener, error)
+func (n *Listener) ListenStream(ctx context.Context) (stream.StreamListener, error) {
+	listen, err := listener.Listen(ctx, n.network, n.address)
+	if err != nil {
+		return nil, err
+	}
+	if n.tlsConfig != nil {
+		listen = tls.NewListener(listen, n.tlsConfig)
+	}
+	return listen, nil
 }

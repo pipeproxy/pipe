@@ -3,7 +3,6 @@ package forward
 import (
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/components/stream/dialer"
 )
 
 const (
@@ -15,7 +14,7 @@ func init() {
 }
 
 type Config struct {
-	Dialer dialer.Dialer
+	Dialer stream.Dialer
 }
 
 // NewForwardWithConfig create a new forward with config.

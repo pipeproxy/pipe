@@ -1,12 +1,13 @@
 // DO NOT EDIT! Code generated.
-package reference
+package reader
 
 import (
+	"context"
 	"fmt"
 	"io"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -21,40 +22,43 @@ type Config struct {
 	Def  io.Reader `json:",omitempty"`
 }
 
-func NewReaderRefWithConfig(conf *Config) io.Reader {
+func NewReaderRefWithConfig(ctx context.Context, conf *Config) io.Reader {
 	o := &Reader{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewReaderDefWithConfig(conf *Config) io.Reader {
-	return ReaderPut(conf.Name, conf.Def)
+func NewReaderDefWithConfig(ctx context.Context, conf *Config) io.Reader {
+	return ReaderPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut          sync.RWMutex
-	_ReaderStore = map[string]io.Reader{}
-)
-
-func ReaderPut(name string, def io.Reader) io.Reader {
+func ReaderPut(ctx context.Context, name string, def io.Reader) io.Reader {
 	if def == nil {
 		def = ReaderNone
 	}
-	mut.Lock()
-	_ReaderStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return ReaderNone
+	}
+	store, _ := m.LoadOrStore("io.Reader", map[string]io.Reader{})
+	store.(map[string]io.Reader)[name] = def
 	return def
 }
 
-func ReaderGet(name string, defaults io.Reader) io.Reader {
-	mut.RLock()
-	o, ok := _ReaderStore[name]
-	mut.RUnlock()
+func ReaderGet(ctx context.Context, name string, defaults io.Reader) io.Reader {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("io.Reader", map[string]io.Reader{})
+		o, ok := store.(map[string]io.Reader)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -80,8 +84,9 @@ func (_ReaderNone) Read(_ []uint8) (_ int, error error) {
 type Reader struct {
 	Name string
 	Def  io.Reader
+	Ctx  context.Context
 }
 
 func (o *Reader) Read(a []uint8) (int, error) {
-	return ReaderGet(o.Name, o.Def).Read(a)
+	return ReaderGet(o.Ctx, o.Name, o.Def).Read(a)
 }

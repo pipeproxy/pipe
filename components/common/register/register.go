@@ -16,8 +16,6 @@ func Register(kind string, fun interface{}) error {
 		return err
 	}
 
-	logger.Infof("Register: %s ", kind)
-
 	return types.Default.Register(kind, fun)
 }
 

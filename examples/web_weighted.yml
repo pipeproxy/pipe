@@ -24,9 +24,8 @@ Multi:
   - '@Kind': def@service.Service
     Def:
       '@Kind': stream@service.Service
-      DisconnectOnClose: false
       Handler:
-        '@Kind': http@stream.Handler
+        '@Kind': http1@stream.Handler
         Handler:
           '@Kind': log@net/http.Handler
           Handler:
@@ -36,7 +35,7 @@ Multi:
             '@Kind': file@io.Writer
             Path: /dev/stderr
       Listener:
-        '@Kind': network@stream/listener.ListenConfig
+        '@Kind': listener@stream.ListenConfig
         Address: :80
         Network: tcp
     Name: gateway

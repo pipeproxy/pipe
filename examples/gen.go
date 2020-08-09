@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/kubernetes-sigs/yaml"
 	"github.com/wzshiming/pipe/examples"
+	"sigs.k8s.io/yaml"
 )
 
 func main() {

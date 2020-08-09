@@ -1,7 +1,7 @@
 package yaml
 
 import (
-	"github.com/kubernetes-sigs/yaml"
+	"sigs.k8s.io/yaml"
 )
 
 type Coder struct {

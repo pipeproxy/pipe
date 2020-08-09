@@ -1,12 +1,13 @@
 // DO NOT EDIT! Code generated.
-package reference
+package marshaler
 
 import (
+	"context"
 	"fmt"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/codec"
 	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -21,40 +22,43 @@ type Config struct {
 	Def  codec.Marshaler `json:",omitempty"`
 }
 
-func NewMarshalerRefWithConfig(conf *Config) codec.Marshaler {
+func NewMarshalerRefWithConfig(ctx context.Context, conf *Config) codec.Marshaler {
 	o := &Marshaler{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewMarshalerDefWithConfig(conf *Config) codec.Marshaler {
-	return MarshalerPut(conf.Name, conf.Def)
+func NewMarshalerDefWithConfig(ctx context.Context, conf *Config) codec.Marshaler {
+	return MarshalerPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut             sync.RWMutex
-	_MarshalerStore = map[string]codec.Marshaler{}
-)
-
-func MarshalerPut(name string, def codec.Marshaler) codec.Marshaler {
+func MarshalerPut(ctx context.Context, name string, def codec.Marshaler) codec.Marshaler {
 	if def == nil {
 		def = MarshalerNone
 	}
-	mut.Lock()
-	_MarshalerStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return MarshalerNone
+	}
+	store, _ := m.LoadOrStore("codec.Marshaler", map[string]codec.Marshaler{})
+	store.(map[string]codec.Marshaler)[name] = def
 	return def
 }
 
-func MarshalerGet(name string, defaults codec.Marshaler) codec.Marshaler {
-	mut.RLock()
-	o, ok := _MarshalerStore[name]
-	mut.RUnlock()
+func MarshalerGet(ctx context.Context, name string, defaults codec.Marshaler) codec.Marshaler {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("codec.Marshaler", map[string]codec.Marshaler{})
+		o, ok := store.(map[string]codec.Marshaler)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -80,8 +84,9 @@ func (_MarshalerNone) Marshal(_ interface{}) (_ []uint8, error error) {
 type Marshaler struct {
 	Name string
 	Def  codec.Marshaler
+	Ctx  context.Context
 }
 
 func (o *Marshaler) Marshal(a interface{}) ([]uint8, error) {
-	return MarshalerGet(o.Name, o.Def).Marshal(a)
+	return MarshalerGet(o.Ctx, o.Name, o.Def).Marshal(a)
 }

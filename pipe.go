@@ -4,21 +4,26 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"sync/atomic"
+	"time"
 
-	"github.com/kubernetes-sigs/yaml"
 	"github.com/wzshiming/pipe/components/common/load"
 	"github.com/wzshiming/pipe/components/once"
 	"github.com/wzshiming/pipe/components/stdio/input/inline"
+	"github.com/wzshiming/pipe/internal/ctxcache"
+	"github.com/wzshiming/pipe/internal/listener"
 	"golang.org/x/sync/errgroup"
+	"sigs.k8s.io/yaml"
 )
 
 type Pipe struct {
-	config string
-	group  *errgroup.Group
-	ctx    context.Context
-	cancel func()
-	once   once.Once
-	mut    sync.Mutex
+	config    string
+	group     *errgroup.Group
+	ctx       context.Context
+	cancel    []func()
+	mut       sync.Mutex
+	reloadMut sync.Mutex
+	usage     int32
 }
 
 type pipeCtxKeyType int
@@ -33,35 +38,17 @@ func GetPipeWithContext(ctx context.Context) (*Pipe, bool) {
 }
 
 func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
-	config, err := yaml.YAMLToJSONStrict(config)
-	if err != nil {
-		return nil, err
+	c := &Pipe{
+		ctx: ctx,
 	}
-	conf := string(config)
-	c := &Pipe{}
-	c.group, c.ctx = errgroup.WithContext(ctx)
 	c.ctx = context.WithValue(c.ctx, pipeCtxKeyType(0), c)
-	var o once.Once
-	err = load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
-	if err != nil {
-		return nil, err
-	}
-	if o == nil {
-		return nil, fmt.Errorf("no entry")
-	}
-	c.once = o
-	c.config = conf
+	c.group, c.ctx = errgroup.WithContext(c.ctx)
+	c.config = string(config)
 	return c, nil
 }
 
 func (c *Pipe) Start() error {
-	c.mut.Lock()
-	defer c.mut.Unlock()
-	err := c.start(c.once)
-	if err != nil {
-		return err
-	}
-	return nil
+	return c.load([]byte(c.config), true)
 }
 
 func (c *Pipe) Run() error {
@@ -76,28 +63,45 @@ func (c *Pipe) Wait() error {
 	return c.group.Wait()
 }
 
-func (c *Pipe) start(o once.Once) error {
-	ctx, cancel := context.WithCancel(c.ctx)
-	run := func() error {
-		return o.Do(ctx)
+func (c *Pipe) waitUsage(i int32) {
+	for atomic.LoadInt32(&c.usage) > i {
+		time.Sleep(time.Second / 10)
 	}
-	c.group.Go(run)
-	if c.cancel != nil {
-		c.cancel()
+	time.Sleep(time.Second / 2)
+}
+
+func (c *Pipe) start(ctx context.Context, o once.Once, first bool) error {
+	listener.Swap()
+	ctx, cancel := context.WithCancel(ctx)
+	c.group.Go(func() error {
+		atomic.AddInt32(&c.usage, 1)
+		err := o.Do(ctx)
+		atomic.AddInt32(&c.usage, -1)
+		return err
+	})
+	if !first {
+		c.waitUsage(2)
 	}
-	c.once = o
-	c.cancel = cancel
+	c.close()
+	listener.CloseSwap()
+	c.waitUsage(1)
+	c.cancel = append(c.cancel, cancel)
 	return nil
 }
 
 func (c *Pipe) Reload(config []byte) error {
+	return c.load(config, false)
+}
+
+func (c *Pipe) load(config []byte, first bool) error {
 	config, err := yaml.YAMLToJSONStrict(config)
 	if err != nil {
 		return err
 	}
 	conf := string(config)
 	var o once.Once
-	err = load.Load(c.ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
+	ctx := ctxcache.WithCache(c.ctx)
+	err = load.Load(ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
 	if err != nil {
 		return err
 	}
@@ -107,7 +111,7 @@ func (c *Pipe) Reload(config []byte) error {
 
 	c.mut.Lock()
 	defer c.mut.Unlock()
-	err = c.start(o)
+	err = c.start(ctx, o, first)
 	if err != nil {
 		return err
 	}
@@ -118,10 +122,19 @@ func (c *Pipe) Reload(config []byte) error {
 func (c *Pipe) Close() error {
 	c.mut.Lock()
 	defer c.mut.Unlock()
-	if c.cancel != nil {
-		c.cancel()
-	}
+	listener.Swap()
+	c.close()
+	listener.CloseSwap()
+	c.waitUsage(0)
 	return nil
+}
+
+func (c *Pipe) close() {
+	for _, do := range c.cancel {
+		do()
+	}
+	c.cancel = c.cancel[:0]
+	return
 }
 
 func (c *Pipe) Config() []byte {

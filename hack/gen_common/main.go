@@ -44,7 +44,8 @@ func (g *gen) data() interface{} {
 	dep := []string{
 		"github.com/wzshiming/pipe/components/common/register",
 		"github.com/wzshiming/pipe/internal/logger",
-		"sync",
+		"github.com/wzshiming/pipe/internal/ctxcache",
+		"context",
 	}
 	for _, d := range dep {
 		imports[d] = struct{}{}
@@ -113,6 +114,7 @@ func (g *gen) data() interface{} {
 	}
 	return map[string]interface{}{
 		"Type":    g.typ.Name(),
+		"PkgName": strings.ToLower(g.typ.Name()),
 		"Pkg":     getImportName(g.typ.PkgPath()),
 		"Imports": imp,
 		"Methods": methods,

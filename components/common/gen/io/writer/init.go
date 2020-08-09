@@ -1,12 +1,13 @@
 // DO NOT EDIT! Code generated.
-package reference
+package writer
 
 import (
+	"context"
 	"fmt"
 	"io"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -21,40 +22,43 @@ type Config struct {
 	Def  io.Writer `json:",omitempty"`
 }
 
-func NewWriterRefWithConfig(conf *Config) io.Writer {
+func NewWriterRefWithConfig(ctx context.Context, conf *Config) io.Writer {
 	o := &Writer{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewWriterDefWithConfig(conf *Config) io.Writer {
-	return WriterPut(conf.Name, conf.Def)
+func NewWriterDefWithConfig(ctx context.Context, conf *Config) io.Writer {
+	return WriterPut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut          sync.RWMutex
-	_WriterStore = map[string]io.Writer{}
-)
-
-func WriterPut(name string, def io.Writer) io.Writer {
+func WriterPut(ctx context.Context, name string, def io.Writer) io.Writer {
 	if def == nil {
 		def = WriterNone
 	}
-	mut.Lock()
-	_WriterStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return WriterNone
+	}
+	store, _ := m.LoadOrStore("io.Writer", map[string]io.Writer{})
+	store.(map[string]io.Writer)[name] = def
 	return def
 }
 
-func WriterGet(name string, defaults io.Writer) io.Writer {
-	mut.RLock()
-	o, ok := _WriterStore[name]
-	mut.RUnlock()
+func WriterGet(ctx context.Context, name string, defaults io.Writer) io.Writer {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("io.Writer", map[string]io.Writer{})
+		o, ok := store.(map[string]io.Writer)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -80,8 +84,9 @@ func (_WriterNone) Write(_ []uint8) (_ int, error error) {
 type Writer struct {
 	Name string
 	Def  io.Writer
+	Ctx  context.Context
 }
 
 func (o *Writer) Write(a []uint8) (int, error) {
-	return WriterGet(o.Name, o.Def).Write(a)
+	return WriterGet(o.Ctx, o.Name, o.Def).Write(a)
 }

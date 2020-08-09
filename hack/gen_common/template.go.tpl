@@ -1,5 +1,5 @@
 // DO NOT EDIT! Code generated.
-package reference
+package {{ .PkgName }}
 
 import (
 	{{ range .Imports }}
@@ -21,40 +21,43 @@ type Config struct {
 	Def  {{ .Pkg }}.{{ .Type }} `json:",omitempty"`
 }
 
-func New{{ .Type }}RefWithConfig(conf *Config) {{ .Pkg }}.{{ .Type }} {
+func New{{ .Type }}RefWithConfig(ctx context.Context, conf *Config) {{ .Pkg }}.{{ .Type }} {
 	o := &{{ .Type }}{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func New{{ .Type }}DefWithConfig(conf *Config) {{ .Pkg }}.{{ .Type }} {
-	return {{ .Type }}Put(conf.Name, conf.Def)
+func New{{ .Type }}DefWithConfig(ctx context.Context, conf *Config) {{ .Pkg }}.{{ .Type }} {
+	return {{ .Type }}Put(ctx, conf.Name, conf.Def)
 }
 
-var (
-    mut sync.RWMutex
-    _{{ .Type }}Store = map[string]{{ .Pkg }}.{{ .Type }}{}
-)
-
-func {{ .Type }}Put(name string, def {{ .Pkg }}.{{ .Type }}) {{ .Pkg }}.{{ .Type }} {
+func {{ .Type }}Put(ctx context.Context, name string, def {{ .Pkg }}.{{ .Type }}) {{ .Pkg }}.{{ .Type }} {
     if def == nil {
         def = {{ .Type }}None
     }
-    mut.Lock()
-	_{{ .Type }}Store[name] = def
-	mut.Unlock()
+
+    m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return {{ .Type }}None
+	}
+	store, _ := m.LoadOrStore("{{ .Pkg }}.{{ .Type }}", map[string]{{ .Pkg }}.{{ .Type }}{})
+	store.(map[string]{{ .Pkg }}.{{ .Type }})[name] = def
 	return def
 }
 
-func {{ .Type }}Get(name string, defaults {{ .Pkg }}.{{ .Type }}) {{ .Pkg }}.{{ .Type }} {
-    mut.RLock()
-	o, ok := _{{ .Type }}Store[name]
-	mut.RUnlock()
+func {{ .Type }}Get(ctx context.Context, name string, defaults {{ .Pkg }}.{{ .Type }}) {{ .Pkg }}.{{ .Type }} {
+    m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("{{ .Pkg }}.{{ .Type }}", map[string]{{ .Pkg }}.{{ .Type }}{})
+		o, ok := store.(map[string]{{ .Pkg }}.{{ .Type }})[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -90,6 +93,7 @@ func (_{{ $Type }}None) {{ .FuncName }}(
 type {{ .Type }} struct {
 	Name string
 	Def  {{ .Pkg }}.{{ .Type }}
+	Ctx  context.Context
 }
 
 {{ range .Methods }}
@@ -102,7 +106,7 @@ func (o *{{ $Type }}) {{ .FuncName }}(
         {{ .Type }},
     {{- end -}}
 	) {
-    {{ if .Results }}return{{ end }} {{ $Type }}Get(o.Name, o.Def).{{ .FuncName }}(
+    {{ if .Results }}return{{ end }} {{ $Type }}Get(o.Ctx, o.Name, o.Def).{{ .FuncName }}(
     {{- range .Args -}}
         {{- .Name }},
     {{- end -}}

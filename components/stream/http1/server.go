@@ -1,0 +1,46 @@
+package http
+
+import (
+	"context"
+	"net/http"
+
+	"github.com/wzshiming/pipe/components/stream"
+	"github.com/wzshiming/pipe/internal/listener"
+	"github.com/wzshiming/pipe/internal/logger"
+)
+
+type server struct {
+	handler http.Handler
+}
+
+func NewServer(handler http.Handler) *server {
+	s := &server{
+		handler: handler,
+	}
+	return s
+}
+
+func (s *server) serve(ctx context.Context, listen stream.StreamListener, handler http.Handler) error {
+	baseContext := func(stream.StreamListener) context.Context {
+		return ctx
+	}
+
+	svc := http.Server{
+		Handler:     handler,
+		BaseContext: baseContext,
+	}
+
+	err := svc.Serve(listen)
+	if err != nil && !listener.IsClosedConnError(err) {
+		return err
+	}
+	return nil
+}
+
+func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
+	err := s.serve(ctx, listener.NewSingleConnListener(stm), s.handler)
+	if err != nil {
+		logger.Error("[http1]", err)
+		return
+	}
+}

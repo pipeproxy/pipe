@@ -1,13 +1,13 @@
 // DO NOT EDIT! Code generated.
-package reference
+package service
 
 import (
 	"context"
 	"fmt"
-	"sync"
 
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/service"
+	"github.com/wzshiming/pipe/internal/ctxcache"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -22,40 +22,43 @@ type Config struct {
 	Def  service.Service `json:",omitempty"`
 }
 
-func NewServiceRefWithConfig(conf *Config) service.Service {
+func NewServiceRefWithConfig(ctx context.Context, conf *Config) service.Service {
 	o := &Service{
 		Name: conf.Name,
 		Def:  conf.Def,
+		Ctx:  ctx,
 	}
 	return o
 }
 
-func NewServiceDefWithConfig(conf *Config) service.Service {
-	return ServicePut(conf.Name, conf.Def)
+func NewServiceDefWithConfig(ctx context.Context, conf *Config) service.Service {
+	return ServicePut(ctx, conf.Name, conf.Def)
 }
 
-var (
-	mut           sync.RWMutex
-	_ServiceStore = map[string]service.Service{}
-)
-
-func ServicePut(name string, def service.Service) service.Service {
+func ServicePut(ctx context.Context, name string, def service.Service) service.Service {
 	if def == nil {
 		def = ServiceNone
 	}
-	mut.Lock()
-	_ServiceStore[name] = def
-	mut.Unlock()
+
+	m, ok := ctxcache.GetCacheWithContext(ctx)
+	if !ok {
+		return ServiceNone
+	}
+	store, _ := m.LoadOrStore("service.Service", map[string]service.Service{})
+	store.(map[string]service.Service)[name] = def
 	return def
 }
 
-func ServiceGet(name string, defaults service.Service) service.Service {
-	mut.RLock()
-	o, ok := _ServiceStore[name]
-	mut.RUnlock()
+func ServiceGet(ctx context.Context, name string, defaults service.Service) service.Service {
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		return o
+		store, _ := m.LoadOrStore("service.Service", map[string]service.Service{})
+		o, ok := store.(map[string]service.Service)[name]
+		if ok {
+			return o
+		}
 	}
+
 	if defaults != nil {
 		return defaults
 	}
@@ -89,12 +92,13 @@ func (_ServiceNone) Run(_ context.Context) (error error) {
 type Service struct {
 	Name string
 	Def  service.Service
+	Ctx  context.Context
 }
 
 func (o *Service) Close() error {
-	return ServiceGet(o.Name, o.Def).Close()
+	return ServiceGet(o.Ctx, o.Name, o.Def).Close()
 }
 
 func (o *Service) Run(context context.Context) error {
-	return ServiceGet(o.Name, o.Def).Run(context)
+	return ServiceGet(o.Ctx, o.Name, o.Def).Run(context)
 }

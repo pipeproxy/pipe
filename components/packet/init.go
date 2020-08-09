@@ -8,12 +8,20 @@ import (
 )
 
 func init() {
+	var packet Packet
+	types.Register(&packet)
 	var handler Handler
 	types.Register(&handler)
+	var listenConfig ListenConfig
+	types.Register(&listenConfig)
 }
 
 type Packet = net.PacketConn
 
 type Handler interface {
 	ServePacket(ctx context.Context, pkt Packet)
+}
+
+type ListenConfig interface {
+	ListenPacket(ctx context.Context) (Packet, error)
 }

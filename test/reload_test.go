@@ -6,24 +6,22 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"testing"
 	"time"
 
 	"github.com/wzshiming/pipe"
 	"github.com/wzshiming/pipe/bind"
-	"github.com/wzshiming/pipe/internal/network"
 )
 
 func getDirect(port, info string) []byte {
 	def := bind.ServiceOnceConfig{
 		Service: bind.StreamServiceConfig{
 			DisconnectOnClose: true,
-			Listener: bind.NetworkStreamListenerListenConfigConfig{
-				Network: bind.NetworkStreamListenerListenConfigNetworkEnumEnumTCP,
+			Listener: bind.ListenerStreamListenConfigConfig{
+				Network: bind.ListenerStreamListenConfigListenerNetworkEnumEnumTCP,
 				Address: port,
 			},
-			Handler: bind.HTTPStreamHandlerConfig{
+			Handler: bind.HTTP1StreamHandlerConfig{
 				Handler: bind.MuxNetHTTPHandlerConfig{
 					Routes: []bind.MuxNetHTTPHandlerRoute{
 						{
@@ -61,28 +59,20 @@ func getNone() []byte {
 }
 
 func TestReload(t *testing.T) {
+	var port = "8888"
 	var data = "data"
-	p, err := pipe.NewPipeWithConfig(context.Background(), getDirect(":0", data))
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = p.Start()
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer p.Close()
-	time.Sleep(time.Second / 100)
-	d := network.ListenList()
-	if len(d) != 1 {
-		t.Fail()
-	}
-
-	u, err := url.Parse(d[0])
+	svc, err := pipe.NewPipeWithConfig(context.Background(), getDirect(fmt.Sprintf(":%s", port), data))
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	port := u.Port()
+	err = svc.Start()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer svc.Close()
+	time.Sleep(time.Second / 5)
+
 	uri := fmt.Sprintf("http://127.0.0.1:%s", port)
 	body, err := httpGet(uri)
 	if err != nil {
@@ -92,13 +82,13 @@ func TestReload(t *testing.T) {
 		t.FailNow()
 	}
 
-	for i := 0; i != 60; i++ {
+	for i := 0; i != 10; i++ {
 		data := fmt.Sprintf("data%d", i)
-		err := p.Reload(getDirect(fmt.Sprintf(":%s", port), data))
+		err := svc.Reload(getDirect(fmt.Sprintf(":%s", port), data))
 		if err != nil {
 			t.Fatal(err)
 		}
-		time.Sleep(time.Second / 100)
+		time.Sleep(time.Second)
 
 		body, err := httpGet(uri)
 		if err != nil {
@@ -111,11 +101,11 @@ func TestReload(t *testing.T) {
 			continue
 		}
 
-		err = p.Reload(getNone())
+		err = svc.Reload(getNone())
 		if err != nil {
 			t.Fatal(err)
 		}
-		time.Sleep(time.Second / 100)
+		time.Sleep(time.Second)
 
 		body, err = httpGet(uri)
 		if err == nil && string(body) == data {
@@ -123,11 +113,11 @@ func TestReload(t *testing.T) {
 			t.Errorf("reload configuration failed times %d, error %s", i, err)
 		}
 
-		err = p.Reload(getDirect(":0", data))
+		err = svc.Reload(getDirect(":0", data))
 		if err != nil {
 			t.Fatal(err)
 		}
-		time.Sleep(time.Second / 100)
+		time.Sleep(time.Second)
 
 		body, err = httpGet(uri)
 		if err == nil && string(body) == data {
@@ -135,11 +125,11 @@ func TestReload(t *testing.T) {
 			t.Errorf("reload configuration failed times %d, error %s", i, err)
 		}
 
-		err = p.Reload(getDirect(fmt.Sprintf(":%s", port), data))
+		err = svc.Reload(getDirect(fmt.Sprintf(":%s", port), data))
 		if err != nil {
 			t.Fatal(err)
 		}
-		time.Sleep(time.Second / 100)
+		time.Sleep(time.Second)
 
 		body, err = httpGet(uri)
 		if err != nil {

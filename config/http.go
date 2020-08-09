@@ -15,9 +15,9 @@ func BuildContentTypeHTMLWithHTTPHandler() bind.HTTPHandler {
 	}
 }
 
-func BuildHTTPRedirectWithHTTPHandler(location string, wait time.Duration) bind.StreamHandler {
+func BuildHTTPRedirectWithStreamHandler(location string, wait time.Duration) bind.StreamHandler {
 	if wait == 0 {
-		return bind.HTTPStreamHandlerConfig{
+		return bind.HTTP1StreamHandlerConfig{
 			Handler: bind.RedirectNetHTTPHandlerConfig{
 				Code:     http.StatusFound,
 				Location: location,
@@ -25,7 +25,7 @@ func BuildHTTPRedirectWithHTTPHandler(location string, wait time.Duration) bind.
 		}
 	}
 
-	return bind.HTTPStreamHandlerConfig{
+	return bind.HTTP1StreamHandlerConfig{
 		Handler: bind.MultiNetHTTPHandlerConfig{
 			Multi: []bind.HTTPHandler{
 				BuildContentTypeHTMLWithHTTPHandler(),
@@ -44,12 +44,12 @@ func BuildHTTPRedirectWithHTTPHandler(location string, wait time.Duration) bind.
 
 func BuildHTTP443ToHTTPSWithStreamHandler(handler bind.HTTPHandler, tls bind.TLS, wait time.Duration) bind.StreamHandler {
 	if tls == nil {
-		return bind.HTTPStreamHandlerConfig{
+		return bind.HTTP1StreamHandlerConfig{
 			Handler: handler,
 		}
 	}
 
-	redirect := BuildHTTPRedirectWithHTTPHandler("{{.Scheme}}s://{{.Host}}{{.RequestURI}}", wait)
+	redirect := BuildHTTPRedirectWithStreamHandler("{{.Scheme}}s://{{.Host}}{{.RequestURI}}", wait)
 
 	return bind.MuxStreamHandlerConfig{
 		Routes: []bind.MuxStreamHandlerRoute{
@@ -58,9 +58,97 @@ func BuildHTTP443ToHTTPSWithStreamHandler(handler bind.HTTPHandler, tls bind.TLS
 				Handler: redirect,
 			},
 		},
-		NotFound: bind.HTTPStreamHandlerConfig{
+		NotFound: bind.TLSDownStreamHandlerConfig{
+			Handler: bind.HTTP2StreamHandlerConfig{
+				Handler: handler,
+			},
+			TLS: tls,
+		},
+	}
+}
+
+func BuildH3WithService(address string, handler bind.HTTPHandler, tls bind.TLS) bind.Service {
+	listen := bind.ListenerPacketListenConfigConfig{
+		Network: bind.ListenerPacketListenConfigListenerNetworkEnumEnumUDP,
+		Address: address,
+	}
+	return bind.PacketServiceConfig{
+		Listener: listen,
+		Handler: bind.HTTP3PacketHandlerConfig{
+			Handler: handler,
 			TLS:     tls,
+		},
+	}
+}
+
+func BuildH2WithService(address string, handler bind.HTTPHandler, tls bind.TLS) bind.Service {
+	listen := bind.ListenerStreamListenConfigConfig{
+		Network: bind.ListenerStreamListenConfigListenerNetworkEnumEnumTCP,
+		Address: address,
+	}
+	return bind.StreamServiceConfig{
+		Listener: listen,
+		Handler: bind.MuxStreamHandlerConfig{
+			Routes: []bind.MuxStreamHandlerRoute{
+				{
+					Pattern: "http",
+					Handler: BuildHTTPRedirectWithStreamHandler("{{.Scheme}}s://{{.Host}}{{.RequestURI}}", 0),
+				},
+			},
+			NotFound: bind.HTTP2StreamHandlerConfig{
+				Handler: handler,
+				TLS:     tls,
+			},
+		},
+	}
+}
+
+func BuildH2SupportH3WithService(address string, handler bind.HTTPHandler, tls bind.TLS) bind.Service {
+	return BuildH2WithService(address, bind.MultiNetHTTPHandlerConfig{
+		Multi: []bind.HTTPHandler{
+			bind.AddResponseHeaderNetHTTPHandlerConfig{
+				Key:   "Alt-Svc",
+				Value: `h3-29=":443"; ma=2592000`,
+			},
+			handler,
+		},
+	}, tls)
+}
+
+func BuildHTTPRedirectToHTTPSWithService(address string) bind.Service {
+	listen := bind.ListenerStreamListenConfigConfig{
+		Network: bind.ListenerStreamListenConfigListenerNetworkEnumEnumTCP,
+		Address: address,
+	}
+
+	return bind.StreamServiceConfig{
+		Listener: listen,
+		Handler:  BuildHTTPRedirectWithStreamHandler("{{.Scheme}}s://{{.Host}}{{.RequestURI}}", 0),
+	}
+}
+
+func BuildH1WithService(address string, handler bind.HTTPHandler) bind.Service {
+	listen := bind.ListenerStreamListenConfigConfig{
+		Network: bind.ListenerStreamListenConfigListenerNetworkEnumEnumTCP,
+		Address: address,
+	}
+	return bind.StreamServiceConfig{
+		Listener: listen,
+		Handler: bind.HTTP1StreamHandlerConfig{
 			Handler: handler,
 		},
 	}
+}
+
+func BuildHTTPLog(log string, handler bind.HTTPHandler) bind.HTTPHandler {
+	return bind.LogNetHTTPHandlerConfig{
+		Output: bind.FileIoWriterConfig{
+			Path: log,
+		},
+		Handler: handler,
+	}
+}
+
+func BuildHTTPLogStderr(handler bind.HTTPHandler) bind.HTTPHandler {
+	return BuildHTTPLog("/dev/stderr", handler)
 }

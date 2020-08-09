@@ -661,6 +661,76 @@ func (m DefIoWriterConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@io.Writer type =========
 
+// ========= Begin def@net.Listener type =========
+//
+
+const kindDefNetListenerConfig = `def@net.Listener`
+
+// DefNetListenerConfig def@net.Listener
+type DefNetListenerConfig struct {
+	Name string
+	Def  NetListener `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindDefNetListenerConfig,
+		func(r *DefNetListenerConfig) NetListener { return r },
+	)
+}
+
+func (DefNetListenerConfig) isNetListener() {}
+func (DefNetListenerConfig) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DefNetListenerConfig) MarshalJSON() ([]byte, error) {
+	type t DefNetListenerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindDefNetListenerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End def@net.Listener type =========
+
+// ========= Begin def@net.PacketConn type =========
+//
+
+const kindDefNetPacketConnConfig = `def@net.PacketConn`
+
+// DefNetPacketConnConfig def@net.PacketConn
+type DefNetPacketConnConfig struct {
+	Name string
+	Def  NetPacketConn `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindDefNetPacketConnConfig,
+		func(r *DefNetPacketConnConfig) NetPacketConn { return r },
+	)
+}
+
+func (DefNetPacketConnConfig) isNetPacketConn() {}
+func (DefNetPacketConnConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DefNetPacketConnConfig) MarshalJSON() ([]byte, error) {
+	type t DefNetPacketConnConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindDefNetPacketConnConfig, data)
+	return data, nil
+}
+
+//
+// ========= End def@net.PacketConn type =========
+
 // ========= Begin def@net/http.Handler type =========
 //
 
@@ -801,6 +871,41 @@ func (m DefPacketHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@packet.Handler type =========
 
+// ========= Begin def@packet.ListenConfig type =========
+//
+
+const kindDefPacketListenConfigConfig = `def@packet.ListenConfig`
+
+// DefPacketListenConfigConfig def@packet.ListenConfig
+type DefPacketListenConfigConfig struct {
+	Name string
+	Def  PacketListenConfig `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindDefPacketListenConfigConfig,
+		func(r *DefPacketListenConfigConfig) PacketListenConfig { return r },
+	)
+}
+
+func (DefPacketListenConfigConfig) isPacketListenConfig() {}
+func (DefPacketListenConfigConfig) isComponent()          {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DefPacketListenConfigConfig) MarshalJSON() ([]byte, error) {
+	type t DefPacketListenConfigConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindDefPacketListenConfigConfig, data)
+	return data, nil
+}
+
+//
+// ========= End def@packet.ListenConfig type =========
+
 // ========= Begin def@protocol.Handler type =========
 //
 
@@ -871,6 +976,41 @@ func (m DefServiceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@service.Service type =========
 
+// ========= Begin def@stream.Dialer type =========
+//
+
+const kindDefStreamDialerConfig = `def@stream.Dialer`
+
+// DefStreamDialerConfig def@stream.Dialer
+type DefStreamDialerConfig struct {
+	Name string
+	Def  StreamDialer `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindDefStreamDialerConfig,
+		func(r *DefStreamDialerConfig) StreamDialer { return r },
+	)
+}
+
+func (DefStreamDialerConfig) isStreamDialer() {}
+func (DefStreamDialerConfig) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DefStreamDialerConfig) MarshalJSON() ([]byte, error) {
+	type t DefStreamDialerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindDefStreamDialerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End def@stream.Dialer type =========
+
 // ========= Begin def@stream.Handler type =========
 //
 
@@ -906,75 +1046,40 @@ func (m DefStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@stream.Handler type =========
 
-// ========= Begin def@stream/dialer.Dialer type =========
+// ========= Begin def@stream.ListenConfig type =========
 //
 
-const kindDefStreamDialerConfig = `def@stream/dialer.Dialer`
+const kindDefStreamListenConfigConfig = `def@stream.ListenConfig`
 
-// DefStreamDialerConfig def@stream/dialer.Dialer
-type DefStreamDialerConfig struct {
+// DefStreamListenConfigConfig def@stream.ListenConfig
+type DefStreamListenConfigConfig struct {
 	Name string
-	Def  Dialer `json:",omitempty"`
+	Def  StreamListenConfig `json:",omitempty"`
 }
 
 func init() {
 	_ = provider.Register(
-		kindDefStreamDialerConfig,
-		func(r *DefStreamDialerConfig) Dialer { return r },
+		kindDefStreamListenConfigConfig,
+		func(r *DefStreamListenConfigConfig) StreamListenConfig { return r },
 	)
 }
 
-func (DefStreamDialerConfig) isDialer()    {}
-func (DefStreamDialerConfig) isComponent() {}
+func (DefStreamListenConfigConfig) isStreamListenConfig() {}
+func (DefStreamListenConfigConfig) isComponent()          {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m DefStreamDialerConfig) MarshalJSON() ([]byte, error) {
-	type t DefStreamDialerConfig
+func (m DefStreamListenConfigConfig) MarshalJSON() ([]byte, error) {
+	type t DefStreamListenConfigConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindDefStreamDialerConfig, data)
+	data = prepend(kindKey, kindDefStreamListenConfigConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@stream/dialer.Dialer type =========
-
-// ========= Begin def@stream/listener.ListenConfig type =========
-//
-
-const kindDefStreamListenerListenConfigConfig = `def@stream/listener.ListenConfig`
-
-// DefStreamListenerListenConfigConfig def@stream/listener.ListenConfig
-type DefStreamListenerListenConfigConfig struct {
-	Name string
-	Def  ListenerListenConfig `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindDefStreamListenerListenConfigConfig,
-		func(r *DefStreamListenerListenConfigConfig) ListenerListenConfig { return r },
-	)
-}
-
-func (DefStreamListenerListenConfigConfig) isListenerListenConfig() {}
-func (DefStreamListenerListenConfigConfig) isComponent()            {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m DefStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
-	type t DefStreamListenerListenConfigConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindDefStreamListenerListenConfigConfig, data)
-	return data, nil
-}
-
-//
-// ========= End def@stream/listener.ListenConfig type =========
+// ========= End def@stream.ListenConfig type =========
 
 // ========= Begin def@tls.TLS type =========
 //
@@ -1010,6 +1115,51 @@ func (m DefTLSConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End def@tls.TLS type =========
+
+// ========= Begin dialer@stream.Dialer type =========
+//
+
+const kindDialerStreamDialerConfig = `dialer@stream.Dialer`
+
+// DialerStreamDialerConfig dialer@stream.Dialer
+type DialerStreamDialerConfig struct {
+	Network DialerStreamDialerDialerNetworkEnum
+	Address string
+	TLS     TLS `json:",omitempty"`
+}
+
+type DialerStreamDialerDialerNetworkEnum string
+
+const (
+	DialerStreamDialerDialerNetworkEnumEnumUnix DialerStreamDialerDialerNetworkEnum = "unix"
+	DialerStreamDialerDialerNetworkEnumEnumTCP6 DialerStreamDialerDialerNetworkEnum = "tcp6"
+	DialerStreamDialerDialerNetworkEnumEnumTCP4 DialerStreamDialerDialerNetworkEnum = "tcp4"
+	DialerStreamDialerDialerNetworkEnumEnumTCP  DialerStreamDialerDialerNetworkEnum = "tcp"
+)
+
+func init() {
+	_ = provider.Register(
+		kindDialerStreamDialerConfig,
+		func(r *DialerStreamDialerConfig) StreamDialer { return r },
+	)
+}
+
+func (DialerStreamDialerConfig) isStreamDialer() {}
+func (DialerStreamDialerConfig) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DialerStreamDialerConfig) MarshalJSON() ([]byte, error) {
+	type t DialerStreamDialerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindDialerStreamDialerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End dialer@stream.Dialer type =========
 
 // ========= Begin direct@net/http.Handler type =========
 //
@@ -1222,7 +1372,7 @@ const kindForwardNetHTTPHandlerConfig = `forward@net/http.Handler`
 
 // ForwardNetHTTPHandlerConfig forward@net/http.Handler
 type ForwardNetHTTPHandlerConfig struct {
-	RoundTripper HTTPRoundTripper
+	RoundTripper HTTPRoundTripper `json:",omitempty"`
 	URL          string
 }
 
@@ -1257,7 +1407,7 @@ const kindForwardStreamHandlerConfig = `forward@stream.Handler`
 
 // ForwardStreamHandlerConfig forward@stream.Handler
 type ForwardStreamHandlerConfig struct {
-	Dialer Dialer
+	Dialer StreamDialer
 }
 
 func init() {
@@ -1386,40 +1536,6 @@ func (m GzipCodecEncoder) MarshalJSON() ([]byte, error) {
 //
 // ========= End gzip@codec.Encoder type =========
 
-// ========= Begin h2c@net/http.Handler type =========
-//
-
-const kindH2CNetHTTPHandlerConfig = `h2c@net/http.Handler`
-
-// H2CNetHTTPHandlerConfig h2c@net/http.Handler
-type H2CNetHTTPHandlerConfig struct {
-	Handler HTTPHandler
-}
-
-func init() {
-	_ = provider.Register(
-		kindH2CNetHTTPHandlerConfig,
-		func(r *H2CNetHTTPHandlerConfig) HTTPHandler { return r },
-	)
-}
-
-func (H2CNetHTTPHandlerConfig) isHTTPHandler() {}
-func (H2CNetHTTPHandlerConfig) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m H2CNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t H2CNetHTTPHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindH2CNetHTTPHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End h2c@net/http.Handler type =========
-
 // ========= Begin hex@codec.Decoder type =========
 //
 
@@ -1526,6 +1642,110 @@ func (m HostNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End host@net/http.Handler type =========
 
+// ========= Begin http1@stream.Handler type =========
+//
+
+const kindHTTP1StreamHandlerConfig = `http1@stream.Handler`
+
+// HTTP1StreamHandlerConfig http1@stream.Handler
+type HTTP1StreamHandlerConfig struct {
+	Handler HTTPHandler
+}
+
+func init() {
+	_ = provider.Register(
+		kindHTTP1StreamHandlerConfig,
+		func(r *HTTP1StreamHandlerConfig) StreamHandler { return r },
+	)
+}
+
+func (HTTP1StreamHandlerConfig) isStreamHandler() {}
+func (HTTP1StreamHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m HTTP1StreamHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t HTTP1StreamHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindHTTP1StreamHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End http1@stream.Handler type =========
+
+// ========= Begin http2@stream.Handler type =========
+//
+
+const kindHTTP2StreamHandlerConfig = `http2@stream.Handler`
+
+// HTTP2StreamHandlerConfig http2@stream.Handler
+type HTTP2StreamHandlerConfig struct {
+	Handler HTTPHandler
+	TLS     TLS `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindHTTP2StreamHandlerConfig,
+		func(r *HTTP2StreamHandlerConfig) StreamHandler { return r },
+	)
+}
+
+func (HTTP2StreamHandlerConfig) isStreamHandler() {}
+func (HTTP2StreamHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m HTTP2StreamHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t HTTP2StreamHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindHTTP2StreamHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End http2@stream.Handler type =========
+
+// ========= Begin http3@packet.Handler type =========
+//
+
+const kindHTTP3PacketHandlerConfig = `http3@packet.Handler`
+
+// HTTP3PacketHandlerConfig http3@packet.Handler
+type HTTP3PacketHandlerConfig struct {
+	Handler HTTPHandler
+	TLS     TLS
+}
+
+func init() {
+	_ = provider.Register(
+		kindHTTP3PacketHandlerConfig,
+		func(r *HTTP3PacketHandlerConfig) PacketHandler { return r },
+	)
+}
+
+func (HTTP3PacketHandlerConfig) isPacketHandler() {}
+func (HTTP3PacketHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m HTTP3PacketHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t HTTP3PacketHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindHTTP3PacketHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End http3@packet.Handler type =========
+
 // ========= Begin http@io.Reader type =========
 //
 
@@ -1560,41 +1780,6 @@ func (m HTTPIoReaderConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End http@io.Reader type =========
-
-// ========= Begin http@stream.Handler type =========
-//
-
-const kindHTTPStreamHandlerConfig = `http@stream.Handler`
-
-// HTTPStreamHandlerConfig http@stream.Handler
-type HTTPStreamHandlerConfig struct {
-	Handler HTTPHandler
-	TLS     TLS `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindHTTPStreamHandlerConfig,
-		func(r *HTTPStreamHandlerConfig) StreamHandler { return r },
-	)
-}
-
-func (HTTPStreamHandlerConfig) isStreamHandler() {}
-func (HTTPStreamHandlerConfig) isComponent()     {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m HTTPStreamHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t HTTPStreamHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindHTTPStreamHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End http@stream.Handler type =========
 
 // ========= Begin inline@io.Reader type =========
 //
@@ -1695,6 +1880,95 @@ func (m JSONCodecUnmarshaler) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End json@codec.Unmarshaler type =========
+
+// ========= Begin listener@packet.ListenConfig type =========
+//
+
+const kindListenerPacketListenConfigConfig = `listener@packet.ListenConfig`
+
+// ListenerPacketListenConfigConfig listener@packet.ListenConfig
+type ListenerPacketListenConfigConfig struct {
+	Network ListenerPacketListenConfigListenerNetworkEnum
+	Address string
+}
+
+type ListenerPacketListenConfigListenerNetworkEnum string
+
+const (
+	ListenerPacketListenConfigListenerNetworkEnumEnumUnixPacket ListenerPacketListenConfigListenerNetworkEnum = "unixpacket"
+	ListenerPacketListenConfigListenerNetworkEnumEnumUDP6       ListenerPacketListenConfigListenerNetworkEnum = "udp6"
+	ListenerPacketListenConfigListenerNetworkEnumEnumUDP4       ListenerPacketListenConfigListenerNetworkEnum = "udp4"
+	ListenerPacketListenConfigListenerNetworkEnumEnumUDP        ListenerPacketListenConfigListenerNetworkEnum = "udp"
+)
+
+func init() {
+	_ = provider.Register(
+		kindListenerPacketListenConfigConfig,
+		func(r *ListenerPacketListenConfigConfig) PacketListenConfig { return r },
+	)
+}
+
+func (ListenerPacketListenConfigConfig) isPacketListenConfig() {}
+func (ListenerPacketListenConfigConfig) isComponent()          {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m ListenerPacketListenConfigConfig) MarshalJSON() ([]byte, error) {
+	type t ListenerPacketListenConfigConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindListenerPacketListenConfigConfig, data)
+	return data, nil
+}
+
+//
+// ========= End listener@packet.ListenConfig type =========
+
+// ========= Begin listener@stream.ListenConfig type =========
+//
+
+const kindListenerStreamListenConfigConfig = `listener@stream.ListenConfig`
+
+// ListenerStreamListenConfigConfig listener@stream.ListenConfig
+type ListenerStreamListenConfigConfig struct {
+	Network ListenerStreamListenConfigListenerNetworkEnum
+	Address string
+	TLS     TLS `json:",omitempty"`
+}
+
+type ListenerStreamListenConfigListenerNetworkEnum string
+
+const (
+	ListenerStreamListenConfigListenerNetworkEnumEnumUnix ListenerStreamListenConfigListenerNetworkEnum = "unix"
+	ListenerStreamListenConfigListenerNetworkEnumEnumTCP6 ListenerStreamListenConfigListenerNetworkEnum = "tcp6"
+	ListenerStreamListenConfigListenerNetworkEnumEnumTCP4 ListenerStreamListenConfigListenerNetworkEnum = "tcp4"
+	ListenerStreamListenConfigListenerNetworkEnumEnumTCP  ListenerStreamListenConfigListenerNetworkEnum = "tcp"
+)
+
+func init() {
+	_ = provider.Register(
+		kindListenerStreamListenConfigConfig,
+		func(r *ListenerStreamListenConfigConfig) StreamListenConfig { return r },
+	)
+}
+
+func (ListenerStreamListenConfigConfig) isStreamListenConfig() {}
+func (ListenerStreamListenConfigConfig) isComponent()          {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m ListenerStreamListenConfigConfig) MarshalJSON() ([]byte, error) {
+	type t ListenerStreamListenConfigConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindListenerStreamListenConfigConfig, data)
+	return data, nil
+}
+
+//
+// ========= End listener@stream.ListenConfig type =========
 
 // ========= Begin load@codec.Decoder type =========
 //
@@ -1900,6 +2174,74 @@ func (m LoadIoWriterConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End load@io.Writer type =========
 
+// ========= Begin load@net.Listener type =========
+//
+
+const kindLoadNetListenerConfig = `load@net.Listener`
+
+// LoadNetListenerConfig load@net.Listener
+type LoadNetListenerConfig struct {
+	Load IoReader
+}
+
+func init() {
+	_ = provider.Register(
+		kindLoadNetListenerConfig,
+		func(r *LoadNetListenerConfig) NetListener { return r },
+	)
+}
+
+func (LoadNetListenerConfig) isNetListener() {}
+func (LoadNetListenerConfig) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LoadNetListenerConfig) MarshalJSON() ([]byte, error) {
+	type t LoadNetListenerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLoadNetListenerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End load@net.Listener type =========
+
+// ========= Begin load@net.PacketConn type =========
+//
+
+const kindLoadNetPacketConnConfig = `load@net.PacketConn`
+
+// LoadNetPacketConnConfig load@net.PacketConn
+type LoadNetPacketConnConfig struct {
+	Load IoReader
+}
+
+func init() {
+	_ = provider.Register(
+		kindLoadNetPacketConnConfig,
+		func(r *LoadNetPacketConnConfig) NetPacketConn { return r },
+	)
+}
+
+func (LoadNetPacketConnConfig) isNetPacketConn() {}
+func (LoadNetPacketConnConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LoadNetPacketConnConfig) MarshalJSON() ([]byte, error) {
+	type t LoadNetPacketConnConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLoadNetPacketConnConfig, data)
+	return data, nil
+}
+
+//
+// ========= End load@net.PacketConn type =========
+
 // ========= Begin load@net/http.Handler type =========
 //
 
@@ -2036,6 +2378,40 @@ func (m LoadPacketHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End load@packet.Handler type =========
 
+// ========= Begin load@packet.ListenConfig type =========
+//
+
+const kindLoadPacketListenConfigConfig = `load@packet.ListenConfig`
+
+// LoadPacketListenConfigConfig load@packet.ListenConfig
+type LoadPacketListenConfigConfig struct {
+	Load IoReader
+}
+
+func init() {
+	_ = provider.Register(
+		kindLoadPacketListenConfigConfig,
+		func(r *LoadPacketListenConfigConfig) PacketListenConfig { return r },
+	)
+}
+
+func (LoadPacketListenConfigConfig) isPacketListenConfig() {}
+func (LoadPacketListenConfigConfig) isComponent()          {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LoadPacketListenConfigConfig) MarshalJSON() ([]byte, error) {
+	type t LoadPacketListenConfigConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLoadPacketListenConfigConfig, data)
+	return data, nil
+}
+
+//
+// ========= End load@packet.ListenConfig type =========
+
 // ========= Begin load@protocol.Handler type =========
 //
 
@@ -2104,6 +2480,40 @@ func (m LoadServiceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End load@service.Service type =========
 
+// ========= Begin load@stream.Dialer type =========
+//
+
+const kindLoadStreamDialerConfig = `load@stream.Dialer`
+
+// LoadStreamDialerConfig load@stream.Dialer
+type LoadStreamDialerConfig struct {
+	Load IoReader
+}
+
+func init() {
+	_ = provider.Register(
+		kindLoadStreamDialerConfig,
+		func(r *LoadStreamDialerConfig) StreamDialer { return r },
+	)
+}
+
+func (LoadStreamDialerConfig) isStreamDialer() {}
+func (LoadStreamDialerConfig) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LoadStreamDialerConfig) MarshalJSON() ([]byte, error) {
+	type t LoadStreamDialerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLoadStreamDialerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End load@stream.Dialer type =========
+
 // ========= Begin load@stream.Handler type =========
 //
 
@@ -2138,73 +2548,39 @@ func (m LoadStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End load@stream.Handler type =========
 
-// ========= Begin load@stream/dialer.Dialer type =========
+// ========= Begin load@stream.ListenConfig type =========
 //
 
-const kindLoadStreamDialerConfig = `load@stream/dialer.Dialer`
+const kindLoadStreamListenConfigConfig = `load@stream.ListenConfig`
 
-// LoadStreamDialerConfig load@stream/dialer.Dialer
-type LoadStreamDialerConfig struct {
+// LoadStreamListenConfigConfig load@stream.ListenConfig
+type LoadStreamListenConfigConfig struct {
 	Load IoReader
 }
 
 func init() {
 	_ = provider.Register(
-		kindLoadStreamDialerConfig,
-		func(r *LoadStreamDialerConfig) Dialer { return r },
+		kindLoadStreamListenConfigConfig,
+		func(r *LoadStreamListenConfigConfig) StreamListenConfig { return r },
 	)
 }
 
-func (LoadStreamDialerConfig) isDialer()    {}
-func (LoadStreamDialerConfig) isComponent() {}
+func (LoadStreamListenConfigConfig) isStreamListenConfig() {}
+func (LoadStreamListenConfigConfig) isComponent()          {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m LoadStreamDialerConfig) MarshalJSON() ([]byte, error) {
-	type t LoadStreamDialerConfig
+func (m LoadStreamListenConfigConfig) MarshalJSON() ([]byte, error) {
+	type t LoadStreamListenConfigConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindLoadStreamDialerConfig, data)
+	data = prepend(kindKey, kindLoadStreamListenConfigConfig, data)
 	return data, nil
 }
 
 //
-// ========= End load@stream/dialer.Dialer type =========
-
-// ========= Begin load@stream/listener.ListenConfig type =========
-//
-
-const kindLoadStreamListenerListenConfigConfig = `load@stream/listener.ListenConfig`
-
-// LoadStreamListenerListenConfigConfig load@stream/listener.ListenConfig
-type LoadStreamListenerListenConfigConfig struct {
-	Load IoReader
-}
-
-func init() {
-	_ = provider.Register(
-		kindLoadStreamListenerListenConfigConfig,
-		func(r *LoadStreamListenerListenConfigConfig) ListenerListenConfig { return r },
-	)
-}
-
-func (LoadStreamListenerListenConfigConfig) isListenerListenConfig() {}
-func (LoadStreamListenerListenConfigConfig) isComponent()            {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m LoadStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
-	type t LoadStreamListenerListenConfigConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindLoadStreamListenerListenConfigConfig, data)
-	return data, nil
-}
-
-//
-// ========= End load@stream/listener.ListenConfig type =========
+// ========= End load@stream.ListenConfig type =========
 
 // ========= Begin load@tls.TLS type =========
 //
@@ -2396,6 +2772,39 @@ func (m MethodNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End method@net/http.Handler type =========
+
+// ========= Begin metrics@net/http.Handler type =========
+//
+
+const kindMetricsNetHTTPHandler = `metrics@net/http.Handler`
+
+// MetricsNetHTTPHandler metrics@net/http.Handler
+type MetricsNetHTTPHandler struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindMetricsNetHTTPHandler,
+		func(r *MetricsNetHTTPHandler) HTTPHandler { return r },
+	)
+}
+
+func (MetricsNetHTTPHandler) isHTTPHandler() {}
+func (MetricsNetHTTPHandler) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m MetricsNetHTTPHandler) MarshalJSON() ([]byte, error) {
+	type t MetricsNetHTTPHandler
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindMetricsNetHTTPHandler, data)
+	return data, nil
+}
+
+//
+// ========= End metrics@net/http.Handler type =========
 
 // ========= Begin multi@net/http.Handler type =========
 //
@@ -2617,94 +3026,6 @@ func (m MuxStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End mux@stream.Handler type =========
 
-// ========= Begin network@stream/dialer.Dialer type =========
-//
-
-const kindNetworkStreamDialerConfig = `network@stream/dialer.Dialer`
-
-// NetworkStreamDialerConfig network@stream/dialer.Dialer
-type NetworkStreamDialerConfig struct {
-	Network NetworkStreamDialerNetworkEnum
-	Address string
-}
-
-type NetworkStreamDialerNetworkEnum string
-
-const (
-	NetworkStreamDialerNetworkEnumEnumUnix NetworkStreamDialerNetworkEnum = "unix"
-	NetworkStreamDialerNetworkEnumEnumTCP6 NetworkStreamDialerNetworkEnum = "tcp6"
-	NetworkStreamDialerNetworkEnumEnumTCP4 NetworkStreamDialerNetworkEnum = "tcp4"
-	NetworkStreamDialerNetworkEnumEnumTCP  NetworkStreamDialerNetworkEnum = "tcp"
-)
-
-func init() {
-	_ = provider.Register(
-		kindNetworkStreamDialerConfig,
-		func(r *NetworkStreamDialerConfig) Dialer { return r },
-	)
-}
-
-func (NetworkStreamDialerConfig) isDialer()    {}
-func (NetworkStreamDialerConfig) isComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m NetworkStreamDialerConfig) MarshalJSON() ([]byte, error) {
-	type t NetworkStreamDialerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindNetworkStreamDialerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End network@stream/dialer.Dialer type =========
-
-// ========= Begin network@stream/listener.ListenConfig type =========
-//
-
-const kindNetworkStreamListenerListenConfigConfig = `network@stream/listener.ListenConfig`
-
-// NetworkStreamListenerListenConfigConfig network@stream/listener.ListenConfig
-type NetworkStreamListenerListenConfigConfig struct {
-	Network NetworkStreamListenerListenConfigNetworkEnum
-	Address string
-}
-
-type NetworkStreamListenerListenConfigNetworkEnum string
-
-const (
-	NetworkStreamListenerListenConfigNetworkEnumEnumUnix NetworkStreamListenerListenConfigNetworkEnum = "unix"
-	NetworkStreamListenerListenConfigNetworkEnumEnumTCP6 NetworkStreamListenerListenConfigNetworkEnum = "tcp6"
-	NetworkStreamListenerListenConfigNetworkEnumEnumTCP4 NetworkStreamListenerListenConfigNetworkEnum = "tcp4"
-	NetworkStreamListenerListenConfigNetworkEnumEnumTCP  NetworkStreamListenerListenConfigNetworkEnum = "tcp"
-)
-
-func init() {
-	_ = provider.Register(
-		kindNetworkStreamListenerListenConfigConfig,
-		func(r *NetworkStreamListenerListenConfigConfig) ListenerListenConfig { return r },
-	)
-}
-
-func (NetworkStreamListenerListenConfigConfig) isListenerListenConfig() {}
-func (NetworkStreamListenerListenConfigConfig) isComponent()            {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m NetworkStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
-	type t NetworkStreamListenerListenConfigConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindNetworkStreamListenerListenConfigConfig, data)
-	return data, nil
-}
-
-//
-// ========= End network@stream/listener.ListenConfig type =========
-
 // ========= Begin none@codec.Decoder type =========
 //
 
@@ -2903,6 +3224,72 @@ func (m NoneIoWriter) MarshalJSON() ([]byte, error) {
 //
 // ========= End none@io.Writer type =========
 
+// ========= Begin none@net.Listener type =========
+//
+
+const kindNoneNetListener = `none@net.Listener`
+
+// NoneNetListener none@net.Listener
+type NoneNetListener struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneNetListener,
+		func(r *NoneNetListener) NetListener { return r },
+	)
+}
+
+func (NoneNetListener) isNetListener() {}
+func (NoneNetListener) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneNetListener) MarshalJSON() ([]byte, error) {
+	type t NoneNetListener
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneNetListener, data)
+	return data, nil
+}
+
+//
+// ========= End none@net.Listener type =========
+
+// ========= Begin none@net.PacketConn type =========
+//
+
+const kindNoneNetPacketConn = `none@net.PacketConn`
+
+// NoneNetPacketConn none@net.PacketConn
+type NoneNetPacketConn struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneNetPacketConn,
+		func(r *NoneNetPacketConn) NetPacketConn { return r },
+	)
+}
+
+func (NoneNetPacketConn) isNetPacketConn() {}
+func (NoneNetPacketConn) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneNetPacketConn) MarshalJSON() ([]byte, error) {
+	type t NoneNetPacketConn
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneNetPacketConn, data)
+	return data, nil
+}
+
+//
+// ========= End none@net.PacketConn type =========
+
 // ========= Begin none@net/http.Handler type =========
 //
 
@@ -3035,6 +3422,39 @@ func (m NonePacketHandler) MarshalJSON() ([]byte, error) {
 //
 // ========= End none@packet.Handler type =========
 
+// ========= Begin none@packet.ListenConfig type =========
+//
+
+const kindNonePacketListenConfig = `none@packet.ListenConfig`
+
+// NonePacketListenConfig none@packet.ListenConfig
+type NonePacketListenConfig struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNonePacketListenConfig,
+		func(r *NonePacketListenConfig) PacketListenConfig { return r },
+	)
+}
+
+func (NonePacketListenConfig) isPacketListenConfig() {}
+func (NonePacketListenConfig) isComponent()          {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NonePacketListenConfig) MarshalJSON() ([]byte, error) {
+	type t NonePacketListenConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNonePacketListenConfig, data)
+	return data, nil
+}
+
+//
+// ========= End none@packet.ListenConfig type =========
+
 // ========= Begin none@protocol.Handler type =========
 //
 
@@ -3101,6 +3521,39 @@ func (m NoneService) MarshalJSON() ([]byte, error) {
 //
 // ========= End none@service.Service type =========
 
+// ========= Begin none@stream.Dialer type =========
+//
+
+const kindNoneStreamDialer = `none@stream.Dialer`
+
+// NoneStreamDialer none@stream.Dialer
+type NoneStreamDialer struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneStreamDialer,
+		func(r *NoneStreamDialer) StreamDialer { return r },
+	)
+}
+
+func (NoneStreamDialer) isStreamDialer() {}
+func (NoneStreamDialer) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneStreamDialer) MarshalJSON() ([]byte, error) {
+	type t NoneStreamDialer
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneStreamDialer, data)
+	return data, nil
+}
+
+//
+// ========= End none@stream.Dialer type =========
+
 // ========= Begin none@stream.Handler type =========
 //
 
@@ -3134,71 +3587,38 @@ func (m NoneStreamHandler) MarshalJSON() ([]byte, error) {
 //
 // ========= End none@stream.Handler type =========
 
-// ========= Begin none@stream/dialer.Dialer type =========
+// ========= Begin none@stream.ListenConfig type =========
 //
 
-const kindNoneStreamDialer = `none@stream/dialer.Dialer`
+const kindNoneStreamListenConfig = `none@stream.ListenConfig`
 
-// NoneStreamDialer none@stream/dialer.Dialer
-type NoneStreamDialer struct {
+// NoneStreamListenConfig none@stream.ListenConfig
+type NoneStreamListenConfig struct {
 }
 
 func init() {
 	_ = provider.Register(
-		kindNoneStreamDialer,
-		func(r *NoneStreamDialer) Dialer { return r },
+		kindNoneStreamListenConfig,
+		func(r *NoneStreamListenConfig) StreamListenConfig { return r },
 	)
 }
 
-func (NoneStreamDialer) isDialer()    {}
-func (NoneStreamDialer) isComponent() {}
+func (NoneStreamListenConfig) isStreamListenConfig() {}
+func (NoneStreamListenConfig) isComponent()          {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m NoneStreamDialer) MarshalJSON() ([]byte, error) {
-	type t NoneStreamDialer
+func (m NoneStreamListenConfig) MarshalJSON() ([]byte, error) {
+	type t NoneStreamListenConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindNoneStreamDialer, data)
+	data = prepend(kindKey, kindNoneStreamListenConfig, data)
 	return data, nil
 }
 
 //
-// ========= End none@stream/dialer.Dialer type =========
-
-// ========= Begin none@stream/listener.ListenConfig type =========
-//
-
-const kindNoneStreamListenerListenConfig = `none@stream/listener.ListenConfig`
-
-// NoneStreamListenerListenConfig none@stream/listener.ListenConfig
-type NoneStreamListenerListenConfig struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindNoneStreamListenerListenConfig,
-		func(r *NoneStreamListenerListenConfig) ListenerListenConfig { return r },
-	)
-}
-
-func (NoneStreamListenerListenConfig) isListenerListenConfig() {}
-func (NoneStreamListenerListenConfig) isComponent()            {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m NoneStreamListenerListenConfig) MarshalJSON() ([]byte, error) {
-	type t NoneStreamListenerListenConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindNoneStreamListenerListenConfig, data)
-	return data, nil
-}
-
-//
-// ========= End none@stream/listener.ListenConfig type =========
+// ========= End none@stream.ListenConfig type =========
 
 // ========= Begin none@tls.TLS type =========
 //
@@ -3232,6 +3652,41 @@ func (m NoneTLS) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End none@tls.TLS type =========
+
+// ========= Begin packet@service.Service type =========
+//
+
+const kindPacketServiceConfig = `packet@service.Service`
+
+// PacketServiceConfig packet@service.Service
+type PacketServiceConfig struct {
+	Listener PacketListenConfig
+	Handler  PacketHandler
+}
+
+func init() {
+	_ = provider.Register(
+		kindPacketServiceConfig,
+		func(r *PacketServiceConfig) Service { return r },
+	)
+}
+
+func (PacketServiceConfig) isService()   {}
+func (PacketServiceConfig) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m PacketServiceConfig) MarshalJSON() ([]byte, error) {
+	type t PacketServiceConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindPacketServiceConfig, data)
+	return data, nil
+}
+
+//
+// ========= End packet@service.Service type =========
 
 // ========= Begin poller@net/http.Handler type =========
 //
@@ -3317,48 +3772,6 @@ func (m PollerStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End poller@stream.Handler type =========
 
-// ========= Begin poller@stream/dialer.Dialer type =========
-//
-
-const kindPollerStreamDialerConfig = `poller@stream/dialer.Dialer`
-
-// PollerStreamDialerConfig poller@stream/dialer.Dialer
-type PollerStreamDialerConfig struct {
-	Poller  PollerStreamDialerPollerEnum
-	Dialers []Dialer
-}
-
-type PollerStreamDialerPollerEnum string
-
-const (
-	PollerStreamDialerPollerEnumEnumRoundRobin PollerStreamDialerPollerEnum = "round_robin"
-	PollerStreamDialerPollerEnumEnumRandom     PollerStreamDialerPollerEnum = "random"
-)
-
-func init() {
-	_ = provider.Register(
-		kindPollerStreamDialerConfig,
-		func(r *PollerStreamDialerConfig) Dialer { return r },
-	)
-}
-
-func (PollerStreamDialerConfig) isDialer()    {}
-func (PollerStreamDialerConfig) isComponent() {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m PollerStreamDialerConfig) MarshalJSON() ([]byte, error) {
-	type t PollerStreamDialerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindPollerStreamDialerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End poller@stream/dialer.Dialer type =========
-
 // ========= Begin pprof@net/http.Handler type =========
 //
 
@@ -3391,6 +3804,41 @@ func (m PprofNetHTTPHandler) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End pprof@net/http.Handler type =========
+
+// ========= Begin quic@stream.ListenConfig type =========
+//
+
+const kindQuicStreamListenConfigConfig = `quic@stream.ListenConfig`
+
+// QuicStreamListenConfigConfig quic@stream.ListenConfig
+type QuicStreamListenConfigConfig struct {
+	Packet NetPacketConn
+	TLS    TLS
+}
+
+func init() {
+	_ = provider.Register(
+		kindQuicStreamListenConfigConfig,
+		func(r *QuicStreamListenConfigConfig) StreamListenConfig { return r },
+	)
+}
+
+func (QuicStreamListenConfigConfig) isStreamListenConfig() {}
+func (QuicStreamListenConfigConfig) isComponent()          {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m QuicStreamListenConfigConfig) MarshalJSON() ([]byte, error) {
+	type t QuicStreamListenConfigConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindQuicStreamListenConfigConfig, data)
+	return data, nil
+}
+
+//
+// ========= End quic@stream.ListenConfig type =========
 
 // ========= Begin quit@net/http.Handler type =========
 //
@@ -3670,6 +4118,76 @@ func (m RefIoWriterConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End ref@io.Writer type =========
 
+// ========= Begin ref@net.Listener type =========
+//
+
+const kindRefNetListenerConfig = `ref@net.Listener`
+
+// RefNetListenerConfig ref@net.Listener
+type RefNetListenerConfig struct {
+	Name string
+	Def  NetListener `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindRefNetListenerConfig,
+		func(r *RefNetListenerConfig) NetListener { return r },
+	)
+}
+
+func (RefNetListenerConfig) isNetListener() {}
+func (RefNetListenerConfig) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RefNetListenerConfig) MarshalJSON() ([]byte, error) {
+	type t RefNetListenerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindRefNetListenerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End ref@net.Listener type =========
+
+// ========= Begin ref@net.PacketConn type =========
+//
+
+const kindRefNetPacketConnConfig = `ref@net.PacketConn`
+
+// RefNetPacketConnConfig ref@net.PacketConn
+type RefNetPacketConnConfig struct {
+	Name string
+	Def  NetPacketConn `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindRefNetPacketConnConfig,
+		func(r *RefNetPacketConnConfig) NetPacketConn { return r },
+	)
+}
+
+func (RefNetPacketConnConfig) isNetPacketConn() {}
+func (RefNetPacketConnConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RefNetPacketConnConfig) MarshalJSON() ([]byte, error) {
+	type t RefNetPacketConnConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindRefNetPacketConnConfig, data)
+	return data, nil
+}
+
+//
+// ========= End ref@net.PacketConn type =========
+
 // ========= Begin ref@net/http.Handler type =========
 //
 
@@ -3810,6 +4328,41 @@ func (m RefPacketHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End ref@packet.Handler type =========
 
+// ========= Begin ref@packet.ListenConfig type =========
+//
+
+const kindRefPacketListenConfigConfig = `ref@packet.ListenConfig`
+
+// RefPacketListenConfigConfig ref@packet.ListenConfig
+type RefPacketListenConfigConfig struct {
+	Name string
+	Def  PacketListenConfig `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindRefPacketListenConfigConfig,
+		func(r *RefPacketListenConfigConfig) PacketListenConfig { return r },
+	)
+}
+
+func (RefPacketListenConfigConfig) isPacketListenConfig() {}
+func (RefPacketListenConfigConfig) isComponent()          {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RefPacketListenConfigConfig) MarshalJSON() ([]byte, error) {
+	type t RefPacketListenConfigConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindRefPacketListenConfigConfig, data)
+	return data, nil
+}
+
+//
+// ========= End ref@packet.ListenConfig type =========
+
 // ========= Begin ref@protocol.Handler type =========
 //
 
@@ -3880,6 +4433,41 @@ func (m RefServiceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End ref@service.Service type =========
 
+// ========= Begin ref@stream.Dialer type =========
+//
+
+const kindRefStreamDialerConfig = `ref@stream.Dialer`
+
+// RefStreamDialerConfig ref@stream.Dialer
+type RefStreamDialerConfig struct {
+	Name string
+	Def  StreamDialer `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindRefStreamDialerConfig,
+		func(r *RefStreamDialerConfig) StreamDialer { return r },
+	)
+}
+
+func (RefStreamDialerConfig) isStreamDialer() {}
+func (RefStreamDialerConfig) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RefStreamDialerConfig) MarshalJSON() ([]byte, error) {
+	type t RefStreamDialerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindRefStreamDialerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End ref@stream.Dialer type =========
+
 // ========= Begin ref@stream.Handler type =========
 //
 
@@ -3915,75 +4503,40 @@ func (m RefStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End ref@stream.Handler type =========
 
-// ========= Begin ref@stream/dialer.Dialer type =========
+// ========= Begin ref@stream.ListenConfig type =========
 //
 
-const kindRefStreamDialerConfig = `ref@stream/dialer.Dialer`
+const kindRefStreamListenConfigConfig = `ref@stream.ListenConfig`
 
-// RefStreamDialerConfig ref@stream/dialer.Dialer
-type RefStreamDialerConfig struct {
+// RefStreamListenConfigConfig ref@stream.ListenConfig
+type RefStreamListenConfigConfig struct {
 	Name string
-	Def  Dialer `json:",omitempty"`
+	Def  StreamListenConfig `json:",omitempty"`
 }
 
 func init() {
 	_ = provider.Register(
-		kindRefStreamDialerConfig,
-		func(r *RefStreamDialerConfig) Dialer { return r },
+		kindRefStreamListenConfigConfig,
+		func(r *RefStreamListenConfigConfig) StreamListenConfig { return r },
 	)
 }
 
-func (RefStreamDialerConfig) isDialer()    {}
-func (RefStreamDialerConfig) isComponent() {}
+func (RefStreamListenConfigConfig) isStreamListenConfig() {}
+func (RefStreamListenConfigConfig) isComponent()          {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m RefStreamDialerConfig) MarshalJSON() ([]byte, error) {
-	type t RefStreamDialerConfig
+func (m RefStreamListenConfigConfig) MarshalJSON() ([]byte, error) {
+	type t RefStreamListenConfigConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindRefStreamDialerConfig, data)
+	data = prepend(kindKey, kindRefStreamListenConfigConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@stream/dialer.Dialer type =========
-
-// ========= Begin ref@stream/listener.ListenConfig type =========
-//
-
-const kindRefStreamListenerListenConfigConfig = `ref@stream/listener.ListenConfig`
-
-// RefStreamListenerListenConfigConfig ref@stream/listener.ListenConfig
-type RefStreamListenerListenConfigConfig struct {
-	Name string
-	Def  ListenerListenConfig `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindRefStreamListenerListenConfigConfig,
-		func(r *RefStreamListenerListenConfigConfig) ListenerListenConfig { return r },
-	)
-}
-
-func (RefStreamListenerListenConfigConfig) isListenerListenConfig() {}
-func (RefStreamListenerListenConfigConfig) isComponent()            {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RefStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
-	type t RefStreamListenerListenConfigConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindRefStreamListenerListenConfigConfig, data)
-	return data, nil
-}
-
-//
-// ========= End ref@stream/listener.ListenConfig type =========
+// ========= End ref@stream.ListenConfig type =========
 
 // ========= Begin ref@tls.TLS type =========
 //
@@ -4162,9 +4715,9 @@ const kindStreamServiceConfig = `stream@service.Service`
 
 // StreamServiceConfig stream@service.Service
 type StreamServiceConfig struct {
-	Listener          ListenerListenConfig
+	Listener          StreamListenConfig
 	Handler           StreamHandler
-	DisconnectOnClose bool
+	DisconnectOnClose bool `json:",omitempty"`
 }
 
 func init() {
@@ -4191,75 +4744,40 @@ func (m StreamServiceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End stream@service.Service type =========
 
-// ========= Begin tls@stream/dialer.Dialer type =========
+// ========= Begin strip_prefix@net/http.Handler type =========
 //
 
-const kindTLSStreamDialerConfig = `tls@stream/dialer.Dialer`
+const kindStripPrefixNetHTTPHandlerConfig = `strip_prefix@net/http.Handler`
 
-// TLSStreamDialerConfig tls@stream/dialer.Dialer
-type TLSStreamDialerConfig struct {
-	Dialer Dialer
-	TLS    TLS
+// StripPrefixNetHTTPHandlerConfig strip_prefix@net/http.Handler
+type StripPrefixNetHTTPHandlerConfig struct {
+	Prefix  string
+	Handler HTTPHandler
 }
 
 func init() {
 	_ = provider.Register(
-		kindTLSStreamDialerConfig,
-		func(r *TLSStreamDialerConfig) Dialer { return r },
+		kindStripPrefixNetHTTPHandlerConfig,
+		func(r *StripPrefixNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
-func (TLSStreamDialerConfig) isDialer()    {}
-func (TLSStreamDialerConfig) isComponent() {}
+func (StripPrefixNetHTTPHandlerConfig) isHTTPHandler() {}
+func (StripPrefixNetHTTPHandlerConfig) isComponent()   {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m TLSStreamDialerConfig) MarshalJSON() ([]byte, error) {
-	type t TLSStreamDialerConfig
+func (m StripPrefixNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t StripPrefixNetHTTPHandlerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindTLSStreamDialerConfig, data)
+	data = prepend(kindKey, kindStripPrefixNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End tls@stream/dialer.Dialer type =========
-
-// ========= Begin tls@stream/listener.ListenConfig type =========
-//
-
-const kindTLSStreamListenerListenConfigConfig = `tls@stream/listener.ListenConfig`
-
-// TLSStreamListenerListenConfigConfig tls@stream/listener.ListenConfig
-type TLSStreamListenerListenConfigConfig struct {
-	ListenConfig ListenerListenConfig
-	TLS          TLS
-}
-
-func init() {
-	_ = provider.Register(
-		kindTLSStreamListenerListenConfigConfig,
-		func(r *TLSStreamListenerListenConfigConfig) ListenerListenConfig { return r },
-	)
-}
-
-func (TLSStreamListenerListenConfigConfig) isListenerListenConfig() {}
-func (TLSStreamListenerListenConfigConfig) isComponent()            {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m TLSStreamListenerListenConfigConfig) MarshalJSON() ([]byte, error) {
-	type t TLSStreamListenerListenConfigConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindTLSStreamListenerListenConfigConfig, data)
-	return data, nil
-}
-
-//
-// ========= End tls@stream/listener.ListenConfig type =========
+// ========= End strip_prefix@net/http.Handler type =========
 
 // ========= Begin tls_down@stream.Handler type =========
 //
@@ -4339,7 +4857,7 @@ const kindTransportNetHTTPRoundTripperConfig = `transport@net/http.RoundTripper`
 // TransportNetHTTPRoundTripperConfig transport@net/http.RoundTripper
 type TransportNetHTTPRoundTripperConfig struct {
 	TLS    TLS
-	Dialer Dialer
+	Dialer StreamDialer
 }
 
 func init() {
@@ -4859,6 +5377,76 @@ func (m *RawIoWriter) UnmarshalJSON(data []byte) error {
 //
 // ========= End io.Writer interface =========
 
+// ========= Begin net.Listener interface =========
+//
+
+// NetListener net.Listener
+type NetListener interface {
+	isNetListener()
+	Component
+}
+
+// RawNetListener is store raw bytes of NetListener
+type RawNetListener []byte
+
+func (RawNetListener) isNetListener() {}
+func (RawNetListener) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawNetListener) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawNetListener) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawNetListener: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End net.Listener interface =========
+
+// ========= Begin net.PacketConn interface =========
+//
+
+// NetPacketConn net.PacketConn
+type NetPacketConn interface {
+	isNetPacketConn()
+	Component
+}
+
+// RawNetPacketConn is store raw bytes of NetPacketConn
+type RawNetPacketConn []byte
+
+func (RawNetPacketConn) isNetPacketConn() {}
+func (RawNetPacketConn) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawNetPacketConn) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawNetPacketConn) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawNetPacketConn: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End net.PacketConn interface =========
+
 // ========= Begin http.RoundTripper interface =========
 //
 
@@ -4928,6 +5516,41 @@ func (m *RawPacketHandler) UnmarshalJSON(data []byte) error {
 
 //
 // ========= End packet.Handler interface =========
+
+// ========= Begin packet.ListenConfig interface =========
+//
+
+// PacketListenConfig packet.ListenConfig
+type PacketListenConfig interface {
+	isPacketListenConfig()
+	Component
+}
+
+// RawPacketListenConfig is store raw bytes of PacketListenConfig
+type RawPacketListenConfig []byte
+
+func (RawPacketListenConfig) isPacketListenConfig() {}
+func (RawPacketListenConfig) isComponent()          {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawPacketListenConfig) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawPacketListenConfig) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawPacketListenConfig: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End packet.ListenConfig interface =========
 
 // ========= Begin protocol.Handler interface =========
 //
@@ -4999,6 +5622,41 @@ func (m *RawService) UnmarshalJSON(data []byte) error {
 //
 // ========= End service.Service interface =========
 
+// ========= Begin stream.Dialer interface =========
+//
+
+// StreamDialer stream.Dialer
+type StreamDialer interface {
+	isStreamDialer()
+	Component
+}
+
+// RawStreamDialer is store raw bytes of StreamDialer
+type RawStreamDialer []byte
+
+func (RawStreamDialer) isStreamDialer() {}
+func (RawStreamDialer) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawStreamDialer) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawStreamDialer) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawStreamDialer: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End stream.Dialer interface =========
+
 // ========= Begin stream.Handler interface =========
 //
 
@@ -5034,23 +5692,23 @@ func (m *RawStreamHandler) UnmarshalJSON(data []byte) error {
 //
 // ========= End stream.Handler interface =========
 
-// ========= Begin dialer.Dialer interface =========
+// ========= Begin stream.ListenConfig interface =========
 //
 
-// Dialer dialer.Dialer
-type Dialer interface {
-	isDialer()
+// StreamListenConfig stream.ListenConfig
+type StreamListenConfig interface {
+	isStreamListenConfig()
 	Component
 }
 
-// RawDialer is store raw bytes of Dialer
-type RawDialer []byte
+// RawStreamListenConfig is store raw bytes of StreamListenConfig
+type RawStreamListenConfig []byte
 
-func (RawDialer) isDialer()    {}
-func (RawDialer) isComponent() {}
+func (RawStreamListenConfig) isStreamListenConfig() {}
+func (RawStreamListenConfig) isComponent()          {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m RawDialer) MarshalJSON() ([]byte, error) {
+func (m RawStreamListenConfig) MarshalJSON() ([]byte, error) {
 	if m == nil {
 		return []byte("null"), nil
 	}
@@ -5058,48 +5716,13 @@ func (m RawDialer) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON sets *m to a copy of data.
-func (m *RawDialer) UnmarshalJSON(data []byte) error {
+func (m *RawStreamListenConfig) UnmarshalJSON(data []byte) error {
 	if m == nil {
-		return errors.New("RawDialer: UnmarshalJSON on nil pointer")
+		return errors.New("RawStreamListenConfig: UnmarshalJSON on nil pointer")
 	}
 	*m = append((*m)[:0], data...)
 	return nil
 }
 
 //
-// ========= End dialer.Dialer interface =========
-
-// ========= Begin listener.ListenConfig interface =========
-//
-
-// ListenerListenConfig listener.ListenConfig
-type ListenerListenConfig interface {
-	isListenerListenConfig()
-	Component
-}
-
-// RawListenerListenConfig is store raw bytes of ListenerListenConfig
-type RawListenerListenConfig []byte
-
-func (RawListenerListenConfig) isListenerListenConfig() {}
-func (RawListenerListenConfig) isComponent()            {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawListenerListenConfig) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawListenerListenConfig) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawListenerListenConfig: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End listener.ListenConfig interface =========
+// ========= End stream.ListenConfig interface =========

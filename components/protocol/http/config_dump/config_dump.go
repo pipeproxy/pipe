@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kubernetes-sigs/yaml"
 	"github.com/wzshiming/pipe"
+	"sigs.k8s.io/yaml"
 )
 
 func NewConfigDump(ro bool) *ConfigDump {
