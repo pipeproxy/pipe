@@ -16,7 +16,7 @@ import (
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
-//go:generate go run github.com/wzshiming/go-bindata/cmd/go-bindata --nomemcopy --pkg main -o template.go ./template.go.tpl
+//go:generate ../../bin/go-bindata --nomemcopy --pkg main -o template.go ./template.go.tpl
 
 func main() {
 	for _, g := range types.Global {
