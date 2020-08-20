@@ -1,12 +1,12 @@
 package template
 
 import (
-	"bytes"
 	"io"
 	"net/http"
 	"strings"
-	"sync"
 	"text/template"
+
+	"github.com/wzshiming/pipe/internal/pool"
 )
 
 type Template struct {
@@ -32,20 +32,13 @@ func (t *Template) Format(w io.Writer, r *http.Request) error {
 }
 
 func (t *Template) FormatString(r *http.Request) string {
-	buf := poolBuffer.Get().(*bytes.Buffer)
-	buf.Reset()
-	defer poolBuffer.Put(buf)
+	buf := pool.GetBuffer()
+	defer pool.PutBuffer(buf)
 	err := t.Format(buf, r)
 	if err != nil {
 		return ""
 	}
 	return buf.String()
-}
-
-var poolBuffer = sync.Pool{
-	New: func() interface{} {
-		return bytes.NewBuffer(make([]byte, 1024))
-	},
 }
 
 // splitHostPort separates host and port. If the port is not valid, it returns

@@ -72,11 +72,11 @@ func (t *RequestVal) Header(key string) string {
 	return t.r.Header.Get(key)
 }
 
-func (t *RequestVal) Method(key string) string {
+func (t *RequestVal) Method() string {
 	return t.r.Method
 }
 
-func (t *RequestVal) ContentLength(key string) int64 {
+func (t *RequestVal) ContentLength() int64 {
 	return t.r.ContentLength
 }
 
