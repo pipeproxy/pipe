@@ -4849,6 +4849,39 @@ func (m ValidationTLSConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End validation@tls.TLS type =========
 
+// ========= Begin wait@service.Service type =========
+//
+
+const kindWaitService = `wait@service.Service`
+
+// WaitService wait@service.Service
+type WaitService struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindWaitService,
+		func(r *WaitService) Service { return r },
+	)
+}
+
+func (WaitService) isService()   {}
+func (WaitService) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m WaitService) MarshalJSON() ([]byte, error) {
+	type t WaitService
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindWaitService, data)
+	return data, nil
+}
+
+//
+// ========= End wait@service.Service type =========
+
 // ========= Begin weighted@net/http.Handler type =========
 //
 

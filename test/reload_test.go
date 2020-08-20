@@ -46,9 +46,9 @@ func getDirect(port, info string) []byte {
 	return data
 }
 
-func getNone() []byte {
+func getWait() []byte {
 	def := bind.ServiceOnceConfig{
-		Service: bind.NoneService{},
+		Service: bind.WaitService{},
 	}
 
 	data, err := json.Marshal(def)
@@ -101,7 +101,7 @@ func TestReload(t *testing.T) {
 			continue
 		}
 
-		err = svc.Reload(getNone())
+		err = svc.Reload(getWait())
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -149,7 +149,7 @@ func httpGet(url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	ctx, _ := context.WithDeadline(context.Background(), time.Now().Add(time.Second/5))
+	ctx, _ := context.WithDeadline(req.Context(), time.Now().Add(time.Second/5))
 	req = req.WithContext(ctx)
 	resp, err := httpClient.Do(req)
 	if err != nil {

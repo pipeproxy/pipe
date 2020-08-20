@@ -1,22 +1,22 @@
-package none
+package wait
 
 import (
 	"context"
 	"sync"
 )
 
-type none struct {
+type wait struct {
 	ch   chan struct{}
 	once sync.Once
 }
 
-func newNone() *none {
-	return &none{
+func newWait() *wait {
+	return &wait{
 		ch: make(chan struct{}),
 	}
 }
 
-func (n *none) Run(ctx context.Context) error {
+func (n *wait) Run(ctx context.Context) error {
 	select {
 	case <-ctx.Done():
 		_ = n.Close()
@@ -25,7 +25,7 @@ func (n *none) Run(ctx context.Context) error {
 	return nil
 }
 
-func (n *none) Close() error {
+func (n *wait) Close() error {
 	n.once.Do(func() {
 		close(n.ch)
 	})

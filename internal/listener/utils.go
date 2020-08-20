@@ -82,7 +82,7 @@ func IsAcceptTimeoutError(err error) bool {
 	}
 
 	if oe, ok := err.(*net.OpError); ok && oe.Op == "accept" {
-		return IsAcceptTimeoutError(oe)
+		return IsAcceptTimeoutError(oe.Err)
 	}
 
 	return false

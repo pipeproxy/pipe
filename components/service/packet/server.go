@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/wzshiming/pipe/components/packet"
+	"github.com/wzshiming/pipe/internal/logger"
 )
 
 type Server struct {
@@ -42,6 +43,12 @@ func (s *Server) Close() error {
 
 func (s *Server) ServePacket(ctx context.Context, pkt packet.Packet) {
 	s.handler.ServePacket(ctx, nopCloser{pkt})
+	err := pkt.Close()
+	if err != nil {
+		addr := pkt.LocalAddr()
+		logger.Errorf("Close %s://%s error: %s", addr.Network(), addr.String(), err)
+		return
+	}
 }
 
 type nopCloser struct {

@@ -1,4 +1,4 @@
-package none
+package wait
 
 import (
 	"github.com/wzshiming/pipe/components/common/register"
@@ -6,13 +6,13 @@ import (
 )
 
 const (
-	name = "none"
+	name = "wait"
 )
 
 func init() {
-	register.Register(name, NewNoneWithConfig)
+	register.Register(name, NewWaitWithConfig)
 }
 
-func NewNoneWithConfig() service.Service {
-	return newNone()
+func NewWaitWithConfig() service.Service {
+	return newWait()
 }

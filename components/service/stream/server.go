@@ -40,7 +40,8 @@ func (s *Server) Run(ctx context.Context) error {
 			if listener.IsClosedConnError(err) || err == context.Canceled {
 				return nil
 			}
-			return err
+			logger.Error(err)
+			continue
 		}
 		go s.ServeStream(ctx, conn)
 	}
@@ -76,7 +77,7 @@ func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
 	err := stm.Close()
 	if err != nil {
 		addr := stm.LocalAddr()
-		logger.Errorf("CloseSwap %s://%s error: %s", addr.Network(), addr.String(), err)
+		logger.Errorf("Close %s://%s error: %s", addr.Network(), addr.String(), err)
 		return
 	}
 }
