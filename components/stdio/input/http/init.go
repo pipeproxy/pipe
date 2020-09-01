@@ -6,8 +6,9 @@ import (
 	"net/http"
 
 	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/protocol/http/round_tripper"
 	"github.com/wzshiming/pipe/components/stdio/input"
+	"github.com/wzshiming/pipe/components/stream"
+	"github.com/wzshiming/pipe/internal/round_tripper"
 )
 
 const (
@@ -19,19 +20,13 @@ func init() {
 }
 
 type Config struct {
-	RoundTripper round_tripper.RoundTripper
-	URL          string
+	Dialer stream.Dialer `json:",omitempty"`
+	URL    string
 }
 
-var defaultTransport = http.DefaultTransport.(*http.Transport)
-
 func NewHTTPWithConfig(conf *Config) (input.Input, error) {
-	roundTripper := conf.RoundTripper
-	if roundTripper == nil {
-		roundTripper = http.DefaultTransport
-	}
 	cli := http.Client{
-		Transport: roundTripper,
+		Transport: round_tripper.RoundTripper(conf.Dialer),
 	}
 	resp, err := cli.Get(conf.URL)
 	if err != nil {

@@ -23,13 +23,17 @@ func NewDialer(network string, address string, tlsConfig *tls.Config) *Dialer {
 	}
 }
 
-func (n *Dialer) DialStream(ctx context.Context) (stream.Stream, error) {
-	stm, err := n.dialer.DialContext(ctx, n.network, n.address)
+func (d *Dialer) DialStream(ctx context.Context) (stream.Stream, error) {
+	stm, err := d.dialer.DialContext(ctx, d.network, d.address)
 	if err != nil {
 		return nil, err
 	}
-	if n.tlsConfig != nil {
-		stm = tls.Client(stm, n.tlsConfig)
+	if d.tlsConfig != nil {
+		stm = tls.Client(stm, d.tlsConfig)
 	}
 	return stm, nil
+}
+
+func (d *Dialer) IsTCP() bool {
+	return d.tlsConfig != nil
 }

@@ -42,8 +42,6 @@ import (
 	_ "github.com/wzshiming/pipe/components/protocol/http/redirect"
 	_ "github.com/wzshiming/pipe/components/protocol/http/remove_request_header"
 	_ "github.com/wzshiming/pipe/components/protocol/http/remove_response_header"
-	_ "github.com/wzshiming/pipe/components/protocol/http/round_tripper"
-	_ "github.com/wzshiming/pipe/components/protocol/http/round_tripper/transport"
 	_ "github.com/wzshiming/pipe/components/protocol/http/strip_prefix"
 	_ "github.com/wzshiming/pipe/components/protocol/http/weighted"
 	_ "github.com/wzshiming/pipe/components/service"
