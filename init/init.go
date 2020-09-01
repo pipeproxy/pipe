@@ -30,7 +30,7 @@ import (
 	_ "github.com/wzshiming/pipe/components/protocol/http/expvar"
 	_ "github.com/wzshiming/pipe/components/protocol/http/file"
 	_ "github.com/wzshiming/pipe/components/protocol/http/forward"
-	_ "github.com/wzshiming/pipe/components/protocol/http/host"
+	_ "github.com/wzshiming/pipe/components/protocol/http/hosts"
 	_ "github.com/wzshiming/pipe/components/protocol/http/log"
 	_ "github.com/wzshiming/pipe/components/protocol/http/method"
 	_ "github.com/wzshiming/pipe/components/protocol/http/metrics"

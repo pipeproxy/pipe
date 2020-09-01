@@ -1,4 +1,4 @@
-package host
+package hosts
 
 import (
 	"fmt"
@@ -11,8 +11,8 @@ var (
 	ErrFormat   = fmt.Errorf("error only a single asterisk is currently supported")
 )
 
-// Host is an host multiplexer.
-type Host struct {
+// Hosts is an hosts multiplexer.
+type Hosts struct {
 	domains  map[string]http.Handler
 	matchers []*matcher
 	notFound http.Handler
@@ -24,19 +24,19 @@ type matcher struct {
 	handler http.Handler
 }
 
-func NewHost() *Host {
-	p := &Host{
+func NewHosts() *Hosts {
+	p := &Hosts{
 		domains: map[string]http.Handler{},
 	}
 	return p
 }
 
-func (h *Host) NotFound(handler http.Handler) error {
+func (h *Hosts) NotFound(handler http.Handler) error {
 	h.notFound = handler
 	return nil
 }
 
-func (h *Host) Handle(host string, handler http.Handler) error {
+func (h *Hosts) Handle(host string, handler http.Handler) error {
 	split := strings.Split(host, "*")
 	switch len(split) {
 	default:
@@ -54,7 +54,7 @@ func (h *Host) Handle(host string, handler http.Handler) error {
 }
 
 // handler returns most matching handler and prefix bytes data to use for the given reader.
-func (h *Host) Handler(host string) (handler http.Handler, err error) {
+func (h *Hosts) Handler(host string) (handler http.Handler, err error) {
 	handler, ok := h.domains[host]
 	if ok {
 		return handler, nil
@@ -78,7 +78,7 @@ func (h *Host) Handler(host string) (handler http.Handler, err error) {
 	return h.notFound, nil
 }
 
-func (h *Host) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (h *Hosts) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	host := r.Host
 	handler, err := h.Handler(host)
 	if err != nil || handler == nil {

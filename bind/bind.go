@@ -1602,45 +1602,45 @@ func (m HexCodecEncoder) MarshalJSON() ([]byte, error) {
 //
 // ========= End hex@codec.Encoder type =========
 
-// ========= Begin host@net/http.Handler type =========
+// ========= Begin hosts@net/http.Handler type =========
 //
 
-const kindHostNetHTTPHandlerConfig = `host@net/http.Handler`
+const kindHostsNetHTTPHandlerConfig = `hosts@net/http.Handler`
 
-// HostNetHTTPHandlerConfig host@net/http.Handler
-type HostNetHTTPHandlerConfig struct {
-	Hosts    []HostNetHTTPHandlerRoute
+// HostsNetHTTPHandlerConfig hosts@net/http.Handler
+type HostsNetHTTPHandlerConfig struct {
+	Hosts    []HostsNetHTTPHandlerRoute
 	NotFound HTTPHandler
 }
 
-type HostNetHTTPHandlerRoute struct {
+type HostsNetHTTPHandlerRoute struct {
 	Domain  string
 	Handler HTTPHandler
 }
 
 func init() {
 	_ = provider.Register(
-		kindHostNetHTTPHandlerConfig,
-		func(r *HostNetHTTPHandlerConfig) HTTPHandler { return r },
+		kindHostsNetHTTPHandlerConfig,
+		func(r *HostsNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
-func (HostNetHTTPHandlerConfig) isHTTPHandler() {}
-func (HostNetHTTPHandlerConfig) isComponent()   {}
+func (HostsNetHTTPHandlerConfig) isHTTPHandler() {}
+func (HostsNetHTTPHandlerConfig) isComponent()   {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HostNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t HostNetHTTPHandlerConfig
+func (m HostsNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t HostsNetHTTPHandlerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindHostNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindHostsNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End host@net/http.Handler type =========
+// ========= End hosts@net/http.Handler type =========
 
 // ========= Begin http1@stream.Handler type =========
 //
