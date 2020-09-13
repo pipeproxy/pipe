@@ -23,7 +23,7 @@ func (c *ConfigQuit) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 
 	err := svc.Close()
-	if svc == nil {
+	if err != nil {
 		logger.Errorf("service close error: %s", err)
 		return
 	}

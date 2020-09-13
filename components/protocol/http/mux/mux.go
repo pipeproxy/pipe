@@ -8,7 +8,6 @@ import (
 	"sync/atomic"
 
 	"github.com/wzshiming/pipe/internal/pool"
-
 	"github.com/wzshiming/trie"
 )
 

@@ -1,8 +1,6 @@
 package dialer
 
 import (
-	"fmt"
-
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/stream"
 	"github.com/wzshiming/pipe/components/tls"
@@ -10,10 +8,6 @@ import (
 
 const (
 	name = "dialer"
-)
-
-var (
-	ErrNotTLS = fmt.Errorf("not tls")
 )
 
 func init() {

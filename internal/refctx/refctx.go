@@ -8,9 +8,7 @@ import (
 )
 
 var (
-	ErrDefEmpty  = fmt.Errorf("def must not be empty")
 	ErrNotDefine = fmt.Errorf("not define")
-	ErrNotUse    = fmt.Errorf("not use reference")
 )
 
 type ctxVal struct {

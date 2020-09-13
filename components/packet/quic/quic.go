@@ -59,11 +59,11 @@ func (l *Listener) acceptStream(sess quic.Session) {
 
 func (l *Listener) Accept() (net.Conn, error) {
 	l.once.Do(l.init)
-	ac := <-l.ch
-	if ac == nil {
+	conn, ok := <-l.ch
+	if !ok || conn == nil {
 		return nil, listener.ErrNetClosing
 	}
-	return ac, nil
+	return conn, nil
 }
 
 func (l *Listener) Close() error {

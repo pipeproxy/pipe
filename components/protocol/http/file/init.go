@@ -19,5 +19,5 @@ type Config struct {
 }
 
 func NewFileWithConfig(conf *Config) http.Handler {
-	return NewFile(conf.Root)
+	return http.FileServer(http.Dir(conf.Root))
 }
