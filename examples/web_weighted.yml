@@ -4,8 +4,8 @@ Multi:
   Components:
   - '@Kind': def@net/http.Handler
     Def:
-      '@Kind': weighted@net/http.Handler
-      Weighted:
+      '@Kind': lb@net/http.Handler
+      Handlers:
       - Handler:
           '@Kind': direct@net/http.Handler
           Body:

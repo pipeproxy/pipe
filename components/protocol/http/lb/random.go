@@ -1,4 +1,4 @@
-package poller
+package lb
 
 import (
 	"math/rand"

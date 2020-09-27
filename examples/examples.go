@@ -65,14 +65,17 @@ var (
 		},
 		bind.DefNetHTTPHandlerConfig{
 			Name: "balance",
-			Def: bind.PollerNetHTTPHandlerConfig{
-				Poller: bind.PollerNetHTTPHandlerPollerEnumEnumRoundRobin,
-				Handlers: []bind.HTTPHandler{
-					bind.ForwardNetHTTPHandlerConfig{
-						URL: "http://127.0.0.1:8001",
-					},
-					bind.ForwardNetHTTPHandlerConfig{
-						URL: "http://127.0.0.1:8002",
+			Def: bind.LbNetHTTPHandlerConfig{
+				Policy: bind.LbNetHTTPHandlerLoadBalancePolicyEnumEnumRoundRobin,
+				Handlers: []bind.LbNetHTTPHandlerWeight{
+					{
+						Handler: bind.ForwardNetHTTPHandlerConfig{
+							URL: "http://127.0.0.1:8001",
+						},
+					}, {
+						Handler: bind.ForwardNetHTTPHandlerConfig{
+							URL: "http://127.0.0.1:8002",
+						},
 					},
 				},
 			},
@@ -140,8 +143,8 @@ var (
 		},
 		bind.DefNetHTTPHandlerConfig{
 			Name: "weighted",
-			Def: bind.WeightedNetHTTPHandlerConfig{
-				Weighted: []bind.WeightedNetHTTPHandlerWeighted{
+			Def: bind.LbNetHTTPHandlerConfig{
+				Handlers: []bind.LbNetHTTPHandlerWeight{
 					{
 						Weight: 2,
 						Handler: bind.DirectNetHTTPHandlerConfig{

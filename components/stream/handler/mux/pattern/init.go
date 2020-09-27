@@ -1,7 +1,7 @@
 package pattern
 
 import (
-	"github.com/wzshiming/pipe/components/stream/mux"
+	"github.com/wzshiming/pipe/components/stream/handler/mux"
 )
 
 func init() {

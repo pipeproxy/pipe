@@ -22,13 +22,15 @@ Multi:
     Name: server
   - '@Kind': def@net/http.Handler
     Def:
-      '@Kind': poller@net/http.Handler
+      '@Kind': lb@net/http.Handler
       Handlers:
-      - '@Kind': forward@net/http.Handler
-        URL: http://127.0.0.1:8001
-      - '@Kind': forward@net/http.Handler
-        URL: http://127.0.0.1:8002
-      Poller: round_robin
+      - Handler:
+          '@Kind': forward@net/http.Handler
+          URL: http://127.0.0.1:8001
+      - Handler:
+          '@Kind': forward@net/http.Handler
+          URL: http://127.0.0.1:8002
+      Policy: round_robin
     Name: balance
   - '@Kind': def@service.Service
     Def:

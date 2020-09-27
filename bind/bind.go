@@ -1881,6 +1881,147 @@ func (m JSONCodecUnmarshaler) MarshalJSON() ([]byte, error) {
 //
 // ========= End json@codec.Unmarshaler type =========
 
+// ========= Begin lb@net/http.Handler type =========
+//
+
+const kindLbNetHTTPHandlerConfig = `lb@net/http.Handler`
+
+// LbNetHTTPHandlerConfig lb@net/http.Handler
+type LbNetHTTPHandlerConfig struct {
+	Policy   LbNetHTTPHandlerLoadBalancePolicyEnum `json:",omitempty"`
+	Handlers []LbNetHTTPHandlerWeight
+}
+
+type LbNetHTTPHandlerLoadBalancePolicyEnum string
+
+const (
+	LbNetHTTPHandlerLoadBalancePolicyEnumEnumRoundRobin LbNetHTTPHandlerLoadBalancePolicyEnum = "round_robin"
+	LbNetHTTPHandlerLoadBalancePolicyEnumEnumRandom     LbNetHTTPHandlerLoadBalancePolicyEnum = "random"
+)
+
+type LbNetHTTPHandlerWeight struct {
+	Weight  uint `json:",omitempty"`
+	Handler HTTPHandler
+}
+
+func init() {
+	_ = provider.Register(
+		kindLbNetHTTPHandlerConfig,
+		func(r *LbNetHTTPHandlerConfig) HTTPHandler { return r },
+	)
+}
+
+func (LbNetHTTPHandlerConfig) isHTTPHandler() {}
+func (LbNetHTTPHandlerConfig) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LbNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t LbNetHTTPHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLbNetHTTPHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End lb@net/http.Handler type =========
+
+// ========= Begin lb@stream.Dialer type =========
+//
+
+const kindLbStreamDialerConfig = `lb@stream.Dialer`
+
+// LbStreamDialerConfig lb@stream.Dialer
+type LbStreamDialerConfig struct {
+	Policy  LbStreamDialerLoadBalancePolicyEnum `json:",omitempty"`
+	Dialers []LbStreamDialerWeight
+}
+
+type LbStreamDialerLoadBalancePolicyEnum string
+
+const (
+	LbStreamDialerLoadBalancePolicyEnumEnumRoundRobin LbStreamDialerLoadBalancePolicyEnum = "round_robin"
+	LbStreamDialerLoadBalancePolicyEnumEnumRandom     LbStreamDialerLoadBalancePolicyEnum = "random"
+)
+
+type LbStreamDialerWeight struct {
+	Weight uint `json:",omitempty"`
+	Dialer StreamDialer
+}
+
+func init() {
+	_ = provider.Register(
+		kindLbStreamDialerConfig,
+		func(r *LbStreamDialerConfig) StreamDialer { return r },
+	)
+}
+
+func (LbStreamDialerConfig) isStreamDialer() {}
+func (LbStreamDialerConfig) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LbStreamDialerConfig) MarshalJSON() ([]byte, error) {
+	type t LbStreamDialerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLbStreamDialerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End lb@stream.Dialer type =========
+
+// ========= Begin lb@stream.Handler type =========
+//
+
+const kindLbStreamHandlerConfig = `lb@stream.Handler`
+
+// LbStreamHandlerConfig lb@stream.Handler
+type LbStreamHandlerConfig struct {
+	Policy   LbStreamHandlerLoadBalancePolicyEnum `json:",omitempty"`
+	Handlers []LbStreamHandlerWeight
+}
+
+type LbStreamHandlerLoadBalancePolicyEnum string
+
+const (
+	LbStreamHandlerLoadBalancePolicyEnumEnumRoundRobin LbStreamHandlerLoadBalancePolicyEnum = "round_robin"
+	LbStreamHandlerLoadBalancePolicyEnumEnumRandom     LbStreamHandlerLoadBalancePolicyEnum = "random"
+)
+
+type LbStreamHandlerWeight struct {
+	Weight  uint `json:",omitempty"`
+	Handler StreamHandler
+}
+
+func init() {
+	_ = provider.Register(
+		kindLbStreamHandlerConfig,
+		func(r *LbStreamHandlerConfig) StreamHandler { return r },
+	)
+}
+
+func (LbStreamHandlerConfig) isStreamHandler() {}
+func (LbStreamHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LbStreamHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t LbStreamHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLbStreamHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End lb@stream.Handler type =========
+
 // ========= Begin listener@packet.ListenConfig type =========
 //
 
@@ -3654,90 +3795,6 @@ func (m PacketServiceConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End packet@service.Service type =========
 
-// ========= Begin poller@net/http.Handler type =========
-//
-
-const kindPollerNetHTTPHandlerConfig = `poller@net/http.Handler`
-
-// PollerNetHTTPHandlerConfig poller@net/http.Handler
-type PollerNetHTTPHandlerConfig struct {
-	Poller   PollerNetHTTPHandlerPollerEnum
-	Handlers []HTTPHandler
-}
-
-type PollerNetHTTPHandlerPollerEnum string
-
-const (
-	PollerNetHTTPHandlerPollerEnumEnumRoundRobin PollerNetHTTPHandlerPollerEnum = "round_robin"
-	PollerNetHTTPHandlerPollerEnumEnumRandom     PollerNetHTTPHandlerPollerEnum = "random"
-)
-
-func init() {
-	_ = provider.Register(
-		kindPollerNetHTTPHandlerConfig,
-		func(r *PollerNetHTTPHandlerConfig) HTTPHandler { return r },
-	)
-}
-
-func (PollerNetHTTPHandlerConfig) isHTTPHandler() {}
-func (PollerNetHTTPHandlerConfig) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m PollerNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t PollerNetHTTPHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindPollerNetHTTPHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End poller@net/http.Handler type =========
-
-// ========= Begin poller@stream.Handler type =========
-//
-
-const kindPollerStreamHandlerConfig = `poller@stream.Handler`
-
-// PollerStreamHandlerConfig poller@stream.Handler
-type PollerStreamHandlerConfig struct {
-	Poller   PollerStreamHandlerPollerEnum
-	Handlers []StreamHandler
-}
-
-type PollerStreamHandlerPollerEnum string
-
-const (
-	PollerStreamHandlerPollerEnumEnumRoundRobin PollerStreamHandlerPollerEnum = "round_robin"
-	PollerStreamHandlerPollerEnumEnumRandom     PollerStreamHandlerPollerEnum = "random"
-)
-
-func init() {
-	_ = provider.Register(
-		kindPollerStreamHandlerConfig,
-		func(r *PollerStreamHandlerConfig) StreamHandler { return r },
-	)
-}
-
-func (PollerStreamHandlerConfig) isStreamHandler() {}
-func (PollerStreamHandlerConfig) isComponent()     {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m PollerStreamHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t PollerStreamHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindPollerStreamHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End poller@stream.Handler type =========
-
 // ========= Begin pprof@net/http.Handler type =========
 //
 
@@ -4881,84 +4938,6 @@ func (m WaitService) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End wait@service.Service type =========
-
-// ========= Begin weighted@net/http.Handler type =========
-//
-
-const kindWeightedNetHTTPHandlerConfig = `weighted@net/http.Handler`
-
-// WeightedNetHTTPHandlerConfig weighted@net/http.Handler
-type WeightedNetHTTPHandlerConfig struct {
-	Weighted []WeightedNetHTTPHandlerWeighted
-}
-
-type WeightedNetHTTPHandlerWeighted struct {
-	Weight  uint
-	Handler HTTPHandler
-}
-
-func init() {
-	_ = provider.Register(
-		kindWeightedNetHTTPHandlerConfig,
-		func(r *WeightedNetHTTPHandlerConfig) HTTPHandler { return r },
-	)
-}
-
-func (WeightedNetHTTPHandlerConfig) isHTTPHandler() {}
-func (WeightedNetHTTPHandlerConfig) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m WeightedNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t WeightedNetHTTPHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindWeightedNetHTTPHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End weighted@net/http.Handler type =========
-
-// ========= Begin weighted@stream.Handler type =========
-//
-
-const kindWeightedStreamHandlerConfig = `weighted@stream.Handler`
-
-// WeightedStreamHandlerConfig weighted@stream.Handler
-type WeightedStreamHandlerConfig struct {
-	Weighted []WeightedStreamHandlerWeighted
-}
-
-type WeightedStreamHandlerWeighted struct {
-	Weight  uint
-	Handler StreamHandler
-}
-
-func init() {
-	_ = provider.Register(
-		kindWeightedStreamHandlerConfig,
-		func(r *WeightedStreamHandlerConfig) StreamHandler { return r },
-	)
-}
-
-func (WeightedStreamHandlerConfig) isStreamHandler() {}
-func (WeightedStreamHandlerConfig) isComponent()     {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m WeightedStreamHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t WeightedStreamHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindWeightedStreamHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End weighted@stream.Handler type =========
 
 // ========= Begin yaml@codec.Marshaler type =========
 //
