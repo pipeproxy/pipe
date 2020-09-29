@@ -37,7 +37,7 @@ func NewMarshalerDefWithConfig(ctx context.Context, conf *Config) codec.Marshale
 
 func MarshalerPut(ctx context.Context, name string, def codec.Marshaler) codec.Marshaler {
 	if def == nil {
-		def = MarshalerNone
+		return MarshalerNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -52,16 +52,19 @@ func MarshalerPut(ctx context.Context, name string, def codec.Marshaler) codec.M
 func MarshalerGet(ctx context.Context, name string, defaults codec.Marshaler) codec.Marshaler {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("codec.Marshaler", map[string]codec.Marshaler{})
-		o, ok := store.(map[string]codec.Marshaler)[name]
+		store, ok := m.Load("codec.Marshaler")
 		if ok {
-			return o
+			o, ok := store.(map[string]codec.Marshaler)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("codec.Marshaler %q is not defined", name)
 	return MarshalerNone
 }
 
@@ -76,7 +79,7 @@ func newMarshalerNone() codec.Marshaler {
 func (_MarshalerNone) Marshal(_ interface{}) (_ []uint8, error error) {
 	logger.Warn("this is none of codec.Marshaler")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error codec.Marshaler is none")
 
 	return
 }

@@ -36,7 +36,7 @@ func NewHandlerDefWithConfig(ctx context.Context, conf *Config) http.Handler {
 
 func HandlerPut(ctx context.Context, name string, def http.Handler) http.Handler {
 	if def == nil {
-		def = HandlerNone
+		return HandlerNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -51,16 +51,19 @@ func HandlerPut(ctx context.Context, name string, def http.Handler) http.Handler
 func HandlerGet(ctx context.Context, name string, defaults http.Handler) http.Handler {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("http.Handler", map[string]http.Handler{})
-		o, ok := store.(map[string]http.Handler)[name]
+		store, ok := m.Load("http.Handler")
 		if ok {
-			return o
+			o, ok := store.(map[string]http.Handler)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("http.Handler %q is not defined", name)
 	return HandlerNone
 }
 

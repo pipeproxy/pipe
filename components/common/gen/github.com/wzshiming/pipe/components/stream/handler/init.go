@@ -37,7 +37,7 @@ func NewHandlerDefWithConfig(ctx context.Context, conf *Config) stream.Handler {
 
 func HandlerPut(ctx context.Context, name string, def stream.Handler) stream.Handler {
 	if def == nil {
-		def = HandlerNone
+		return HandlerNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -52,16 +52,19 @@ func HandlerPut(ctx context.Context, name string, def stream.Handler) stream.Han
 func HandlerGet(ctx context.Context, name string, defaults stream.Handler) stream.Handler {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("stream.Handler", map[string]stream.Handler{})
-		o, ok := store.(map[string]stream.Handler)[name]
+		store, ok := m.Load("stream.Handler")
 		if ok {
-			return o
+			o, ok := store.(map[string]stream.Handler)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("stream.Handler %q is not defined", name)
 	return HandlerNone
 }
 

@@ -36,7 +36,7 @@ func NewTLSDefWithConfig(ctx context.Context, conf *Config) tls.TLS {
 
 func TLSPut(ctx context.Context, name string, def tls.TLS) tls.TLS {
 	if def == nil {
-		def = TLSNone
+		return TLSNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -51,16 +51,19 @@ func TLSPut(ctx context.Context, name string, def tls.TLS) tls.TLS {
 func TLSGet(ctx context.Context, name string, defaults tls.TLS) tls.TLS {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("tls.TLS", map[string]tls.TLS{})
-		o, ok := store.(map[string]tls.TLS)[name]
+		store, ok := m.Load("tls.TLS")
 		if ok {
-			return o
+			o, ok := store.(map[string]tls.TLS)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("tls.TLS %q is not defined", name)
 	return TLSNone
 }
 

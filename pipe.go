@@ -11,7 +11,6 @@ import (
 	"github.com/wzshiming/pipe/components/once"
 	"github.com/wzshiming/pipe/components/stdio/input/inline"
 	"github.com/wzshiming/pipe/internal/ctxcache"
-	"github.com/wzshiming/pipe/internal/listener"
 	"golang.org/x/sync/errgroup"
 	"sigs.k8s.io/yaml"
 )
@@ -71,7 +70,6 @@ func (c *Pipe) waitUsage(i int32) {
 }
 
 func (c *Pipe) start(ctx context.Context, o once.Once, first bool) error {
-	listener.Swap()
 	ctx, cancel := context.WithCancel(ctx)
 	c.group.Go(func() error {
 		atomic.AddInt32(&c.usage, 1)
@@ -83,7 +81,6 @@ func (c *Pipe) start(ctx context.Context, o once.Once, first bool) error {
 		c.waitUsage(2)
 	}
 	c.close()
-	listener.CloseSwap()
 	c.waitUsage(1)
 	c.cancel = append(c.cancel, cancel)
 	return nil
@@ -122,9 +119,7 @@ func (c *Pipe) load(config []byte, first bool) error {
 func (c *Pipe) Close() error {
 	c.mut.Lock()
 	defer c.mut.Unlock()
-	listener.Swap()
 	c.close()
-	listener.CloseSwap()
 	c.waitUsage(0)
 	return nil
 }

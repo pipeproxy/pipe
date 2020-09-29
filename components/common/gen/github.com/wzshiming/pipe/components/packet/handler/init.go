@@ -37,7 +37,7 @@ func NewHandlerDefWithConfig(ctx context.Context, conf *Config) packet.Handler {
 
 func HandlerPut(ctx context.Context, name string, def packet.Handler) packet.Handler {
 	if def == nil {
-		def = HandlerNone
+		return HandlerNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -52,16 +52,19 @@ func HandlerPut(ctx context.Context, name string, def packet.Handler) packet.Han
 func HandlerGet(ctx context.Context, name string, defaults packet.Handler) packet.Handler {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("packet.Handler", map[string]packet.Handler{})
-		o, ok := store.(map[string]packet.Handler)[name]
+		store, ok := m.Load("packet.Handler")
 		if ok {
-			return o
+			o, ok := store.(map[string]packet.Handler)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("packet.Handler %q is not defined", name)
 	return HandlerNone
 }
 

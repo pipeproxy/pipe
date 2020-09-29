@@ -38,7 +38,7 @@ func NewEncoderDefWithConfig(ctx context.Context, conf *Config) codec.Encoder {
 
 func EncoderPut(ctx context.Context, name string, def codec.Encoder) codec.Encoder {
 	if def == nil {
-		def = EncoderNone
+		return EncoderNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -53,16 +53,19 @@ func EncoderPut(ctx context.Context, name string, def codec.Encoder) codec.Encod
 func EncoderGet(ctx context.Context, name string, defaults codec.Encoder) codec.Encoder {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("codec.Encoder", map[string]codec.Encoder{})
-		o, ok := store.(map[string]codec.Encoder)[name]
+		store, ok := m.Load("codec.Encoder")
 		if ok {
-			return o
+			o, ok := store.(map[string]codec.Encoder)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("codec.Encoder %q is not defined", name)
 	return EncoderNone
 }
 
@@ -77,7 +80,7 @@ func newEncoderNone() codec.Encoder {
 func (_EncoderNone) Encode(_ io.Writer) (_ io.Writer, error error) {
 	logger.Warn("this is none of codec.Encoder")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error codec.Encoder is none")
 
 	return
 }

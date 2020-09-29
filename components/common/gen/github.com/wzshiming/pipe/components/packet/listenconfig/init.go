@@ -38,7 +38,7 @@ func NewListenConfigDefWithConfig(ctx context.Context, conf *Config) packet.List
 
 func ListenConfigPut(ctx context.Context, name string, def packet.ListenConfig) packet.ListenConfig {
 	if def == nil {
-		def = ListenConfigNone
+		return ListenConfigNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -53,16 +53,19 @@ func ListenConfigPut(ctx context.Context, name string, def packet.ListenConfig) 
 func ListenConfigGet(ctx context.Context, name string, defaults packet.ListenConfig) packet.ListenConfig {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("packet.ListenConfig", map[string]packet.ListenConfig{})
-		o, ok := store.(map[string]packet.ListenConfig)[name]
+		store, ok := m.Load("packet.ListenConfig")
 		if ok {
-			return o
+			o, ok := store.(map[string]packet.ListenConfig)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("packet.ListenConfig %q is not defined", name)
 	return ListenConfigNone
 }
 
@@ -77,7 +80,7 @@ func newListenConfigNone() packet.ListenConfig {
 func (_ListenConfigNone) ListenPacket(_ context.Context) (_ net.PacketConn, error error) {
 	logger.Warn("this is none of packet.ListenConfig")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error packet.ListenConfig is none")
 
 	return
 }

@@ -37,7 +37,7 @@ func NewListenerDefWithConfig(ctx context.Context, conf *Config) net.Listener {
 
 func ListenerPut(ctx context.Context, name string, def net.Listener) net.Listener {
 	if def == nil {
-		def = ListenerNone
+		return ListenerNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -52,16 +52,19 @@ func ListenerPut(ctx context.Context, name string, def net.Listener) net.Listene
 func ListenerGet(ctx context.Context, name string, defaults net.Listener) net.Listener {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("net.Listener", map[string]net.Listener{})
-		o, ok := store.(map[string]net.Listener)[name]
+		store, ok := m.Load("net.Listener")
 		if ok {
-			return o
+			o, ok := store.(map[string]net.Listener)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("net.Listener %q is not defined", name)
 	return ListenerNone
 }
 
@@ -76,7 +79,7 @@ func newListenerNone() net.Listener {
 func (_ListenerNone) Accept() (_ net.Conn, error error) {
 	logger.Warn("this is none of net.Listener")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error net.Listener is none")
 
 	return
 }
@@ -90,7 +93,7 @@ func (_ListenerNone) Addr() (_ net.Addr) {
 func (_ListenerNone) Close() (error error) {
 	logger.Warn("this is none of net.Listener")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error net.Listener is none")
 
 	return
 }

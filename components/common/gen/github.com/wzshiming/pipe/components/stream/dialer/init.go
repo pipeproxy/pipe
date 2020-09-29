@@ -38,7 +38,7 @@ func NewDialerDefWithConfig(ctx context.Context, conf *Config) stream.Dialer {
 
 func DialerPut(ctx context.Context, name string, def stream.Dialer) stream.Dialer {
 	if def == nil {
-		def = DialerNone
+		return DialerNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -53,16 +53,19 @@ func DialerPut(ctx context.Context, name string, def stream.Dialer) stream.Diale
 func DialerGet(ctx context.Context, name string, defaults stream.Dialer) stream.Dialer {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("stream.Dialer", map[string]stream.Dialer{})
-		o, ok := store.(map[string]stream.Dialer)[name]
+		store, ok := m.Load("stream.Dialer")
 		if ok {
-			return o
+			o, ok := store.(map[string]stream.Dialer)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("stream.Dialer %q is not defined", name)
 	return DialerNone
 }
 
@@ -77,7 +80,7 @@ func newDialerNone() stream.Dialer {
 func (_DialerNone) DialStream(_ context.Context) (_ net.Conn, error error) {
 	logger.Warn("this is none of stream.Dialer")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error stream.Dialer is none")
 
 	return
 }

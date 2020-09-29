@@ -37,7 +37,7 @@ func NewOnceDefWithConfig(ctx context.Context, conf *Config) once.Once {
 
 func OncePut(ctx context.Context, name string, def once.Once) once.Once {
 	if def == nil {
-		def = OnceNone
+		return OnceNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -52,16 +52,19 @@ func OncePut(ctx context.Context, name string, def once.Once) once.Once {
 func OnceGet(ctx context.Context, name string, defaults once.Once) once.Once {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("once.Once", map[string]once.Once{})
-		o, ok := store.(map[string]once.Once)[name]
+		store, ok := m.Load("once.Once")
 		if ok {
-			return o
+			o, ok := store.(map[string]once.Once)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("once.Once %q is not defined", name)
 	return OnceNone
 }
 
@@ -76,7 +79,7 @@ func newOnceNone() once.Once {
 func (_OnceNone) Do(_ context.Context) (error error) {
 	logger.Warn("this is none of once.Once")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error once.Once is none")
 
 	return
 }

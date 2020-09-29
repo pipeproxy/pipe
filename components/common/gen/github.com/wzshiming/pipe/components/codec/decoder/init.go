@@ -38,7 +38,7 @@ func NewDecoderDefWithConfig(ctx context.Context, conf *Config) codec.Decoder {
 
 func DecoderPut(ctx context.Context, name string, def codec.Decoder) codec.Decoder {
 	if def == nil {
-		def = DecoderNone
+		return DecoderNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -53,16 +53,19 @@ func DecoderPut(ctx context.Context, name string, def codec.Decoder) codec.Decod
 func DecoderGet(ctx context.Context, name string, defaults codec.Decoder) codec.Decoder {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("codec.Decoder", map[string]codec.Decoder{})
-		o, ok := store.(map[string]codec.Decoder)[name]
+		store, ok := m.Load("codec.Decoder")
 		if ok {
-			return o
+			o, ok := store.(map[string]codec.Decoder)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("codec.Decoder %q is not defined", name)
 	return DecoderNone
 }
 
@@ -77,7 +80,7 @@ func newDecoderNone() codec.Decoder {
 func (_DecoderNone) Decode(_ io.Reader) (_ io.Reader, error error) {
 	logger.Warn("this is none of codec.Decoder")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error codec.Decoder is none")
 
 	return
 }

@@ -38,7 +38,7 @@ func NewListenConfigDefWithConfig(ctx context.Context, conf *Config) stream.List
 
 func ListenConfigPut(ctx context.Context, name string, def stream.ListenConfig) stream.ListenConfig {
 	if def == nil {
-		def = ListenConfigNone
+		return ListenConfigNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -53,16 +53,19 @@ func ListenConfigPut(ctx context.Context, name string, def stream.ListenConfig) 
 func ListenConfigGet(ctx context.Context, name string, defaults stream.ListenConfig) stream.ListenConfig {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("stream.ListenConfig", map[string]stream.ListenConfig{})
-		o, ok := store.(map[string]stream.ListenConfig)[name]
+		store, ok := m.Load("stream.ListenConfig")
 		if ok {
-			return o
+			o, ok := store.(map[string]stream.ListenConfig)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("stream.ListenConfig %q is not defined", name)
 	return ListenConfigNone
 }
 
@@ -77,7 +80,7 @@ func newListenConfigNone() stream.ListenConfig {
 func (_ListenConfigNone) ListenStream(_ context.Context) (_ net.Listener, error error) {
 	logger.Warn("this is none of stream.ListenConfig")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error stream.ListenConfig is none")
 
 	return
 }

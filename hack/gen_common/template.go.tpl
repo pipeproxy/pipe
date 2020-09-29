@@ -3,7 +3,7 @@ package {{ .PkgName }}
 
 import (
 	{{ range .Imports }}
-    {{- .Alias }} "{{ .PkgPath }}"
+	{{- .Alias }} "{{ .PkgPath }}"
 	{{ end }}
 )
 
@@ -35,11 +35,11 @@ func New{{ .Type }}DefWithConfig(ctx context.Context, conf *Config) {{ .Pkg }}.{
 }
 
 func {{ .Type }}Put(ctx context.Context, name string, def {{ .Pkg }}.{{ .Type }}) {{ .Pkg }}.{{ .Type }} {
-    if def == nil {
-        def = {{ .Type }}None
-    }
+	if def == nil {
+		return {{ .Type }}None
+	}
 
-    m, ok := ctxcache.GetCacheWithContext(ctx)
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if !ok {
 		return {{ .Type }}None
 	}
@@ -49,18 +49,21 @@ func {{ .Type }}Put(ctx context.Context, name string, def {{ .Pkg }}.{{ .Type }}
 }
 
 func {{ .Type }}Get(ctx context.Context, name string, defaults {{ .Pkg }}.{{ .Type }}) {{ .Pkg }}.{{ .Type }} {
-    m, ok := ctxcache.GetCacheWithContext(ctx)
+	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("{{ .Pkg }}.{{ .Type }}", map[string]{{ .Pkg }}.{{ .Type }}{})
-		o, ok := store.(map[string]{{ .Pkg }}.{{ .Type }})[name]
+		store, ok := m.Load("{{ .Pkg }}.{{ .Type }}")
 		if ok {
-			return o
+			o, ok := store.(map[string]{{ .Pkg }}.{{ .Type }})[name]
+			if ok {
+				return o
+			}   
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("{{ $Pkg }}.{{ $Type }} %q is not defined", name)
 	return {{ .Type }}None
 }
 
@@ -74,18 +77,18 @@ func new{{ .Type }}None() {{ .Pkg }}.{{ .Type }} {
 
 {{ range .Methods }}
 func (_{{ $Type }}None) {{ .FuncName }}(
-    {{- range .Args -}}
+	{{- range .Args -}}
 		_ {{ .Type }},
-    {{- end -}}
+	{{- end -}}
 	) (
-    {{- range .Results -}}
+	{{- range .Results -}}
 		{{ if .Value }} {{ .Name }} {{ else }} _ {{ end }} {{ .Type }},
-    {{- end -}}
+	{{- end -}}
 	) {
 	logger.Warn("this is none of {{ $Pkg }}.{{ $Type }}")
 	{{ range .Results }}
-    {{ if .Value }} {{ .Name }} = {{ .Value }} {{ end }}
-    {{ end }}
+	{{ if .Value }} {{ .Name }} = {{ .Value }} {{ end }}
+	{{ end }}
 	return
 }
 {{ end }}
@@ -98,18 +101,18 @@ type {{ .Type }} struct {
 
 {{ range .Methods }}
 func (o *{{ $Type }}) {{ .FuncName }}(
-    {{- range .Args -}}
-        {{- .Name }} {{ .Type }},
-    {{- end -}}
+	{{- range .Args -}}
+		{{- .Name }} {{ .Type }},
+	{{- end -}}
 	) (
-    {{- range .Results -}}
-        {{ .Type }},
-    {{- end -}}
+	{{- range .Results -}}
+		{{ .Type }},
+	{{- end -}}
 	) {
-    {{ if .Results }}return{{ end }} {{ $Type }}Get(o.Ctx, o.Name, o.Def).{{ .FuncName }}(
-    {{- range .Args -}}
-        {{- .Name }},
-    {{- end -}}
+	{{ if .Results }}return{{ end }} {{ $Type }}Get(o.Ctx, o.Name, o.Def).{{ .FuncName }}(
+	{{- range .Args -}}
+		{{- .Name }},
+	{{- end -}}
 	)
 }
 {{ end }}

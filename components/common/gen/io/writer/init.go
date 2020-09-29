@@ -37,7 +37,7 @@ func NewWriterDefWithConfig(ctx context.Context, conf *Config) io.Writer {
 
 func WriterPut(ctx context.Context, name string, def io.Writer) io.Writer {
 	if def == nil {
-		def = WriterNone
+		return WriterNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -52,16 +52,19 @@ func WriterPut(ctx context.Context, name string, def io.Writer) io.Writer {
 func WriterGet(ctx context.Context, name string, defaults io.Writer) io.Writer {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("io.Writer", map[string]io.Writer{})
-		o, ok := store.(map[string]io.Writer)[name]
+		store, ok := m.Load("io.Writer")
 		if ok {
-			return o
+			o, ok := store.(map[string]io.Writer)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("io.Writer %q is not defined", name)
 	return WriterNone
 }
 
@@ -76,7 +79,7 @@ func newWriterNone() io.Writer {
 func (_WriterNone) Write(_ []uint8) (_ int, error error) {
 	logger.Warn("this is none of io.Writer")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error io.Writer is none")
 
 	return
 }

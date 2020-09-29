@@ -37,7 +37,7 @@ func NewServiceDefWithConfig(ctx context.Context, conf *Config) service.Service 
 
 func ServicePut(ctx context.Context, name string, def service.Service) service.Service {
 	if def == nil {
-		def = ServiceNone
+		return ServiceNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -52,16 +52,19 @@ func ServicePut(ctx context.Context, name string, def service.Service) service.S
 func ServiceGet(ctx context.Context, name string, defaults service.Service) service.Service {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("service.Service", map[string]service.Service{})
-		o, ok := store.(map[string]service.Service)[name]
+		store, ok := m.Load("service.Service")
 		if ok {
-			return o
+			o, ok := store.(map[string]service.Service)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("service.Service %q is not defined", name)
 	return ServiceNone
 }
 
@@ -76,7 +79,7 @@ func newServiceNone() service.Service {
 func (_ServiceNone) Close() (error error) {
 	logger.Warn("this is none of service.Service")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error service.Service is none")
 
 	return
 }
@@ -84,7 +87,7 @@ func (_ServiceNone) Close() (error error) {
 func (_ServiceNone) Run(_ context.Context) (error error) {
 	logger.Warn("this is none of service.Service")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error service.Service is none")
 
 	return
 }

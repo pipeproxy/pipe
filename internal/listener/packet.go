@@ -19,7 +19,7 @@ func ListenPacket(ctx context.Context, network, address string) (net.PacketConn,
 	if err != nil {
 		return nil, err
 	}
-	channelClose(ctx, pc)
+	swapClose(ctx, pc)
 	return pc, nil
 }
 
@@ -56,6 +56,10 @@ type fakeClosePacketConn struct {
 	usage  *int32
 	key    string
 	net.PacketConn
+}
+
+func (f *fakeClosePacketConn) Key() string {
+	return f.key
 }
 
 func (f *fakeClosePacketConn) Close() error {

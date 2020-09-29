@@ -20,7 +20,7 @@ func Listen(ctx context.Context, network, address string) (net.Listener, error) 
 	if err != nil {
 		return nil, err
 	}
-	channelClose(ctx, ln)
+	swapClose(ctx, ln)
 	return ln, nil
 }
 
@@ -100,6 +100,10 @@ func (f *fakeCloseListener) Accept() (net.Conn, error) {
 	}
 
 	return nil, err
+}
+
+func (f *fakeCloseListener) Key() string {
+	return f.key
 }
 
 func (f *fakeCloseListener) Close() error {

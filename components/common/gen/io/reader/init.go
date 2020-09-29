@@ -37,7 +37,7 @@ func NewReaderDefWithConfig(ctx context.Context, conf *Config) io.Reader {
 
 func ReaderPut(ctx context.Context, name string, def io.Reader) io.Reader {
 	if def == nil {
-		def = ReaderNone
+		return ReaderNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -52,16 +52,19 @@ func ReaderPut(ctx context.Context, name string, def io.Reader) io.Reader {
 func ReaderGet(ctx context.Context, name string, defaults io.Reader) io.Reader {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("io.Reader", map[string]io.Reader{})
-		o, ok := store.(map[string]io.Reader)[name]
+		store, ok := m.Load("io.Reader")
 		if ok {
-			return o
+			o, ok := store.(map[string]io.Reader)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("io.Reader %q is not defined", name)
 	return ReaderNone
 }
 
@@ -76,7 +79,7 @@ func newReaderNone() io.Reader {
 func (_ReaderNone) Read(_ []uint8) (_ int, error error) {
 	logger.Warn("this is none of io.Reader")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error io.Reader is none")
 
 	return
 }

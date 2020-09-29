@@ -37,7 +37,7 @@ func NewUnmarshalerDefWithConfig(ctx context.Context, conf *Config) codec.Unmars
 
 func UnmarshalerPut(ctx context.Context, name string, def codec.Unmarshaler) codec.Unmarshaler {
 	if def == nil {
-		def = UnmarshalerNone
+		return UnmarshalerNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -52,16 +52,19 @@ func UnmarshalerPut(ctx context.Context, name string, def codec.Unmarshaler) cod
 func UnmarshalerGet(ctx context.Context, name string, defaults codec.Unmarshaler) codec.Unmarshaler {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("codec.Unmarshaler", map[string]codec.Unmarshaler{})
-		o, ok := store.(map[string]codec.Unmarshaler)[name]
+		store, ok := m.Load("codec.Unmarshaler")
 		if ok {
-			return o
+			o, ok := store.(map[string]codec.Unmarshaler)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("codec.Unmarshaler %q is not defined", name)
 	return UnmarshalerNone
 }
 
@@ -76,7 +79,7 @@ func newUnmarshalerNone() codec.Unmarshaler {
 func (_UnmarshalerNone) Unmarshal(_ []uint8, _ interface{}) (error error) {
 	logger.Warn("this is none of codec.Unmarshaler")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error codec.Unmarshaler is none")
 
 	return
 }

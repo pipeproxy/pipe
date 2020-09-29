@@ -38,7 +38,7 @@ func NewPacketConnDefWithConfig(ctx context.Context, conf *Config) net.PacketCon
 
 func PacketConnPut(ctx context.Context, name string, def net.PacketConn) net.PacketConn {
 	if def == nil {
-		def = PacketConnNone
+		return PacketConnNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -53,16 +53,19 @@ func PacketConnPut(ctx context.Context, name string, def net.PacketConn) net.Pac
 func PacketConnGet(ctx context.Context, name string, defaults net.PacketConn) net.PacketConn {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("net.PacketConn", map[string]net.PacketConn{})
-		o, ok := store.(map[string]net.PacketConn)[name]
+		store, ok := m.Load("net.PacketConn")
 		if ok {
-			return o
+			o, ok := store.(map[string]net.PacketConn)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("net.PacketConn %q is not defined", name)
 	return PacketConnNone
 }
 
@@ -77,7 +80,7 @@ func newPacketConnNone() net.PacketConn {
 func (_PacketConnNone) Close() (error error) {
 	logger.Warn("this is none of net.PacketConn")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error net.PacketConn is none")
 
 	return
 }
@@ -91,7 +94,7 @@ func (_PacketConnNone) LocalAddr() (_ net.Addr) {
 func (_PacketConnNone) ReadFrom(_ []uint8) (_ int, _ net.Addr, error error) {
 	logger.Warn("this is none of net.PacketConn")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error net.PacketConn is none")
 
 	return
 }
@@ -99,7 +102,7 @@ func (_PacketConnNone) ReadFrom(_ []uint8) (_ int, _ net.Addr, error error) {
 func (_PacketConnNone) SetDeadline(_ time.Time) (error error) {
 	logger.Warn("this is none of net.PacketConn")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error net.PacketConn is none")
 
 	return
 }
@@ -107,7 +110,7 @@ func (_PacketConnNone) SetDeadline(_ time.Time) (error error) {
 func (_PacketConnNone) SetReadDeadline(_ time.Time) (error error) {
 	logger.Warn("this is none of net.PacketConn")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error net.PacketConn is none")
 
 	return
 }
@@ -115,7 +118,7 @@ func (_PacketConnNone) SetReadDeadline(_ time.Time) (error error) {
 func (_PacketConnNone) SetWriteDeadline(_ time.Time) (error error) {
 	logger.Warn("this is none of net.PacketConn")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error net.PacketConn is none")
 
 	return
 }
@@ -123,7 +126,7 @@ func (_PacketConnNone) SetWriteDeadline(_ time.Time) (error error) {
 func (_PacketConnNone) WriteTo(_ []uint8, _ net.Addr) (_ int, error error) {
 	logger.Warn("this is none of net.PacketConn")
 
-	error = fmt.Errorf("error none")
+	error = fmt.Errorf("error net.PacketConn is none")
 
 	return
 }

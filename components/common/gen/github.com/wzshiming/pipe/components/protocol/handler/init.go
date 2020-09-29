@@ -36,7 +36,7 @@ func NewHandlerDefWithConfig(ctx context.Context, conf *Config) protocol.Handler
 
 func HandlerPut(ctx context.Context, name string, def protocol.Handler) protocol.Handler {
 	if def == nil {
-		def = HandlerNone
+		return HandlerNone
 	}
 
 	m, ok := ctxcache.GetCacheWithContext(ctx)
@@ -51,16 +51,19 @@ func HandlerPut(ctx context.Context, name string, def protocol.Handler) protocol
 func HandlerGet(ctx context.Context, name string, defaults protocol.Handler) protocol.Handler {
 	m, ok := ctxcache.GetCacheWithContext(ctx)
 	if ok {
-		store, _ := m.LoadOrStore("protocol.Handler", map[string]protocol.Handler{})
-		o, ok := store.(map[string]protocol.Handler)[name]
+		store, ok := m.Load("protocol.Handler")
 		if ok {
-			return o
+			o, ok := store.(map[string]protocol.Handler)[name]
+			if ok {
+				return o
+			}
 		}
 	}
 
 	if defaults != nil {
 		return defaults
 	}
+	logger.Warnf("protocol.Handler %q is not defined", name)
 	return HandlerNone
 }
 

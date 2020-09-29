@@ -7,28 +7,22 @@ import (
 )
 
 var (
-	closers     []io.Closer
-	closersSwap []io.Closer
+	closersSwap = map[string]io.Closer{}
 	closersMut  sync.Mutex
 )
 
-func channelClose(ctx context.Context, closer io.Closer) {
-	closersMut.Lock()
-	defer closersMut.Unlock()
-	closers = append(closers, closer)
+type keyCloser interface {
+	Key() string
+	io.Closer
 }
 
-func Swap() {
+func swapClose(ctx context.Context, closer keyCloser) {
 	closersMut.Lock()
 	defer closersMut.Unlock()
-	closers, closersSwap = closersSwap, closers
-}
-
-func CloseSwap() {
-	closersMut.Lock()
-	defer closersMut.Unlock()
-	for _, closer := range closersSwap {
-		closer.Close()
+	key := closer.Key()
+	c, ok := closersSwap[key]
+	if ok {
+		c.Close()
 	}
-	closersSwap = closersSwap[:0]
+	closersSwap[key] = closer
 }

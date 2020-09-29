@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"go/format"
 	"io/ioutil"
 	"os"
@@ -52,6 +53,8 @@ func (g *gen) data() interface{} {
 	}
 	methods := []interface{}{}
 	pkgPath := g.typ.PkgPath()
+	pkg := getImportName(pkgPath)
+	typName := g.typ.Name()
 	imports[pkgPath] = struct{}{}
 	j := g.typ.NumMethod()
 	for i := 0; i != j; i++ {
@@ -87,7 +90,7 @@ func (g *gen) data() interface{} {
 			}
 			if t == "error" {
 				imports["fmt"] = struct{}{}
-				m["Value"] = `fmt.Errorf("error none")`
+				m["Value"] = fmt.Sprintf(`fmt.Errorf("error %s.%s is none")`, pkg, typName)
 			}
 			results = append(results, m)
 		}
@@ -113,9 +116,9 @@ func (g *gen) data() interface{} {
 		imp = append(imp, im)
 	}
 	return map[string]interface{}{
-		"Type":    g.typ.Name(),
-		"PkgName": strings.ToLower(g.typ.Name()),
-		"Pkg":     getImportName(g.typ.PkgPath()),
+		"Type":    typName,
+		"PkgName": strings.ToLower(typName),
+		"Pkg":     pkg,
 		"Imports": imp,
 		"Methods": methods,
 	}
