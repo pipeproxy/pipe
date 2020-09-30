@@ -766,41 +766,6 @@ func (m DefNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@net/http.Handler type =========
 
-// ========= Begin def@net/http.RoundTripper type =========
-//
-
-const kindDefNetHTTPRoundTripperConfig = `def@net/http.RoundTripper`
-
-// DefNetHTTPRoundTripperConfig def@net/http.RoundTripper
-type DefNetHTTPRoundTripperConfig struct {
-	Name string
-	Def  HTTPRoundTripper `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindDefNetHTTPRoundTripperConfig,
-		func(r *DefNetHTTPRoundTripperConfig) HTTPRoundTripper { return r },
-	)
-}
-
-func (DefNetHTTPRoundTripperConfig) isHTTPRoundTripper() {}
-func (DefNetHTTPRoundTripperConfig) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m DefNetHTTPRoundTripperConfig) MarshalJSON() ([]byte, error) {
-	type t DefNetHTTPRoundTripperConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindDefNetHTTPRoundTripperConfig, data)
-	return data, nil
-}
-
-//
-// ========= End def@net/http.RoundTripper type =========
-
 // ========= Begin def@once.Once type =========
 //
 
@@ -1125,7 +1090,6 @@ const kindDialerStreamDialerConfig = `dialer@stream.Dialer`
 type DialerStreamDialerConfig struct {
 	Network DialerStreamDialerDialerNetworkEnum
 	Address string
-	TLS     TLS `json:",omitempty"`
 }
 
 type DialerStreamDialerDialerNetworkEnum string
@@ -2075,7 +2039,6 @@ const kindListenerStreamListenConfigConfig = `listener@stream.ListenConfig`
 type ListenerStreamListenConfigConfig struct {
 	Network ListenerStreamListenConfigListenerNetworkEnum
 	Address string
-	TLS     TLS `json:",omitempty"`
 }
 
 type ListenerStreamListenConfigListenerNetworkEnum string
@@ -2314,74 +2277,6 @@ func (m LoadIoWriterConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End load@io.Writer type =========
-
-// ========= Begin load@net.Listener type =========
-//
-
-const kindLoadNetListenerConfig = `load@net.Listener`
-
-// LoadNetListenerConfig load@net.Listener
-type LoadNetListenerConfig struct {
-	Load IoReader
-}
-
-func init() {
-	_ = provider.Register(
-		kindLoadNetListenerConfig,
-		func(r *LoadNetListenerConfig) NetListener { return r },
-	)
-}
-
-func (LoadNetListenerConfig) isNetListener() {}
-func (LoadNetListenerConfig) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m LoadNetListenerConfig) MarshalJSON() ([]byte, error) {
-	type t LoadNetListenerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindLoadNetListenerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End load@net.Listener type =========
-
-// ========= Begin load@net.PacketConn type =========
-//
-
-const kindLoadNetPacketConnConfig = `load@net.PacketConn`
-
-// LoadNetPacketConnConfig load@net.PacketConn
-type LoadNetPacketConnConfig struct {
-	Load IoReader
-}
-
-func init() {
-	_ = provider.Register(
-		kindLoadNetPacketConnConfig,
-		func(r *LoadNetPacketConnConfig) NetPacketConn { return r },
-	)
-}
-
-func (LoadNetPacketConnConfig) isNetPacketConn() {}
-func (LoadNetPacketConnConfig) isComponent()     {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m LoadNetPacketConnConfig) MarshalJSON() ([]byte, error) {
-	type t LoadNetPacketConnConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindLoadNetPacketConnConfig, data)
-	return data, nil
-}
-
-//
-// ========= End load@net.PacketConn type =========
 
 // ========= Begin load@net/http.Handler type =========
 //
@@ -3430,39 +3325,6 @@ func (m NoneNetHTTPHandler) MarshalJSON() ([]byte, error) {
 //
 // ========= End none@net/http.Handler type =========
 
-// ========= Begin none@net/http.RoundTripper type =========
-//
-
-const kindNoneNetHTTPRoundTripper = `none@net/http.RoundTripper`
-
-// NoneNetHTTPRoundTripper none@net/http.RoundTripper
-type NoneNetHTTPRoundTripper struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindNoneNetHTTPRoundTripper,
-		func(r *NoneNetHTTPRoundTripper) HTTPRoundTripper { return r },
-	)
-}
-
-func (NoneNetHTTPRoundTripper) isHTTPRoundTripper() {}
-func (NoneNetHTTPRoundTripper) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m NoneNetHTTPRoundTripper) MarshalJSON() ([]byte, error) {
-	type t NoneNetHTTPRoundTripper
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindNoneNetHTTPRoundTripper, data)
-	return data, nil
-}
-
-//
-// ========= End none@net/http.RoundTripper type =========
-
 // ========= Begin none@once.Once type =========
 //
 
@@ -4246,41 +4108,6 @@ func (m RefNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End ref@net/http.Handler type =========
 
-// ========= Begin ref@net/http.RoundTripper type =========
-//
-
-const kindRefNetHTTPRoundTripperConfig = `ref@net/http.RoundTripper`
-
-// RefNetHTTPRoundTripperConfig ref@net/http.RoundTripper
-type RefNetHTTPRoundTripperConfig struct {
-	Name string
-	Def  HTTPRoundTripper `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindRefNetHTTPRoundTripperConfig,
-		func(r *RefNetHTTPRoundTripperConfig) HTTPRoundTripper { return r },
-	)
-}
-
-func (RefNetHTTPRoundTripperConfig) isHTTPRoundTripper() {}
-func (RefNetHTTPRoundTripperConfig) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RefNetHTTPRoundTripperConfig) MarshalJSON() ([]byte, error) {
-	type t RefNetHTTPRoundTripperConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindRefNetHTTPRoundTripperConfig, data)
-	return data, nil
-}
-
-//
-// ========= End ref@net/http.RoundTripper type =========
-
 // ========= Begin ref@once.Once type =========
 //
 
@@ -4801,6 +4628,76 @@ func (m StripPrefixNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End strip_prefix@net/http.Handler type =========
+
+// ========= Begin tls@stream.Dialer type =========
+//
+
+const kindTLSStreamDialerConfig = `tls@stream.Dialer`
+
+// TLSStreamDialerConfig tls@stream.Dialer
+type TLSStreamDialerConfig struct {
+	Dialer StreamDialer
+	TLS    TLS `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindTLSStreamDialerConfig,
+		func(r *TLSStreamDialerConfig) StreamDialer { return r },
+	)
+}
+
+func (TLSStreamDialerConfig) isStreamDialer() {}
+func (TLSStreamDialerConfig) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m TLSStreamDialerConfig) MarshalJSON() ([]byte, error) {
+	type t TLSStreamDialerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindTLSStreamDialerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End tls@stream.Dialer type =========
+
+// ========= Begin tls@stream.ListenConfig type =========
+//
+
+const kindTLSStreamListenConfigConfig = `tls@stream.ListenConfig`
+
+// TLSStreamListenConfigConfig tls@stream.ListenConfig
+type TLSStreamListenConfigConfig struct {
+	ListenConfig StreamListenConfig
+	TLS          TLS
+}
+
+func init() {
+	_ = provider.Register(
+		kindTLSStreamListenConfigConfig,
+		func(r *TLSStreamListenConfigConfig) StreamListenConfig { return r },
+	)
+}
+
+func (TLSStreamListenConfigConfig) isStreamListenConfig() {}
+func (TLSStreamListenConfigConfig) isComponent()          {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m TLSStreamListenConfigConfig) MarshalJSON() ([]byte, error) {
+	type t TLSStreamListenConfigConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindTLSStreamListenConfigConfig, data)
+	return data, nil
+}
+
+//
+// ========= End tls@stream.ListenConfig type =========
 
 // ========= Begin tls_down@stream.Handler type =========
 //
@@ -5389,41 +5286,6 @@ func (m *RawNetPacketConn) UnmarshalJSON(data []byte) error {
 
 //
 // ========= End net.PacketConn interface =========
-
-// ========= Begin http.RoundTripper interface =========
-//
-
-// HTTPRoundTripper http.RoundTripper
-type HTTPRoundTripper interface {
-	isHTTPRoundTripper()
-	Component
-}
-
-// RawHTTPRoundTripper is store raw bytes of HTTPRoundTripper
-type RawHTTPRoundTripper []byte
-
-func (RawHTTPRoundTripper) isHTTPRoundTripper() {}
-func (RawHTTPRoundTripper) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawHTTPRoundTripper) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawHTTPRoundTripper) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawHTTPRoundTripper: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End http.RoundTripper interface =========
 
 // ========= Begin packet.Handler interface =========
 //

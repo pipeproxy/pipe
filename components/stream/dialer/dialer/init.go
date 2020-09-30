@@ -3,7 +3,6 @@ package dialer
 import (
 	"github.com/wzshiming/pipe/components/common/register"
 	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/components/tls"
 )
 
 const (
@@ -26,12 +25,8 @@ const (
 type Config struct {
 	Network DialerNetworkEnum
 	Address string
-	TLS     tls.TLS `json:",omitempty"`
 }
 
 func NewDialerWithConfig(conf *Config) stream.Dialer {
-	if conf.TLS == nil {
-		return NewDialer(string(conf.Network), conf.Address, nil)
-	}
-	return NewDialer(string(conf.Network), conf.Address, conf.TLS.TLS())
+	return NewDialer(string(conf.Network), conf.Address)
 }

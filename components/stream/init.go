@@ -8,8 +8,6 @@ import (
 )
 
 func init() {
-	var streamListener StreamListener
-	types.Register(&streamListener)
 	var handler Handler
 	types.Register(&handler)
 	var listenConfig ListenConfig

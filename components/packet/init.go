@@ -8,8 +8,6 @@ import (
 )
 
 func init() {
-	var packet Packet
-	types.Register(&packet)
 	var handler Handler
 	types.Register(&handler)
 	var listenConfig ListenConfig
