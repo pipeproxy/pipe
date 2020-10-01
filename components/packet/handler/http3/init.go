@@ -30,5 +30,5 @@ func NewServerWithConfig(conf *Config) (packet.Handler, error) {
 	if conf.TLS == nil {
 		return nil, ErrNotTLS
 	}
-	return NewServer(conf.Handler, conf.TLS.TLS()), nil
+	return NewServer(conf.Handler, conf.TLS), nil
 }

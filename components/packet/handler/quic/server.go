@@ -11,10 +11,10 @@ import (
 
 type server struct {
 	pkt       packet.Packet
-	tlsConfig *tls.Config
+	tlsConfig tls.TLS
 }
 
-func NewServer(pkt packet.Packet, tlsConfig *tls.Config) stream.ListenConfig {
+func NewServer(pkt packet.Packet, tlsConfig tls.TLS) stream.ListenConfig {
 	s := &server{
 		pkt:       pkt,
 		tlsConfig: tlsConfig,
@@ -23,7 +23,7 @@ func NewServer(pkt packet.Packet, tlsConfig *tls.Config) stream.ListenConfig {
 }
 
 func (s *server) ListenStream(ctx context.Context) (stream.StreamListener, error) {
-	listen, err := quic.Listen(s.pkt, s.tlsConfig, &quic.Config{})
+	listen, err := quic.Listen(s.pkt, s.tlsConfig.TLS(), &quic.Config{})
 	if err != nil {
 		return nil, err
 	}

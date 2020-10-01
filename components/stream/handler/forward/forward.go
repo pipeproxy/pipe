@@ -21,13 +21,13 @@ func NewForward(dialer stream.Dialer) *Forward {
 func (f *Forward) ServeStream(ctx context.Context, stm stream.Stream) {
 	conn, err := f.dialer.DialStream(ctx)
 	if err != nil {
-		logger.Error(err)
+		logger.Errorln(err)
 		return
 	}
 	defer conn.Close()
 	err = tunnel.Tunnel(ctx, stm, conn)
 	if err != nil {
-		logger.Error(err)
+		logger.Errorln(err)
 		return
 	}
 }

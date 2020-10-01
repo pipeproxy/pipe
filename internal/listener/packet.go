@@ -27,8 +27,8 @@ func listenPacket(ctx context.Context, network, address string) (*fakeClosePacke
 	packetConnMut.Lock()
 	defer packetConnMut.Unlock()
 
+	key := buildKey(network, address)
 	if _, port, _ := net.SplitHostPort(address); port != "" && port != "0" {
-		key := buildKey(network, address)
 		if global, ok := packetConn[key]; ok {
 			atomic.AddInt32(&global.usage, 1)
 			logger.Infof("Relisten to %s", key)
@@ -42,11 +42,14 @@ func listenPacket(ctx context.Context, network, address string) (*fakeClosePacke
 		return nil, err
 	}
 	address = sameAddress(address, pc.LocalAddr().String())
-	key := buildKey(network, address)
-
 	global := &globalPacketConn{usage: 1, packetConn: pc}
 	packetConn[key] = global
-
+	realKey := buildKey(network, address)
+	if key != realKey {
+		logger.Infof("Listen to %s (%s)", key, realKey)
+	} else {
+		logger.Infof("Listen to %s", key)
+	}
 	logger.Infof("Listen to %s", key)
 	return &fakeClosePacketConn{usage: &global.usage, key: key, PacketConn: pc}, nil
 }

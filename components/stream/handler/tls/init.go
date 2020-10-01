@@ -22,9 +22,9 @@ type Config struct {
 }
 
 func NewTlsDownWithConfig(conf *Config) stream.Handler {
-	return NewTlsDown(conf.Handler, conf.TLS.TLS())
+	return NewTlsDown(conf.Handler, conf.TLS)
 }
 
 func NewTlsUpWithConfig(conf *Config) stream.Handler {
-	return NewTlsUp(conf.Handler, conf.TLS.TLS())
+	return NewTlsUp(conf.Handler, conf.TLS)
 }

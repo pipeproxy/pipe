@@ -9,10 +9,10 @@ import (
 
 type Tls struct {
 	listenConfig stream.ListenConfig
-	tlsConfig    *tls.Config
+	tlsConfig    tls.TLS
 }
 
-func NewTls(listenConfig stream.ListenConfig, tlsConfig *tls.Config) *Tls {
+func NewTls(listenConfig stream.ListenConfig, tlsConfig tls.TLS) *Tls {
 	return &Tls{
 		listenConfig: listenConfig,
 		tlsConfig:    tlsConfig,
@@ -24,5 +24,5 @@ func (d *Tls) ListenStream(ctx context.Context) (stream.StreamListener, error) {
 	if err != nil {
 		return nil, err
 	}
-	return tls.NewListener(listener, d.tlsConfig), nil
+	return tls.NewListener(listener, d.tlsConfig.TLS()), nil
 }

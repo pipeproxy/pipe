@@ -22,7 +22,7 @@ func (m *Service) Do(ctx context.Context) error {
 		<-ctx.Done()
 		err := m.svc.Close()
 		if err != nil {
-			logger.Error(err)
+			logger.Errorln(err)
 		}
 	}()
 	return m.svc.Run(ctx)

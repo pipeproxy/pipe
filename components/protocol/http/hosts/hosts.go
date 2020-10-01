@@ -7,8 +7,7 @@ import (
 )
 
 var (
-	ErrNotFound = fmt.Errorf("error not found")
-	ErrFormat   = fmt.Errorf("error only a single asterisk is currently supported")
+	ErrFormat = fmt.Errorf("error only a single asterisk is currently supported")
 )
 
 // Hosts is an hosts multiplexer.
@@ -31,12 +30,15 @@ func NewHosts() *Hosts {
 	return p
 }
 
-func (h *Hosts) NotFound(handler http.Handler) error {
+func (h *Hosts) NotFound(handler http.Handler) {
 	h.notFound = handler
-	return nil
 }
 
 func (h *Hosts) Handle(host string, handler http.Handler) error {
+	if host == "*" {
+		h.NotFound(handler)
+		return nil
+	}
 	split := strings.Split(host, "*")
 	switch len(split) {
 	default:
@@ -54,10 +56,10 @@ func (h *Hosts) Handle(host string, handler http.Handler) error {
 }
 
 // handler returns most matching handler and prefix bytes data to use for the given reader.
-func (h *Hosts) Handler(host string) (handler http.Handler, err error) {
+func (h *Hosts) Handler(host string) (handler http.Handler) {
 	handler, ok := h.domains[host]
 	if ok {
-		return handler, nil
+		return handler
 	}
 	for _, m := range h.matchers {
 		if m.prefix != "" {
@@ -70,19 +72,14 @@ func (h *Hosts) Handler(host string) (handler http.Handler, err error) {
 				continue
 			}
 		}
-		return m.handler, nil
+		return m.handler
 	}
 	if h.notFound == nil {
-		return nil, ErrNotFound
+		return http.HandlerFunc(http.NotFound)
 	}
-	return h.notFound, nil
+	return h.notFound
 }
 
 func (h *Hosts) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	host := r.Host
-	handler, err := h.Handler(host)
-	if err != nil || handler == nil {
-		handler = http.HandlerFunc(http.NotFound)
-	}
-	handler.ServeHTTP(rw, r)
+	h.Handler(r.Host).ServeHTTP(rw, r)
 }

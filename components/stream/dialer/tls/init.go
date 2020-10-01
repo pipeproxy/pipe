@@ -16,9 +16,9 @@ func init() {
 
 type Config struct {
 	Dialer stream.Dialer
-	TLS    tls.TLS `json:",omitempty"`
+	TLS    tls.TLS
 }
 
 func NewTlsWithConfig(conf *Config) stream.Dialer {
-	return NewTls(conf.Dialer, conf.TLS.TLS())
+	return NewTls(conf.Dialer, conf.TLS)
 }

@@ -14,10 +14,10 @@ import (
 
 type server struct {
 	handler   http.Handler
-	tlsConfig *tls.Config
+	tlsConfig tls.TLS
 }
 
-func NewServer(handler http.Handler, tlsConfig *tls.Config) *server {
+func NewServer(handler http.Handler, tlsConfig tls.TLS) *server {
 	s := &server{
 		handler:   handler,
 		tlsConfig: tlsConfig,
@@ -35,7 +35,7 @@ func (s *server) serve(ctx context.Context, listen stream.StreamListener, handle
 	svc := http.Server{
 		Handler:     handler,
 		BaseContext: baseContext,
-		TLSConfig:   s.tlsConfig,
+		TLSConfig:   s.tlsConfig.TLS(),
 	}
 
 	svc.Handler = h2c.NewHandler(svc.Handler, &h2)
@@ -59,7 +59,7 @@ func (s *server) serve(ctx context.Context, listen stream.StreamListener, handle
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
 	err := s.serve(ctx, listener.NewSingleConnListener(stm), s.handler)
 	if err != nil {
-		logger.Error("[http2]", err)
+		logger.Errorln("[http2]", err)
 		return
 	}
 }

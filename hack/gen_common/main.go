@@ -25,7 +25,7 @@ func main() {
 		g := newGen(t)
 		err := g.Write()
 		if err != nil {
-			logger.Error(err)
+			logger.Errorln(err)
 		}
 	}
 }
@@ -142,7 +142,7 @@ func (g *gen) Write() error {
 	if err == nil {
 		src = newSrc
 	} else {
-		logger.Error(err)
+		logger.Errorln(err)
 	}
 
 	file := filepath.Join(g.typ.PkgPath(), strings.ToLower(g.typ.Name()), "init.go")

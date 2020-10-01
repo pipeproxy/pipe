@@ -30,5 +30,5 @@ func NewServerWithConfig(conf *Config) (stream.ListenConfig, error) {
 	if conf.TLS == nil {
 		return nil, ErrNotTLS
 	}
-	return NewServer(conf.Packet, conf.TLS.TLS()), nil
+	return NewServer(conf.Packet, conf.TLS), nil
 }

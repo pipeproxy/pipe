@@ -26,8 +26,5 @@ func NewServerWithConfig(conf *Config) (stream.Handler, error) {
 	if conf.Handler == nil {
 		return nil, ErrNotHandler
 	}
-	if conf.TLS != nil {
-		return NewServer(conf.Handler, conf.TLS.TLS()), nil
-	}
-	return NewServer(conf.Handler, nil), nil
+	return NewServer(conf.Handler, conf.TLS), nil
 }

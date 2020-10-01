@@ -29,13 +29,12 @@ type Route struct {
 
 type Config struct {
 	Routes   []*Route
-	NotFound http.Handler
+	NotFound http.Handler `json:",omitempty"`
 }
 
 func NewMuxWithConfig(conf *Config) (http.Handler, error) {
 	mux := NewMux()
 	mux.NotFound(conf.NotFound)
-
 	for _, route := range conf.Routes {
 		if route.Handler == nil {
 			return nil, ErrNotHandler
@@ -43,9 +42,15 @@ func NewMuxWithConfig(conf *Config) (http.Handler, error) {
 		if route.Path != "" {
 			mux.HandlePath(route.Path, route.Handler)
 		} else if route.Regexp == "" && route.Prefix != "" {
-			mux.HandlePrefix(route.Prefix, route.Handler)
+			err := mux.HandlePrefix(route.Prefix, route.Handler)
+			if err != nil {
+				return nil, err
+			}
 		} else if route.Regexp != "" {
-			mux.HandlePrefixAndRegexp(route.Prefix, route.Regexp, route.Handler)
+			err := mux.HandlePrefixAndRegexp(route.Prefix, route.Regexp, route.Handler)
+			if err != nil {
+				return nil, err
+			}
 		} else {
 			return nil, ErrNotRouter
 		}

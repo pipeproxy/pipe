@@ -9,10 +9,10 @@ import (
 
 type Tls struct {
 	dialer    stream.Dialer
-	tlsConfig *tls.Config
+	tlsConfig tls.TLS
 }
 
-func NewTls(dialer stream.Dialer, tlsConfig *tls.Config) *Tls {
+func NewTls(dialer stream.Dialer, tlsConfig tls.TLS) *Tls {
 	return &Tls{
 		dialer:    dialer,
 		tlsConfig: tlsConfig,
@@ -24,8 +24,5 @@ func (d *Tls) DialStream(ctx context.Context) (stream.Stream, error) {
 	if err != nil {
 		return nil, err
 	}
-	if d.tlsConfig != nil {
-		stm = tls.Client(stm, d.tlsConfig)
-	}
-	return stm, nil
+	return tls.Client(stm, d.tlsConfig.TLS()), nil
 }

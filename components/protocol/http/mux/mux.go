@@ -12,7 +12,6 @@ import (
 )
 
 var (
-	ErrNotFound           = fmt.Errorf("error not found")
 	ErrRouteAlreadyExists = fmt.Errorf("error route already exists")
 )
 
@@ -49,9 +48,9 @@ func NewMux() *Mux {
 }
 
 // NotFound replies to the handler with an Handler not found error.
-func (m *Mux) NotFound(handler http.Handler) error {
+func (m *Mux) NotFound(handler http.Handler) {
 	m.notFound = handler
-	return nil
+	return
 }
 
 func (m *Mux) HandlePrefix(prefix string, handler http.Handler) error {
@@ -76,19 +75,19 @@ func (m *Mux) HandlePrefixAndRegexp(prefix, reg string, handler http.Handler) er
 	return nil
 }
 
-func (m *Mux) HandlePath(path string, handler http.Handler) error {
+func (m *Mux) HandlePath(path string, handler http.Handler) {
 	m.paths[path] = handler
-	return nil
+	return
 }
 
 // Handler returns most matching handler and prefix bytes data to use for the given reader.
-func (m *Mux) Handler(path string) (handler http.Handler, err error) {
+func (m *Mux) Handler(path string) (handler http.Handler) {
 	handler, ok := m.paths[path]
 	if ok {
-		return handler, nil
+		return handler
 	}
 	if m.prefixLength == 0 {
-		return nil, ErrNotFound
+		return http.HandlerFunc(http.NotFound)
 	}
 
 	buf := pool.GetBytes()
@@ -102,12 +101,12 @@ func (m *Mux) Handler(path string) (handler http.Handler, err error) {
 		}
 	}
 	if handler != nil {
-		return handler, nil
+		return handler
 	}
 	if m.notFound == nil {
-		return nil, ErrNotFound
+		return http.HandlerFunc(http.NotFound)
 	}
-	return m.notFound, nil
+	return m.notFound
 }
 
 func (m *Mux) handle(prefix string, buf []byte) {
@@ -160,10 +159,5 @@ func (m *Mux) getHandler(index []byte) (http.Handler, bool) {
 }
 
 func (m *Mux) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
-	handler, err := m.Handler(path)
-	if err != nil || handler == nil {
-		handler = http.HandlerFunc(http.NotFound)
-	}
-	handler.ServeHTTP(rw, r)
+	m.Handler(r.URL.Path).ServeHTTP(rw, r)
 }

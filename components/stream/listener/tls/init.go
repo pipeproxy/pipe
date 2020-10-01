@@ -20,5 +20,5 @@ type Config struct {
 }
 
 func NewTlsWithConfig(conf *Config) stream.ListenConfig {
-	return NewTls(conf.ListenConfig, conf.TLS.TLS())
+	return NewTls(conf.ListenConfig, conf.TLS)
 }

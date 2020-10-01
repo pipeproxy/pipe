@@ -1,19 +1,43 @@
 package merge
 
 import (
-	"crypto/tls"
+	"fmt"
+
+	"github.com/wzshiming/pipe/components/tls"
 )
 
-func NewMerge(config []*tls.Config) *tls.Config {
-	switch len(config) {
+var (
+	ErrNotTls = fmt.Errorf("not tls")
+)
+
+type Merge struct {
+	config []tls.TLS
+	res    *tls.Config
+}
+
+func NewMerge(config []tls.TLS) *Merge {
+	return &Merge{
+		config: config,
+	}
+}
+
+func (m *Merge) TLS() *tls.Config {
+	if m.res != nil {
+		return m.res
+	}
+	switch len(m.config) {
 	case 0:
-		return &tls.Config{}
+		return nil
 	case 1:
-		return config[0]
+		return m.config[0].TLS()
 	}
 
-	n := config[0].Clone()
-	for _, v := range config[1:] {
+	n := &tls.Config{}
+	for _, t := range m.config {
+		v := t.TLS()
+		if v == nil {
+			continue
+		}
 		if v.RootCAs != nil && n.RootCAs == nil {
 			n.RootCAs = v.RootCAs
 		}
@@ -23,10 +47,13 @@ func NewMerge(config []*tls.Config) *tls.Config {
 		if v.ServerName != "" && n.ServerName == "" {
 			n.ServerName = v.ServerName
 		}
+		if v.InsecureSkipVerify && !n.InsecureSkipVerify {
+			n.InsecureSkipVerify = v.InsecureSkipVerify
+		}
 		if len(v.Certificates) != 0 {
 			n.Certificates = append(n.Certificates, v.Certificates...)
 		}
 	}
-
+	m.res = n
 	return n
 }

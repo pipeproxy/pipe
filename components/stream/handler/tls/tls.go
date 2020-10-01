@@ -9,10 +9,10 @@ import (
 
 type TlsUp struct {
 	handler   stream.Handler
-	tlsConfig *tls.Config
+	tlsConfig tls.TLS
 }
 
-func NewTlsUp(handler stream.Handler, tlsConfig *tls.Config) *TlsUp {
+func NewTlsUp(handler stream.Handler, tlsConfig tls.TLS) *TlsUp {
 	return &TlsUp{
 		handler:   handler,
 		tlsConfig: tlsConfig,
@@ -20,16 +20,16 @@ func NewTlsUp(handler stream.Handler, tlsConfig *tls.Config) *TlsUp {
 }
 
 func (t *TlsUp) ServeStream(ctx context.Context, stm stream.Stream) {
-	conn := tls.Client(stm, t.tlsConfig)
+	conn := tls.Client(stm, t.tlsConfig.TLS())
 	t.handler.ServeStream(ctx, conn)
 }
 
 type TlsDown struct {
 	handler   stream.Handler
-	tlsConfig *tls.Config
+	tlsConfig tls.TLS
 }
 
-func NewTlsDown(handler stream.Handler, tlsConfig *tls.Config) *TlsDown {
+func NewTlsDown(handler stream.Handler, tlsConfig tls.TLS) *TlsDown {
 	return &TlsDown{
 		handler:   handler,
 		tlsConfig: tlsConfig,
@@ -37,6 +37,6 @@ func NewTlsDown(handler stream.Handler, tlsConfig *tls.Config) *TlsDown {
 }
 
 func (t *TlsDown) ServeStream(ctx context.Context, stm stream.Stream) {
-	conn := tls.Server(stm, t.tlsConfig)
+	conn := tls.Server(stm, t.tlsConfig.TLS())
 	t.handler.ServeStream(ctx, conn)
 }

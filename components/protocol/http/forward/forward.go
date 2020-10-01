@@ -16,29 +16,34 @@ type Forward struct {
 }
 
 func NewForward(url string, transport http.RoundTripper) (*Forward, error) {
+	f := &Forward{
+		transport: transport,
+	}
+	if url == "" {
+		url = "{{.Scheme}}://{{.Host}}"
+	}
+
 	u, err := template.NewFormat(url)
 	if err != nil {
 		return nil, err
 	}
-	return &Forward{
-		url:       u,
-		transport: transport,
-	}, nil
+	f.url = u
+	return f, nil
 }
 
 func (h *Forward) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	proxy := httputil.ReverseProxy{
+		BufferPool:   pool.Bytes,
+		Transport:    h.transport,
+		ErrorHandler: errorHandler,
+	}
 	u := h.url.FormatString(r)
 	target, err := url.Parse(u)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	proxy := httputil.ReverseProxy{
-		BufferPool:   pool.Bytes,
-		Transport:    h.transport,
-		ErrorHandler: errorHandler,
-		Director:     directorFunc(target),
-	}
+	proxy.Director = directorFunc(target)
 	proxy.ServeHTTP(rw, r)
 }
 

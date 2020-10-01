@@ -20,20 +20,15 @@ func sameAddress(a1, a2 string) string {
 		return a1
 	}
 
-	switch host1 {
-	case "0.0.0.0", "[::]":
-		host1 = ""
-	}
-
 	switch port1 {
-	case "0":
+	case "0", "":
 		_, port2, err := net.SplitHostPort(a2)
 		if err != nil {
 			return a1
 		}
 		port1 = port2
 	}
-	return fmt.Sprintf("%s:%s", host1, port1)
+	return net.JoinHostPort(host1, port1)
 }
 
 var ErrNetClosing = errors.New("use of closed network connection")

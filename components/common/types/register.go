@@ -20,7 +20,7 @@ func Register(i interface{}) error {
 	for _, item := range list {
 		err := item(i)
 		if err != nil {
-			logger.Error(err)
+			logger.Errorln(err)
 			return err
 		}
 	}

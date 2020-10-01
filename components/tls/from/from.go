@@ -11,6 +11,7 @@ func NewFrom(domain string, cert, key []byte) (*tls.Config, error) {
 	}
 	conf := &tls.Config{}
 	conf.ServerName = domain
+	conf.InsecureSkipVerify = domain == ""
 	conf.Certificates = append(conf.Certificates, pair)
 	return conf, nil
 }

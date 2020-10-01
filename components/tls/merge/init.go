@@ -18,9 +18,8 @@ type Config struct {
 }
 
 func NewMergeWithConfig(conf *Config) (tls.TLS, error) {
-	ts := make([]*tls.Config, 0, len(conf.Merge))
-	for _, v := range conf.Merge {
-		ts = append(ts, v.TLS())
+	if len(conf.Merge) == 0 {
+		return nil, ErrNotTls
 	}
-	return tls.WrapTLS(NewMerge(ts)), nil
+	return NewMerge(conf.Merge), nil
 }

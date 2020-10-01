@@ -40,7 +40,7 @@ func (s *Server) Run(ctx context.Context) error {
 			if listener.IsClosedConnError(err) || err == context.Canceled {
 				return nil
 			}
-			logger.Error(err)
+			logger.Errorln(err)
 			continue
 		}
 		go s.ServeStream(ctx, conn)

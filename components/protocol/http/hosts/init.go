@@ -27,7 +27,7 @@ type Route struct {
 
 type Config struct {
 	Hosts    []*Route
-	NotFound http.Handler
+	NotFound http.Handler `json:",omitempty"`
 }
 
 func NewHostsWithConfig(conf *Config) (http.Handler, error) {
@@ -40,7 +40,10 @@ func NewHostsWithConfig(conf *Config) (http.Handler, error) {
 		if route.Domain == "" {
 			return nil, ErrNotDomain
 		}
-		mux.Handle(route.Domain, route.Handler)
+		err := mux.Handle(route.Domain, route.Handler)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return mux, nil
 }

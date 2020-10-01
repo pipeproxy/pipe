@@ -40,7 +40,7 @@ func (s *server) serve(ctx context.Context, listen stream.StreamListener, handle
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
 	err := s.serve(ctx, listener.NewSingleConnListener(stm), s.handler)
 	if err != nil {
-		logger.Error("[http1]", err)
+		logger.Errorln("[http1]", err)
 		return
 	}
 }
