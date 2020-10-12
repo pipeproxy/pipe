@@ -20,10 +20,12 @@ type Config struct {
 	Path string
 }
 
-func NewFileWithConfig(conf *Config) (input.Input, error) {
-	data, err := ioutil.ReadFile(conf.Path)
-	if err != nil {
-		return nil, err
-	}
-	return bytes.NewBuffer(data), nil
+func NewFileWithConfig(conf *Config) input.Input {
+	return input.NewLazyReader(func() (input.Input, error) {
+		data, err := ioutil.ReadFile(conf.Path)
+		if err != nil {
+			return nil, err
+		}
+		return bytes.NewBuffer(data), nil
+	})
 }
