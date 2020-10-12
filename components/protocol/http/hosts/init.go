@@ -21,7 +21,7 @@ var (
 )
 
 type Route struct {
-	Domain  string
+	Domains []string
 	Handler http.Handler
 }
 
@@ -37,12 +37,17 @@ func NewHostsWithConfig(conf *Config) (http.Handler, error) {
 		if route.Handler == nil {
 			return nil, ErrNotHandler
 		}
-		if route.Domain == "" {
+		if len(route.Domains) == 0 {
 			return nil, ErrNotDomain
 		}
-		err := mux.Handle(route.Domain, route.Handler)
-		if err != nil {
-			return nil, err
+		for _, domain := range route.Domains {
+			if domain == "" {
+				return nil, ErrNotDomain
+			}
+			err := mux.Handle(domain, route.Handler)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 	return mux, nil

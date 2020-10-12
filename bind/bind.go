@@ -1574,11 +1574,11 @@ const kindHostsNetHTTPHandlerConfig = `hosts@net/http.Handler`
 // HostsNetHTTPHandlerConfig hosts@net/http.Handler
 type HostsNetHTTPHandlerConfig struct {
 	Hosts    []HostsNetHTTPHandlerRoute
-	NotFound HTTPHandler
+	NotFound HTTPHandler `json:",omitempty"`
 }
 
 type HostsNetHTTPHandlerRoute struct {
-	Domain  string
+	Domains []string
 	Handler HTTPHandler
 }
 
@@ -2952,7 +2952,7 @@ const kindMuxNetHTTPHandlerConfig = `mux@net/http.Handler`
 // MuxNetHTTPHandlerConfig mux@net/http.Handler
 type MuxNetHTTPHandlerConfig struct {
 	Routes   []MuxNetHTTPHandlerRoute
-	NotFound HTTPHandler
+	NotFound HTTPHandler `json:",omitempty"`
 }
 
 type MuxNetHTTPHandlerRoute struct {
@@ -4637,7 +4637,7 @@ const kindTLSStreamDialerConfig = `tls@stream.Dialer`
 // TLSStreamDialerConfig tls@stream.Dialer
 type TLSStreamDialerConfig struct {
 	Dialer StreamDialer
-	TLS    TLS `json:",omitempty"`
+	TLS    TLS
 }
 
 func init() {

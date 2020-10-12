@@ -13,7 +13,6 @@ Multi:
             '@Kind': log@net/http.Handler
             Handler:
               '@Kind': mux@net/http.Handler
-              NotFound: null
               Routes:
               - Handler:
                   '@Kind': multi@net/http.Handler
