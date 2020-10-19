@@ -52,7 +52,9 @@ func (s *Server) Close() error {
 		return nil
 	}
 	err := s.listener.Close()
-
+	if listener.IsClosedConnError(err) {
+		err = nil
+	}
 	if s.disconnectOnClose {
 		deadline := time.Now().Add(-1 * time.Minute)
 		s.pool.Range(func(key, value interface{}) bool {

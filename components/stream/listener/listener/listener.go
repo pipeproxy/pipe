@@ -5,6 +5,7 @@ import (
 
 	"github.com/wzshiming/pipe/components/stream"
 	"github.com/wzshiming/pipe/internal/listener"
+	"github.com/wzshiming/pipe/internal/logger"
 )
 
 type Listener struct {
@@ -20,5 +21,6 @@ func NewListener(network string, address string) *Listener {
 }
 
 func (n *Listener) ListenStream(ctx context.Context) (stream.StreamListener, error) {
+	logger.Infof("Listen %s://%s", n.network, n.address)
 	return listener.Listen(ctx, n.network, n.address)
 }

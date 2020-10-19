@@ -8,6 +8,7 @@ import (
 	http3 "github.com/lucas-clemente/quic-go/http3"
 	"github.com/wzshiming/pipe/components/packet"
 	"github.com/wzshiming/pipe/components/tls"
+	"github.com/wzshiming/pipe/internal/listener"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -41,6 +42,9 @@ func (s *server) ServePacket(ctx context.Context, pkt packet.Packet) {
 	}()
 
 	err := quicServer.Serve(pkt)
+	if listener.IsClosedConnError(err) {
+		err = nil
+	}
 	if err != nil {
 		if err.Error() != "server closed" {
 			logger.Errorln("[http3]", err)

@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/wzshiming/pipe/components/packet"
+	"github.com/wzshiming/pipe/internal/listener"
 	"github.com/wzshiming/pipe/internal/logger"
 )
 
@@ -38,12 +39,19 @@ func (s *Server) Close() error {
 	if s.packet == nil {
 		return nil
 	}
-	return s.packet.Close()
+	err := s.packet.Close()
+	if listener.IsClosedConnError(err) {
+		err = nil
+	}
+	return err
 }
 
 func (s *Server) ServePacket(ctx context.Context, pkt packet.Packet) {
 	s.handler.ServePacket(ctx, nopCloser{pkt})
 	err := pkt.Close()
+	if listener.IsClosedConnError(err) {
+		err = nil
+	}
 	if err != nil {
 		addr := pkt.LocalAddr()
 		logger.Errorf("Close %s://%s error: %s", addr.Network(), addr.String(), err)

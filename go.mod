@@ -3,6 +3,7 @@ module github.com/wzshiming/pipe
 go 1.15
 
 require (
+	github.com/gogf/greuse v1.1.0
 	github.com/gorilla/handlers v1.4.2
 	github.com/lucas-clemente/quic-go v0.18.0
 	github.com/prometheus/client_golang v1.7.1
