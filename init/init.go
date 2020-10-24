@@ -2,14 +2,6 @@
 package init
 
 import (
-	_ "github.com/wzshiming/pipe/components/codec"
-	_ "github.com/wzshiming/pipe/components/codec/base32"
-	_ "github.com/wzshiming/pipe/components/codec/base64"
-	_ "github.com/wzshiming/pipe/components/codec/bzip2"
-	_ "github.com/wzshiming/pipe/components/codec/gzip"
-	_ "github.com/wzshiming/pipe/components/codec/hex"
-	_ "github.com/wzshiming/pipe/components/codec/json"
-	_ "github.com/wzshiming/pipe/components/codec/yaml"
 	_ "github.com/wzshiming/pipe/components/common/load"
 	_ "github.com/wzshiming/pipe/components/once"
 	_ "github.com/wzshiming/pipe/components/once/components"

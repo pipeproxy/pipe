@@ -12,6 +12,8 @@ func init() {
 	types.Register(&handler)
 	var listenConfig ListenConfig
 	types.Register(&listenConfig)
+	var packet Packet
+	types.Register(&packet)
 }
 
 type Packet = net.PacketConn

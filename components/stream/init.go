@@ -14,6 +14,8 @@ func init() {
 	types.Register(&listenConfig)
 	var dialer Dialer
 	types.Register(&dialer)
+	var stream Stream
+	types.Register(&stream)
 }
 
 type Stream = net.Conn

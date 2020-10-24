@@ -179,175 +179,6 @@ func (m AddResponseHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End add_response_header@net/http.Handler type =========
 
-// ========= Begin base32@codec.Decoder type =========
-//
-
-const kindBase32CodecDecoderConfig = `base32@codec.Decoder`
-
-// Base32CodecDecoderConfig base32@codec.Decoder
-type Base32CodecDecoderConfig struct {
-	Encoding string
-}
-
-func init() {
-	_ = provider.Register(
-		kindBase32CodecDecoderConfig,
-		func(r *Base32CodecDecoderConfig) CodecDecoder { return r },
-	)
-}
-
-func (Base32CodecDecoderConfig) isCodecDecoder() {}
-func (Base32CodecDecoderConfig) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m Base32CodecDecoderConfig) MarshalJSON() ([]byte, error) {
-	type t Base32CodecDecoderConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindBase32CodecDecoderConfig, data)
-	return data, nil
-}
-
-//
-// ========= End base32@codec.Decoder type =========
-
-// ========= Begin base32@codec.Encoder type =========
-//
-
-const kindBase32CodecEncoderConfig = `base32@codec.Encoder`
-
-// Base32CodecEncoderConfig base32@codec.Encoder
-type Base32CodecEncoderConfig struct {
-	Encoding string
-}
-
-func init() {
-	_ = provider.Register(
-		kindBase32CodecEncoderConfig,
-		func(r *Base32CodecEncoderConfig) CodecEncoder { return r },
-	)
-}
-
-func (Base32CodecEncoderConfig) isCodecEncoder() {}
-func (Base32CodecEncoderConfig) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m Base32CodecEncoderConfig) MarshalJSON() ([]byte, error) {
-	type t Base32CodecEncoderConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindBase32CodecEncoderConfig, data)
-	return data, nil
-}
-
-//
-// ========= End base32@codec.Encoder type =========
-
-// ========= Begin base64@codec.Decoder type =========
-//
-
-const kindBase64CodecDecoderConfig = `base64@codec.Decoder`
-
-// Base64CodecDecoderConfig base64@codec.Decoder
-type Base64CodecDecoderConfig struct {
-	Encoding string
-}
-
-func init() {
-	_ = provider.Register(
-		kindBase64CodecDecoderConfig,
-		func(r *Base64CodecDecoderConfig) CodecDecoder { return r },
-	)
-}
-
-func (Base64CodecDecoderConfig) isCodecDecoder() {}
-func (Base64CodecDecoderConfig) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m Base64CodecDecoderConfig) MarshalJSON() ([]byte, error) {
-	type t Base64CodecDecoderConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindBase64CodecDecoderConfig, data)
-	return data, nil
-}
-
-//
-// ========= End base64@codec.Decoder type =========
-
-// ========= Begin base64@codec.Encoder type =========
-//
-
-const kindBase64CodecEncoderConfig = `base64@codec.Encoder`
-
-// Base64CodecEncoderConfig base64@codec.Encoder
-type Base64CodecEncoderConfig struct {
-	Encoding string
-}
-
-func init() {
-	_ = provider.Register(
-		kindBase64CodecEncoderConfig,
-		func(r *Base64CodecEncoderConfig) CodecEncoder { return r },
-	)
-}
-
-func (Base64CodecEncoderConfig) isCodecEncoder() {}
-func (Base64CodecEncoderConfig) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m Base64CodecEncoderConfig) MarshalJSON() ([]byte, error) {
-	type t Base64CodecEncoderConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindBase64CodecEncoderConfig, data)
-	return data, nil
-}
-
-//
-// ========= End base64@codec.Encoder type =========
-
-// ========= Begin bzip2@codec.Decoder type =========
-//
-
-const kindBzip2CodecDecoder = `bzip2@codec.Decoder`
-
-// Bzip2CodecDecoder bzip2@codec.Decoder
-type Bzip2CodecDecoder struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindBzip2CodecDecoder,
-		func(r *Bzip2CodecDecoder) CodecDecoder { return r },
-	)
-}
-
-func (Bzip2CodecDecoder) isCodecDecoder() {}
-func (Bzip2CodecDecoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m Bzip2CodecDecoder) MarshalJSON() ([]byte, error) {
-	type t Bzip2CodecDecoder
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindBzip2CodecDecoder, data)
-	return data, nil
-}
-
-//
-// ========= End bzip2@codec.Decoder type =========
-
 // ========= Begin components@once.Once type =========
 //
 
@@ -451,146 +282,6 @@ func (m ConfigDumpNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End config_dump@net/http.Handler type =========
 
-// ========= Begin def@codec.Decoder type =========
-//
-
-const kindDefCodecDecoderConfig = `def@codec.Decoder`
-
-// DefCodecDecoderConfig def@codec.Decoder
-type DefCodecDecoderConfig struct {
-	Name string
-	Def  CodecDecoder `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindDefCodecDecoderConfig,
-		func(r *DefCodecDecoderConfig) CodecDecoder { return r },
-	)
-}
-
-func (DefCodecDecoderConfig) isCodecDecoder() {}
-func (DefCodecDecoderConfig) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m DefCodecDecoderConfig) MarshalJSON() ([]byte, error) {
-	type t DefCodecDecoderConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindDefCodecDecoderConfig, data)
-	return data, nil
-}
-
-//
-// ========= End def@codec.Decoder type =========
-
-// ========= Begin def@codec.Encoder type =========
-//
-
-const kindDefCodecEncoderConfig = `def@codec.Encoder`
-
-// DefCodecEncoderConfig def@codec.Encoder
-type DefCodecEncoderConfig struct {
-	Name string
-	Def  CodecEncoder `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindDefCodecEncoderConfig,
-		func(r *DefCodecEncoderConfig) CodecEncoder { return r },
-	)
-}
-
-func (DefCodecEncoderConfig) isCodecEncoder() {}
-func (DefCodecEncoderConfig) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m DefCodecEncoderConfig) MarshalJSON() ([]byte, error) {
-	type t DefCodecEncoderConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindDefCodecEncoderConfig, data)
-	return data, nil
-}
-
-//
-// ========= End def@codec.Encoder type =========
-
-// ========= Begin def@codec.Marshaler type =========
-//
-
-const kindDefCodecMarshalerConfig = `def@codec.Marshaler`
-
-// DefCodecMarshalerConfig def@codec.Marshaler
-type DefCodecMarshalerConfig struct {
-	Name string
-	Def  CodecMarshaler `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindDefCodecMarshalerConfig,
-		func(r *DefCodecMarshalerConfig) CodecMarshaler { return r },
-	)
-}
-
-func (DefCodecMarshalerConfig) isCodecMarshaler() {}
-func (DefCodecMarshalerConfig) isComponent()      {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m DefCodecMarshalerConfig) MarshalJSON() ([]byte, error) {
-	type t DefCodecMarshalerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindDefCodecMarshalerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End def@codec.Marshaler type =========
-
-// ========= Begin def@codec.Unmarshaler type =========
-//
-
-const kindDefCodecUnmarshalerConfig = `def@codec.Unmarshaler`
-
-// DefCodecUnmarshalerConfig def@codec.Unmarshaler
-type DefCodecUnmarshalerConfig struct {
-	Name string
-	Def  CodecUnmarshaler `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindDefCodecUnmarshalerConfig,
-		func(r *DefCodecUnmarshalerConfig) CodecUnmarshaler { return r },
-	)
-}
-
-func (DefCodecUnmarshalerConfig) isCodecUnmarshaler() {}
-func (DefCodecUnmarshalerConfig) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m DefCodecUnmarshalerConfig) MarshalJSON() ([]byte, error) {
-	type t DefCodecUnmarshalerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindDefCodecUnmarshalerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End def@codec.Unmarshaler type =========
-
 // ========= Begin def@io.Reader type =========
 //
 
@@ -661,40 +352,40 @@ func (m DefIoWriterConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@io.Writer type =========
 
-// ========= Begin def@net.Listener type =========
+// ========= Begin def@net.Conn type =========
 //
 
-const kindDefNetListenerConfig = `def@net.Listener`
+const kindDefNetConnConfig = `def@net.Conn`
 
-// DefNetListenerConfig def@net.Listener
-type DefNetListenerConfig struct {
+// DefNetConnConfig def@net.Conn
+type DefNetConnConfig struct {
 	Name string
-	Def  NetListener `json:",omitempty"`
+	Def  NetConn `json:",omitempty"`
 }
 
 func init() {
 	_ = provider.Register(
-		kindDefNetListenerConfig,
-		func(r *DefNetListenerConfig) NetListener { return r },
+		kindDefNetConnConfig,
+		func(r *DefNetConnConfig) NetConn { return r },
 	)
 }
 
-func (DefNetListenerConfig) isNetListener() {}
-func (DefNetListenerConfig) isComponent()   {}
+func (DefNetConnConfig) isNetConn()   {}
+func (DefNetConnConfig) isComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m DefNetListenerConfig) MarshalJSON() ([]byte, error) {
-	type t DefNetListenerConfig
+func (m DefNetConnConfig) MarshalJSON() ([]byte, error) {
+	type t DefNetConnConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindDefNetListenerConfig, data)
+	data = prepend(kindKey, kindDefNetConnConfig, data)
 	return data, nil
 }
 
 //
-// ========= End def@net.Listener type =========
+// ========= End def@net.Conn type =========
 
 // ========= Begin def@net.PacketConn type =========
 //
@@ -1434,138 +1125,6 @@ func (m FromTLSConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End from@tls.TLS type =========
 
-// ========= Begin gzip@codec.Decoder type =========
-//
-
-const kindGzipCodecDecoder = `gzip@codec.Decoder`
-
-// GzipCodecDecoder gzip@codec.Decoder
-type GzipCodecDecoder struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindGzipCodecDecoder,
-		func(r *GzipCodecDecoder) CodecDecoder { return r },
-	)
-}
-
-func (GzipCodecDecoder) isCodecDecoder() {}
-func (GzipCodecDecoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m GzipCodecDecoder) MarshalJSON() ([]byte, error) {
-	type t GzipCodecDecoder
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindGzipCodecDecoder, data)
-	return data, nil
-}
-
-//
-// ========= End gzip@codec.Decoder type =========
-
-// ========= Begin gzip@codec.Encoder type =========
-//
-
-const kindGzipCodecEncoder = `gzip@codec.Encoder`
-
-// GzipCodecEncoder gzip@codec.Encoder
-type GzipCodecEncoder struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindGzipCodecEncoder,
-		func(r *GzipCodecEncoder) CodecEncoder { return r },
-	)
-}
-
-func (GzipCodecEncoder) isCodecEncoder() {}
-func (GzipCodecEncoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m GzipCodecEncoder) MarshalJSON() ([]byte, error) {
-	type t GzipCodecEncoder
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindGzipCodecEncoder, data)
-	return data, nil
-}
-
-//
-// ========= End gzip@codec.Encoder type =========
-
-// ========= Begin hex@codec.Decoder type =========
-//
-
-const kindHexCodecDecoder = `hex@codec.Decoder`
-
-// HexCodecDecoder hex@codec.Decoder
-type HexCodecDecoder struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindHexCodecDecoder,
-		func(r *HexCodecDecoder) CodecDecoder { return r },
-	)
-}
-
-func (HexCodecDecoder) isCodecDecoder() {}
-func (HexCodecDecoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m HexCodecDecoder) MarshalJSON() ([]byte, error) {
-	type t HexCodecDecoder
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindHexCodecDecoder, data)
-	return data, nil
-}
-
-//
-// ========= End hex@codec.Decoder type =========
-
-// ========= Begin hex@codec.Encoder type =========
-//
-
-const kindHexCodecEncoder = `hex@codec.Encoder`
-
-// HexCodecEncoder hex@codec.Encoder
-type HexCodecEncoder struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindHexCodecEncoder,
-		func(r *HexCodecEncoder) CodecEncoder { return r },
-	)
-}
-
-func (HexCodecEncoder) isCodecEncoder() {}
-func (HexCodecEncoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m HexCodecEncoder) MarshalJSON() ([]byte, error) {
-	type t HexCodecEncoder
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindHexCodecEncoder, data)
-	return data, nil
-}
-
-//
-// ========= End hex@codec.Encoder type =========
-
 // ========= Begin hosts@net/http.Handler type =========
 //
 
@@ -1778,72 +1337,6 @@ func (m InlineIoReaderConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End inline@io.Reader type =========
-
-// ========= Begin json@codec.Marshaler type =========
-//
-
-const kindJSONCodecMarshaler = `json@codec.Marshaler`
-
-// JSONCodecMarshaler json@codec.Marshaler
-type JSONCodecMarshaler struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindJSONCodecMarshaler,
-		func(r *JSONCodecMarshaler) CodecMarshaler { return r },
-	)
-}
-
-func (JSONCodecMarshaler) isCodecMarshaler() {}
-func (JSONCodecMarshaler) isComponent()      {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m JSONCodecMarshaler) MarshalJSON() ([]byte, error) {
-	type t JSONCodecMarshaler
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindJSONCodecMarshaler, data)
-	return data, nil
-}
-
-//
-// ========= End json@codec.Marshaler type =========
-
-// ========= Begin json@codec.Unmarshaler type =========
-//
-
-const kindJSONCodecUnmarshaler = `json@codec.Unmarshaler`
-
-// JSONCodecUnmarshaler json@codec.Unmarshaler
-type JSONCodecUnmarshaler struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindJSONCodecUnmarshaler,
-		func(r *JSONCodecUnmarshaler) CodecUnmarshaler { return r },
-	)
-}
-
-func (JSONCodecUnmarshaler) isCodecUnmarshaler() {}
-func (JSONCodecUnmarshaler) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m JSONCodecUnmarshaler) MarshalJSON() ([]byte, error) {
-	type t JSONCodecUnmarshaler
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindJSONCodecUnmarshaler, data)
-	return data, nil
-}
-
-//
-// ========= End json@codec.Unmarshaler type =========
 
 // ========= Begin lb@net/http.Handler type =========
 //
@@ -2074,142 +1567,6 @@ func (m ListenerStreamListenConfigConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End listener@stream.ListenConfig type =========
 
-// ========= Begin load@codec.Decoder type =========
-//
-
-const kindLoadCodecDecoderConfig = `load@codec.Decoder`
-
-// LoadCodecDecoderConfig load@codec.Decoder
-type LoadCodecDecoderConfig struct {
-	Load IoReader
-}
-
-func init() {
-	_ = provider.Register(
-		kindLoadCodecDecoderConfig,
-		func(r *LoadCodecDecoderConfig) CodecDecoder { return r },
-	)
-}
-
-func (LoadCodecDecoderConfig) isCodecDecoder() {}
-func (LoadCodecDecoderConfig) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m LoadCodecDecoderConfig) MarshalJSON() ([]byte, error) {
-	type t LoadCodecDecoderConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindLoadCodecDecoderConfig, data)
-	return data, nil
-}
-
-//
-// ========= End load@codec.Decoder type =========
-
-// ========= Begin load@codec.Encoder type =========
-//
-
-const kindLoadCodecEncoderConfig = `load@codec.Encoder`
-
-// LoadCodecEncoderConfig load@codec.Encoder
-type LoadCodecEncoderConfig struct {
-	Load IoReader
-}
-
-func init() {
-	_ = provider.Register(
-		kindLoadCodecEncoderConfig,
-		func(r *LoadCodecEncoderConfig) CodecEncoder { return r },
-	)
-}
-
-func (LoadCodecEncoderConfig) isCodecEncoder() {}
-func (LoadCodecEncoderConfig) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m LoadCodecEncoderConfig) MarshalJSON() ([]byte, error) {
-	type t LoadCodecEncoderConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindLoadCodecEncoderConfig, data)
-	return data, nil
-}
-
-//
-// ========= End load@codec.Encoder type =========
-
-// ========= Begin load@codec.Marshaler type =========
-//
-
-const kindLoadCodecMarshalerConfig = `load@codec.Marshaler`
-
-// LoadCodecMarshalerConfig load@codec.Marshaler
-type LoadCodecMarshalerConfig struct {
-	Load IoReader
-}
-
-func init() {
-	_ = provider.Register(
-		kindLoadCodecMarshalerConfig,
-		func(r *LoadCodecMarshalerConfig) CodecMarshaler { return r },
-	)
-}
-
-func (LoadCodecMarshalerConfig) isCodecMarshaler() {}
-func (LoadCodecMarshalerConfig) isComponent()      {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m LoadCodecMarshalerConfig) MarshalJSON() ([]byte, error) {
-	type t LoadCodecMarshalerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindLoadCodecMarshalerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End load@codec.Marshaler type =========
-
-// ========= Begin load@codec.Unmarshaler type =========
-//
-
-const kindLoadCodecUnmarshalerConfig = `load@codec.Unmarshaler`
-
-// LoadCodecUnmarshalerConfig load@codec.Unmarshaler
-type LoadCodecUnmarshalerConfig struct {
-	Load IoReader
-}
-
-func init() {
-	_ = provider.Register(
-		kindLoadCodecUnmarshalerConfig,
-		func(r *LoadCodecUnmarshalerConfig) CodecUnmarshaler { return r },
-	)
-}
-
-func (LoadCodecUnmarshalerConfig) isCodecUnmarshaler() {}
-func (LoadCodecUnmarshalerConfig) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m LoadCodecUnmarshalerConfig) MarshalJSON() ([]byte, error) {
-	type t LoadCodecUnmarshalerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindLoadCodecUnmarshalerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End load@codec.Unmarshaler type =========
-
 // ========= Begin load@io.Reader type =========
 //
 
@@ -2277,6 +1634,74 @@ func (m LoadIoWriterConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End load@io.Writer type =========
+
+// ========= Begin load@net.Conn type =========
+//
+
+const kindLoadNetConnConfig = `load@net.Conn`
+
+// LoadNetConnConfig load@net.Conn
+type LoadNetConnConfig struct {
+	Load IoReader
+}
+
+func init() {
+	_ = provider.Register(
+		kindLoadNetConnConfig,
+		func(r *LoadNetConnConfig) NetConn { return r },
+	)
+}
+
+func (LoadNetConnConfig) isNetConn()   {}
+func (LoadNetConnConfig) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LoadNetConnConfig) MarshalJSON() ([]byte, error) {
+	type t LoadNetConnConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLoadNetConnConfig, data)
+	return data, nil
+}
+
+//
+// ========= End load@net.Conn type =========
+
+// ========= Begin load@net.PacketConn type =========
+//
+
+const kindLoadNetPacketConnConfig = `load@net.PacketConn`
+
+// LoadNetPacketConnConfig load@net.PacketConn
+type LoadNetPacketConnConfig struct {
+	Load IoReader
+}
+
+func init() {
+	_ = provider.Register(
+		kindLoadNetPacketConnConfig,
+		func(r *LoadNetPacketConnConfig) NetPacketConn { return r },
+	)
+}
+
+func (LoadNetPacketConnConfig) isNetPacketConn() {}
+func (LoadNetPacketConnConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LoadNetPacketConnConfig) MarshalJSON() ([]byte, error) {
+	type t LoadNetPacketConnConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLoadNetPacketConnConfig, data)
+	return data, nil
+}
+
+//
+// ========= End load@net.PacketConn type =========
 
 // ========= Begin load@net/http.Handler type =========
 //
@@ -3028,138 +2453,6 @@ func (m MuxStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End mux@stream.Handler type =========
 
-// ========= Begin none@codec.Decoder type =========
-//
-
-const kindNoneCodecDecoder = `none@codec.Decoder`
-
-// NoneCodecDecoder none@codec.Decoder
-type NoneCodecDecoder struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindNoneCodecDecoder,
-		func(r *NoneCodecDecoder) CodecDecoder { return r },
-	)
-}
-
-func (NoneCodecDecoder) isCodecDecoder() {}
-func (NoneCodecDecoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m NoneCodecDecoder) MarshalJSON() ([]byte, error) {
-	type t NoneCodecDecoder
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindNoneCodecDecoder, data)
-	return data, nil
-}
-
-//
-// ========= End none@codec.Decoder type =========
-
-// ========= Begin none@codec.Encoder type =========
-//
-
-const kindNoneCodecEncoder = `none@codec.Encoder`
-
-// NoneCodecEncoder none@codec.Encoder
-type NoneCodecEncoder struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindNoneCodecEncoder,
-		func(r *NoneCodecEncoder) CodecEncoder { return r },
-	)
-}
-
-func (NoneCodecEncoder) isCodecEncoder() {}
-func (NoneCodecEncoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m NoneCodecEncoder) MarshalJSON() ([]byte, error) {
-	type t NoneCodecEncoder
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindNoneCodecEncoder, data)
-	return data, nil
-}
-
-//
-// ========= End none@codec.Encoder type =========
-
-// ========= Begin none@codec.Marshaler type =========
-//
-
-const kindNoneCodecMarshaler = `none@codec.Marshaler`
-
-// NoneCodecMarshaler none@codec.Marshaler
-type NoneCodecMarshaler struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindNoneCodecMarshaler,
-		func(r *NoneCodecMarshaler) CodecMarshaler { return r },
-	)
-}
-
-func (NoneCodecMarshaler) isCodecMarshaler() {}
-func (NoneCodecMarshaler) isComponent()      {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m NoneCodecMarshaler) MarshalJSON() ([]byte, error) {
-	type t NoneCodecMarshaler
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindNoneCodecMarshaler, data)
-	return data, nil
-}
-
-//
-// ========= End none@codec.Marshaler type =========
-
-// ========= Begin none@codec.Unmarshaler type =========
-//
-
-const kindNoneCodecUnmarshaler = `none@codec.Unmarshaler`
-
-// NoneCodecUnmarshaler none@codec.Unmarshaler
-type NoneCodecUnmarshaler struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindNoneCodecUnmarshaler,
-		func(r *NoneCodecUnmarshaler) CodecUnmarshaler { return r },
-	)
-}
-
-func (NoneCodecUnmarshaler) isCodecUnmarshaler() {}
-func (NoneCodecUnmarshaler) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m NoneCodecUnmarshaler) MarshalJSON() ([]byte, error) {
-	type t NoneCodecUnmarshaler
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindNoneCodecUnmarshaler, data)
-	return data, nil
-}
-
-//
-// ========= End none@codec.Unmarshaler type =========
-
 // ========= Begin none@io.Reader type =========
 //
 
@@ -3226,38 +2519,38 @@ func (m NoneIoWriter) MarshalJSON() ([]byte, error) {
 //
 // ========= End none@io.Writer type =========
 
-// ========= Begin none@net.Listener type =========
+// ========= Begin none@net.Conn type =========
 //
 
-const kindNoneNetListener = `none@net.Listener`
+const kindNoneNetConn = `none@net.Conn`
 
-// NoneNetListener none@net.Listener
-type NoneNetListener struct {
+// NoneNetConn none@net.Conn
+type NoneNetConn struct {
 }
 
 func init() {
 	_ = provider.Register(
-		kindNoneNetListener,
-		func(r *NoneNetListener) NetListener { return r },
+		kindNoneNetConn,
+		func(r *NoneNetConn) NetConn { return r },
 	)
 }
 
-func (NoneNetListener) isNetListener() {}
-func (NoneNetListener) isComponent()   {}
+func (NoneNetConn) isNetConn()   {}
+func (NoneNetConn) isComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m NoneNetListener) MarshalJSON() ([]byte, error) {
-	type t NoneNetListener
+func (m NoneNetConn) MarshalJSON() ([]byte, error) {
+	type t NoneNetConn
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindNoneNetListener, data)
+	data = prepend(kindKey, kindNoneNetConn, data)
 	return data, nil
 }
 
 //
-// ========= End none@net.Listener type =========
+// ========= End none@net.Conn type =========
 
 // ========= Begin none@net.PacketConn type =========
 //
@@ -3793,146 +3086,6 @@ func (m RedirectNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End redirect@net/http.Handler type =========
 
-// ========= Begin ref@codec.Decoder type =========
-//
-
-const kindRefCodecDecoderConfig = `ref@codec.Decoder`
-
-// RefCodecDecoderConfig ref@codec.Decoder
-type RefCodecDecoderConfig struct {
-	Name string
-	Def  CodecDecoder `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindRefCodecDecoderConfig,
-		func(r *RefCodecDecoderConfig) CodecDecoder { return r },
-	)
-}
-
-func (RefCodecDecoderConfig) isCodecDecoder() {}
-func (RefCodecDecoderConfig) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RefCodecDecoderConfig) MarshalJSON() ([]byte, error) {
-	type t RefCodecDecoderConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindRefCodecDecoderConfig, data)
-	return data, nil
-}
-
-//
-// ========= End ref@codec.Decoder type =========
-
-// ========= Begin ref@codec.Encoder type =========
-//
-
-const kindRefCodecEncoderConfig = `ref@codec.Encoder`
-
-// RefCodecEncoderConfig ref@codec.Encoder
-type RefCodecEncoderConfig struct {
-	Name string
-	Def  CodecEncoder `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindRefCodecEncoderConfig,
-		func(r *RefCodecEncoderConfig) CodecEncoder { return r },
-	)
-}
-
-func (RefCodecEncoderConfig) isCodecEncoder() {}
-func (RefCodecEncoderConfig) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RefCodecEncoderConfig) MarshalJSON() ([]byte, error) {
-	type t RefCodecEncoderConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindRefCodecEncoderConfig, data)
-	return data, nil
-}
-
-//
-// ========= End ref@codec.Encoder type =========
-
-// ========= Begin ref@codec.Marshaler type =========
-//
-
-const kindRefCodecMarshalerConfig = `ref@codec.Marshaler`
-
-// RefCodecMarshalerConfig ref@codec.Marshaler
-type RefCodecMarshalerConfig struct {
-	Name string
-	Def  CodecMarshaler `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindRefCodecMarshalerConfig,
-		func(r *RefCodecMarshalerConfig) CodecMarshaler { return r },
-	)
-}
-
-func (RefCodecMarshalerConfig) isCodecMarshaler() {}
-func (RefCodecMarshalerConfig) isComponent()      {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RefCodecMarshalerConfig) MarshalJSON() ([]byte, error) {
-	type t RefCodecMarshalerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindRefCodecMarshalerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End ref@codec.Marshaler type =========
-
-// ========= Begin ref@codec.Unmarshaler type =========
-//
-
-const kindRefCodecUnmarshalerConfig = `ref@codec.Unmarshaler`
-
-// RefCodecUnmarshalerConfig ref@codec.Unmarshaler
-type RefCodecUnmarshalerConfig struct {
-	Name string
-	Def  CodecUnmarshaler `json:",omitempty"`
-}
-
-func init() {
-	_ = provider.Register(
-		kindRefCodecUnmarshalerConfig,
-		func(r *RefCodecUnmarshalerConfig) CodecUnmarshaler { return r },
-	)
-}
-
-func (RefCodecUnmarshalerConfig) isCodecUnmarshaler() {}
-func (RefCodecUnmarshalerConfig) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RefCodecUnmarshalerConfig) MarshalJSON() ([]byte, error) {
-	type t RefCodecUnmarshalerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindRefCodecUnmarshalerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End ref@codec.Unmarshaler type =========
-
 // ========= Begin ref@io.Reader type =========
 //
 
@@ -4003,40 +3156,40 @@ func (m RefIoWriterConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End ref@io.Writer type =========
 
-// ========= Begin ref@net.Listener type =========
+// ========= Begin ref@net.Conn type =========
 //
 
-const kindRefNetListenerConfig = `ref@net.Listener`
+const kindRefNetConnConfig = `ref@net.Conn`
 
-// RefNetListenerConfig ref@net.Listener
-type RefNetListenerConfig struct {
+// RefNetConnConfig ref@net.Conn
+type RefNetConnConfig struct {
 	Name string
-	Def  NetListener `json:",omitempty"`
+	Def  NetConn `json:",omitempty"`
 }
 
 func init() {
 	_ = provider.Register(
-		kindRefNetListenerConfig,
-		func(r *RefNetListenerConfig) NetListener { return r },
+		kindRefNetConnConfig,
+		func(r *RefNetConnConfig) NetConn { return r },
 	)
 }
 
-func (RefNetListenerConfig) isNetListener() {}
-func (RefNetListenerConfig) isComponent()   {}
+func (RefNetConnConfig) isNetConn()   {}
+func (RefNetConnConfig) isComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m RefNetListenerConfig) MarshalJSON() ([]byte, error) {
-	type t RefNetListenerConfig
+func (m RefNetConnConfig) MarshalJSON() ([]byte, error) {
+	type t RefNetConnConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindRefNetListenerConfig, data)
+	data = prepend(kindKey, kindRefNetConnConfig, data)
 	return data, nil
 }
 
 //
-// ========= End ref@net.Listener type =========
+// ========= End ref@net.Conn type =========
 
 // ========= Begin ref@net.PacketConn type =========
 //
@@ -4836,72 +3989,6 @@ func (m WaitService) MarshalJSON() ([]byte, error) {
 //
 // ========= End wait@service.Service type =========
 
-// ========= Begin yaml@codec.Marshaler type =========
-//
-
-const kindYamlCodecMarshaler = `yaml@codec.Marshaler`
-
-// YamlCodecMarshaler yaml@codec.Marshaler
-type YamlCodecMarshaler struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindYamlCodecMarshaler,
-		func(r *YamlCodecMarshaler) CodecMarshaler { return r },
-	)
-}
-
-func (YamlCodecMarshaler) isCodecMarshaler() {}
-func (YamlCodecMarshaler) isComponent()      {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m YamlCodecMarshaler) MarshalJSON() ([]byte, error) {
-	type t YamlCodecMarshaler
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindYamlCodecMarshaler, data)
-	return data, nil
-}
-
-//
-// ========= End yaml@codec.Marshaler type =========
-
-// ========= Begin yaml@codec.Unmarshaler type =========
-//
-
-const kindYamlCodecUnmarshaler = `yaml@codec.Unmarshaler`
-
-// YamlCodecUnmarshaler yaml@codec.Unmarshaler
-type YamlCodecUnmarshaler struct {
-}
-
-func init() {
-	_ = provider.Register(
-		kindYamlCodecUnmarshaler,
-		func(r *YamlCodecUnmarshaler) CodecUnmarshaler { return r },
-	)
-}
-
-func (YamlCodecUnmarshaler) isCodecUnmarshaler() {}
-func (YamlCodecUnmarshaler) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m YamlCodecUnmarshaler) MarshalJSON() ([]byte, error) {
-	type t YamlCodecUnmarshaler
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindYamlCodecUnmarshaler, data)
-	return data, nil
-}
-
-//
-// ========= End yaml@codec.Unmarshaler type =========
-
 // ========= Begin tls.TLS interface =========
 //
 
@@ -4972,76 +4059,6 @@ func (m *RawHTTPHandler) UnmarshalJSON(data []byte) error {
 //
 // ========= End http.Handler interface =========
 
-// ========= Begin codec.Decoder interface =========
-//
-
-// CodecDecoder codec.Decoder
-type CodecDecoder interface {
-	isCodecDecoder()
-	Component
-}
-
-// RawCodecDecoder is store raw bytes of CodecDecoder
-type RawCodecDecoder []byte
-
-func (RawCodecDecoder) isCodecDecoder() {}
-func (RawCodecDecoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawCodecDecoder) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawCodecDecoder) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawCodecDecoder: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End codec.Decoder interface =========
-
-// ========= Begin codec.Encoder interface =========
-//
-
-// CodecEncoder codec.Encoder
-type CodecEncoder interface {
-	isCodecEncoder()
-	Component
-}
-
-// RawCodecEncoder is store raw bytes of CodecEncoder
-type RawCodecEncoder []byte
-
-func (RawCodecEncoder) isCodecEncoder() {}
-func (RawCodecEncoder) isComponent()    {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawCodecEncoder) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawCodecEncoder) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawCodecEncoder: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End codec.Encoder interface =========
-
 // ========= Begin once.Once interface =========
 //
 
@@ -5076,76 +4093,6 @@ func (m *RawOnce) UnmarshalJSON(data []byte) error {
 
 //
 // ========= End once.Once interface =========
-
-// ========= Begin codec.Marshaler interface =========
-//
-
-// CodecMarshaler codec.Marshaler
-type CodecMarshaler interface {
-	isCodecMarshaler()
-	Component
-}
-
-// RawCodecMarshaler is store raw bytes of CodecMarshaler
-type RawCodecMarshaler []byte
-
-func (RawCodecMarshaler) isCodecMarshaler() {}
-func (RawCodecMarshaler) isComponent()      {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawCodecMarshaler) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawCodecMarshaler) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawCodecMarshaler: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End codec.Marshaler interface =========
-
-// ========= Begin codec.Unmarshaler interface =========
-//
-
-// CodecUnmarshaler codec.Unmarshaler
-type CodecUnmarshaler interface {
-	isCodecUnmarshaler()
-	Component
-}
-
-// RawCodecUnmarshaler is store raw bytes of CodecUnmarshaler
-type RawCodecUnmarshaler []byte
-
-func (RawCodecUnmarshaler) isCodecUnmarshaler() {}
-func (RawCodecUnmarshaler) isComponent()        {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawCodecUnmarshaler) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawCodecUnmarshaler) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawCodecUnmarshaler: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End codec.Unmarshaler interface =========
 
 // ========= Begin io.Reader interface =========
 //
@@ -5217,23 +4164,23 @@ func (m *RawIoWriter) UnmarshalJSON(data []byte) error {
 //
 // ========= End io.Writer interface =========
 
-// ========= Begin net.Listener interface =========
+// ========= Begin net.Conn interface =========
 //
 
-// NetListener net.Listener
-type NetListener interface {
-	isNetListener()
+// NetConn net.Conn
+type NetConn interface {
+	isNetConn()
 	Component
 }
 
-// RawNetListener is store raw bytes of NetListener
-type RawNetListener []byte
+// RawNetConn is store raw bytes of NetConn
+type RawNetConn []byte
 
-func (RawNetListener) isNetListener() {}
-func (RawNetListener) isComponent()   {}
+func (RawNetConn) isNetConn()   {}
+func (RawNetConn) isComponent() {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m RawNetListener) MarshalJSON() ([]byte, error) {
+func (m RawNetConn) MarshalJSON() ([]byte, error) {
 	if m == nil {
 		return []byte("null"), nil
 	}
@@ -5241,16 +4188,16 @@ func (m RawNetListener) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON sets *m to a copy of data.
-func (m *RawNetListener) UnmarshalJSON(data []byte) error {
+func (m *RawNetConn) UnmarshalJSON(data []byte) error {
 	if m == nil {
-		return errors.New("RawNetListener: UnmarshalJSON on nil pointer")
+		return errors.New("RawNetConn: UnmarshalJSON on nil pointer")
 	}
 	*m = append((*m)[:0], data...)
 	return nil
 }
 
 //
-// ========= End net.Listener interface =========
+// ========= End net.Conn interface =========
 
 // ========= Begin net.PacketConn interface =========
 //
