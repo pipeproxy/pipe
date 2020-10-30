@@ -50,6 +50,7 @@ import (
 	_ "github.com/wzshiming/pipe/components/stream"
 	_ "github.com/wzshiming/pipe/components/stream/dialer/dialer"
 	_ "github.com/wzshiming/pipe/components/stream/dialer/lb"
+	_ "github.com/wzshiming/pipe/components/stream/dialer/original"
 	_ "github.com/wzshiming/pipe/components/stream/dialer/tls"
 	_ "github.com/wzshiming/pipe/components/stream/handler/forward"
 	_ "github.com/wzshiming/pipe/components/stream/handler/http1"

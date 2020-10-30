@@ -2915,6 +2915,39 @@ func (m NoneTLS) MarshalJSON() ([]byte, error) {
 //
 // ========= End none@tls.TLS type =========
 
+// ========= Begin original@stream.Dialer type =========
+//
+
+const kindOriginalStreamDialer = `original@stream.Dialer`
+
+// OriginalStreamDialer original@stream.Dialer
+type OriginalStreamDialer struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindOriginalStreamDialer,
+		func(r *OriginalStreamDialer) StreamDialer { return r },
+	)
+}
+
+func (OriginalStreamDialer) isStreamDialer() {}
+func (OriginalStreamDialer) isComponent()    {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m OriginalStreamDialer) MarshalJSON() ([]byte, error) {
+	type t OriginalStreamDialer
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindOriginalStreamDialer, data)
+	return data, nil
+}
+
+//
+// ========= End original@stream.Dialer type =========
+
 // ========= Begin packet@service.Service type =========
 //
 
