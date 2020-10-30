@@ -71,6 +71,7 @@ func (s *Server) Close() error {
 }
 
 func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
+	ctx = withContext(ctx, stm)
 	if s.disconnectOnClose {
 		s.pool.Store(stm, ctx)
 		defer s.pool.Delete(stm)
@@ -90,4 +91,19 @@ type nopCloser struct {
 
 func (nopCloser) Close() error {
 	return nil
+}
+
+type streamCtxKeyType int
+
+func GetRawStreamWithContext(ctx context.Context) (stream.Stream, bool) {
+	i := ctx.Value(streamCtxKeyType(0))
+	if i == nil {
+		return nil, false
+	}
+	p, ok := i.(stream.Stream)
+	return p, ok
+}
+
+func withContext(ctx context.Context, s stream.Stream) context.Context {
+	return context.WithValue(ctx, streamCtxKeyType(0), s)
 }
