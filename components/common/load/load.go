@@ -5,9 +5,9 @@ import (
 	"io"
 	"io/ioutil"
 
+	"github.com/pipeproxy/pipe/internal/refctx"
 	"github.com/wzshiming/funcfg/types"
 	"github.com/wzshiming/funcfg/unmarshaler"
-	"github.com/wzshiming/pipe/internal/refctx"
 	"sigs.k8s.io/yaml"
 )
 

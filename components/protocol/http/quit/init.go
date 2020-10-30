@@ -1,8 +1,8 @@
 package quit
 
 import (
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/protocol/http"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/protocol/http"
 )
 
 const (

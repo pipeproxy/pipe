@@ -83,7 +83,7 @@ func templateGoTpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "template.go.tpl", size: 2576, mode: os.FileMode(420), modTime: time.Unix(1601527145, 0)}
+	info := bindataFileInfo{name: "template.go.tpl", size: 2576, mode: os.FileMode(420), modTime: time.Unix(1601363058, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

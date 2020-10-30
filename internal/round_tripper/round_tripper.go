@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/wzshiming/pipe/components/stream"
+	"github.com/pipeproxy/pipe/components/stream"
 )
 
 var defaultTransport = http.DefaultTransport.(*http.Transport).Clone()

@@ -3,9 +3,9 @@ package forward
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/internal/logger"
-	"github.com/wzshiming/pipe/internal/tunnel"
+	"github.com/pipeproxy/pipe/components/stream"
+	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/internal/tunnel"
 )
 
 type Forward struct {

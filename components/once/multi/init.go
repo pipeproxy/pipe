@@ -1,8 +1,8 @@
 package multi
 
 import (
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/once"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/once"
 )
 
 const (

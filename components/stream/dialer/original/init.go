@@ -1,7 +1,7 @@
 package original
 
 import (
-	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/common/register"
 )
 
 const (

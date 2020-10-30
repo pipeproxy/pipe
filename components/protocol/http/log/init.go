@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/handlers"
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/stdio/output"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/stdio/output"
 )
 
 const (

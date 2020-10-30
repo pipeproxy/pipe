@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/wzshiming/pipe/examples"
+	"github.com/pipeproxy/pipe/examples"
 	"sigs.k8s.io/yaml"
 )
 

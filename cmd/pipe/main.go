@@ -7,13 +7,13 @@ import (
 	"os"
 	"path/filepath"
 
-	_ "github.com/wzshiming/pipe/init"
+	_ "github.com/pipeproxy/pipe/init"
 
+	"github.com/pipeproxy/pipe"
+	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/internal/notify"
 	"github.com/spf13/pflag"
 	"github.com/wzshiming/lockfile"
-	"github.com/wzshiming/pipe"
-	"github.com/wzshiming/pipe/internal/logger"
-	"github.com/wzshiming/pipe/internal/notify"
 )
 
 var signal string

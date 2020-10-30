@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/once"
-	"github.com/wzshiming/pipe/components/service"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/once"
+	"github.com/pipeproxy/pipe/components/service"
 )
 
 const (

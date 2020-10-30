@@ -1,4 +1,4 @@
-module github.com/wzshiming/pipe
+module github.com/pipeproxy/pipe
 
 go 1.15
 

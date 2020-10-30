@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/wzshiming/pipe"
+	"github.com/pipeproxy/pipe"
 	"sigs.k8s.io/yaml"
 )
 

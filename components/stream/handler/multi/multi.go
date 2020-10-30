@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/wzshiming/pipe/components/stream"
+	"github.com/pipeproxy/pipe/components/stream"
 )
 
 var (

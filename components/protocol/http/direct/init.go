@@ -4,9 +4,9 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/stdio/input"
-	"github.com/wzshiming/pipe/internal/http/template"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/stdio/input"
+	"github.com/pipeproxy/pipe/internal/http/template"
 )
 
 const (

@@ -8,9 +8,9 @@ import (
 	"strings"
 	"sync/atomic"
 
+	"github.com/pipeproxy/pipe/components/stream"
+	"github.com/pipeproxy/pipe/internal/logger"
 	"github.com/wzshiming/crun"
-	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/internal/logger"
 	"github.com/wzshiming/trie"
 )
 

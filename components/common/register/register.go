@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/pipeproxy/pipe/internal/logger"
 	"github.com/wzshiming/funcfg/types"
 	"github.com/wzshiming/funcfg/types/extra"
-	"github.com/wzshiming/pipe/internal/logger"
 )
 
 func Register(kind string, fun interface{}) error {

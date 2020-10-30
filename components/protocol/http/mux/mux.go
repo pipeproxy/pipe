@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"sync/atomic"
 
-	"github.com/wzshiming/pipe/internal/pool"
+	"github.com/pipeproxy/pipe/internal/pool"
 	"github.com/wzshiming/trie"
 )
 

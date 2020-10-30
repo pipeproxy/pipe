@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/components/tls"
-	"github.com/wzshiming/pipe/internal/listener"
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/components/stream"
+	"github.com/pipeproxy/pipe/components/tls"
+	"github.com/pipeproxy/pipe/internal/listener"
+	"github.com/pipeproxy/pipe/internal/logger"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 )

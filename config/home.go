@@ -3,7 +3,7 @@ package config
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/bind"
+	"github.com/pipeproxy/pipe/bind"
 )
 
 func BuildHomeWithHTTPHandler() bind.HTTPHandler {

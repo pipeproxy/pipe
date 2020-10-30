@@ -4,7 +4,7 @@ import (
 	"context"
 	"net"
 
-	"github.com/wzshiming/pipe/components/stream"
+	"github.com/pipeproxy/pipe/components/stream"
 )
 
 type Dialer struct {

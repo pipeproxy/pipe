@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"os"
 
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/stdio/input"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/stdio/input"
 )
 
 const (

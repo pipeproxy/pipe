@@ -1,9 +1,9 @@
 package components
 
 import (
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/once"
 	"github.com/wzshiming/funcfg/define"
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/once"
 )
 
 const (

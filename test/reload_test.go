@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/wzshiming/pipe"
-	"github.com/wzshiming/pipe/bind"
+	"github.com/pipeproxy/pipe"
+	"github.com/pipeproxy/pipe/bind"
 )
 
 func getDirect(port, info string) []byte {

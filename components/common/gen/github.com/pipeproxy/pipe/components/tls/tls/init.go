@@ -4,10 +4,10 @@ package tls
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/tls"
-	"github.com/wzshiming/pipe/internal/ctxcache"
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/tls"
+	"github.com/pipeproxy/pipe/internal/ctxcache"
+	"github.com/pipeproxy/pipe/internal/logger"
 )
 
 func init() {

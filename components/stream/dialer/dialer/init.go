@@ -1,8 +1,8 @@
 package dialer
 
 import (
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/stream"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/stream"
 )
 
 const (

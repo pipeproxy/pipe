@@ -6,8 +6,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/wzshiming/pipe/internal/http/template"
-	"github.com/wzshiming/pipe/internal/pool"
+	"github.com/pipeproxy/pipe/internal/http/template"
+	"github.com/pipeproxy/pipe/internal/pool"
 )
 
 type Forward struct {

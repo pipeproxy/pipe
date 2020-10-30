@@ -11,10 +11,10 @@ import (
 	"strings"
 	"text/template"
 
-	_ "github.com/wzshiming/pipe/init"
+	_ "github.com/pipeproxy/pipe/init"
 
-	"github.com/wzshiming/pipe/components/common/types"
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/components/common/types"
+	"github.com/pipeproxy/pipe/internal/logger"
 )
 
 //go:generate ../../bin/go-bindata --nomemcopy --pkg main -o template.go ./template.go.tpl
@@ -43,9 +43,9 @@ func (g *gen) data() interface{} {
 
 	imports := map[string]struct{}{}
 	dep := []string{
-		"github.com/wzshiming/pipe/components/common/register",
-		"github.com/wzshiming/pipe/internal/logger",
-		"github.com/wzshiming/pipe/internal/ctxcache",
+		"github.com/pipeproxy/pipe/components/common/register",
+		"github.com/pipeproxy/pipe/internal/logger",
+		"github.com/pipeproxy/pipe/internal/ctxcache",
 		"context",
 	}
 	for _, d := range dep {

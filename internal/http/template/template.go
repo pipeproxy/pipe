@@ -6,7 +6,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/wzshiming/pipe/internal/pool"
+	"github.com/pipeproxy/pipe/internal/pool"
 )
 
 type Template struct {

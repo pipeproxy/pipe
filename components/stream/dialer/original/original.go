@@ -6,8 +6,8 @@ import (
 	"net"
 
 	"github.com/mikioh/tcp"
-	svc_stream "github.com/wzshiming/pipe/components/service/stream"
-	"github.com/wzshiming/pipe/components/stream"
+	svc_stream "github.com/pipeproxy/pipe/components/service/stream"
+	"github.com/pipeproxy/pipe/components/stream"
 )
 
 type Original struct {

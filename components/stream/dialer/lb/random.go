@@ -4,7 +4,7 @@ import (
 	"context"
 	"math/rand"
 
-	"github.com/wzshiming/pipe/components/stream"
+	"github.com/pipeproxy/pipe/components/stream"
 )
 
 type Random struct {

@@ -3,7 +3,7 @@ package merge
 import (
 	"fmt"
 
-	"github.com/wzshiming/pipe/components/tls"
+	"github.com/pipeproxy/pipe/components/tls"
 )
 
 var (

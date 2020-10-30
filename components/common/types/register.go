@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/wzshiming/pipe/components/common/load"
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/components/common/load"
+	"github.com/pipeproxy/pipe/internal/logger"
 )
 
 var Global []interface{}

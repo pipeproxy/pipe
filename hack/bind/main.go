@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	_ "github.com/wzshiming/pipe/init"
+	_ "github.com/pipeproxy/pipe/init"
 
 	"github.com/wzshiming/funcfg/build/bind"
 )

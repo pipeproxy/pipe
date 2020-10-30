@@ -1,8 +1,8 @@
 package self_signed
 
 import (
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/tls"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/tls"
 )
 
 const (

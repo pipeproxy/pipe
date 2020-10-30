@@ -1,5 +1,5 @@
 package test
 
 import (
-	_ "github.com/wzshiming/pipe/init"
+	_ "github.com/pipeproxy/pipe/init"
 )

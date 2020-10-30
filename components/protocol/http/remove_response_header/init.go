@@ -3,7 +3,7 @@ package remove_response_header
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/common/register"
 )
 
 const (

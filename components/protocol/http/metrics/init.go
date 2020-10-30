@@ -1,8 +1,8 @@
 package metrics
 
 import (
+	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/wzshiming/pipe/components/common/register"
 )
 
 const (

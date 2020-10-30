@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/wzshiming/pipe/components/stdio/output"
+	"github.com/pipeproxy/pipe/components/stdio/output"
 )
 
 type File struct {

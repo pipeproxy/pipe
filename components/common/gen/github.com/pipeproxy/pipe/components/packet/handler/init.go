@@ -5,10 +5,10 @@ import (
 	"context"
 	"net"
 
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/packet"
-	"github.com/wzshiming/pipe/internal/ctxcache"
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/packet"
+	"github.com/pipeproxy/pipe/internal/ctxcache"
+	"github.com/pipeproxy/pipe/internal/logger"
 )
 
 func init() {

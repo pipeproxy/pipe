@@ -1,5 +1,5 @@
 FROM golang:alpine AS builder
-WORKDIR /go/src/github.com/wzshiming/pipe/
+WORKDIR /go/src/github.com/pipeproxy/pipe/
 COPY . .
 RUN go install ./cmd/pipe
 

@@ -7,10 +7,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/wzshiming/pipe/components/common/load"
-	"github.com/wzshiming/pipe/components/once"
-	"github.com/wzshiming/pipe/components/stdio/input/inline"
-	"github.com/wzshiming/pipe/internal/ctxcache"
+	"github.com/pipeproxy/pipe/components/common/load"
+	"github.com/pipeproxy/pipe/components/once"
+	"github.com/pipeproxy/pipe/components/stdio/input/inline"
+	"github.com/pipeproxy/pipe/internal/ctxcache"
 	"golang.org/x/sync/errgroup"
 	"sigs.k8s.io/yaml"
 )

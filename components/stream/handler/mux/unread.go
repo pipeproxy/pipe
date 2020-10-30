@@ -3,7 +3,7 @@ package mux
 import (
 	"io"
 
-	"github.com/wzshiming/pipe/components/stream"
+	"github.com/pipeproxy/pipe/components/stream"
 )
 
 func UnwrapUnreadStream(rwc stream.Stream) (stream.Stream, []byte) {

@@ -3,8 +3,8 @@ package quit
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe"
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe"
+	"github.com/pipeproxy/pipe/internal/logger"
 )
 
 func NewQuit() *ConfigQuit {

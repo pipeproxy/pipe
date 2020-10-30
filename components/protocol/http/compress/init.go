@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/handlers"
-	"github.com/wzshiming/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/common/register"
 )
 
 const (

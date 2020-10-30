@@ -4,9 +4,9 @@ import (
 	"context"
 
 	quic "github.com/lucas-clemente/quic-go"
-	"github.com/wzshiming/pipe/components/packet"
-	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/components/tls"
+	"github.com/pipeproxy/pipe/components/packet"
+	"github.com/pipeproxy/pipe/components/stream"
+	"github.com/pipeproxy/pipe/components/tls"
 )
 
 type server struct {

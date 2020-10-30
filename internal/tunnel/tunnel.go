@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	"github.com/wzshiming/pipe/internal/pool"
+	"github.com/pipeproxy/pipe/internal/pool"
 )
 
 func Tunnel(ctx context.Context, c1, c2 io.ReadWriter) error {

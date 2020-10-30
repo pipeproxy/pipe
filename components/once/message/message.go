@@ -3,7 +3,7 @@ package message
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/internal/logger"
 )
 
 type Message string

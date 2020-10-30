@@ -5,9 +5,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/internal/listener"
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/components/stream"
+	"github.com/pipeproxy/pipe/internal/listener"
+	"github.com/pipeproxy/pipe/internal/logger"
 )
 
 type Server struct {

@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/components/service"
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/components/service"
+	"github.com/pipeproxy/pipe/internal/logger"
 )
 
 type Service struct {

@@ -3,8 +3,8 @@ package tls
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/components/tls"
+	"github.com/pipeproxy/pipe/components/stream"
+	"github.com/pipeproxy/pipe/components/tls"
 )
 
 type TlsUp struct {

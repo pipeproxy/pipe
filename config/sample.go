@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/wzshiming/pipe/bind"
+	"github.com/pipeproxy/pipe/bind"
 )
 
 func BuildSampleWithOnce(start bind.Service, components ...bind.Component) bind.Once {

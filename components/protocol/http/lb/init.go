@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/internal/gcd"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/internal/gcd"
 )
 
 var (

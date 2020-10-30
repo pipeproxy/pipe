@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/stream"
-	"github.com/wzshiming/pipe/components/tls"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/stream"
+	"github.com/pipeproxy/pipe/components/tls"
 )
 
 var (

@@ -3,8 +3,8 @@ package listener
 import (
 	"context"
 
-	"github.com/wzshiming/pipe/components/common/register"
-	"github.com/wzshiming/pipe/components/packet"
+	"github.com/pipeproxy/pipe/components/common/register"
+	"github.com/pipeproxy/pipe/components/packet"
 )
 
 const (

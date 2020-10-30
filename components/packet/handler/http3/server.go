@@ -6,10 +6,10 @@ import (
 	"net/http"
 
 	http3 "github.com/lucas-clemente/quic-go/http3"
-	"github.com/wzshiming/pipe/components/packet"
-	"github.com/wzshiming/pipe/components/tls"
-	"github.com/wzshiming/pipe/internal/listener"
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/components/packet"
+	"github.com/pipeproxy/pipe/components/tls"
+	"github.com/pipeproxy/pipe/internal/listener"
+	"github.com/pipeproxy/pipe/internal/logger"
 )
 
 type server struct {

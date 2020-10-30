@@ -14,7 +14,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/wzshiming/pipe/internal/pool"
+	"github.com/pipeproxy/pipe/internal/pool"
 )
 
 func NewSelfSigned() (*tls.Config, error) {

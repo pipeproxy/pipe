@@ -3,8 +3,8 @@ package examples
 import (
 	"net/http"
 
-	"github.com/wzshiming/pipe/bind"
-	"github.com/wzshiming/pipe/config"
+	"github.com/pipeproxy/pipe/bind"
+	"github.com/pipeproxy/pipe/config"
 )
 
 var Examples = map[string]interface{}{

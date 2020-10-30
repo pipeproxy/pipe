@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/wzshiming/pipe/bind"
+	"github.com/pipeproxy/pipe/bind"
 )
 
 func BuildContentTypeHTMLWithHTTPHandler() bind.HTTPHandler {

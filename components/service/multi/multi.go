@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/wzshiming/pipe/components/service"
-	"github.com/wzshiming/pipe/internal/logger"
+	"github.com/pipeproxy/pipe/components/service"
+	"github.com/pipeproxy/pipe/internal/logger"
 )
 
 var (

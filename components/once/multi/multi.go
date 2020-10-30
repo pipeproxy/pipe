@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/wzshiming/pipe/components/once"
+	"github.com/pipeproxy/pipe/components/once"
 )
 
 var (
