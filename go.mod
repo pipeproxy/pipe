@@ -6,6 +6,9 @@ require (
 	github.com/gogf/greuse v1.1.0
 	github.com/gorilla/handlers v1.4.2
 	github.com/lucas-clemente/quic-go v0.18.0
+	github.com/mikioh/tcp v0.0.0-20190314235350-803a9b46060c
+	github.com/mikioh/tcpinfo v0.0.0-20190314235526-30a79bb1804b // indirect
+	github.com/mikioh/tcpopt v0.0.0-20190314235656-172688c1accc // indirect
 	github.com/prometheus/client_golang v1.7.1
 	github.com/spf13/pflag v1.0.5
 	github.com/wzshiming/crun v0.3.3
