@@ -25,31 +25,42 @@ func NewServer(handler http.Handler, tlsConfig tls.TLS) *server {
 	return s
 }
 
-var h2 = http2.Server{}
-
 func (s *server) serve(ctx context.Context, listen stream.StreamListener, handler http.Handler) error {
 	baseContext := func(stream.StreamListener) context.Context {
 		return ctx
 	}
 
+	var err error
+	var tlsConfig *tls.Config
+	if s.tlsConfig != nil {
+		tlsConfig = s.tlsConfig.TLS()
+		if tlsConfig != nil {
+			tlsConfig = tlsConfig.Clone()
+		}
+	}
+
 	svc := http.Server{
 		Handler:     handler,
 		BaseContext: baseContext,
-		TLSConfig:   s.tlsConfig.TLS(),
+		TLSConfig:   tlsConfig,
 	}
 
-	svc.Handler = h2c.NewHandler(svc.Handler, &h2)
-
-	err := http2.ConfigureServer(&svc, &h2)
-	if err != nil {
-		return err
-	}
-
+	go func() {
+		<-ctx.Done()
+		svc.Shutdown(context.Background())
+	}()
 	if svc.TLSConfig != nil {
-		err = svc.ServeTLS(listen, "", "")
+		svc.TLSConfig.NextProtos = strSliceContainsOrSet(svc.TLSConfig.NextProtos, "h2")
+		listen = tls.NewListener(listen, svc.TLSConfig)
 	} else {
-		err = svc.Serve(listen)
+		var h2 http2.Server
+		svc.Handler = h2c.NewHandler(svc.Handler, &h2)
+		err := http2.ConfigureServer(&svc, &h2)
+		if err != nil {
+			return err
+		}
 	}
+	err = svc.Serve(listen)
 	if err != nil && !listener.IsClosedConnError(err) {
 		return err
 	}
@@ -62,4 +73,13 @@ func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
 		logger.Errorln("[http2]", err)
 		return
 	}
+}
+
+func strSliceContainsOrSet(ss []string, s string) []string {
+	for _, v := range ss {
+		if v == s {
+			return ss
+		}
+	}
+	return append(ss, s)
 }
