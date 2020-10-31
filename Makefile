@@ -4,12 +4,16 @@ regenerate: generate format
 	go mod tidy
 
 generate: bin/go-bindata
-	-rm -f init/init_gen.go
+	-rm -f init/init.go
+	-rm -rf components/common/gen/*/
+	-rm -f bind/bind.go
 	go generate \
-		./hack/gen_common \
-		./components/common/gen \
 		./init \
-		./bind \
+		./components/common/gen
+	go generate \
+		./init \
+		./bind
+	go generate \
 		./examples
 
 format: bin/goimports

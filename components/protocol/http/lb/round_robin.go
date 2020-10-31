@@ -15,5 +15,5 @@ func NewRoundRobin(handlers []http.Handler) *RoundRobin {
 }
 
 func (r *RoundRobin) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
-	r.handlers[int(atomic.AddUint64(&r.count, 1))%len(r.handlers)].ServeHTTP(rw, req)
+	r.handlers[int(atomic.AddUint64(&r.count, 1)-1)%len(r.handlers)].ServeHTTP(rw, req)
 }

@@ -17,5 +17,5 @@ func NewRoundRobin(handlers []stream.Dialer) *Random {
 }
 
 func (r *RoundRobin) DialStream(ctx context.Context) (stream.Stream, error) {
-	return r.handlers[int(atomic.AddUint64(&r.count, 1))%len(r.handlers)].DialStream(ctx)
+	return r.handlers[int(atomic.AddUint64(&r.count, 1)-1)%len(r.handlers)].DialStream(ctx)
 }

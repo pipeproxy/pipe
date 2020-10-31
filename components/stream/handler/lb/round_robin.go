@@ -17,5 +17,5 @@ func NewRoundRobin(handlers []stream.Handler) *Random {
 }
 
 func (r *RoundRobin) ServeStream(ctx context.Context, stm stream.Stream) {
-	r.handlers[int(atomic.AddUint64(&r.count, 1))%len(r.handlers)].ServeStream(ctx, stm)
+	r.handlers[int(atomic.AddUint64(&r.count, 1)-1)%len(r.handlers)].ServeStream(ctx, stm)
 }

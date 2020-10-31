@@ -72,7 +72,8 @@ var (
 						Handler: bind.ForwardNetHTTPHandlerConfig{
 							URL: "http://127.0.0.1:8001",
 						},
-					}, {
+					},
+					{
 						Handler: bind.ForwardNetHTTPHandlerConfig{
 							URL: "http://127.0.0.1:8002",
 						},
