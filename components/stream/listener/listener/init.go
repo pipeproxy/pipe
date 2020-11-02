@@ -27,8 +27,9 @@ const (
 type Config struct {
 	Network ListenerNetworkEnum
 	Address string
+	Virtual bool `json:",omitempty"`
 }
 
 func NewListenerWithConfig(ctx context.Context, conf *Config) stream.ListenConfig {
-	return NewListener(string(conf.Network), conf.Address)
+	return NewListener(string(conf.Network), conf.Address, conf.Virtual)
 }

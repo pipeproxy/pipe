@@ -1,6 +1,7 @@
 FROM golang:alpine AS builder
 WORKDIR /go/src/github.com/pipeproxy/pipe/
 COPY . .
+ENV CGO_ENABLED=0
 RUN go install ./cmd/pipe
 
 FROM alpine

@@ -23,10 +23,12 @@ const (
 )
 
 type Config struct {
-	Network DialerNetworkEnum
-	Address string
+	Network  DialerNetworkEnum
+	Address  string
+	Original bool `json:",omitempty"`
+	Virtual  bool `json:",omitempty"`
 }
 
 func NewDialerWithConfig(conf *Config) stream.Dialer {
-	return NewDialer(string(conf.Network), conf.Address)
+	return NewDialer(string(conf.Network), conf.Address, conf.Virtual, conf.Original)
 }

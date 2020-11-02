@@ -50,7 +50,6 @@ import (
 	_ "github.com/pipeproxy/pipe/components/stream"
 	_ "github.com/pipeproxy/pipe/components/stream/dialer/dialer"
 	_ "github.com/pipeproxy/pipe/components/stream/dialer/lb"
-	_ "github.com/pipeproxy/pipe/components/stream/dialer/original"
 	_ "github.com/pipeproxy/pipe/components/stream/dialer/tls"
 	_ "github.com/pipeproxy/pipe/components/stream/handler/forward"
 	_ "github.com/pipeproxy/pipe/components/stream/handler/http1"
