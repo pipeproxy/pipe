@@ -3,6 +3,7 @@ package listener
 import (
 	"context"
 	"fmt"
+	"io"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -31,19 +32,25 @@ func (v *virtualListenerManager) Listen(ctx context.Context, network, address st
 
 	listener := newVirtualListener(v, addr)
 
+	var old io.Closer
+	defer func() {
+		if old != nil {
+			old.Close()
+		}
+	}()
 	v.mut.Lock()
 	defer v.mut.Unlock()
 	if addr.IP.Equal(ipv4zero) {
 		l, ok := v.port[addr.Port]
 		if ok {
-			l.Close()
+			old = l
 		}
 		v.port[addr.Port] = listener
 	} else {
 		a := addr.String()
 		l, ok := v.address[a]
 		if ok {
-			l.Close()
+			old = l
 		}
 		v.address[a] = listener
 	}
