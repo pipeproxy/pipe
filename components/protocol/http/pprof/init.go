@@ -1,8 +1,6 @@
 package pprof
 
 import (
-	"net/http"
-
 	"github.com/pipeproxy/pipe/components/common/register"
 )
 
@@ -11,9 +9,5 @@ const (
 )
 
 func init() {
-	register.Register(name, NewPprofWithConfig)
-}
-
-func NewPprofWithConfig() http.Handler {
-	return NewPprof()
+	register.Register(name, NewPprof)
 }

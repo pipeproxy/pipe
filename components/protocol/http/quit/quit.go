@@ -7,14 +7,14 @@ import (
 	"github.com/pipeproxy/pipe/internal/logger"
 )
 
-func NewQuit() *ConfigQuit {
-	return &ConfigQuit{}
+type Quit struct {
 }
 
-type ConfigQuit struct {
+func NewQuit() http.Handler {
+	return &Quit{}
 }
 
-func (c *ConfigQuit) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (c *Quit) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	svc, ok := pipe.GetPipeWithContext(r.Context())
 	if !ok {
 		http.Error(rw, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)

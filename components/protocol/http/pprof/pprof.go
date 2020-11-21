@@ -9,7 +9,7 @@ import (
 type Pprof struct {
 }
 
-func NewPprof() Pprof {
+func NewPprof() http.Handler {
 	return Pprof{}
 }
 
