@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/pipeproxy/pipe/internal/logger"
 	"github.com/wzshiming/funcfg/types"
 	"github.com/wzshiming/funcfg/types/extra"
+	"github.com/wzshiming/logger"
 )
 
 func Register(kind string, fun interface{}) error {
@@ -20,10 +20,9 @@ func Register(kind string, fun interface{}) error {
 }
 
 func GetKindName(kind string, fun interface{}) (string, error) {
-
 	typ, err := types.CheckFunc(reflect.ValueOf(fun))
 	if err != nil {
-		logger.Errorf("CheckFunc: %s: %s", kind, err)
+		logger.Log.Error(err, "CheckFunc", "kind", kind)
 		return "", err
 	}
 	pkg := typ.PkgPath()

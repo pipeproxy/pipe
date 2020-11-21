@@ -7,7 +7,7 @@ import (
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/protocol"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -63,7 +63,7 @@ func HandlerGet(ctx context.Context, name string, defaults protocol.Handler) pro
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("protocol.Handler %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("protocol.Handler is not defined", "name", name)
 	return HandlerNone
 }
 
@@ -76,7 +76,7 @@ func newHandlerNone() protocol.Handler {
 }
 
 func (_HandlerNone) ServeProtocol(_ context.Context, _ protocol.Protocol) {
-	logger.Warn("this is none of protocol.Handler")
+	logger.Log.V(-1).Info("this is none of protocol.Handler")
 
 	return
 }

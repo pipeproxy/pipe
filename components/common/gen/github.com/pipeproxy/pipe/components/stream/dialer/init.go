@@ -9,7 +9,7 @@ import (
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -65,7 +65,7 @@ func DialerGet(ctx context.Context, name string, defaults stream.Dialer) stream.
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("stream.Dialer %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("stream.Dialer is not defined", "name", name)
 	return DialerNone
 }
 
@@ -78,7 +78,7 @@ func newDialerNone() stream.Dialer {
 }
 
 func (_DialerNone) DialStream(_ context.Context) (_ net.Conn, error error) {
-	logger.Warn("this is none of stream.Dialer")
+	logger.Log.V(-1).Info("this is none of stream.Dialer")
 
 	error = fmt.Errorf("error stream.Dialer is none")
 

@@ -7,7 +7,7 @@ import (
 
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -63,7 +63,7 @@ func HandlerGet(ctx context.Context, name string, defaults http.Handler) http.Ha
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("http.Handler %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("http.Handler is not defined", "name", name)
 	return HandlerNone
 }
 
@@ -76,7 +76,7 @@ func newHandlerNone() http.Handler {
 }
 
 func (_HandlerNone) ServeHTTP(_ http.ResponseWriter, _ *http.Request) {
-	logger.Warn("this is none of http.Handler")
+	logger.Log.V(-1).Info("this is none of http.Handler")
 
 	return
 }

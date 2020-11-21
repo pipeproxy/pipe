@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"github.com/pipeproxy/pipe/components/service"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 var (
@@ -29,14 +29,17 @@ func (m *Multi) Run(ctx context.Context) error {
 	case 0:
 	default:
 		m.wg.Add(len(m.multi))
-		for _, svc := range m.multi {
-			go func(svc service.Service) {
+		for i, svc := range m.multi {
+			go func(ctx context.Context, i int, svc service.Service) {
+				log := logger.FromContext(ctx)
+				log = log.WithName(getName(i, svc))
+				ctx = logger.WithContext(ctx, log)
 				err := svc.Run(ctx)
 				if err != nil {
-					logger.Errorf("service start error: %s", err)
+					log.Error(err, "service start")
 				}
 				m.wg.Done()
-			}(svc)
+			}(ctx, i, svc)
 		}
 		m.wg.Wait()
 	}
@@ -47,10 +50,10 @@ func (m *Multi) Close() error {
 	switch len(m.multi) {
 	case 0:
 	default:
-		for _, service := range m.multi {
-			err := service.Close()
+		for i, svc := range m.multi {
+			err := svc.Close()
 			if err != nil {
-				logger.Errorf("service close error: %s", err)
+				logger.Log.WithName(getName(i, svc)).Error(err, "service close")
 			}
 		}
 	}

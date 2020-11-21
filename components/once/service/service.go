@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/pipeproxy/pipe/components/service"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 type Service struct {
@@ -22,7 +22,7 @@ func (m *Service) Do(ctx context.Context) error {
 		<-ctx.Done()
 		err := m.svc.Close()
 		if err != nil {
-			logger.Errorln(err)
+			logger.FromContext(ctx).Error(err, "service close")
 		}
 	}()
 	return m.svc.Run(ctx)

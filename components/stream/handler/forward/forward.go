@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/pipeproxy/pipe/components/stream"
-	"github.com/pipeproxy/pipe/internal/logger"
 	"github.com/pipeproxy/pipe/internal/tunnel"
+	"github.com/wzshiming/logger"
 )
 
 type Forward struct {
@@ -21,13 +21,13 @@ func NewForward(dialer stream.Dialer) *Forward {
 func (f *Forward) ServeStream(ctx context.Context, stm stream.Stream) {
 	conn, err := f.dialer.DialStream(ctx)
 	if err != nil {
-		logger.Errorln(err)
+		logger.FromContext(ctx).Error(err, "dial")
 		return
 	}
 	defer conn.Close()
 	err = tunnel.Tunnel(ctx, stm, conn)
 	if err != nil {
-		logger.Errorln(err)
+		logger.FromContext(ctx).Error(err, "tunnel")
 		return
 	}
 }

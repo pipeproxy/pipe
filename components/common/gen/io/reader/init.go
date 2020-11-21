@@ -8,7 +8,7 @@ import (
 
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -64,7 +64,7 @@ func ReaderGet(ctx context.Context, name string, defaults io.Reader) io.Reader {
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("io.Reader %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("io.Reader is not defined", "name", name)
 	return ReaderNone
 }
 
@@ -77,7 +77,7 @@ func newReaderNone() io.Reader {
 }
 
 func (_ReaderNone) Read(_ []uint8) (_ int, error error) {
-	logger.Warn("this is none of io.Reader")
+	logger.Log.V(-1).Info("this is none of io.Reader")
 
 	error = fmt.Errorf("error io.Reader is none")
 

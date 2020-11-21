@@ -8,12 +8,13 @@ import (
 	"path/filepath"
 
 	_ "github.com/pipeproxy/pipe/init"
+	_ "github.com/pipeproxy/pipe/internal/log"
 
 	"github.com/pipeproxy/pipe"
-	"github.com/pipeproxy/pipe/internal/logger"
 	"github.com/pipeproxy/pipe/internal/notify"
 	"github.com/spf13/pflag"
 	"github.com/wzshiming/lockfile"
+	"github.com/wzshiming/logger"
 )
 
 var signal string
@@ -39,65 +40,68 @@ func init() {
 
 func main() {
 
+	log := logger.Log
 	lf, err := lockfile.NewLockfile(pidfile)
 	if err != nil {
-		logger.Fatalf("lockfile error: %s", err)
+		log.Error(err, "lockfile")
 		return
 	}
 
 	if signal == "" {
-		logger.Infof("Start pipe")
+		log.Info("Start pipe")
 	} else {
-		logger.Infof("Send signal %s to pipe", signal)
+		log = log.WithName(signal).WithValues("signal", signal)
+		log.Info("send signal to pipe")
 	}
 	switch signal {
 	case "":
 		err := lf.Lock()
 		if err != nil {
-			logger.Fatalln("start error:", err)
+			log.Error(err, "lock pidfile")
 			return
 		}
-		start(conf)
+		ctx := logger.WithContext(context.Background(), log)
+		start(ctx, log, conf)
 		err = lf.Unlock()
 		if err != nil {
-			logger.Fatalln("end error:", err)
+			log.Error(err, "unlock pidfile")
 			return
 		}
 	case "reload":
 		pid, err := lf.Get()
 		if err != nil {
-			logger.Fatalln("reload error:", err)
+			log.Error(err, "reload")
 			return
 		}
 		err = notify.Kill(pid, notify.Reload)
 		if err != nil {
-			logger.Fatalln("send error:", err)
+			log.Error(err, "send signal reload")
 			return
 		}
 	case "stop":
 		pid, err := lf.Get()
 		if err != nil {
-			logger.Fatalln("stop error:", err)
+			log.Error(err, "stop")
 			return
 		}
 		err = notify.Kill(pid, notify.Stop)
 		if err != nil {
-			logger.Fatalln("send error:", err)
+			log.Error(err, "send signal stop")
 			return
 		}
 	case "reopen":
 		pid, err := lf.Get()
 		if err != nil {
-			logger.Fatalln("reopen error:", err)
+			log.Error(err, "reopen")
 			return
 		}
 		err = notify.Kill(pid, notify.Reopen)
 		if err != nil {
-			logger.Fatalln("send error:", err)
+			log.Error(err, "send signal reopen")
 			return
 		}
 	default:
-		logger.Fatalf("not defined signal %s", signal)
+		log.V(-2).Info("not defined signal")
 		return
 	}
 }
@@ -116,50 +120,54 @@ func getConfig(conf string) ([]byte, error) {
 	return c, nil
 }
 
-func start(conf string) {
+func start(ctx context.Context, log logger.Logger, conf string) {
 
 	c, err := getConfig(conf)
 	if err != nil {
-		logger.Errorf("read config file %q error: %s", conf, err)
+		log.Error(err, "read config file",
+			"config", conf,
+		)
 		return
 	}
 
-	svc, err := pipe.NewPipeWithConfig(context.Background(), c)
+	svc, err := pipe.NewPipeWithConfig(ctx, c)
 	if err != nil {
-		logger.Errorf("configure config error: %s", err)
+		log.Error(err, "configure config")
 		return
 	}
 
 	notify.On(notify.Stop, func() {
-		logger.Info("Closing")
+		log.Info("Closing")
 
 		err := svc.Close()
-		if svc == nil {
-			logger.Errorf("service close error: %s", err)
+		if err != nil {
+			log.Error(err, "service close")
 			return
 		}
 	})
 	notify.On(notify.Reload, func() {
-		logger.Info("Reloading")
+		log.Info("Reloading")
 
 		c, err := getConfig(conf)
 		if err != nil {
-			logger.Errorf("read config file %q error: %s", conf, err)
+			log.Error(err, "read config file",
+				"config", conf,
+			)
 			return
 		}
 
 		err = svc.Reload(c)
 		if err != nil {
-			logger.Errorf("reload error: %s", err)
+			log.Error(err, "reload")
 			return
 		}
 	})
 
 	err = svc.Run()
 	if err != nil {
-		logger.Errorf("start error: %s", err)
+		log.Error(err, "start")
 		return
 	}
 
-	logger.Info("exit pipe")
+	log.Info("Exit pipe")
 }

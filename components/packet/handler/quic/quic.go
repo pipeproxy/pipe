@@ -7,7 +7,7 @@ import (
 
 	quic "github.com/lucas-clemente/quic-go"
 	"github.com/pipeproxy/pipe/internal/listener"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 type Listener struct {
@@ -36,7 +36,7 @@ func (l *Listener) accept() {
 	for {
 		sess, err := l.Listener.Accept(l.ctx)
 		if err != nil {
-			logger.Errorf("accept session failed: %v", err)
+			logger.FromContext(l.ctx).Error(err, "accept session failed")
 			return
 		}
 
@@ -48,7 +48,7 @@ func (l *Listener) acceptStream(sess quic.Session) {
 	for {
 		stm, err := sess.AcceptStream(l.ctx)
 		if err != nil {
-			logger.Errorf("accept stream failed: %v", err)
+			logger.FromContext(l.ctx).Error(err, "accept stream failed")
 			return
 		}
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/pipeproxy/pipe/components/packet"
 	"github.com/pipeproxy/pipe/internal/listener"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 type Listener struct {
@@ -21,6 +21,8 @@ func NewListener(network string, address string) *Listener {
 }
 
 func (n *Listener) ListenPacket(ctx context.Context) (packet.Packet, error) {
-	logger.Infof("Listen %s://%s", n.network, n.address)
+	logger.FromContext(ctx).Info("Listen packet",
+		"localAddress", n.address,
+	)
 	return listener.ListenPacket(ctx, n.network, n.address)
 }

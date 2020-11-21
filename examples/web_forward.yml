@@ -38,11 +38,16 @@ Multi:
       Handler:
         '@Kind': http1@stream.Handler
         Handler:
-          '@Kind': direct@net/http.Handler
-          Body:
-            '@Kind': inline@io.Reader
-            Data: <html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
-          Code: 200
+          '@Kind': log@net/http.Handler
+          Handler:
+            '@Kind': direct@net/http.Handler
+            Body:
+              '@Kind': inline@io.Reader
+              Data: <html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+            Code: 200
+          Output:
+            '@Kind': file@io.Writer
+            Path: /dev/stderr
       Listener:
         '@Kind': listener@stream.ListenConfig
         Address: :8001
@@ -54,11 +59,16 @@ Multi:
       Handler:
         '@Kind': http1@stream.Handler
         Handler:
-          '@Kind': direct@net/http.Handler
-          Body:
-            '@Kind': inline@io.Reader
-            Data: <html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
-          Code: 200
+          '@Kind': log@net/http.Handler
+          Handler:
+            '@Kind': direct@net/http.Handler
+            Body:
+              '@Kind': inline@io.Reader
+              Data: <html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
+            Code: 200
+          Output:
+            '@Kind': file@io.Writer
+            Path: /dev/stderr
       Listener:
         '@Kind': listener@stream.ListenConfig
         Address: :8002

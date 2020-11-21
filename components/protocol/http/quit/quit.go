@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/pipeproxy/pipe"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 type Quit struct {
@@ -24,7 +24,7 @@ func (c *Quit) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 	err := svc.Close()
 	if err != nil {
-		logger.Errorf("service close error: %s", err)
+		logger.FromContext(r.Context()).Error(err, "service close")
 		return
 	}
 }

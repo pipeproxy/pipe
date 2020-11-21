@@ -14,7 +14,7 @@ import (
 	_ "github.com/pipeproxy/pipe/init"
 
 	"github.com/pipeproxy/pipe/components/common/types"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 //go:generate ../../bin/go-bindata --nomemcopy --pkg main -o template.go ./template.go.tpl
@@ -25,7 +25,7 @@ func main() {
 		g := newGen(t)
 		err := g.Write()
 		if err != nil {
-			logger.Errorln(err)
+			logger.Log.Error(err, "write file")
 		}
 	}
 }
@@ -44,7 +44,7 @@ func (g *gen) data() interface{} {
 	imports := map[string]struct{}{}
 	dep := []string{
 		"github.com/pipeproxy/pipe/components/common/register",
-		"github.com/pipeproxy/pipe/internal/logger",
+		"github.com/wzshiming/logger",
 		"github.com/pipeproxy/pipe/internal/ctxcache",
 		"context",
 	}
@@ -142,7 +142,7 @@ func (g *gen) Write() error {
 	if err == nil {
 		src = newSrc
 	} else {
-		logger.Errorln(err)
+		logger.Log.Error(err, "format source code")
 	}
 
 	file := filepath.Join(g.typ.PkgPath(), strings.ToLower(g.typ.Name()), "init.go")

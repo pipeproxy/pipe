@@ -5,6 +5,7 @@ import (
 
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/components/tls"
+	"github.com/wzshiming/logger"
 )
 
 type Tls struct {
@@ -20,6 +21,9 @@ func NewTls(listenConfig stream.ListenConfig, tlsConfig tls.TLS) *Tls {
 }
 
 func (d *Tls) ListenStream(ctx context.Context) (stream.StreamListener, error) {
+	log := logger.FromContext(ctx)
+	log = log.WithName("tls")
+	ctx = logger.WithContext(ctx, log)
 	listener, err := d.listenConfig.ListenStream(ctx)
 	if err != nil {
 		return nil, err

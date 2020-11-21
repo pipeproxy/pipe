@@ -8,7 +8,7 @@ import (
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/service"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -64,7 +64,7 @@ func ServiceGet(ctx context.Context, name string, defaults service.Service) serv
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("service.Service %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("service.Service is not defined", "name", name)
 	return ServiceNone
 }
 
@@ -77,7 +77,7 @@ func newServiceNone() service.Service {
 }
 
 func (_ServiceNone) Close() (error error) {
-	logger.Warn("this is none of service.Service")
+	logger.Log.V(-1).Info("this is none of service.Service")
 
 	error = fmt.Errorf("error service.Service is none")
 
@@ -85,7 +85,7 @@ func (_ServiceNone) Close() (error error) {
 }
 
 func (_ServiceNone) Run(_ context.Context) (error error) {
-	logger.Warn("this is none of service.Service")
+	logger.Log.V(-1).Info("this is none of service.Service")
 
 	error = fmt.Errorf("error service.Service is none")
 

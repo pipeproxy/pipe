@@ -7,6 +7,7 @@ import (
 	"github.com/pipeproxy/pipe/components/packet"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/components/tls"
+	"github.com/wzshiming/logger"
 )
 
 type server struct {
@@ -23,6 +24,9 @@ func NewServer(pkt packet.Packet, tlsConfig tls.TLS) stream.ListenConfig {
 }
 
 func (s *server) ListenStream(ctx context.Context) (stream.StreamListener, error) {
+	log := logger.FromContext(ctx)
+	log = log.WithName("quic")
+	ctx = logger.WithContext(ctx, log)
 	listen, err := quic.Listen(s.pkt, s.tlsConfig.TLS(), &quic.Config{})
 	if err != nil {
 		return nil, err

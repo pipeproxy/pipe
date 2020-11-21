@@ -6,7 +6,7 @@ import (
 
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/listener"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 type server struct {
@@ -38,9 +38,12 @@ func (s *server) serve(ctx context.Context, listen stream.StreamListener, handle
 }
 
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
+	log := logger.FromContext(ctx)
+	log = log.WithName("http1")
+	ctx = logger.WithContext(ctx, log)
 	err := s.serve(ctx, listener.NewSingleConnListener(stm), s.handler)
 	if err != nil {
-		logger.Errorln("[http1]", err)
+		log.Error(err, "http1 server close")
 		return
 	}
 }

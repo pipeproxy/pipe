@@ -5,6 +5,7 @@ import (
 
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/components/tls"
+	"github.com/wzshiming/logger"
 )
 
 type Tls struct {
@@ -20,6 +21,9 @@ func NewTls(dialer stream.Dialer, tlsConfig tls.TLS) *Tls {
 }
 
 func (d *Tls) DialStream(ctx context.Context) (stream.Stream, error) {
+	log := logger.FromContext(ctx)
+	log = log.WithName("tls")
+	ctx = logger.WithContext(ctx, log)
 	stm, err := d.dialer.DialStream(ctx)
 	if err != nil {
 		return nil, err

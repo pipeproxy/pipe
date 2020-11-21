@@ -9,7 +9,7 @@ import (
 
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -65,7 +65,7 @@ func PacketConnGet(ctx context.Context, name string, defaults net.PacketConn) ne
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("net.PacketConn %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("net.PacketConn is not defined", "name", name)
 	return PacketConnNone
 }
 
@@ -78,7 +78,7 @@ func newPacketConnNone() net.PacketConn {
 }
 
 func (_PacketConnNone) Close() (error error) {
-	logger.Warn("this is none of net.PacketConn")
+	logger.Log.V(-1).Info("this is none of net.PacketConn")
 
 	error = fmt.Errorf("error net.PacketConn is none")
 
@@ -86,13 +86,13 @@ func (_PacketConnNone) Close() (error error) {
 }
 
 func (_PacketConnNone) LocalAddr() (_ net.Addr) {
-	logger.Warn("this is none of net.PacketConn")
+	logger.Log.V(-1).Info("this is none of net.PacketConn")
 
 	return
 }
 
 func (_PacketConnNone) ReadFrom(_ []uint8) (_ int, _ net.Addr, error error) {
-	logger.Warn("this is none of net.PacketConn")
+	logger.Log.V(-1).Info("this is none of net.PacketConn")
 
 	error = fmt.Errorf("error net.PacketConn is none")
 
@@ -100,7 +100,7 @@ func (_PacketConnNone) ReadFrom(_ []uint8) (_ int, _ net.Addr, error error) {
 }
 
 func (_PacketConnNone) SetDeadline(_ time.Time) (error error) {
-	logger.Warn("this is none of net.PacketConn")
+	logger.Log.V(-1).Info("this is none of net.PacketConn")
 
 	error = fmt.Errorf("error net.PacketConn is none")
 
@@ -108,7 +108,7 @@ func (_PacketConnNone) SetDeadline(_ time.Time) (error error) {
 }
 
 func (_PacketConnNone) SetReadDeadline(_ time.Time) (error error) {
-	logger.Warn("this is none of net.PacketConn")
+	logger.Log.V(-1).Info("this is none of net.PacketConn")
 
 	error = fmt.Errorf("error net.PacketConn is none")
 
@@ -116,7 +116,7 @@ func (_PacketConnNone) SetReadDeadline(_ time.Time) (error error) {
 }
 
 func (_PacketConnNone) SetWriteDeadline(_ time.Time) (error error) {
-	logger.Warn("this is none of net.PacketConn")
+	logger.Log.V(-1).Info("this is none of net.PacketConn")
 
 	error = fmt.Errorf("error net.PacketConn is none")
 
@@ -124,7 +124,7 @@ func (_PacketConnNone) SetWriteDeadline(_ time.Time) (error error) {
 }
 
 func (_PacketConnNone) WriteTo(_ []uint8, _ net.Addr) (_ int, error error) {
-	logger.Warn("this is none of net.PacketConn")
+	logger.Log.V(-1).Info("this is none of net.PacketConn")
 
 	error = fmt.Errorf("error net.PacketConn is none")
 

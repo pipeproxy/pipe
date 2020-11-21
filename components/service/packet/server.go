@@ -6,7 +6,7 @@ import (
 
 	"github.com/pipeproxy/pipe/components/packet"
 	"github.com/pipeproxy/pipe/internal/listener"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 type Server struct {
@@ -53,8 +53,9 @@ func (s *Server) ServePacket(ctx context.Context, pkt packet.Packet) {
 		err = nil
 	}
 	if err != nil {
-		addr := pkt.LocalAddr()
-		logger.Errorf("Close %s://%s error: %s", addr.Network(), addr.String(), err)
+		log := logger.FromContext(ctx)
+		log = log.WithName("packet")
+		log.Error(err, "close listen")
 		return
 	}
 }

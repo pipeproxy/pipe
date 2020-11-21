@@ -8,7 +8,7 @@ import (
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/packet"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -64,7 +64,7 @@ func HandlerGet(ctx context.Context, name string, defaults packet.Handler) packe
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("packet.Handler %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("packet.Handler is not defined", "name", name)
 	return HandlerNone
 }
 
@@ -77,7 +77,7 @@ func newHandlerNone() packet.Handler {
 }
 
 func (_HandlerNone) ServePacket(_ context.Context, _ net.PacketConn) {
-	logger.Warn("this is none of packet.Handler")
+	logger.Log.V(-1).Info("this is none of packet.Handler")
 
 	return
 }

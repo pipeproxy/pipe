@@ -8,7 +8,7 @@ import (
 
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -64,7 +64,7 @@ func WriterGet(ctx context.Context, name string, defaults io.Writer) io.Writer {
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("io.Writer %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("io.Writer is not defined", "name", name)
 	return WriterNone
 }
 
@@ -77,7 +77,7 @@ func newWriterNone() io.Writer {
 }
 
 func (_WriterNone) Write(_ []uint8) (_ int, error error) {
-	logger.Warn("this is none of io.Writer")
+	logger.Log.V(-1).Info("this is none of io.Writer")
 
 	error = fmt.Errorf("error io.Writer is none")
 

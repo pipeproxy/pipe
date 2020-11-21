@@ -5,7 +5,7 @@ import (
 
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/listener"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 type Listener struct {
@@ -23,10 +23,16 @@ func NewListener(network string, address string, virtual bool) *Listener {
 }
 
 func (l *Listener) ListenStream(ctx context.Context) (stream.StreamListener, error) {
+	log := logger.FromContext(ctx)
 	if l.virtual {
-		logger.Infof("Virtual Listen %s://%s", l.network, l.address)
+		log.Info("Virtual listen stream",
+			"localAddress", l.address,
+			"virtual", true,
+		)
 		return listener.VirtualListen(ctx, l.network, l.address)
 	}
-	logger.Infof("Listen %s://%s", l.network, l.address)
+	log.Info("Listen stream",
+		"localAddress", l.address,
+	)
 	return listener.Listen(ctx, l.network, l.address)
 }

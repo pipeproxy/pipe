@@ -2,7 +2,7 @@ package types
 
 import (
 	"github.com/pipeproxy/pipe/components/common/load"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 var Global []interface{}
@@ -20,7 +20,7 @@ func Register(i interface{}) error {
 	for _, item := range list {
 		err := item(i)
 		if err != nil {
-			logger.Errorln(err)
+			logger.Log.Error(err, "register components")
 			return err
 		}
 	}

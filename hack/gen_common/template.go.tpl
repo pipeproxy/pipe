@@ -63,7 +63,7 @@ func {{ .Type }}Get(ctx context.Context, name string, defaults {{ .Pkg }}.{{ .Ty
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("{{ $Pkg }}.{{ $Type }} %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("{{ $Pkg }}.{{ $Type }} is not defined", "name", name)
 	return {{ .Type }}None
 }
 
@@ -85,7 +85,7 @@ func (_{{ $Type }}None) {{ .FuncName }}(
 		{{ if .Value }} {{ .Name }} {{ else }} _ {{ end }} {{ .Type }},
 	{{- end -}}
 	) {
-	logger.Warn("this is none of {{ $Pkg }}.{{ $Type }}")
+	logger.Log.V(-1).Info("this is none of {{ $Pkg }}.{{ $Type }}")
 	{{ range .Results }}
 	{{ if .Value }} {{ .Name }} = {{ .Value }} {{ end }}
 	{{ end }}

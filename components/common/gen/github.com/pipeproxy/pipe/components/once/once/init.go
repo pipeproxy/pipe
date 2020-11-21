@@ -8,7 +8,7 @@ import (
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/once"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -64,7 +64,7 @@ func OnceGet(ctx context.Context, name string, defaults once.Once) once.Once {
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("once.Once %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("once.Once is not defined", "name", name)
 	return OnceNone
 }
 
@@ -77,7 +77,7 @@ func newOnceNone() once.Once {
 }
 
 func (_OnceNone) Do(_ context.Context) (error error) {
-	logger.Warn("this is none of once.Once")
+	logger.Log.V(-1).Info("this is none of once.Once")
 
 	error = fmt.Errorf("error once.Once is none")
 

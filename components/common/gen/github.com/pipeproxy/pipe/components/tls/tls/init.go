@@ -7,7 +7,7 @@ import (
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/tls"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -63,7 +63,7 @@ func TLSGet(ctx context.Context, name string, defaults tls.TLS) tls.TLS {
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("tls.TLS %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("tls.TLS is not defined", "name", name)
 	return TLSNone
 }
 
@@ -76,7 +76,7 @@ func newTLSNone() tls.TLS {
 }
 
 func (_TLSNone) TLS() (_ *tls.Config) {
-	logger.Warn("this is none of tls.TLS")
+	logger.Log.V(-1).Info("this is none of tls.TLS")
 
 	return
 }

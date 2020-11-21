@@ -1,18 +1,34 @@
-package logger
+package log
 
 import (
 	"io"
-	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/wzshiming/logger"
 )
+
+var outfile = map[string]io.WriteCloser{
+	"/dev/stdout": nopCloser{os.Stdout},
+	"/dev/stderr": nopCloser{os.Stderr},
+	"/dev/null":   emptyWriter{},
+	"stdout":      nopCloser{os.Stdout},
+	"stderr":      nopCloser{os.Stderr},
+	"null":        emptyWriter{},
+	"":            emptyWriter{},
+}
 
 type fileLogger struct {
 	file io.WriteCloser
 	path string
 }
 
-func newFileLogger(file string) (*fileLogger, error) {
+func NewFile(file string) (io.WriteCloser, error) {
+	f, ok := outfile[file]
+	if ok {
+		return f, nil
+	}
+
 	if file != "" {
 		abs, err := filepath.Abs(file)
 		if err != nil {
@@ -28,24 +44,19 @@ func newFileLogger(file string) (*fileLogger, error) {
 	l := &fileLogger{
 		path: file,
 	}
-	f, ok := outfile[file]
-	if ok {
-		l.file = f
-	} else {
-		log.Printf("open log file: %s", l.path)
-		f, err := openAppendFile(l.path)
-		if err != nil {
-			return nil, err
-		}
-		l.file = f
+
+	f, err = openAppendFile(l.path)
+	if err != nil {
+		return nil, err
 	}
+	l.file = f
+
 	return l, nil
 }
 
 func (l *fileLogger) Close() error {
 	old := l.file
-
-	log.Printf("close log file: %s", l.path)
+	logger.Log.V(1).Info("close log file: %s", l.path)
 	return old.Close()
 }
 

@@ -9,6 +9,7 @@ import (
 	svc_stream "github.com/pipeproxy/pipe/components/service/stream"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/listener"
+	"github.com/wzshiming/logger"
 )
 
 type Dialer struct {
@@ -61,8 +62,17 @@ func (d *Dialer) DialStream(ctx context.Context) (stream.Stream, error) {
 			}
 		}
 	}
+
+	log := logger.FromContext(ctx)
 	if d.virtual {
+		log.Info("Virtual dial stream",
+			"targetAddress", address,
+			"virtual", true,
+		)
 		return listener.VirtualDialContext(ctx, network, address)
 	}
+	log.Info("Dial stream",
+		"targetAddress", address,
+	)
 	return listener.DialContext(ctx, network, address)
 }

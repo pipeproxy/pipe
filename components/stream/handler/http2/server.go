@@ -7,7 +7,7 @@ import (
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/components/tls"
 	"github.com/pipeproxy/pipe/internal/listener"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 )
@@ -68,9 +68,16 @@ func (s *server) serve(ctx context.Context, listen stream.StreamListener, handle
 }
 
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
+	log := logger.FromContext(ctx)
+	if s.tlsConfig != nil {
+		log = log.WithName("http2")
+	} else {
+		log = log.WithName("h2c")
+	}
+	ctx = logger.WithContext(ctx, log)
 	err := s.serve(ctx, listener.NewSingleConnListener(stm), s.handler)
 	if err != nil {
-		logger.Errorln("[http2]", err)
+		log.Error(err, "http2 server close")
 		return
 	}
 }

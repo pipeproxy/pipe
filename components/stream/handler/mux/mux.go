@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 
 	"github.com/pipeproxy/pipe/components/stream"
-	"github.com/pipeproxy/pipe/internal/logger"
 	"github.com/wzshiming/crun"
+	"github.com/wzshiming/logger"
 	"github.com/wzshiming/trie"
 )
 
@@ -137,7 +137,9 @@ func (m *Mux) getHandler(index []byte) (stream.Handler, bool) {
 func (m *Mux) ServeStream(ctx context.Context, stm stream.Stream) {
 	connector, buf, err := m.Handler(stm)
 	if err != nil {
-		logger.Errorf("prefix %q: %s", buf, err)
+		logger.FromContext(ctx).Error(err, "",
+			"prefix", buf,
+		)
 		stm.Close()
 		return
 	}

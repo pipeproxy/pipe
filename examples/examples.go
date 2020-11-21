@@ -59,9 +59,12 @@ var (
 		bind.DefServiceConfig{
 			Name: "server",
 			Def: config.BuildH1WithService(":80",
-				config.BuildHTTPLogStderr(bind.RefNetHTTPHandlerConfig{
-					Name: "balance",
-				})),
+				config.BuildHTTPLogStderr(
+					bind.RefNetHTTPHandlerConfig{
+						Name: "balance",
+					},
+				),
+			),
 		},
 		bind.DefNetHTTPHandlerConfig{
 			Name: "balance",
@@ -84,32 +87,34 @@ var (
 		bind.DefServiceConfig{
 			Name: "host1",
 			Def: config.BuildH1WithService(":8001",
-				bind.DirectNetHTTPHandlerConfig{
-					Code: http.StatusOK,
-					Body: bind.InlineIoReaderConfig{
-						Data: `<html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
+				config.BuildHTTPLogStderr(
+					bind.DirectNetHTTPHandlerConfig{
+						Code: http.StatusOK,
+						Body: bind.InlineIoReaderConfig{
+							Data: `<html><body>This is Pipe page1 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
+						},
 					},
-				}),
+				),
+			),
 		},
 		bind.DefServiceConfig{
 			Name: "host2",
 			Def: config.BuildH1WithService(":8002",
-				bind.DirectNetHTTPHandlerConfig{
-					Code: http.StatusOK,
-					Body: bind.InlineIoReaderConfig{
-						Data: `<html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
+				config.BuildHTTPLogStderr(
+					bind.DirectNetHTTPHandlerConfig{
+						Code: http.StatusOK,
+						Body: bind.InlineIoReaderConfig{
+							Data: `<html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>`,
+						},
 					},
-				}),
+				),
+			),
 		},
 	)
 
 	ExampleHTTPS = config.BuildSampleWithOnce(
-		bind.MultiServiceConfig{
-			Multi: []bind.Service{
-				bind.RefServiceConfig{
-					Name: "server",
-				},
-			},
+		bind.RefServiceConfig{
+			Name: "server",
 		},
 		bind.DefNetHTTPHandlerConfig{
 			Name: "page",
@@ -126,9 +131,13 @@ var (
 				Multi: []bind.Service{
 					config.BuildHTTPRedirectToHTTPSWithService(":80"),
 					config.BuildH2WithService(":443",
-						config.BuildHTTPLogStderr(bind.RefNetHTTPHandlerConfig{
-							Name: "page",
-						}), bind.SelfSignedTLS{}),
+						config.BuildHTTPLogStderr(
+							bind.RefNetHTTPHandlerConfig{
+								Name: "page",
+							},
+						),
+						bind.SelfSignedTLS{},
+					),
 				},
 			},
 		},

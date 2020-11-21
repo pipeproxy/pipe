@@ -9,7 +9,7 @@ import (
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 func init() {
@@ -65,7 +65,7 @@ func ListenConfigGet(ctx context.Context, name string, defaults stream.ListenCon
 	if defaults != nil {
 		return defaults
 	}
-	logger.Warnf("stream.ListenConfig %q is not defined", name)
+	logger.FromContext(ctx).V(-1).Info("stream.ListenConfig is not defined", "name", name)
 	return ListenConfigNone
 }
 
@@ -78,7 +78,7 @@ func newListenConfigNone() stream.ListenConfig {
 }
 
 func (_ListenConfigNone) ListenStream(_ context.Context) (_ net.Listener, error error) {
-	logger.Warn("this is none of stream.ListenConfig")
+	logger.Log.V(-1).Info("this is none of stream.ListenConfig")
 
 	error = fmt.Errorf("error stream.ListenConfig is none")
 

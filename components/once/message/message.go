@@ -3,12 +3,12 @@ package message
 import (
 	"context"
 
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 type Message string
 
 func (m Message) Do(ctx context.Context) error {
-	logger.Info(string(m))
+	logger.FromContext(ctx).Info(string(m))
 	return nil
 }

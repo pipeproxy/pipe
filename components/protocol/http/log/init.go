@@ -3,7 +3,6 @@ package log
 import (
 	"net/http"
 
-	"github.com/gorilla/handlers"
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stdio/output"
 )
@@ -22,8 +21,5 @@ type Config struct {
 }
 
 func NewLogWithConfig(conf *Config) http.Handler {
-	if conf.Output != nil {
-		return handlers.CombinedLoggingHandler(conf.Output, conf.Handler)
-	}
-	return conf.Handler
+	return NewLog(conf.Handler)
 }

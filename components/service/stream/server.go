@@ -2,12 +2,13 @@ package stream
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/listener"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 type Server struct {
@@ -29,20 +30,31 @@ func NewServer(listenConfig stream.ListenConfig, handler stream.Handler, disconn
 }
 
 func (s *Server) Run(ctx context.Context) error {
+	log := logger.FromContext(ctx)
 	listen, err := s.listenConfig.ListenStream(ctx)
 	if err != nil {
 		return err
 	}
 	s.listener = listen
+
+	var size uint64
 	for {
 		conn, err := s.listener.Accept()
 		if err != nil {
 			if listener.IsClosedConnError(err) || err == context.Canceled {
 				return nil
 			}
-			logger.Errorln(err)
+			log.Error(err, "listener accept")
 			continue
 		}
+		log := log.WithName(fmt.Sprintf("stream-%d", size))
+		size++
+		ctx = logger.WithContext(ctx, log)
+		log = log.WithValues(
+			"localAddress", conn.LocalAddr(),
+			"remoteAddress", conn.RemoteAddr(),
+		)
+		log.Info("New stream")
 		go s.ServeStream(ctx, conn)
 	}
 }
@@ -62,7 +74,9 @@ func (s *Server) Close() error {
 			err := stm.SetDeadline(deadline)
 			if err != nil {
 				addr := stm.LocalAddr()
-				logger.Errorf("SetDeadline %s://%s error: %s", addr.Network(), addr.String(), err)
+				logger.Log.Error(err, "SetDeadline",
+					"address", addr.String(),
+				)
 			}
 			return true
 		})
@@ -80,7 +94,7 @@ func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
 	err := stm.Close()
 	if err != nil {
 		addr := stm.LocalAddr()
-		logger.Errorf("Close %s://%s error: %s", addr.Network(), addr.String(), err)
+		logger.Log.V(-2).Info("Close %s://%s error: %s", addr.Network(), addr.String(), err)
 		return
 	}
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/pipeproxy/pipe/components/packet"
 	"github.com/pipeproxy/pipe/components/tls"
 	"github.com/pipeproxy/pipe/internal/listener"
-	"github.com/pipeproxy/pipe/internal/logger"
+	"github.com/wzshiming/logger"
 )
 
 type server struct {
@@ -26,6 +26,10 @@ func NewServer(handler http.Handler, tlsConfig tls.TLS) packet.Handler {
 }
 
 func (s *server) ServePacket(ctx context.Context, pkt packet.Packet) {
+	log := logger.FromContext(ctx)
+	log = log.WithName("http3")
+	ctx = logger.WithContext(ctx, log)
+
 	httpServer := &http.Server{
 		BaseContext: func(listener net.Listener) context.Context {
 			return ctx
@@ -47,7 +51,7 @@ func (s *server) ServePacket(ctx context.Context, pkt packet.Packet) {
 	}
 	if err != nil {
 		if err.Error() != "server closed" {
-			logger.Errorln("[http3]", err)
+			log.Error(err, "http3 server close")
 		}
 	}
 }

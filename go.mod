@@ -3,6 +3,8 @@ module github.com/pipeproxy/pipe
 go 1.15
 
 require (
+	github.com/felixge/httpsnoop v1.0.1
+	github.com/go-logr/logr v0.3.0
 	github.com/gogf/greuse v1.1.0
 	github.com/gorilla/handlers v1.4.2
 	github.com/lucas-clemente/quic-go v0.18.0
@@ -14,14 +16,15 @@ require (
 	github.com/wzshiming/crun v0.3.3
 	github.com/wzshiming/funcfg v0.1.2
 	github.com/wzshiming/lockfile v0.0.5
+	github.com/wzshiming/logger v0.0.0-20201120123225-10f5d60851cc
 	github.com/wzshiming/notify v0.0.5
 	github.com/wzshiming/trie v0.0.1
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
-	golang.org/x/net v0.0.0-20200822124328-c89045814202
-	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208
+	golang.org/x/net v0.0.0-20201021035429-f5854403a974
+	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
 	golang.org/x/sys v0.0.0-20200821140526-fda516888d29 // indirect
 	golang.org/x/text v0.3.3 // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	golang.org/x/tools v0.0.0-20201120032337-6d151481565c // indirect
 	sigs.k8s.io/yaml v1.2.0
 )
 
