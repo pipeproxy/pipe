@@ -56,7 +56,7 @@ func NewFile(file string) (io.WriteCloser, error) {
 
 func (l *fileLogger) Close() error {
 	old := l.file
-	logger.Log.V(1).Info("close log file: %s", l.path)
+	logger.Log.V(1).Info("close log file", "path", l.path)
 	return old.Close()
 }
 

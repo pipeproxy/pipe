@@ -55,6 +55,7 @@ import (
 	_ "github.com/pipeproxy/pipe/components/stream/handler/http1"
 	_ "github.com/pipeproxy/pipe/components/stream/handler/http2"
 	_ "github.com/pipeproxy/pipe/components/stream/handler/lb"
+	_ "github.com/pipeproxy/pipe/components/stream/handler/log"
 	_ "github.com/pipeproxy/pipe/components/stream/handler/multi"
 	_ "github.com/pipeproxy/pipe/components/stream/handler/mux"
 	_ "github.com/pipeproxy/pipe/components/stream/handler/mux/pattern"

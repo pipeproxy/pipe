@@ -2,7 +2,6 @@ package stream
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
@@ -31,13 +30,13 @@ func NewServer(listenConfig stream.ListenConfig, handler stream.Handler, disconn
 
 func (s *Server) Run(ctx context.Context) error {
 	log := logger.FromContext(ctx)
+	log = log.WithName("stream")
+	ctx = logger.WithContext(ctx, log)
 	listen, err := s.listenConfig.ListenStream(ctx)
 	if err != nil {
 		return err
 	}
 	s.listener = listen
-
-	var size uint64
 	for {
 		conn, err := s.listener.Accept()
 		if err != nil {
@@ -47,14 +46,6 @@ func (s *Server) Run(ctx context.Context) error {
 			log.Error(err, "listener accept")
 			continue
 		}
-		log := log.WithName(fmt.Sprintf("stream-%d", size))
-		size++
-		ctx = logger.WithContext(ctx, log)
-		log = log.WithValues(
-			"localAddress", conn.LocalAddr(),
-			"remoteAddress", conn.RemoteAddr(),
-		)
-		log.Info("New stream")
 		go s.ServeStream(ctx, conn)
 	}
 }
@@ -94,7 +85,9 @@ func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
 	err := stm.Close()
 	if err != nil {
 		addr := stm.LocalAddr()
-		logger.Log.V(-2).Info("Close %s://%s error: %s", addr.Network(), addr.String(), err)
+		logger.Log.Error(err, "Close",
+			"address", addr.String(),
+		)
 		return
 	}
 }

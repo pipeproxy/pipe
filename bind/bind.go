@@ -2081,6 +2081,41 @@ func (m LogNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End log@net/http.Handler type =========
 
+// ========= Begin log@stream.Handler type =========
+//
+
+const kindLogStreamHandlerConfig = `log@stream.Handler`
+
+// LogStreamHandlerConfig log@stream.Handler
+type LogStreamHandlerConfig struct {
+	Output  IoWriter
+	Handler StreamHandler
+}
+
+func init() {
+	_ = provider.Register(
+		kindLogStreamHandlerConfig,
+		func(r *LogStreamHandlerConfig) StreamHandler { return r },
+	)
+}
+
+func (LogStreamHandlerConfig) isStreamHandler() {}
+func (LogStreamHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LogStreamHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t LogStreamHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLogStreamHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End log@stream.Handler type =========
+
 // ========= Begin merge@tls.TLS type =========
 //
 
