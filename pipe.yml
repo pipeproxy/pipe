@@ -28,24 +28,9 @@ Multi:
       Multi:
       - '@Kind': stream@service.Service
         Handler:
-          '@Kind': http1@stream.Handler
+          '@Kind': log@stream.Handler
           Handler:
-            '@Kind': log@net/http.Handler
-            Handler:
-              '@Kind': ref@net/http.Handler
-              Name: page
-            Output:
-              '@Kind': file@io.Writer
-              Path: /dev/stderr
-        Listener:
-          '@Kind': listener@stream.ListenConfig
-          Address: :80
-          Network: tcp
-      - '@Kind': stream@service.Service
-        Handler:
-          '@Kind': mux@stream.Handler
-          NotFound:
-            '@Kind': http2@stream.Handler
+            '@Kind': http1@stream.Handler
             Handler:
               '@Kind': log@net/http.Handler
               Handler:
@@ -54,17 +39,42 @@ Multi:
               Output:
                 '@Kind': file@io.Writer
                 Path: /dev/stderr
-            TLS:
-              '@Kind': ref@tls.TLS
-              Name: tls
-          Routes:
-          - Handler:
-              '@Kind': http1@stream.Handler
+          Output:
+            '@Kind': file@io.Writer
+            Path: /dev/stderr
+        Listener:
+          '@Kind': listener@stream.ListenConfig
+          Address: :80
+          Network: tcp
+      - '@Kind': stream@service.Service
+        Handler:
+          '@Kind': log@stream.Handler
+          Handler:
+            '@Kind': mux@stream.Handler
+            NotFound:
+              '@Kind': http2@stream.Handler
               Handler:
-                '@Kind': redirect@net/http.Handler
-                Code: 302
-                Location: '{{.Scheme}}s://{{.Host}}{{.RequestURI}}'
-            Pattern: http
+                '@Kind': log@net/http.Handler
+                Handler:
+                  '@Kind': ref@net/http.Handler
+                  Name: page
+                Output:
+                  '@Kind': file@io.Writer
+                  Path: /dev/stderr
+              TLS:
+                '@Kind': ref@tls.TLS
+                Name: tls
+            Routes:
+            - Handler:
+                '@Kind': http1@stream.Handler
+                Handler:
+                  '@Kind': redirect@net/http.Handler
+                  Code: 302
+                  Location: '{{.Scheme}}s://{{.Host}}{{.RequestURI}}'
+              Pattern: http
+          Output:
+            '@Kind': file@io.Writer
+            Path: /dev/stderr
         Listener:
           '@Kind': listener@stream.ListenConfig
           Address: :443

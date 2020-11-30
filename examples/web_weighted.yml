@@ -25,15 +25,20 @@ Multi:
     Def:
       '@Kind': stream@service.Service
       Handler:
-        '@Kind': http1@stream.Handler
+        '@Kind': log@stream.Handler
         Handler:
-          '@Kind': log@net/http.Handler
+          '@Kind': http1@stream.Handler
           Handler:
-            '@Kind': ref@net/http.Handler
-            Name: weighted
-          Output:
-            '@Kind': file@io.Writer
-            Path: /dev/stderr
+            '@Kind': log@net/http.Handler
+            Handler:
+              '@Kind': ref@net/http.Handler
+              Name: weighted
+            Output:
+              '@Kind': file@io.Writer
+              Path: /dev/stderr
+        Output:
+          '@Kind': file@io.Writer
+          Path: /dev/stderr
       Listener:
         '@Kind': listener@stream.ListenConfig
         Address: :80

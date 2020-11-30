@@ -8,85 +8,90 @@ Multi:
       Multi:
       - '@Kind': stream@service.Service
         Handler:
-          '@Kind': http1@stream.Handler
+          '@Kind': log@stream.Handler
           Handler:
-            '@Kind': log@net/http.Handler
+            '@Kind': http1@stream.Handler
             Handler:
-              '@Kind': mux@net/http.Handler
-              Routes:
-              - Handler:
-                  '@Kind': multi@net/http.Handler
-                  Multi:
-                  - '@Kind': add_response_header@net/http.Handler
-                    Key: Content-Type
-                    Value: text/html; charset=utf-8
-                  - '@Kind': direct@net/http.Handler
+              '@Kind': log@net/http.Handler
+              Handler:
+                '@Kind': mux@net/http.Handler
+                Routes:
+                - Handler:
+                    '@Kind': multi@net/http.Handler
+                    Multi:
+                    - '@Kind': add_response_header@net/http.Handler
+                      Key: Content-Type
+                      Value: text/html; charset=utf-8
+                    - '@Kind': direct@net/http.Handler
+                      Body:
+                        '@Kind': inline@io.Reader
+                        Data: |-
+                          <pre>
+                          <a href="pprof/">{{.Path}}pprof/</a>
+                          <a href="expvar">{{.Path}}expvar</a>
+                          <a href="must_quit">{{.Path}}must_quit</a>
+                          <a href="healthy">{{.Path}}healthy</a>
+                          <a href="metrics">{{.Path}}metrics</a>
+                          <a href="config_dump">{{.Path}}config_dump</a>
+                          <a href="config_dump_edit.sh">{{.Path}}config_dump_edit.sh</a>
+                          </pre>
+                      Code: 200
+                  Path: /
+                - Handler:
+                    '@Kind': pprof@net/http.Handler
+                  Prefix: /pprof/
+                - Handler:
+                    '@Kind': expvar@net/http.Handler
+                  Path: /expvar
+                - Handler:
+                    '@Kind': quit@net/http.Handler
+                  Path: /must_quit
+                - Handler:
+                    '@Kind': direct@net/http.Handler
                     Body:
                       '@Kind': inline@io.Reader
-                      Data: |-
-                        <pre>
-                        <a href="pprof/">{{.Path}}pprof/</a>
-                        <a href="expvar">{{.Path}}expvar</a>
-                        <a href="must_quit">{{.Path}}must_quit</a>
-                        <a href="healthy">{{.Path}}healthy</a>
-                        <a href="metrics">{{.Path}}metrics</a>
-                        <a href="config_dump">{{.Path}}config_dump</a>
-                        <a href="config_dump_edit.sh">{{.Path}}config_dump_edit.sh</a>
-                        </pre>
+                      Data: healthy
                     Code: 200
-                Path: /
-              - Handler:
-                  '@Kind': pprof@net/http.Handler
-                Prefix: /pprof/
-              - Handler:
-                  '@Kind': expvar@net/http.Handler
-                Path: /expvar
-              - Handler:
-                  '@Kind': quit@net/http.Handler
-                Path: /must_quit
-              - Handler:
-                  '@Kind': direct@net/http.Handler
-                  Body:
-                    '@Kind': inline@io.Reader
-                    Data: healthy
-                  Code: 200
-                Path: /healthy
-              - Handler:
-                  '@Kind': config_dump@net/http.Handler
-                  ReadOnly: false
-                Path: /config_dump
-              - Handler:
-                  '@Kind': metrics@net/http.Handler
-                Path: /metrics
-              - Handler:
-                  '@Kind': multi@net/http.Handler
-                  Multi:
-                  - '@Kind': direct@net/http.Handler
-                    Body:
-                      '@Kind': inline@io.Reader
-                      Data: |
-                        #!/bin/sh
-                        URL="{{.Scheme}}://{{.Host}}"
-                        RESOURCE="$URL/config_dump"
-                        TMP=.pipe_edit_tmp_file.yaml
+                  Path: /healthy
+                - Handler:
+                    '@Kind': config_dump@net/http.Handler
+                    ReadOnly: false
+                  Path: /config_dump
+                - Handler:
+                    '@Kind': metrics@net/http.Handler
+                  Path: /metrics
+                - Handler:
+                    '@Kind': multi@net/http.Handler
+                    Multi:
+                    - '@Kind': direct@net/http.Handler
+                      Body:
+                        '@Kind': inline@io.Reader
+                        Data: |
+                          #!/bin/sh
+                          URL="{{.Scheme}}://{{.Host}}"
+                          RESOURCE="$URL/config_dump"
+                          TMP=.pipe_edit_tmp_file.yaml
 
-                        # Check if editing is allowed
-                        curl -sL -v -X OPTIONS "$RESOURCE" 2>&1 | \
-                        grep "< Allow:" | grep "PUT" > /dev/null || \
-                        { echo "Editing Not Allowed"; exit 1;}
+                          # Check if editing is allowed
+                          curl -sL -v -X OPTIONS "$RESOURCE" 2>&1 | \
+                          grep "< Allow:" | grep "PUT" > /dev/null || \
+                          { echo "Editing Not Allowed"; exit 1;}
 
-                        # Editing
-                        curl -sL "$RESOURCE?yaml" > $TMP && \
-                        vi $TMP && \
-                        curl -sL -X PUT "$RESOURCE" -d "$(cat $TMP)" && \
-                        rm $TMP
+                          # Editing
+                          curl -sL "$RESOURCE?yaml" > $TMP && \
+                          vi $TMP && \
+                          curl -sL -X PUT "$RESOURCE" -d "$(cat $TMP)" && \
+                          rm $TMP
 
-                        # sh -c "$(curl -sL {{.Scheme}}://{{.Host}}{{.Path}})"
-                    Code: 200
-                Path: /config_dump_edit.sh
-            Output:
-              '@Kind': file@io.Writer
-              Path: /dev/stderr
+                          # sh -c "$(curl -sL {{.Scheme}}://{{.Host}}{{.Path}})"
+                      Code: 200
+                  Path: /config_dump_edit.sh
+              Output:
+                '@Kind': file@io.Writer
+                Path: /dev/stderr
+          Output:
+            '@Kind': file@io.Writer
+            Path: /dev/stderr
         Listener:
           '@Kind': listener@stream.ListenConfig
           Address: :8088

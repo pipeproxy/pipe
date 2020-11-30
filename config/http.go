@@ -88,18 +88,20 @@ func BuildH2WithService(address string, handler bind.HTTPHandler, tls bind.TLS) 
 	}
 	return bind.StreamServiceConfig{
 		Listener: listen,
-		Handler: bind.MuxStreamHandlerConfig{
-			Routes: []bind.MuxStreamHandlerRoute{
-				{
-					Pattern: "http",
-					Handler: BuildHTTPRedirectWithStreamHandler("{{.Scheme}}s://{{.Host}}{{.RequestURI}}", 0),
+		Handler: BuildStreamLogStderr(
+			bind.MuxStreamHandlerConfig{
+				Routes: []bind.MuxStreamHandlerRoute{
+					{
+						Pattern: "http",
+						Handler: BuildHTTPRedirectWithStreamHandler("{{.Scheme}}s://{{.Host}}{{.RequestURI}}", 0),
+					},
+				},
+				NotFound: bind.HTTP2StreamHandlerConfig{
+					Handler: handler,
+					TLS:     tls,
 				},
 			},
-			NotFound: bind.HTTP2StreamHandlerConfig{
-				Handler: handler,
-				TLS:     tls,
-			},
-		},
+		),
 	}
 }
 
@@ -134,9 +136,11 @@ func BuildH1WithService(address string, handler bind.HTTPHandler) bind.Service {
 	}
 	return bind.StreamServiceConfig{
 		Listener: listen,
-		Handler: bind.HTTP1StreamHandlerConfig{
-			Handler: handler,
-		},
+		Handler: BuildStreamLogStderr(
+			bind.HTTP1StreamHandlerConfig{
+				Handler: handler,
+			},
+		),
 	}
 }
 
@@ -151,4 +155,17 @@ func BuildHTTPLog(log string, handler bind.HTTPHandler) bind.HTTPHandler {
 
 func BuildHTTPLogStderr(handler bind.HTTPHandler) bind.HTTPHandler {
 	return BuildHTTPLog("/dev/stderr", handler)
+}
+
+func BuildStreamLog(log string, handler bind.StreamHandler) bind.StreamHandler {
+	return bind.LogStreamHandlerConfig{
+		Output: bind.FileIoWriterConfig{
+			Path: log,
+		},
+		Handler: handler,
+	}
+}
+
+func BuildStreamLogStderr(handler bind.StreamHandler) bind.StreamHandler {
+	return BuildStreamLog("/dev/stderr", handler)
 }

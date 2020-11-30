@@ -33,12 +33,11 @@ func (l *Log) ServeStream(ctx context.Context, stm stream.Stream) {
 	}
 
 	ll = ll.WithName(fmt.Sprintf("stream-%d", atomic.AddUint64(&l.size, 1)))
-	ctx = logger.WithContext(ctx, ll)
 	ll = ll.WithValues(
 		"localAddress", stm.LocalAddr(),
 		"remoteAddress", stm.RemoteAddr(),
 	)
 	ll.Info("Connect")
-	l.handler.ServeStream(ctx, stm)
+	l.handler.ServeStream(logger.WithContext(ctx, ll), stm)
 	ll.Info("Disconnect")
 }
