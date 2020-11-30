@@ -3820,6 +3820,42 @@ func (m StripPrefixNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End strip_prefix@net/http.Handler type =========
 
+// ========= Begin tags@service.Service type =========
+//
+
+const kindTagsServiceConfig = `tags@service.Service`
+
+// TagsServiceConfig tags@service.Service
+type TagsServiceConfig struct {
+	Service Service
+	Tag     string
+	Values  map[string]string
+}
+
+func init() {
+	_ = provider.Register(
+		kindTagsServiceConfig,
+		func(r *TagsServiceConfig) Service { return r },
+	)
+}
+
+func (TagsServiceConfig) isService()   {}
+func (TagsServiceConfig) isComponent() {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m TagsServiceConfig) MarshalJSON() ([]byte, error) {
+	type t TagsServiceConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindTagsServiceConfig, data)
+	return data, nil
+}
+
+//
+// ========= End tags@service.Service type =========
+
 // ========= Begin tls@stream.Dialer type =========
 //
 

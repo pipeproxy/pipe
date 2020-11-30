@@ -39,6 +39,7 @@ import (
 	_ "github.com/pipeproxy/pipe/components/service/multi"
 	_ "github.com/pipeproxy/pipe/components/service/packet"
 	_ "github.com/pipeproxy/pipe/components/service/stream"
+	_ "github.com/pipeproxy/pipe/components/service/tags"
 	_ "github.com/pipeproxy/pipe/components/service/wait"
 	_ "github.com/pipeproxy/pipe/components/stdio/input"
 	_ "github.com/pipeproxy/pipe/components/stdio/input/env"

@@ -29,17 +29,14 @@ func (m *Multi) Run(ctx context.Context) error {
 	case 0:
 	default:
 		m.wg.Add(len(m.multi))
-		for i, svc := range m.multi {
-			go func(ctx context.Context, i int, svc service.Service) {
-				log := logger.FromContext(ctx)
-				log = log.WithName(getName(i, svc))
-				ctx = logger.WithContext(ctx, log)
+		for _, svc := range m.multi {
+			go func(ctx context.Context, svc service.Service) {
 				err := svc.Run(ctx)
 				if err != nil {
-					log.Error(err, "service start")
+					logger.FromContext(ctx).Error(err, "service start")
 				}
 				m.wg.Done()
-			}(ctx, i, svc)
+			}(ctx, svc)
 		}
 		m.wg.Wait()
 	}
@@ -50,10 +47,10 @@ func (m *Multi) Close() error {
 	switch len(m.multi) {
 	case 0:
 	default:
-		for i, svc := range m.multi {
+		for _, svc := range m.multi {
 			err := svc.Close()
 			if err != nil {
-				logger.Log.WithName(getName(i, svc)).Error(err, "service close")
+				logger.Log.Error(err, "service close")
 			}
 		}
 	}
