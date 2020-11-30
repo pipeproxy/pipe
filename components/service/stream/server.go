@@ -83,11 +83,11 @@ func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
 	}
 	s.handler.ServeStream(ctx, nopCloser{stm})
 	err := stm.Close()
+	if listener.IsClosedConnError(err) {
+		err = nil
+	}
 	if err != nil {
-		addr := stm.LocalAddr()
-		logger.Log.Error(err, "Close",
-			"address", addr.String(),
-		)
+		logger.FromContext(ctx).Error(err, "close listen")
 		return
 	}
 }

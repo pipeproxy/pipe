@@ -26,6 +26,9 @@ func NewServer(listenConfig packet.ListenConfig, handler packet.Handler) (*Serve
 }
 
 func (s *Server) Run(ctx context.Context) error {
+	log := logger.FromContext(ctx)
+	log = log.WithName("packet")
+	ctx = logger.WithContext(ctx, log)
 	pkt, err := s.listenConfig.ListenPacket(ctx)
 	if err != nil {
 		return err
@@ -47,16 +50,13 @@ func (s *Server) Close() error {
 }
 
 func (s *Server) ServePacket(ctx context.Context, pkt packet.Packet) {
-	log := logger.FromContext(ctx)
-	log = log.WithName("packet")
-	ctx = logger.WithContext(ctx, log)
 	s.handler.ServePacket(ctx, nopCloser{pkt})
 	err := pkt.Close()
 	if listener.IsClosedConnError(err) {
 		err = nil
 	}
 	if err != nil {
-		log.Error(err, "close listen")
+		logger.FromContext(ctx).Error(err, "close listen")
 		return
 	}
 }
