@@ -5,28 +5,40 @@ import (
 	"fmt"
 	"sync/atomic"
 
+	"github.com/pipeproxy/pipe/components/stdio/output"
 	"github.com/pipeproxy/pipe/components/stream"
+	"github.com/pipeproxy/pipe/internal/log"
 	"github.com/wzshiming/logger"
 )
 
 type Log struct {
 	handler stream.Handler
+	output  output.Output
 	size    uint64
 }
 
-func NewLog(h stream.Handler) *Log {
-	return &Log{handler: h, size: 0}
+func NewLog(h stream.Handler, o output.Output) *Log {
+	return &Log{handler: h, output: o, size: 0}
 }
 
 func (l *Log) ServeStream(ctx context.Context, stm stream.Stream) {
-	log := logger.FromContext(ctx)
-	log = log.WithName(fmt.Sprintf("stream-%d", atomic.AddUint64(&l.size, 1)))
-	ctx = logger.WithContext(ctx, log)
-	log = log.WithValues(
+	ll := logger.FromContext(ctx)
+	if !ll.Enabled() {
+		l.handler.ServeStream(ctx, stm)
+		return
+	}
+
+	if l.output != nil {
+		ll = log.WithOut(ll, l.output)
+	}
+
+	ll = ll.WithName(fmt.Sprintf("stream-%d", atomic.AddUint64(&l.size, 1)))
+	ctx = logger.WithContext(ctx, ll)
+	ll = ll.WithValues(
 		"localAddress", stm.LocalAddr(),
 		"remoteAddress", stm.RemoteAddr(),
 	)
-	log.Info("Connect")
+	ll.Info("Connect")
 	l.handler.ServeStream(ctx, stm)
-	log.Info("Disconnect")
+	ll.Info("Disconnect")
 }

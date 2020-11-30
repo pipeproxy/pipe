@@ -21,5 +21,5 @@ type Config struct {
 }
 
 func NewLogWithConfig(conf *Config) stream.Handler {
-	return NewLog(conf.Handler)
+	return NewLog(conf.Handler,conf.Output)
 }

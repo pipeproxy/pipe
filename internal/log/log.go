@@ -34,3 +34,7 @@ func NewLogFromFile(file string) (logr.Logger, error) {
 func NewLog(w io.Writer) logr.Logger {
 	return zap.New(zap.WriteTo(w), zap.UseDevMode(true))
 }
+
+func WithOut(log logr.Logger, w io.Writer) logr.Logger {
+	return zap.WithOut(log, w)
+}

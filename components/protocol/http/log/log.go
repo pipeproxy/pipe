@@ -4,27 +4,35 @@ import (
 	"net/http"
 
 	"github.com/felixge/httpsnoop"
+	"github.com/pipeproxy/pipe/components/stdio/output"
+	"github.com/pipeproxy/pipe/internal/log"
 	"github.com/wzshiming/logger"
 )
 
 type Log struct {
 	handler http.Handler
+	output  output.Output
 }
 
-func NewLog(h http.Handler) *Log {
-	return &Log{h}
+func NewLog(h http.Handler, o output.Output) *Log {
+	return &Log{handler: h, output: o}
 }
 
 func (l *Log) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	log := logger.FromContext(ctx)
-	if !log.Enabled() {
+	ll := logger.FromContext(ctx)
+	if !ll.Enabled() {
 		l.handler.ServeHTTP(rw, r)
 		return
 	}
+
+	if l.output != nil {
+		ll = log.WithOut(ll, l.output)
+	}
+
 	u := r.RequestURI
 
-	log.WithName("Request").
+	ll.WithName("Request").
 		Info(u,
 			"host", r.Host,
 			"method", r.Method,
@@ -32,7 +40,7 @@ func (l *Log) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 			"header", r.Header,
 		)
 	metric := httpsnoop.CaptureMetrics(l.handler, rw, r)
-	log.WithName("Response").
+	ll.WithName("Response").
 		Info(u,
 			"code", metric.Code,
 			"duration", metric.Duration,
