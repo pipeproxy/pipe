@@ -3828,8 +3828,8 @@ const kindTagsServiceConfig = `tags@service.Service`
 // TagsServiceConfig tags@service.Service
 type TagsServiceConfig struct {
 	Service Service
-	Tag     string
-	Values  map[string]string
+	Tag     string            `json:",omitempty"`
+	Values  map[string]string `json:",omitempty"`
 }
 
 func init() {

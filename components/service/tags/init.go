@@ -17,8 +17,8 @@ func init() {
 
 type Config struct {
 	Service service.Service
-	Tag     string
-	Values  map[string]string
+	Tag     string            `json:",omitempty"`
+	Values  map[string]string `json:",omitempty"`
 }
 
 func NewTagsWithConfig(conf *Config) service.Service {

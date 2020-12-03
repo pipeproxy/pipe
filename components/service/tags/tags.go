@@ -18,14 +18,16 @@ func newTags(service service.Service, tag string, values []interface{}) *tags {
 }
 
 func (t *tags) Run(ctx context.Context) error {
-	log := logger.FromContext(ctx)
-	if t.tag != "" {
-		log.WithName(t.tag)
+	if t.tag != "" || len(t.values) != 0 {
+		log := logger.FromContext(ctx)
+		if t.tag != "" {
+			log = log.WithName(t.tag)
+		}
+		if len(t.values) != 0 {
+			log = log.WithValues(t.values)
+		}
+		ctx = logger.WithContext(ctx, log)
 	}
-	if len(t.values) != 0 {
-		log.WithValues(t.values)
-	}
-	ctx = logger.WithContext(ctx, log)
 	return t.service.Run(ctx)
 }
 
