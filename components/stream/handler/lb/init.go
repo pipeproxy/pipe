@@ -2,6 +2,7 @@ package lb
 
 import (
 	"fmt"
+	"math/rand"
 
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stream"
@@ -54,20 +55,20 @@ func NewLBWithConfig(conf *Config) (stream.Handler, error) {
 		}
 	}
 
-	var dialers []stream.Handler
+	var handlers []stream.Handler
 	if sum == 0 {
-		dialers = make([]stream.Handler, 0, len(conf.Handlers))
+		handlers = make([]stream.Handler, 0, len(conf.Handlers))
 		for _, weighted := range conf.Handlers {
-			dialers = append(dialers, weighted.Handler)
+			handlers = append(handlers, weighted.Handler)
 		}
 	} else {
 		g := gcd.GcdSlice(list)
-		dialers = make([]stream.Handler, 0, sum/g)
+		handlers = make([]stream.Handler, 0, sum/g)
 		for _, weighted := range conf.Handlers {
 			if weighted.Weight > 0 {
 				size := weighted.Weight / g
 				for i := uint(0); i != size; i++ {
-					dialers = append(dialers, weighted.Handler)
+					handlers = append(handlers, weighted.Handler)
 				}
 			}
 		}
@@ -75,8 +76,11 @@ func NewLBWithConfig(conf *Config) (stream.Handler, error) {
 
 	switch conf.Policy {
 	case EnumRandom:
-		return NewRandom(dialers), nil
+		return NewRandom(handlers), nil
 	default: // EnumRoundRobin
-		return NewRoundRobin(dialers), nil
+		rand.Shuffle(len(handlers), func(i, j int) {
+			handlers[i], handlers[j] = handlers[j], handlers[i]
+		})
+		return NewRoundRobin(handlers), nil
 	}
 }

@@ -2,6 +2,7 @@ package lb
 
 import (
 	"fmt"
+	"math/rand"
 
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stream"
@@ -77,6 +78,9 @@ func NewLBWithConfig(conf *Config) (stream.Dialer, error) {
 	case EnumRandom:
 		return NewRandom(dialers), nil
 	default: // EnumRoundRobin
+		rand.Shuffle(len(dialers), func(i, j int) {
+			dialers[i], dialers[j] = dialers[j], dialers[i]
+		})
 		return NewRoundRobin(dialers), nil
 	}
 }
