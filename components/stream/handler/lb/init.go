@@ -2,8 +2,8 @@ package lb
 
 import (
 	"fmt"
-	"math/rand"
 
+	"github.com/pipeproxy/pipe/components/balance"
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/gcd"
@@ -21,20 +21,13 @@ func init() {
 	register.Register(name, NewLBWithConfig)
 }
 
-type LoadBalancePolicyEnum string
-
-const (
-	EnumRoundRobin LoadBalancePolicyEnum = "round_robin"
-	EnumRandom     LoadBalancePolicyEnum = "random"
-)
-
 type Weight struct {
 	Weight  uint `json:",omitempty"`
 	Handler stream.Handler
 }
 
 type Config struct {
-	Policy   LoadBalancePolicyEnum `json:",omitempty"`
+	Policy   balance.Policy
 	Handlers []*Weight
 }
 
@@ -73,14 +66,5 @@ func NewLBWithConfig(conf *Config) (stream.Handler, error) {
 			}
 		}
 	}
-
-	switch conf.Policy {
-	case EnumRandom:
-		return NewRandom(handlers), nil
-	default: // EnumRoundRobin
-		rand.Shuffle(len(handlers), func(i, j int) {
-			handlers[i], handlers[j] = handlers[j], handlers[i]
-		})
-		return NewRoundRobin(handlers), nil
-	}
+	return NewLB(conf.Policy, handlers), nil
 }

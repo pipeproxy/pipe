@@ -2,6 +2,10 @@
 package init
 
 import (
+	_ "github.com/pipeproxy/pipe/components/balance"
+	_ "github.com/pipeproxy/pipe/components/balance/none"
+	_ "github.com/pipeproxy/pipe/components/balance/random"
+	_ "github.com/pipeproxy/pipe/components/balance/round_robin"
 	_ "github.com/pipeproxy/pipe/components/common/load"
 	_ "github.com/pipeproxy/pipe/components/once"
 	_ "github.com/pipeproxy/pipe/components/once/components"
@@ -70,6 +74,7 @@ import (
 	_ "github.com/pipeproxy/pipe/components/tls/self_signed"
 	_ "github.com/pipeproxy/pipe/components/tls/validation"
 
+	_ "github.com/pipeproxy/pipe/components/common/gen/github.com/pipeproxy/pipe/components/balance/policy"
 	_ "github.com/pipeproxy/pipe/components/common/gen/github.com/pipeproxy/pipe/components/once/once"
 	_ "github.com/pipeproxy/pipe/components/common/gen/github.com/pipeproxy/pipe/components/packet/handler"
 	_ "github.com/pipeproxy/pipe/components/common/gen/github.com/pipeproxy/pipe/components/packet/listenconfig"

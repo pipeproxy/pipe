@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net"
 
+	"github.com/pipeproxy/pipe/components/balance"
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
@@ -85,6 +86,12 @@ func (_DialerNone) DialStream(_ context.Context) (_ net.Conn, error error) {
 	return
 }
 
+func (_DialerNone) Targets() (_ balance.PolicyEnum, _ []stream.Dialer) {
+	logger.Log.V(-1).Info("this is none of stream.Dialer")
+
+	return
+}
+
 type Dialer struct {
 	Name string
 	Def  stream.Dialer
@@ -93,4 +100,8 @@ type Dialer struct {
 
 func (o *Dialer) DialStream(context context.Context) (net.Conn, error) {
 	return DialerGet(o.Ctx, o.Name, o.Def).DialStream(context)
+}
+
+func (o *Dialer) Targets() (balance.PolicyEnum, []stream.Dialer) {
+	return DialerGet(o.Ctx, o.Name, o.Def).Targets()
 }

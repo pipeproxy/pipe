@@ -15,17 +15,8 @@ func init() {
 	register.Register(name, NewListenerWithConfig)
 }
 
-type ListenerNetworkEnum string
-
-const (
-	EnumUDP        ListenerNetworkEnum = "udp"
-	EnumUDP4       ListenerNetworkEnum = "udp4"
-	EnumUDP6       ListenerNetworkEnum = "udp6"
-	EnumUnixPacket ListenerNetworkEnum = "unixpacket"
-)
-
 type Config struct {
-	Network ListenerNetworkEnum
+	Network packet.NetworkEnum
 	Address string
 }
 

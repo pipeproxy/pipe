@@ -3,6 +3,7 @@ package tls
 import (
 	"context"
 
+	"github.com/pipeproxy/pipe/components/balance"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/components/tls"
 	"github.com/wzshiming/logger"
@@ -29,4 +30,13 @@ func (d *Tls) DialStream(ctx context.Context) (stream.Stream, error) {
 		return nil, err
 	}
 	return tls.Client(stm, d.tlsConfig.TLS()), nil
+}
+
+func (d *Tls) Targets() (balance.PolicyEnum, []stream.Dialer) {
+	policy, ts := d.dialer.Targets()
+	ds := make([]stream.Dialer, 0, len(ts))
+	for _, targer := range ts {
+		ds = append(ds, NewTls(targer, d.tlsConfig))
+	}
+	return policy, ds
 }

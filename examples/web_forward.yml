@@ -35,7 +35,8 @@ Multi:
       - Handler:
           '@Kind': forward@net/http.Handler
           URL: http://127.0.0.1:8002
-      Policy: round_robin
+      Policy:
+        '@Kind': round_robin@balance.Policy
     Name: balance
   - '@Kind': def@service.Service
     Def:

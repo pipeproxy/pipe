@@ -282,6 +282,41 @@ func (m ConfigDumpNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End config_dump@net/http.Handler type =========
 
+// ========= Begin def@balance.Policy type =========
+//
+
+const kindDefBalancePolicyConfig = `def@balance.Policy`
+
+// DefBalancePolicyConfig def@balance.Policy
+type DefBalancePolicyConfig struct {
+	Name string
+	Def  BalancePolicy `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindDefBalancePolicyConfig,
+		func(r *DefBalancePolicyConfig) BalancePolicy { return r },
+	)
+}
+
+func (DefBalancePolicyConfig) isBalancePolicy() {}
+func (DefBalancePolicyConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DefBalancePolicyConfig) MarshalJSON() ([]byte, error) {
+	type t DefBalancePolicyConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindDefBalancePolicyConfig, data)
+	return data, nil
+}
+
+//
+// ========= End def@balance.Policy type =========
+
 // ========= Begin def@io.Reader type =========
 //
 
@@ -779,19 +814,19 @@ const kindDialerStreamDialerConfig = `dialer@stream.Dialer`
 
 // DialerStreamDialerConfig dialer@stream.Dialer
 type DialerStreamDialerConfig struct {
-	Network  DialerStreamDialerDialerNetworkEnum
+	Network  DialerStreamDialerNetworkEnum
 	Address  string
 	Original bool `json:",omitempty"`
 	Virtual  bool `json:",omitempty"`
 }
 
-type DialerStreamDialerDialerNetworkEnum string
+type DialerStreamDialerNetworkEnum string
 
 const (
-	DialerStreamDialerDialerNetworkEnumEnumUnix DialerStreamDialerDialerNetworkEnum = "unix"
-	DialerStreamDialerDialerNetworkEnumEnumTCP6 DialerStreamDialerDialerNetworkEnum = "tcp6"
-	DialerStreamDialerDialerNetworkEnumEnumTCP4 DialerStreamDialerDialerNetworkEnum = "tcp4"
-	DialerStreamDialerDialerNetworkEnumEnumTCP  DialerStreamDialerDialerNetworkEnum = "tcp"
+	DialerStreamDialerNetworkEnumEnumNetworkUnix DialerStreamDialerNetworkEnum = "unix"
+	DialerStreamDialerNetworkEnumEnumNetworkTCP6 DialerStreamDialerNetworkEnum = "tcp6"
+	DialerStreamDialerNetworkEnumEnumNetworkTCP4 DialerStreamDialerNetworkEnum = "tcp4"
+	DialerStreamDialerNetworkEnumEnumNetworkTCP  DialerStreamDialerNetworkEnum = "tcp"
 )
 
 func init() {
@@ -1347,16 +1382,9 @@ const kindLbNetHTTPHandlerConfig = `lb@net/http.Handler`
 
 // LbNetHTTPHandlerConfig lb@net/http.Handler
 type LbNetHTTPHandlerConfig struct {
-	Policy   LbNetHTTPHandlerLoadBalancePolicyEnum `json:",omitempty"`
+	Policy   BalancePolicy
 	Handlers []LbNetHTTPHandlerWeight
 }
-
-type LbNetHTTPHandlerLoadBalancePolicyEnum string
-
-const (
-	LbNetHTTPHandlerLoadBalancePolicyEnumEnumRoundRobin LbNetHTTPHandlerLoadBalancePolicyEnum = "round_robin"
-	LbNetHTTPHandlerLoadBalancePolicyEnumEnumRandom     LbNetHTTPHandlerLoadBalancePolicyEnum = "random"
-)
 
 type LbNetHTTPHandlerWeight struct {
 	Weight  uint `json:",omitempty"`
@@ -1394,16 +1422,9 @@ const kindLbStreamDialerConfig = `lb@stream.Dialer`
 
 // LbStreamDialerConfig lb@stream.Dialer
 type LbStreamDialerConfig struct {
-	Policy  LbStreamDialerLoadBalancePolicyEnum `json:",omitempty"`
+	Policy  BalancePolicy
 	Dialers []LbStreamDialerWeight
 }
-
-type LbStreamDialerLoadBalancePolicyEnum string
-
-const (
-	LbStreamDialerLoadBalancePolicyEnumEnumRoundRobin LbStreamDialerLoadBalancePolicyEnum = "round_robin"
-	LbStreamDialerLoadBalancePolicyEnumEnumRandom     LbStreamDialerLoadBalancePolicyEnum = "random"
-)
 
 type LbStreamDialerWeight struct {
 	Weight uint `json:",omitempty"`
@@ -1441,16 +1462,9 @@ const kindLbStreamHandlerConfig = `lb@stream.Handler`
 
 // LbStreamHandlerConfig lb@stream.Handler
 type LbStreamHandlerConfig struct {
-	Policy   LbStreamHandlerLoadBalancePolicyEnum `json:",omitempty"`
+	Policy   BalancePolicy
 	Handlers []LbStreamHandlerWeight
 }
-
-type LbStreamHandlerLoadBalancePolicyEnum string
-
-const (
-	LbStreamHandlerLoadBalancePolicyEnumEnumRoundRobin LbStreamHandlerLoadBalancePolicyEnum = "round_robin"
-	LbStreamHandlerLoadBalancePolicyEnumEnumRandom     LbStreamHandlerLoadBalancePolicyEnum = "random"
-)
 
 type LbStreamHandlerWeight struct {
 	Weight  uint `json:",omitempty"`
@@ -1488,17 +1502,17 @@ const kindListenerPacketListenConfigConfig = `listener@packet.ListenConfig`
 
 // ListenerPacketListenConfigConfig listener@packet.ListenConfig
 type ListenerPacketListenConfigConfig struct {
-	Network ListenerPacketListenConfigListenerNetworkEnum
+	Network ListenerPacketListenConfigNetworkEnum
 	Address string
 }
 
-type ListenerPacketListenConfigListenerNetworkEnum string
+type ListenerPacketListenConfigNetworkEnum string
 
 const (
-	ListenerPacketListenConfigListenerNetworkEnumEnumUnixPacket ListenerPacketListenConfigListenerNetworkEnum = "unixpacket"
-	ListenerPacketListenConfigListenerNetworkEnumEnumUDP6       ListenerPacketListenConfigListenerNetworkEnum = "udp6"
-	ListenerPacketListenConfigListenerNetworkEnumEnumUDP4       ListenerPacketListenConfigListenerNetworkEnum = "udp4"
-	ListenerPacketListenConfigListenerNetworkEnumEnumUDP        ListenerPacketListenConfigListenerNetworkEnum = "udp"
+	ListenerPacketListenConfigNetworkEnumEnumNetworkUnixPacket ListenerPacketListenConfigNetworkEnum = "unixpacket"
+	ListenerPacketListenConfigNetworkEnumEnumNetworkUDP6       ListenerPacketListenConfigNetworkEnum = "udp6"
+	ListenerPacketListenConfigNetworkEnumEnumNetworkUDP4       ListenerPacketListenConfigNetworkEnum = "udp4"
+	ListenerPacketListenConfigNetworkEnumEnumNetworkUDP        ListenerPacketListenConfigNetworkEnum = "udp"
 )
 
 func init() {
@@ -1532,18 +1546,18 @@ const kindListenerStreamListenConfigConfig = `listener@stream.ListenConfig`
 
 // ListenerStreamListenConfigConfig listener@stream.ListenConfig
 type ListenerStreamListenConfigConfig struct {
-	Network ListenerStreamListenConfigListenerNetworkEnum
+	Network ListenerStreamListenConfigNetworkEnum
 	Address string
 	Virtual bool `json:",omitempty"`
 }
 
-type ListenerStreamListenConfigListenerNetworkEnum string
+type ListenerStreamListenConfigNetworkEnum string
 
 const (
-	ListenerStreamListenConfigListenerNetworkEnumEnumUnix ListenerStreamListenConfigListenerNetworkEnum = "unix"
-	ListenerStreamListenConfigListenerNetworkEnumEnumTCP6 ListenerStreamListenConfigListenerNetworkEnum = "tcp6"
-	ListenerStreamListenConfigListenerNetworkEnumEnumTCP4 ListenerStreamListenConfigListenerNetworkEnum = "tcp4"
-	ListenerStreamListenConfigListenerNetworkEnumEnumTCP  ListenerStreamListenConfigListenerNetworkEnum = "tcp"
+	ListenerStreamListenConfigNetworkEnumEnumNetworkUnix ListenerStreamListenConfigNetworkEnum = "unix"
+	ListenerStreamListenConfigNetworkEnumEnumNetworkTCP6 ListenerStreamListenConfigNetworkEnum = "tcp6"
+	ListenerStreamListenConfigNetworkEnumEnumNetworkTCP4 ListenerStreamListenConfigNetworkEnum = "tcp4"
+	ListenerStreamListenConfigNetworkEnumEnumNetworkTCP  ListenerStreamListenConfigNetworkEnum = "tcp"
 )
 
 func init() {
@@ -1569,6 +1583,40 @@ func (m ListenerStreamListenConfigConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End listener@stream.ListenConfig type =========
+
+// ========= Begin load@balance.Policy type =========
+//
+
+const kindLoadBalancePolicyConfig = `load@balance.Policy`
+
+// LoadBalancePolicyConfig load@balance.Policy
+type LoadBalancePolicyConfig struct {
+	Load IoReader
+}
+
+func init() {
+	_ = provider.Register(
+		kindLoadBalancePolicyConfig,
+		func(r *LoadBalancePolicyConfig) BalancePolicy { return r },
+	)
+}
+
+func (LoadBalancePolicyConfig) isBalancePolicy() {}
+func (LoadBalancePolicyConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m LoadBalancePolicyConfig) MarshalJSON() ([]byte, error) {
+	type t LoadBalancePolicyConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLoadBalancePolicyConfig, data)
+	return data, nil
+}
+
+//
+// ========= End load@balance.Policy type =========
 
 // ========= Begin load@io.Reader type =========
 //
@@ -2491,6 +2539,39 @@ func (m MuxStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End mux@stream.Handler type =========
 
+// ========= Begin none@balance.Policy type =========
+//
+
+const kindNoneBalancePolicy = `none@balance.Policy`
+
+// NoneBalancePolicy none@balance.Policy
+type NoneBalancePolicy struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindNoneBalancePolicy,
+		func(r *NoneBalancePolicy) BalancePolicy { return r },
+	)
+}
+
+func (NoneBalancePolicy) isBalancePolicy() {}
+func (NoneBalancePolicy) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m NoneBalancePolicy) MarshalJSON() ([]byte, error) {
+	type t NoneBalancePolicy
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindNoneBalancePolicy, data)
+	return data, nil
+}
+
+//
+// ========= End none@balance.Policy type =========
+
 // ========= Begin none@io.Reader type =========
 //
 
@@ -3089,6 +3170,39 @@ func (m QuitNetHTTPHandler) MarshalJSON() ([]byte, error) {
 //
 // ========= End quit@net/http.Handler type =========
 
+// ========= Begin random@balance.Policy type =========
+//
+
+const kindRandomBalancePolicy = `random@balance.Policy`
+
+// RandomBalancePolicy random@balance.Policy
+type RandomBalancePolicy struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindRandomBalancePolicy,
+		func(r *RandomBalancePolicy) BalancePolicy { return r },
+	)
+}
+
+func (RandomBalancePolicy) isBalancePolicy() {}
+func (RandomBalancePolicy) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RandomBalancePolicy) MarshalJSON() ([]byte, error) {
+	type t RandomBalancePolicy
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindRandomBalancePolicy, data)
+	return data, nil
+}
+
+//
+// ========= End random@balance.Policy type =========
+
 // ========= Begin redirect@net/http.Handler type =========
 //
 
@@ -3123,6 +3237,41 @@ func (m RedirectNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End redirect@net/http.Handler type =========
+
+// ========= Begin ref@balance.Policy type =========
+//
+
+const kindRefBalancePolicyConfig = `ref@balance.Policy`
+
+// RefBalancePolicyConfig ref@balance.Policy
+type RefBalancePolicyConfig struct {
+	Name string
+	Def  BalancePolicy `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindRefBalancePolicyConfig,
+		func(r *RefBalancePolicyConfig) BalancePolicy { return r },
+	)
+}
+
+func (RefBalancePolicyConfig) isBalancePolicy() {}
+func (RefBalancePolicyConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RefBalancePolicyConfig) MarshalJSON() ([]byte, error) {
+	type t RefBalancePolicyConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindRefBalancePolicyConfig, data)
+	return data, nil
+}
+
+//
+// ========= End ref@balance.Policy type =========
 
 // ========= Begin ref@io.Reader type =========
 //
@@ -3682,6 +3831,39 @@ func (m RemoveResponseHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) 
 //
 // ========= End remove_response_header@net/http.Handler type =========
 
+// ========= Begin round_robin@balance.Policy type =========
+//
+
+const kindRoundRobinBalancePolicy = `round_robin@balance.Policy`
+
+// RoundRobinBalancePolicy round_robin@balance.Policy
+type RoundRobinBalancePolicy struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindRoundRobinBalancePolicy,
+		func(r *RoundRobinBalancePolicy) BalancePolicy { return r },
+	)
+}
+
+func (RoundRobinBalancePolicy) isBalancePolicy() {}
+func (RoundRobinBalancePolicy) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RoundRobinBalancePolicy) MarshalJSON() ([]byte, error) {
+	type t RoundRobinBalancePolicy
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindRoundRobinBalancePolicy, data)
+	return data, nil
+}
+
+//
+// ========= End round_robin@balance.Policy type =========
+
 // ========= Begin self_signed@tls.TLS type =========
 //
 
@@ -4167,6 +4349,41 @@ func (m *RawOnce) UnmarshalJSON(data []byte) error {
 
 //
 // ========= End once.Once interface =========
+
+// ========= Begin balance.Policy interface =========
+//
+
+// BalancePolicy balance.Policy
+type BalancePolicy interface {
+	isBalancePolicy()
+	Component
+}
+
+// RawBalancePolicy is store raw bytes of BalancePolicy
+type RawBalancePolicy []byte
+
+func (RawBalancePolicy) isBalancePolicy() {}
+func (RawBalancePolicy) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawBalancePolicy) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawBalancePolicy) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawBalancePolicy: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End balance.Policy interface =========
 
 // ========= Begin io.Reader interface =========
 //

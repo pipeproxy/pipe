@@ -25,3 +25,12 @@ type Handler interface {
 type ListenConfig interface {
 	ListenPacket(ctx context.Context) (Packet, error)
 }
+
+type NetworkEnum string
+
+const (
+	EnumNetworkUDP        NetworkEnum = "udp"
+	EnumNetworkUDP4       NetworkEnum = "udp4"
+	EnumNetworkUDP6       NetworkEnum = "udp6"
+	EnumNetworkUnixPacket NetworkEnum = "unixpacket"
+)

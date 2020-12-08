@@ -20,6 +20,8 @@ Multi:
             Data: <html><body>This is Pipe page2 {{.Scheme}}://{{.Host}}{{.RequestURI}}</body></html>
           Code: 200
         Weight: 8
+      Policy:
+        '@Kind': round_robin@balance.Policy
     Name: weighted
   - '@Kind': def@service.Service
     Def:

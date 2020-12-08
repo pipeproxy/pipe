@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/pipeproxy/pipe/components/balance"
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/internal/gcd"
 )
@@ -20,20 +21,13 @@ func init() {
 	register.Register(name, NewLBWithConfig)
 }
 
-type LoadBalancePolicyEnum string
-
-const (
-	EnumRoundRobin LoadBalancePolicyEnum = "round_robin"
-	EnumRandom     LoadBalancePolicyEnum = "random"
-)
-
 type Weight struct {
 	Weight  uint `json:",omitempty"`
 	Handler http.Handler
 }
 
 type Config struct {
-	Policy   LoadBalancePolicyEnum `json:",omitempty"`
+	Policy   balance.Policy
 	Handlers []*Weight
 }
 
@@ -54,29 +48,23 @@ func NewLBWithConfig(conf *Config) (http.Handler, error) {
 		}
 	}
 
-	var dialers []http.Handler
+	var handlers []http.Handler
 	if sum == 0 {
-		dialers = make([]http.Handler, 0, len(conf.Handlers))
+		handlers = make([]http.Handler, 0, len(conf.Handlers))
 		for _, weighted := range conf.Handlers {
-			dialers = append(dialers, weighted.Handler)
+			handlers = append(handlers, weighted.Handler)
 		}
 	} else {
 		g := gcd.GcdSlice(list)
-		dialers = make([]http.Handler, 0, sum/g)
+		handlers = make([]http.Handler, 0, sum/g)
 		for _, weighted := range conf.Handlers {
 			if weighted.Weight > 0 {
 				size := weighted.Weight / g
 				for i := uint(0); i != size; i++ {
-					dialers = append(dialers, weighted.Handler)
+					handlers = append(handlers, weighted.Handler)
 				}
 			}
 		}
 	}
-
-	switch conf.Policy {
-	case EnumRandom:
-		return NewRandom(dialers), nil
-	default: // EnumRoundRobin
-		return NewRoundRobin(dialers), nil
-	}
+	return NewLB(conf.Policy, handlers), nil
 }

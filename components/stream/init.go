@@ -4,6 +4,7 @@ import (
 	"context"
 	"net"
 
+	"github.com/pipeproxy/pipe/components/balance"
 	"github.com/pipeproxy/pipe/components/common/types"
 )
 
@@ -32,4 +33,14 @@ type ListenConfig interface {
 
 type Dialer interface {
 	DialStream(ctx context.Context) (Stream, error)
+	Targets() (balance.PolicyEnum, []Dialer)
 }
+
+type NetworkEnum string
+
+const (
+	EnumNetworkTCP  NetworkEnum = "tcp"
+	EnumNetworkTCP4 NetworkEnum = "tcp4"
+	EnumNetworkTCP6 NetworkEnum = "tcp6"
+	EnumNetworkUnix NetworkEnum = "unix"
+)

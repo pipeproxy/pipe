@@ -69,7 +69,7 @@ var (
 		bind.DefNetHTTPHandlerConfig{
 			Name: "balance",
 			Def: bind.LbNetHTTPHandlerConfig{
-				Policy: bind.LbNetHTTPHandlerLoadBalancePolicyEnumEnumRoundRobin,
+				Policy: bind.RoundRobinBalancePolicy{},
 				Handlers: []bind.LbNetHTTPHandlerWeight{
 					{
 						Handler: bind.ForwardNetHTTPHandlerConfig{
@@ -154,6 +154,7 @@ var (
 		bind.DefNetHTTPHandlerConfig{
 			Name: "weighted",
 			Def: bind.LbNetHTTPHandlerConfig{
+				Policy: bind.RoundRobinBalancePolicy{},
 				Handlers: []bind.LbNetHTTPHandlerWeight{
 					{
 						Weight: 2,

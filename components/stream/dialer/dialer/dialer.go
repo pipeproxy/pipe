@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"github.com/mikioh/tcp"
+	"github.com/pipeproxy/pipe/components/balance"
 	svc_stream "github.com/pipeproxy/pipe/components/service/stream"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/listener"
@@ -75,4 +76,8 @@ func (d *Dialer) DialStream(ctx context.Context) (stream.Stream, error) {
 		"targetAddress", address,
 	)
 	return listener.DialContext(ctx, network, address)
+}
+
+func (d *Dialer) Targets() (balance.PolicyEnum, []stream.Dialer) {
+	return balance.EnumPolicyNone, []stream.Dialer{d}
 }

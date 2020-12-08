@@ -13,17 +13,8 @@ func init() {
 	register.Register(name, NewDialerWithConfig)
 }
 
-type DialerNetworkEnum string
-
-const (
-	EnumTCP  DialerNetworkEnum = "tcp"
-	EnumTCP4 DialerNetworkEnum = "tcp4"
-	EnumTCP6 DialerNetworkEnum = "tcp6"
-	EnumUnix DialerNetworkEnum = "unix"
-)
-
 type Config struct {
-	Network  DialerNetworkEnum
+	Network  stream.NetworkEnum
 	Address  string
 	Original bool `json:",omitempty"`
 	Virtual  bool `json:",omitempty"`

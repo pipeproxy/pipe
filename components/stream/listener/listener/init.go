@@ -15,17 +15,8 @@ func init() {
 	register.Register(name, NewListenerWithConfig)
 }
 
-type ListenerNetworkEnum string
-
-const (
-	EnumTCP  ListenerNetworkEnum = "tcp"
-	EnumTCP4 ListenerNetworkEnum = "tcp4"
-	EnumTCP6 ListenerNetworkEnum = "tcp6"
-	EnumUnix ListenerNetworkEnum = "unix"
-)
-
 type Config struct {
-	Network ListenerNetworkEnum
+	Network stream.NetworkEnum
 	Address string
 	Virtual bool `json:",omitempty"`
 }

@@ -69,7 +69,7 @@ func BuildHTTP443ToHTTPSWithStreamHandler(handler bind.HTTPHandler, tls bind.TLS
 
 func BuildH3WithService(address string, handler bind.HTTPHandler, tls bind.TLS) bind.Service {
 	listen := bind.ListenerPacketListenConfigConfig{
-		Network: bind.ListenerPacketListenConfigListenerNetworkEnumEnumUDP,
+		Network: bind.ListenerPacketListenConfigNetworkEnumEnumNetworkUDP,
 		Address: address,
 	}
 	return bind.PacketServiceConfig{
@@ -83,7 +83,7 @@ func BuildH3WithService(address string, handler bind.HTTPHandler, tls bind.TLS) 
 
 func BuildH2WithService(address string, handler bind.HTTPHandler, tls bind.TLS) bind.Service {
 	listen := bind.ListenerStreamListenConfigConfig{
-		Network: bind.ListenerStreamListenConfigListenerNetworkEnumEnumTCP,
+		Network: bind.ListenerStreamListenConfigNetworkEnumEnumNetworkTCP,
 		Address: address,
 	}
 	return bind.StreamServiceConfig{
@@ -119,7 +119,7 @@ func BuildH2SupportH3WithService(address string, handler bind.HTTPHandler, tls b
 
 func BuildHTTPRedirectToHTTPSWithService(address string) bind.Service {
 	listen := bind.ListenerStreamListenConfigConfig{
-		Network: bind.ListenerStreamListenConfigListenerNetworkEnumEnumTCP,
+		Network: bind.ListenerStreamListenConfigNetworkEnumEnumNetworkTCP,
 		Address: address,
 	}
 
@@ -131,7 +131,7 @@ func BuildHTTPRedirectToHTTPSWithService(address string) bind.Service {
 
 func BuildH1WithService(address string, handler bind.HTTPHandler) bind.Service {
 	listen := bind.ListenerStreamListenConfigConfig{
-		Network: bind.ListenerStreamListenConfigListenerNetworkEnumEnumTCP,
+		Network: bind.ListenerStreamListenConfigNetworkEnumEnumNetworkTCP,
 		Address: address,
 	}
 	return bind.StreamServiceConfig{
