@@ -4,9 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/pipeproxy/pipe/components/balance"
-	"github.com/pipeproxy/pipe/components/balance/random"
-	"github.com/pipeproxy/pipe/components/balance/round_robin"
 	"github.com/pipeproxy/pipe/components/stream"
 )
 
@@ -24,16 +21,9 @@ func RoundTripper(d stream.Dialer) http.RoundTripper {
 	if d == nil {
 		return defaultTransport
 	}
-	ld, ds := d.Targets()
+	ds := d.Targets()
 	if len(ds) > 1 {
-		switch ld {
-		case balance.EnumPolicyNone:
-			return RoundTripper(ds[0])
-		case balance.EnumPolicyRandom:
-			return NewLB(random.NewRandom(), roundTrippers(ds))
-		default: // EnumPolicyRoundRobin
-			return NewLB(round_robin.NewRoundRobin(), roundTrippers(ds))
-		}
+		return NewLB(d.Policy(), roundTrippers(ds))
 	}
 	transport := defaultTransport.Clone()
 	if c, ok := d.(isTCP); ok && c.IsTCP() {

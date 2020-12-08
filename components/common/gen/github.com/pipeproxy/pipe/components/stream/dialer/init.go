@@ -86,7 +86,19 @@ func (_DialerNone) DialStream(_ context.Context) (_ net.Conn, error error) {
 	return
 }
 
-func (_DialerNone) Targets() (_ balance.PolicyEnum, _ []stream.Dialer) {
+func (_DialerNone) Policy() (_ balance.Policy) {
+	logger.Log.V(-1).Info("this is none of stream.Dialer")
+
+	return
+}
+
+func (_DialerNone) String() (_ string) {
+	logger.Log.V(-1).Info("this is none of stream.Dialer")
+
+	return
+}
+
+func (_DialerNone) Targets() (_ []stream.Dialer) {
 	logger.Log.V(-1).Info("this is none of stream.Dialer")
 
 	return
@@ -102,6 +114,14 @@ func (o *Dialer) DialStream(context context.Context) (net.Conn, error) {
 	return DialerGet(o.Ctx, o.Name, o.Def).DialStream(context)
 }
 
-func (o *Dialer) Targets() (balance.PolicyEnum, []stream.Dialer) {
+func (o *Dialer) Policy() balance.Policy {
+	return DialerGet(o.Ctx, o.Name, o.Def).Policy()
+}
+
+func (o *Dialer) String() string {
+	return DialerGet(o.Ctx, o.Name, o.Def).String()
+}
+
+func (o *Dialer) Targets() []stream.Dialer {
 	return DialerGet(o.Ctx, o.Name, o.Def).Targets()
 }

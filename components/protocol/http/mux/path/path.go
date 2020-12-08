@@ -1,4 +1,4 @@
-package mux
+package path
 
 import (
 	"encoding/binary"
@@ -17,8 +17,8 @@ var (
 
 const handlerMapPrefixSize = 4
 
-// Mux is an Applicative protocol multiplexer.
-type Mux struct {
+// Path is an host multiplexer.
+type Path struct {
 	trie         *trie.Trie
 	prefixLength int
 	size         uint32
@@ -37,9 +37,9 @@ type matcher struct {
 	handler http.Handler
 }
 
-// NewMux create a new Mux.
-func NewMux() *Mux {
-	p := &Mux{
+// NewPath create a new Path.
+func NewPath() *Path {
+	p := &Path{
 		trie:     trie.NewTrie(),
 		handlers: map[uint32]*regexpRoutes{},
 		paths:    map[string]http.Handler{},
@@ -48,12 +48,12 @@ func NewMux() *Mux {
 }
 
 // NotFound replies to the handler with an Handler not found error.
-func (m *Mux) NotFound(handler http.Handler) {
+func (m *Path) NotFound(handler http.Handler) {
 	m.notFound = handler
 	return
 }
 
-func (m *Mux) HandlePrefix(prefix string, handler http.Handler) error {
+func (m *Path) HandlePrefix(prefix string, handler http.Handler) error {
 	buf, err := m.setHandler(handler, nil)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func (m *Mux) HandlePrefix(prefix string, handler http.Handler) error {
 	return nil
 }
 
-func (m *Mux) HandlePrefixAndRegexp(prefix, reg string, handler http.Handler) error {
+func (m *Path) HandlePrefixAndRegexp(prefix, reg string, handler http.Handler) error {
 	r, err := regexp.Compile(reg)
 	if err != nil {
 		return err
@@ -75,13 +75,13 @@ func (m *Mux) HandlePrefixAndRegexp(prefix, reg string, handler http.Handler) er
 	return nil
 }
 
-func (m *Mux) HandlePath(path string, handler http.Handler) {
+func (m *Path) HandlePath(path string, handler http.Handler) {
 	m.paths[path] = handler
 	return
 }
 
 // Handler returns most matching handler and prefix bytes data to use for the given reader.
-func (m *Mux) Handler(path string) (handler http.Handler) {
+func (m *Path) Handler(path string) (handler http.Handler) {
 	handler, ok := m.paths[path]
 	if ok {
 		return handler
@@ -109,14 +109,14 @@ func (m *Mux) Handler(path string) (handler http.Handler) {
 	return m.notFound
 }
 
-func (m *Mux) handle(prefix string, buf []byte) {
+func (m *Path) handle(prefix string, buf []byte) {
 	m.trie.Put([]byte(prefix), buf)
 	if m.prefixLength < len(prefix) {
 		m.prefixLength = len(prefix)
 	}
 }
 
-func (m *Mux) setHandler(hand http.Handler, reg *regexp.Regexp) ([]byte, error) {
+func (m *Path) setHandler(hand http.Handler, reg *regexp.Regexp) ([]byte, error) {
 	k := atomic.AddUint32(&m.size, 1)
 	buf := make([]byte, handlerMapPrefixSize)
 	binary.BigEndian.PutUint32(buf, k)
@@ -140,7 +140,7 @@ func (m *Mux) setHandler(hand http.Handler, reg *regexp.Regexp) ([]byte, error) 
 	return buf, nil
 }
 
-func (m *Mux) getHandler(index []byte) (http.Handler, bool) {
+func (m *Path) getHandler(index []byte) (http.Handler, bool) {
 	c, ok := m.handlers[binary.BigEndian.Uint32(index)]
 	if !ok {
 		return nil, false
@@ -158,6 +158,6 @@ func (m *Mux) getHandler(index []byte) (http.Handler, bool) {
 	return c.handler, true
 }
 
-func (m *Mux) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (m *Path) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	m.Handler(r.URL.Path).ServeHTTP(rw, r)
 }

@@ -1,4 +1,4 @@
-package mux
+package path
 
 import (
 	"fmt"
@@ -8,11 +8,11 @@ import (
 )
 
 const (
-	name = "mux"
+	name = "path"
 )
 
 func init() {
-	register.Register(name, NewMuxWithConfig)
+	register.Register(name, NewPathWithConfig)
 }
 
 var (
@@ -32,8 +32,8 @@ type Config struct {
 	NotFound http.Handler `json:",omitempty"`
 }
 
-func NewMuxWithConfig(conf *Config) (http.Handler, error) {
-	mux := NewMux()
+func NewPathWithConfig(conf *Config) (http.Handler, error) {
+	mux := NewPath()
 	mux.NotFound(conf.NotFound)
 	for _, route := range conf.Routes {
 		if route.Handler == nil {

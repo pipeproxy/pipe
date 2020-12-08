@@ -7,6 +7,7 @@ import (
 
 	"github.com/mikioh/tcp"
 	"github.com/pipeproxy/pipe/components/balance"
+	"github.com/pipeproxy/pipe/components/balance/none"
 	svc_stream "github.com/pipeproxy/pipe/components/service/stream"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/listener"
@@ -18,15 +19,18 @@ type Dialer struct {
 	address  string
 	virtual  bool
 	original bool
+	name     string
 }
 
 func NewDialer(network string, address string, virtual bool, original bool) *Dialer {
-	return &Dialer{
+	d := &Dialer{
 		network:  network,
 		address:  address,
 		virtual:  virtual,
 		original: original,
 	}
+	d.name = d.getName()
+	return d
 }
 
 func (d *Dialer) DialStream(ctx context.Context) (stream.Stream, error) {
@@ -78,6 +82,31 @@ func (d *Dialer) DialStream(ctx context.Context) (stream.Stream, error) {
 	return listener.DialContext(ctx, network, address)
 }
 
-func (d *Dialer) Targets() (balance.PolicyEnum, []stream.Dialer) {
-	return balance.EnumPolicyNone, []stream.Dialer{d}
+func (d *Dialer) Targets() []stream.Dialer {
+	return []stream.Dialer{d}
+}
+
+func (d *Dialer) Policy() balance.Policy {
+	return none.NewNone()
+}
+
+func (d *Dialer) String() string {
+	return d.name
+}
+
+func (d *Dialer) getName() string {
+	name := d.network + "://" + d.address
+	if d.virtual || d.original {
+		name += "?"
+		if d.virtual {
+			name += "virtual"
+		}
+		if d.original {
+			if d.virtual {
+				name += "&"
+			}
+			name = "original"
+		}
+	}
+	return name
 }

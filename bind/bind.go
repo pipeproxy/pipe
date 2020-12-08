@@ -109,76 +109,6 @@ func (m AcmeTLSConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End acme@tls.TLS type =========
 
-// ========= Begin add_request_header@net/http.Handler type =========
-//
-
-const kindAddRequestHeaderNetHTTPHandlerConfig = `add_request_header@net/http.Handler`
-
-// AddRequestHeaderNetHTTPHandlerConfig add_request_header@net/http.Handler
-type AddRequestHeaderNetHTTPHandlerConfig struct {
-	Key   string
-	Value string
-}
-
-func init() {
-	_ = provider.Register(
-		kindAddRequestHeaderNetHTTPHandlerConfig,
-		func(r *AddRequestHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
-	)
-}
-
-func (AddRequestHeaderNetHTTPHandlerConfig) isHTTPHandler() {}
-func (AddRequestHeaderNetHTTPHandlerConfig) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m AddRequestHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t AddRequestHeaderNetHTTPHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindAddRequestHeaderNetHTTPHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End add_request_header@net/http.Handler type =========
-
-// ========= Begin add_response_header@net/http.Handler type =========
-//
-
-const kindAddResponseHeaderNetHTTPHandlerConfig = `add_response_header@net/http.Handler`
-
-// AddResponseHeaderNetHTTPHandlerConfig add_response_header@net/http.Handler
-type AddResponseHeaderNetHTTPHandlerConfig struct {
-	Key   string
-	Value string
-}
-
-func init() {
-	_ = provider.Register(
-		kindAddResponseHeaderNetHTTPHandlerConfig,
-		func(r *AddResponseHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
-	)
-}
-
-func (AddResponseHeaderNetHTTPHandlerConfig) isHTTPHandler() {}
-func (AddResponseHeaderNetHTTPHandlerConfig) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m AddResponseHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t AddResponseHeaderNetHTTPHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindAddResponseHeaderNetHTTPHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End add_response_header@net/http.Handler type =========
-
 // ========= Begin components@once.Once type =========
 //
 
@@ -888,6 +818,88 @@ func (m DirectNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End direct@net/http.Handler type =========
 
+// ========= Begin edit_request_header@net/http.Handler type =========
+//
+
+const kindEditRequestHeaderNetHTTPHandlerConfig = `edit_request_header@net/http.Handler`
+
+// EditRequestHeaderNetHTTPHandlerConfig edit_request_header@net/http.Handler
+type EditRequestHeaderNetHTTPHandlerConfig struct {
+	Del []string                              `json:",omitempty"`
+	Set []EditRequestHeaderNetHTTPHandlerPair `json:",omitempty"`
+	Add []EditRequestHeaderNetHTTPHandlerPair `json:",omitempty"`
+}
+
+type EditRequestHeaderNetHTTPHandlerPair struct {
+	Key   string
+	Value string
+}
+
+func init() {
+	_ = provider.Register(
+		kindEditRequestHeaderNetHTTPHandlerConfig,
+		func(r *EditRequestHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
+	)
+}
+
+func (EditRequestHeaderNetHTTPHandlerConfig) isHTTPHandler() {}
+func (EditRequestHeaderNetHTTPHandlerConfig) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m EditRequestHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t EditRequestHeaderNetHTTPHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindEditRequestHeaderNetHTTPHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End edit_request_header@net/http.Handler type =========
+
+// ========= Begin edit_response_header@net/http.Handler type =========
+//
+
+const kindEditResponseHeaderNetHTTPHandlerConfig = `edit_response_header@net/http.Handler`
+
+// EditResponseHeaderNetHTTPHandlerConfig edit_response_header@net/http.Handler
+type EditResponseHeaderNetHTTPHandlerConfig struct {
+	Del []string                               `json:",omitempty"`
+	Set []EditResponseHeaderNetHTTPHandlerPair `json:",omitempty"`
+	Add []EditResponseHeaderNetHTTPHandlerPair `json:",omitempty"`
+}
+
+type EditResponseHeaderNetHTTPHandlerPair struct {
+	Key   string
+	Value string
+}
+
+func init() {
+	_ = provider.Register(
+		kindEditResponseHeaderNetHTTPHandlerConfig,
+		func(r *EditResponseHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
+	)
+}
+
+func (EditResponseHeaderNetHTTPHandlerConfig) isHTTPHandler() {}
+func (EditResponseHeaderNetHTTPHandlerConfig) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m EditResponseHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t EditResponseHeaderNetHTTPHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindEditResponseHeaderNetHTTPHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End edit_response_header@net/http.Handler type =========
+
 // ========= Begin env@io.Reader type =========
 //
 
@@ -1162,45 +1174,45 @@ func (m FromTLSConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End from@tls.TLS type =========
 
-// ========= Begin hosts@net/http.Handler type =========
+// ========= Begin host@net/http.Handler type =========
 //
 
-const kindHostsNetHTTPHandlerConfig = `hosts@net/http.Handler`
+const kindHostNetHTTPHandlerConfig = `host@net/http.Handler`
 
-// HostsNetHTTPHandlerConfig hosts@net/http.Handler
-type HostsNetHTTPHandlerConfig struct {
-	Hosts    []HostsNetHTTPHandlerRoute
+// HostNetHTTPHandlerConfig host@net/http.Handler
+type HostNetHTTPHandlerConfig struct {
+	Hosts    []HostNetHTTPHandlerRoute
 	NotFound HTTPHandler `json:",omitempty"`
 }
 
-type HostsNetHTTPHandlerRoute struct {
+type HostNetHTTPHandlerRoute struct {
 	Domains []string
 	Handler HTTPHandler
 }
 
 func init() {
 	_ = provider.Register(
-		kindHostsNetHTTPHandlerConfig,
-		func(r *HostsNetHTTPHandlerConfig) HTTPHandler { return r },
+		kindHostNetHTTPHandlerConfig,
+		func(r *HostNetHTTPHandlerConfig) HTTPHandler { return r },
 	)
 }
 
-func (HostsNetHTTPHandlerConfig) isHTTPHandler() {}
-func (HostsNetHTTPHandlerConfig) isComponent()   {}
+func (HostNetHTTPHandlerConfig) isHTTPHandler() {}
+func (HostNetHTTPHandlerConfig) isComponent()   {}
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (m HostsNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t HostsNetHTTPHandlerConfig
+func (m HostNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t HostNetHTTPHandlerConfig
 	data, err := json.Marshal(t(m))
 	if err != nil {
 		return nil, err
 	}
-	data = prepend(kindKey, kindHostsNetHTTPHandlerConfig, data)
+	data = prepend(kindKey, kindHostNetHTTPHandlerConfig, data)
 	return data, nil
 }
 
 //
-// ========= End hosts@net/http.Handler type =========
+// ========= End host@net/http.Handler type =========
 
 // ========= Begin http1@stream.Handler type =========
 //
@@ -1494,6 +1506,39 @@ func (m LbStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End lb@stream.Handler type =========
+
+// ========= Begin least@ type =========
+//
+
+const kindLeast = `least@`
+
+// Least least@
+type Least struct {
+}
+
+func init() {
+	_ = provider.Register(
+		kindLeast,
+		func(r *Least) LeastLeast { return r },
+	)
+}
+
+func (Least) isLeastLeast() {}
+func (Least) isComponent()  {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m Least) MarshalJSON() ([]byte, error) {
+	type t Least
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindLeast, data)
+	return data, nil
+}
+
+//
+// ========= End least@ type =========
 
 // ========= Begin listener@packet.ListenConfig type =========
 //
@@ -2455,48 +2500,6 @@ func (m MultiStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End multi@stream.Handler type =========
 
-// ========= Begin mux@net/http.Handler type =========
-//
-
-const kindMuxNetHTTPHandlerConfig = `mux@net/http.Handler`
-
-// MuxNetHTTPHandlerConfig mux@net/http.Handler
-type MuxNetHTTPHandlerConfig struct {
-	Routes   []MuxNetHTTPHandlerRoute
-	NotFound HTTPHandler `json:",omitempty"`
-}
-
-type MuxNetHTTPHandlerRoute struct {
-	Prefix  string `json:",omitempty"`
-	Path    string `json:",omitempty"`
-	Regexp  string `json:",omitempty"`
-	Handler HTTPHandler
-}
-
-func init() {
-	_ = provider.Register(
-		kindMuxNetHTTPHandlerConfig,
-		func(r *MuxNetHTTPHandlerConfig) HTTPHandler { return r },
-	)
-}
-
-func (MuxNetHTTPHandlerConfig) isHTTPHandler() {}
-func (MuxNetHTTPHandlerConfig) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m MuxNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t MuxNetHTTPHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindMuxNetHTTPHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End mux@net/http.Handler type =========
-
 // ========= Begin mux@stream.Handler type =========
 //
 
@@ -3068,6 +3071,48 @@ func (m PacketServiceConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End packet@service.Service type =========
+
+// ========= Begin path@net/http.Handler type =========
+//
+
+const kindPathNetHTTPHandlerConfig = `path@net/http.Handler`
+
+// PathNetHTTPHandlerConfig path@net/http.Handler
+type PathNetHTTPHandlerConfig struct {
+	Routes   []PathNetHTTPHandlerRoute
+	NotFound HTTPHandler `json:",omitempty"`
+}
+
+type PathNetHTTPHandlerRoute struct {
+	Prefix  string `json:",omitempty"`
+	Path    string `json:",omitempty"`
+	Regexp  string `json:",omitempty"`
+	Handler HTTPHandler
+}
+
+func init() {
+	_ = provider.Register(
+		kindPathNetHTTPHandlerConfig,
+		func(r *PathNetHTTPHandlerConfig) HTTPHandler { return r },
+	)
+}
+
+func (PathNetHTTPHandlerConfig) isHTTPHandler() {}
+func (PathNetHTTPHandlerConfig) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m PathNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t PathNetHTTPHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindPathNetHTTPHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End path@net/http.Handler type =========
 
 // ========= Begin pprof@net/http.Handler type =========
 //
@@ -3763,74 +3808,6 @@ func (m RefTLSConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End ref@tls.TLS type =========
 
-// ========= Begin remove_request_header@net/http.Handler type =========
-//
-
-const kindRemoveRequestHeaderNetHTTPHandlerConfig = `remove_request_header@net/http.Handler`
-
-// RemoveRequestHeaderNetHTTPHandlerConfig remove_request_header@net/http.Handler
-type RemoveRequestHeaderNetHTTPHandlerConfig struct {
-	Key string
-}
-
-func init() {
-	_ = provider.Register(
-		kindRemoveRequestHeaderNetHTTPHandlerConfig,
-		func(r *RemoveRequestHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
-	)
-}
-
-func (RemoveRequestHeaderNetHTTPHandlerConfig) isHTTPHandler() {}
-func (RemoveRequestHeaderNetHTTPHandlerConfig) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RemoveRequestHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t RemoveRequestHeaderNetHTTPHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindRemoveRequestHeaderNetHTTPHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End remove_request_header@net/http.Handler type =========
-
-// ========= Begin remove_response_header@net/http.Handler type =========
-//
-
-const kindRemoveResponseHeaderNetHTTPHandlerConfig = `remove_response_header@net/http.Handler`
-
-// RemoveResponseHeaderNetHTTPHandlerConfig remove_response_header@net/http.Handler
-type RemoveResponseHeaderNetHTTPHandlerConfig struct {
-	Key string
-}
-
-func init() {
-	_ = provider.Register(
-		kindRemoveResponseHeaderNetHTTPHandlerConfig,
-		func(r *RemoveResponseHeaderNetHTTPHandlerConfig) HTTPHandler { return r },
-	)
-}
-
-func (RemoveResponseHeaderNetHTTPHandlerConfig) isHTTPHandler() {}
-func (RemoveResponseHeaderNetHTTPHandlerConfig) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RemoveResponseHeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t RemoveResponseHeaderNetHTTPHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindRemoveResponseHeaderNetHTTPHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End remove_response_header@net/http.Handler type =========
-
 // ========= Begin round_robin@balance.Policy type =========
 //
 
@@ -4280,41 +4257,6 @@ func (m *RawTLS) UnmarshalJSON(data []byte) error {
 //
 // ========= End tls.TLS interface =========
 
-// ========= Begin http.Handler interface =========
-//
-
-// HTTPHandler http.Handler
-type HTTPHandler interface {
-	isHTTPHandler()
-	Component
-}
-
-// RawHTTPHandler is store raw bytes of HTTPHandler
-type RawHTTPHandler []byte
-
-func (RawHTTPHandler) isHTTPHandler() {}
-func (RawHTTPHandler) isComponent()   {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m RawHTTPHandler) MarshalJSON() ([]byte, error) {
-	if m == nil {
-		return []byte("null"), nil
-	}
-	return m, nil
-}
-
-// UnmarshalJSON sets *m to a copy of data.
-func (m *RawHTTPHandler) UnmarshalJSON(data []byte) error {
-	if m == nil {
-		return errors.New("RawHTTPHandler: UnmarshalJSON on nil pointer")
-	}
-	*m = append((*m)[:0], data...)
-	return nil
-}
-
-//
-// ========= End http.Handler interface =========
-
 // ========= Begin once.Once interface =========
 //
 
@@ -4349,6 +4291,41 @@ func (m *RawOnce) UnmarshalJSON(data []byte) error {
 
 //
 // ========= End once.Once interface =========
+
+// ========= Begin http.Handler interface =========
+//
+
+// HTTPHandler http.Handler
+type HTTPHandler interface {
+	isHTTPHandler()
+	Component
+}
+
+// RawHTTPHandler is store raw bytes of HTTPHandler
+type RawHTTPHandler []byte
+
+func (RawHTTPHandler) isHTTPHandler() {}
+func (RawHTTPHandler) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawHTTPHandler) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawHTTPHandler) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawHTTPHandler: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End http.Handler interface =========
 
 // ========= Begin balance.Policy interface =========
 //
@@ -4769,3 +4746,38 @@ func (m *RawStreamListenConfig) UnmarshalJSON(data []byte) error {
 
 //
 // ========= End stream.ListenConfig interface =========
+
+// ========= Begin *least.Least interface =========
+//
+
+// LeastLeast *least.Least
+type LeastLeast interface {
+	isLeastLeast()
+	Component
+}
+
+// RawLeastLeast is store raw bytes of LeastLeast
+type RawLeastLeast []byte
+
+func (RawLeastLeast) isLeastLeast() {}
+func (RawLeastLeast) isComponent()  {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m RawLeastLeast) MarshalJSON() ([]byte, error) {
+	if m == nil {
+		return []byte("null"), nil
+	}
+	return m, nil
+}
+
+// UnmarshalJSON sets *m to a copy of data.
+func (m *RawLeastLeast) UnmarshalJSON(data []byte) error {
+	if m == nil {
+		return errors.New("RawLeastLeast: UnmarshalJSON on nil pointer")
+	}
+	*m = append((*m)[:0], data...)
+	return nil
+}
+
+//
+// ========= End *least.Least interface =========

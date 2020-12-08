@@ -75,13 +75,19 @@ func newPolicyNone() balance.Policy {
 	return PolicyNone
 }
 
-func (_PolicyNone) InUse(_ uint64, _ func(uint64)) {
+func (_PolicyNone) Clone() (_ balance.Policy) {
 	logger.Log.V(-1).Info("this is none of balance.Policy")
 
 	return
 }
 
-func (_PolicyNone) Policy() (_ balance.PolicyEnum) {
+func (_PolicyNone) InUse(_ func(uint64)) {
+	logger.Log.V(-1).Info("this is none of balance.Policy")
+
+	return
+}
+
+func (_PolicyNone) Init(_ uint64) {
 	logger.Log.V(-1).Info("this is none of balance.Policy")
 
 	return
@@ -93,10 +99,14 @@ type Policy struct {
 	Ctx  context.Context
 }
 
-func (o *Policy) InUse(uint64 uint64, b func(uint64)) {
-	PolicyGet(o.Ctx, o.Name, o.Def).InUse(uint64, b)
+func (o *Policy) Clone() balance.Policy {
+	return PolicyGet(o.Ctx, o.Name, o.Def).Clone()
 }
 
-func (o *Policy) Policy() balance.PolicyEnum {
-	return PolicyGet(o.Ctx, o.Name, o.Def).Policy()
+func (o *Policy) InUse(a func(uint64)) {
+	PolicyGet(o.Ctx, o.Name, o.Def).InUse(a)
+}
+
+func (o *Policy) Init(uint64 uint64) {
+	PolicyGet(o.Ctx, o.Name, o.Def).Init(uint64)
 }

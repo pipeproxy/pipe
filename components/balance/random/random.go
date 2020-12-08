@@ -6,17 +6,25 @@ import (
 	"github.com/pipeproxy/pipe/components/balance"
 )
 
-type Random struct{}
-
-func NewRandom() balance.Policy {
-	return Random{}
+type Random struct {
+	size uint64
 }
 
-func (Random) InUse(size uint64, fun func(i uint64)) {
-	i := rand.Uint64() % size
+func NewRandom() balance.Policy {
+	return &Random{}
+}
+
+func (r *Random) Init(size uint64) {
+	r.size = size
+}
+
+func (r *Random) InUse(fun func(i uint64)) {
+	i := rand.Uint64() % r.size
 	fun(i)
 }
 
-func (Random) Policy() balance.PolicyEnum {
-	return balance.EnumPolicyRandom
+func (r *Random) Clone() balance.Policy {
+	c := NewRandom()
+	c.Init(r.size)
+	return c
 }

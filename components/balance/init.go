@@ -10,14 +10,7 @@ func init() {
 }
 
 type Policy interface {
-	InUse(size uint64, fun func(i uint64))
-	Policy() PolicyEnum
+	Init(size uint64)
+	InUse(fun func(i uint64))
+	Clone() Policy
 }
-
-type PolicyEnum string
-
-const (
-	EnumPolicyNone       PolicyEnum = "none"
-	EnumPolicyRandom     PolicyEnum = "random"
-	EnumPolicyRoundRobin PolicyEnum = "round_robin"
-)

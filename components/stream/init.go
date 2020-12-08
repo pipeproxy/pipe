@@ -33,7 +33,9 @@ type ListenConfig interface {
 
 type Dialer interface {
 	DialStream(ctx context.Context) (Stream, error)
-	Targets() (balance.PolicyEnum, []Dialer)
+	Targets() []Dialer
+	Policy() balance.Policy
+	String() string
 }
 
 type NetworkEnum string

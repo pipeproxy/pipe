@@ -9,9 +9,13 @@ import (
 )
 
 func BuildContentTypeHTMLWithHTTPHandler() bind.HTTPHandler {
-	return bind.AddResponseHeaderNetHTTPHandlerConfig{
-		Key:   "Content-Type",
-		Value: "text/html; charset=utf-8",
+	return bind.EditResponseHeaderNetHTTPHandlerConfig{
+		Set: []bind.EditResponseHeaderNetHTTPHandlerPair{
+			{
+				Key:   "Content-Type",
+				Value: "text/html; charset=utf-8",
+			},
+		},
 	}
 }
 
@@ -108,9 +112,13 @@ func BuildH2WithService(address string, handler bind.HTTPHandler, tls bind.TLS) 
 func BuildH2SupportH3WithService(address string, handler bind.HTTPHandler, tls bind.TLS) bind.Service {
 	return BuildH2WithService(address, bind.MultiNetHTTPHandlerConfig{
 		Multi: []bind.HTTPHandler{
-			bind.AddResponseHeaderNetHTTPHandlerConfig{
-				Key:   "Alt-Svc",
-				Value: `h3-29=":443"; ma=2592000`,
+			bind.EditResponseHeaderNetHTTPHandlerConfig{
+				Set: []bind.EditResponseHeaderNetHTTPHandlerPair{
+					{
+						Key:   "Alt-Svc",
+						Value: `h3-29=":443"; ma=2592000`,
+					},
+				},
 			},
 			handler,
 		},

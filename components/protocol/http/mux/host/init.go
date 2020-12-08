@@ -1,4 +1,4 @@
-package hosts
+package host
 
 import (
 	"fmt"
@@ -8,11 +8,11 @@ import (
 )
 
 const (
-	name = "hosts"
+	name = "host"
 )
 
 func init() {
-	register.Register(name, NewHostsWithConfig)
+	register.Register(name, NewHostWithConfig)
 }
 
 var (
@@ -30,8 +30,8 @@ type Config struct {
 	NotFound http.Handler `json:",omitempty"`
 }
 
-func NewHostsWithConfig(conf *Config) (http.Handler, error) {
-	mux := NewHosts()
+func NewHostWithConfig(conf *Config) (http.Handler, error) {
+	mux := NewHost()
 	mux.NotFound(conf.NotFound)
 	for _, route := range conf.Hosts {
 		if route.Handler == nil {

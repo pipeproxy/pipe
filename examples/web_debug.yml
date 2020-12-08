@@ -14,14 +14,15 @@ Multi:
             Handler:
               '@Kind': log@net/http.Handler
               Handler:
-                '@Kind': mux@net/http.Handler
+                '@Kind': path@net/http.Handler
                 Routes:
                 - Handler:
                     '@Kind': multi@net/http.Handler
                     Multi:
-                    - '@Kind': add_response_header@net/http.Handler
-                      Key: Content-Type
-                      Value: text/html; charset=utf-8
+                    - '@Kind': edit_response_header@net/http.Handler
+                      Set:
+                      - Key: Content-Type
+                        Value: text/html; charset=utf-8
                     - '@Kind': direct@net/http.Handler
                       Body:
                         '@Kind': inline@io.Reader

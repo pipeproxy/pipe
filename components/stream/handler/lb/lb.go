@@ -13,11 +13,12 @@ type LB struct {
 }
 
 func NewLB(policy balance.Policy, handlers []stream.Handler) *LB {
+	policy.Init(uint64(len(handlers)))
 	return &LB{policy: policy, handlers: handlers}
 }
 
 func (l *LB) ServeStream(ctx context.Context, stm stream.Stream) {
-	l.policy.InUse(uint64(len(l.handlers)), func(i uint64) {
+	l.policy.InUse(func(i uint64) {
 		l.handlers[i].ServeStream(ctx, stm)
 	})
 }
