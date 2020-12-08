@@ -7,7 +7,6 @@ import (
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/components/stream/dialer/dialer"
-	"github.com/pipeproxy/pipe/internal/round_tripper"
 )
 
 const (
@@ -32,5 +31,5 @@ func NewForwardWithConfig(conf *Config) (http.Handler, error) {
 	if conf.Dialer == nil {
 		conf.Dialer = dialer.NewDialer("tcp", u.Host, false, false)
 	}
-	return NewForward(conf.URL, round_tripper.RoundTripper(conf.Dialer))
+	return NewForward(conf.URL, conf.Dialer)
 }

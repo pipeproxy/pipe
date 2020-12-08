@@ -5,19 +5,24 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"strings"
+	"sync"
 
+	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/http/template"
 	"github.com/pipeproxy/pipe/internal/pool"
+	"github.com/pipeproxy/pipe/internal/round_tripper"
 )
 
 type Forward struct {
 	url       template.Format
 	transport http.RoundTripper
+	dialer    stream.Dialer
+	once      sync.Once
 }
 
-func NewForward(url string, transport http.RoundTripper) (*Forward, error) {
+func NewForward(url string, dialer stream.Dialer) (*Forward, error) {
 	f := &Forward{
-		transport: transport,
+		dialer: dialer,
 	}
 	if url == "" {
 		url = "{{.Scheme}}://{{.Host}}"
@@ -32,6 +37,9 @@ func NewForward(url string, transport http.RoundTripper) (*Forward, error) {
 }
 
 func (h *Forward) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	h.once.Do(func() {
+		h.transport = round_tripper.RoundTripper(h.dialer)
+	})
 	proxy := httputil.ReverseProxy{
 		BufferPool:   pool.Bytes,
 		Transport:    h.transport,
