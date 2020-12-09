@@ -50,7 +50,6 @@ func NewPath() *Path {
 // NotFound replies to the handler with an Handler not found error.
 func (m *Path) NotFound(handler http.Handler) {
 	m.notFound = handler
-	return
 }
 
 func (m *Path) HandlePrefix(prefix string, handler http.Handler) error {

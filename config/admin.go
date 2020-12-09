@@ -8,7 +8,7 @@ import (
 
 func BuildAdminWithHTTPHandler() bind.HTTPHandler {
 	return bind.PathNetHTTPHandlerConfig{
-		Routes: []bind.PathNetHTTPHandlerRoute{
+		Paths: []bind.PathNetHTTPHandlerRoute{
 			{
 				Path: "/",
 				Handler: bind.MultiNetHTTPHandlerConfig{

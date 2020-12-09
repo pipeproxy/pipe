@@ -11,30 +11,28 @@ var (
 
 // Method is an host multiplexer.
 type Method struct {
-	method   map[string]http.Handler
+	methods  map[string]http.Handler
 	notFound http.Handler
 }
 
 func NewMethod() *Method {
 	p := &Method{
-		method: map[string]http.Handler{},
+		methods: map[string]http.Handler{},
 	}
 	return p
 }
 
-func (h *Method) NotFound(handler http.Handler) error {
+func (h *Method) NotFound(handler http.Handler) {
 	h.notFound = handler
-	return nil
 }
 
-func (h *Method) Handle(host string, handler http.Handler) error {
-	h.method[host] = handler
-	return nil
+func (h *Method) Handle(method string, handler http.Handler) {
+	h.methods[method] = handler
 }
 
-// Handler returns method route handler.
-func (h *Method) Handler(host string) (handler http.Handler, err error) {
-	handler, ok := h.method[host]
+// Handler returns methods route handler.
+func (h *Method) Handler(method string) (handler http.Handler, err error) {
+	handler, ok := h.methods[method]
 	if ok {
 		return handler, nil
 	}

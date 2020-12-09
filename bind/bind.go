@@ -1174,6 +1174,56 @@ func (m FromTLSConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End from@tls.TLS type =========
 
+// ========= Begin header@net/http.Handler type =========
+//
+
+const kindHeaderNetHTTPHandlerConfig = `header@net/http.Handler`
+
+// HeaderNetHTTPHandlerConfig header@net/http.Handler
+type HeaderNetHTTPHandlerConfig struct {
+	Headers  []HeaderNetHTTPHandlerRoute
+	NotFound HTTPHandler `json:",omitempty"`
+}
+
+type HeaderNetHTTPHandlerRoute struct {
+	Matches []HeaderNetHTTPHandlerRouteMatch
+	Handler HTTPHandler
+}
+
+type HeaderNetHTTPHandlerRouteMatch struct {
+	Key      string
+	Exact    string `json:",omitempty"`
+	Present  bool   `json:",omitempty"`
+	Regexp   string `json:",omitempty"`
+	Prefix   string `json:",omitempty"`
+	Suffix   string `json:",omitempty"`
+	Contains string `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindHeaderNetHTTPHandlerConfig,
+		func(r *HeaderNetHTTPHandlerConfig) HTTPHandler { return r },
+	)
+}
+
+func (HeaderNetHTTPHandlerConfig) isHTTPHandler() {}
+func (HeaderNetHTTPHandlerConfig) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m HeaderNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t HeaderNetHTTPHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindHeaderNetHTTPHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End header@net/http.Handler type =========
+
 // ========= Begin host@net/http.Handler type =========
 //
 
@@ -3079,7 +3129,7 @@ const kindPathNetHTTPHandlerConfig = `path@net/http.Handler`
 
 // PathNetHTTPHandlerConfig path@net/http.Handler
 type PathNetHTTPHandlerConfig struct {
-	Routes   []PathNetHTTPHandlerRoute
+	Paths    []PathNetHTTPHandlerRoute
 	NotFound HTTPHandler `json:",omitempty"`
 }
 
@@ -3146,6 +3196,56 @@ func (m PprofNetHTTPHandler) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End pprof@net/http.Handler type =========
+
+// ========= Begin query@net/http.Handler type =========
+//
+
+const kindQueryNetHTTPHandlerConfig = `query@net/http.Handler`
+
+// QueryNetHTTPHandlerConfig query@net/http.Handler
+type QueryNetHTTPHandlerConfig struct {
+	Queries  []QueryNetHTTPHandlerRoute
+	NotFound HTTPHandler `json:",omitempty"`
+}
+
+type QueryNetHTTPHandlerRoute struct {
+	Matches []QueryNetHTTPHandlerRouteMatch
+	Handler HTTPHandler
+}
+
+type QueryNetHTTPHandlerRouteMatch struct {
+	Key      string
+	Exact    string `json:",omitempty"`
+	Present  bool   `json:",omitempty"`
+	Regexp   string `json:",omitempty"`
+	Prefix   string `json:",omitempty"`
+	Suffix   string `json:",omitempty"`
+	Contains string `json:",omitempty"`
+}
+
+func init() {
+	_ = provider.Register(
+		kindQueryNetHTTPHandlerConfig,
+		func(r *QueryNetHTTPHandlerConfig) HTTPHandler { return r },
+	)
+}
+
+func (QueryNetHTTPHandlerConfig) isHTTPHandler() {}
+func (QueryNetHTTPHandlerConfig) isComponent()   {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m QueryNetHTTPHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t QueryNetHTTPHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindQueryNetHTTPHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End query@net/http.Handler type =========
 
 // ========= Begin quic@stream.ListenConfig type =========
 //

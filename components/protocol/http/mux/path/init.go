@@ -28,14 +28,14 @@ type Route struct {
 }
 
 type Config struct {
-	Routes   []*Route
+	Paths    []*Route
 	NotFound http.Handler `json:",omitempty"`
 }
 
 func NewPathWithConfig(conf *Config) (http.Handler, error) {
 	mux := NewPath()
 	mux.NotFound(conf.NotFound)
-	for _, route := range conf.Routes {
+	for _, route := range conf.Paths {
 		if route.Handler == nil {
 			return nil, ErrNotHandler
 		}

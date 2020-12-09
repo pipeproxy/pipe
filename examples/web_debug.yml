@@ -15,7 +15,7 @@ Multi:
               '@Kind': log@net/http.Handler
               Handler:
                 '@Kind': path@net/http.Handler
-                Routes:
+                Paths:
                 - Handler:
                     '@Kind': multi@net/http.Handler
                     Multi:
