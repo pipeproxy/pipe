@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+
+	"github.com/pipeproxy/pipe/internal/http/template"
 )
 
 // Header is an host multiplexer.
@@ -53,7 +55,7 @@ func (h *Header) Handler(v http.Header) http.Handler {
 		}
 	}
 	if h.notFound == nil {
-		return http.HandlerFunc(http.NotFound)
+		return template.NotFoundHandler
 	}
 	return h.notFound
 }

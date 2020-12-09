@@ -5,6 +5,8 @@ import (
 	"net/url"
 	"regexp"
 	"strings"
+
+	"github.com/pipeproxy/pipe/internal/http/template"
 )
 
 // Query is an host multiplexer.
@@ -54,7 +56,7 @@ func (q *Query) Handler(v url.Values) http.Handler {
 		}
 	}
 	if q.notFound == nil {
-		return http.HandlerFunc(http.NotFound)
+		return template.NotFoundHandler
 	}
 	return q.notFound
 }

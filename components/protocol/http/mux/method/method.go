@@ -1,12 +1,9 @@
 package method
 
 import (
-	"fmt"
 	"net/http"
-)
 
-var (
-	ErrNotFound = fmt.Errorf("error not found")
+	"github.com/pipeproxy/pipe/internal/http/template"
 )
 
 // Method is an host multiplexer.
@@ -22,31 +19,26 @@ func NewMethod() *Method {
 	return p
 }
 
-func (h *Method) NotFound(handler http.Handler) {
-	h.notFound = handler
+func (m *Method) NotFound(handler http.Handler) {
+	m.notFound = handler
 }
 
-func (h *Method) Handle(method string, handler http.Handler) {
-	h.methods[method] = handler
+func (m *Method) Handle(method string, handler http.Handler) {
+	m.methods[method] = handler
 }
 
 // Handler returns methods route handler.
-func (h *Method) Handler(method string) (handler http.Handler, err error) {
-	handler, ok := h.methods[method]
+func (m *Method) Handler(method string) (handler http.Handler) {
+	handler, ok := m.methods[method]
 	if ok {
-		return handler, nil
+		return handler
 	}
-	if h.notFound == nil {
-		return nil, ErrNotFound
+	if m.notFound == nil {
+		return template.NotFoundHandler
 	}
-	return h.notFound, nil
+	return m.notFound
 }
 
-func (h *Method) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	host := r.Host
-	handler, err := h.Handler(host)
-	if err != nil || handler == nil {
-		handler = http.HandlerFunc(http.NotFound)
-	}
-	handler.ServeHTTP(rw, r)
+func (m *Method) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	m.Handler(r.Host).ServeHTTP(rw, r)
 }

@@ -40,9 +40,8 @@ func NewMux() *Mux {
 }
 
 // NotFound replies to the handler with an Handler not found error.
-func (m *Mux) NotFound(handler stream.Handler) error {
+func (m *Mux) NotFound(handler stream.Handler) {
 	m.notFound = handler
-	return nil
 }
 
 func (m *Mux) HandleRegexp(pattern string, handler stream.Handler) error {
@@ -66,10 +65,10 @@ func (m *Mux) HandleRegexp(pattern string, handler stream.Handler) error {
 	return nil
 }
 
-func (m *Mux) HandlePrefix(prefix string, handler stream.Handler) error {
+func (m *Mux) HandlePrefix(prefix string, handler stream.Handler) {
 	buf := m.setHandler(handler)
 	m.handle(prefix, buf)
-	return nil
+	return
 }
 
 // Handler returns most matching handler and prefix bytes data to use for the given reader.

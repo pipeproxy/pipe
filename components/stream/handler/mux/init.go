@@ -1,6 +1,10 @@
 package mux
 
 import (
+	"context"
+
+	"github.com/wzshiming/logger"
+
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stream"
 )
@@ -26,11 +30,9 @@ type Config struct {
 }
 
 // NewProtoMux create a new Mux with config.
-func NewMuxWithConfig(conf *Config) (stream.Handler, error) {
+func NewMuxWithConfig(ctx context.Context, conf *Config) (stream.Handler, error) {
 	mux := NewMux()
-	if conf.NotFound != nil {
-		mux.NotFound(conf.NotFound)
-	}
+	mux.NotFound(conf.NotFound)
 
 	for _, route := range conf.Routes {
 		if route.Pattern != "" {
@@ -39,7 +41,10 @@ func NewMuxWithConfig(conf *Config) (stream.Handler, error) {
 				mux.HandleRegexp(patterm, route.Handler)
 			}
 		} else if route.Regexp != "" {
-			mux.HandleRegexp(route.Regexp, route.Handler)
+			err := mux.HandleRegexp(route.Regexp, route.Handler)
+			if err != nil {
+				logger.FromContext(ctx).Error(err, "Stream mux regexp")
+			}
 		} else if route.Prefix != "" {
 			mux.HandlePrefix(route.Prefix, route.Handler)
 		}

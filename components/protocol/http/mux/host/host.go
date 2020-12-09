@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/pipeproxy/pipe/internal/http/template"
 )
 
 var (
@@ -75,7 +77,7 @@ func (h *Host) Handler(host string) (handler http.Handler) {
 		return m.handler
 	}
 	if h.notFound == nil {
-		return http.HandlerFunc(http.NotFound)
+		return template.NotFoundHandler
 	}
 	return h.notFound
 }
