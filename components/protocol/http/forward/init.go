@@ -18,6 +18,7 @@ func init() {
 }
 
 type Config struct {
+	H2c    bool          `json:",omitempty"`
 	Dialer stream.Dialer `json:",omitempty"`
 	URL    string
 }
@@ -31,5 +32,5 @@ func NewForwardWithConfig(conf *Config) (http.Handler, error) {
 	if conf.Dialer == nil {
 		conf.Dialer = dialer.NewDialer("tcp", u.Host, false, false)
 	}
-	return NewForward(conf.URL, conf.Dialer)
+	return NewForward(conf.URL, conf.Dialer, conf.H2c)
 }

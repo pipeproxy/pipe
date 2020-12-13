@@ -11,18 +11,20 @@ import (
 	"github.com/pipeproxy/pipe/components/once"
 	"github.com/pipeproxy/pipe/components/stdio/input/inline"
 	"github.com/pipeproxy/pipe/internal/ctxcache"
+	"github.com/wzshiming/logger"
 	"golang.org/x/sync/errgroup"
 	"sigs.k8s.io/yaml"
 )
 
 type Pipe struct {
-	config    string
-	group     *errgroup.Group
-	ctx       context.Context
-	cancel    []func()
-	mut       sync.Mutex
-	reloadMut sync.Mutex
-	usage     int32
+	config        string
+	group         *errgroup.Group
+	ctx           context.Context
+	cancel        []func()
+	mut           sync.Mutex
+	reloadMut     sync.Mutex
+	reloadCounter uint64
+	usage         int32
 }
 
 type pipeCtxKeyType int
@@ -47,7 +49,9 @@ func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 }
 
 func (c *Pipe) Start() error {
-	return c.load([]byte(c.config), true)
+	ctx := c.ctx
+	ctx = logger.WithContext(ctx, logger.FromContext(ctx).WithName("first-load"))
+	return c.load(ctx, []byte(c.config), true)
 }
 
 func (c *Pipe) Run() error {
@@ -87,18 +91,23 @@ func (c *Pipe) start(ctx context.Context, o once.Once, first bool) error {
 }
 
 func (c *Pipe) Reload(config []byte) error {
-	return c.load(config, false)
+	ctx := c.ctx
+	ctx = logger.WithContext(ctx,
+		logger.FromContext(ctx).WithName(
+			fmt.Sprintf("reload-%d", atomic.AddUint64(&c.reloadCounter, 1))))
+	return c.load(ctx, config, false)
 }
 
-func (c *Pipe) load(config []byte, first bool) error {
+func (c *Pipe) load(ctx context.Context, config []byte, first bool) error {
 	config, err := yaml.YAMLToJSONStrict(config)
 	if err != nil {
 		return err
 	}
 	conf := string(config)
 	var o once.Once
-	ctx := ctxcache.WithCache(c.ctx)
-	err = load.Load(ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
+	ctx = ctxcache.WithCache(ctx)
+	err = load.Load(logger.WithContext(ctx, logger.FromContext(ctx).WithName("loading")),
+		inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
 	if err != nil {
 		return err
 	}

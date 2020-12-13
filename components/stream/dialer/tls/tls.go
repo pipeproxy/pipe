@@ -36,6 +36,10 @@ func (t *Tls) DialStream(ctx context.Context) (stream.Stream, error) {
 	return tls.Client(stm, t.tlsConfig.TLS()), nil
 }
 
+func (t *Tls) IsVirtual() bool {
+	return t.dialer.IsVirtual()
+}
+
 func (t *Tls) Targets() []stream.Dialer {
 	ts := t.dialer.Targets()
 	ds := make([]stream.Dialer, 0, len(ts))

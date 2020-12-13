@@ -1,4 +1,4 @@
-package mux
+package prefix
 
 import (
 	"context"
@@ -18,10 +18,10 @@ var (
 	ErrNotFound = fmt.Errorf("error not found")
 )
 
-// Mux is an Applicative protocol multiplexer
+// Prefix is an Applicative protocol multiplexer
 // It matches the prefix of each incoming reader against a list of registered patterns
 // and calls the handler for the pattern that most closely matches the Handler.
-type Mux struct {
+type Prefix struct {
 	trie         *trie.Trie
 	prefixLength int
 	size         uint32
@@ -29,9 +29,9 @@ type Mux struct {
 	notFound     stream.Handler
 }
 
-// NewProtoMux create a new Mux.
-func NewMux() *Mux {
-	p := &Mux{
+// NewPrefix create a new Prefix.
+func NewPrefix() *Prefix {
+	p := &Prefix{
 		trie:     trie.NewTrie(),
 		handlers: map[uint32]stream.Handler{},
 	}
@@ -40,11 +40,11 @@ func NewMux() *Mux {
 }
 
 // NotFound replies to the handler with an Handler not found error.
-func (m *Mux) NotFound(handler stream.Handler) {
-	m.notFound = handler
+func (p *Prefix) NotFound(handler stream.Handler) {
+	p.notFound = handler
 }
 
-func (m *Mux) HandleRegexp(pattern string, handler stream.Handler) error {
+func (p *Prefix) HandleRegexp(pattern string, handler stream.Handler) error {
 	if !strings.HasPrefix(pattern, "^") {
 		return fmt.Errorf("only prefix matching is supported, change to %q", "^"+pattern)
 	}
@@ -57,28 +57,28 @@ func (m *Mux) HandleRegexp(pattern string, handler stream.Handler) error {
 		return fmt.Errorf("regular is too large: %d", size)
 	}
 
-	buf := m.setHandler(handler)
+	buf := p.setHandler(handler)
 	r.Range(func(prefix string) bool {
-		m.handle(prefix, buf)
+		p.handle(prefix, buf)
 		return true
 	})
 	return nil
 }
 
-func (m *Mux) HandlePrefix(prefix string, handler stream.Handler) {
-	buf := m.setHandler(handler)
-	m.handle(prefix, buf)
+func (p *Prefix) HandlePrefix(prefix string, handler stream.Handler) {
+	buf := p.setHandler(handler)
+	p.handle(prefix, buf)
 	return
 }
 
 // Handler returns most matching handler and prefix bytes data to use for the given reader.
-func (m *Mux) Handler(r io.Reader) (handler stream.Handler, prefix []byte, err error) {
-	if m.prefixLength == 0 {
+func (p *Prefix) Handler(r io.Reader) (handler stream.Handler, prefix []byte, err error) {
+	if p.prefixLength == 0 {
 		return nil, nil, ErrNotFound
 	}
-	parent := m.trie.Mapping()
+	parent := p.trie.Mapping()
 	off := 0
-	prefix = make([]byte, m.prefixLength)
+	prefix = make([]byte, p.prefixLength)
 	for {
 		i, err := r.Read(prefix[off:])
 		if err != nil {
@@ -90,7 +90,7 @@ func (m *Mux) Handler(r io.Reader) (handler stream.Handler, prefix []byte, err e
 
 		data, next, _ := parent.Get(prefix[off : off+i])
 		if len(data) != 0 {
-			conn, ok := m.getHandler(data)
+			conn, ok := p.getHandler(data)
 			if ok {
 				handler = conn
 			}
@@ -104,37 +104,37 @@ func (m *Mux) Handler(r io.Reader) (handler stream.Handler, prefix []byte, err e
 	}
 
 	if handler == nil {
-		if m.notFound == nil {
+		if p.notFound == nil {
 			return nil, prefix[:off], ErrNotFound
 		}
-		handler = m.notFound
+		handler = p.notFound
 	}
 	return handler, prefix[:off], nil
 }
 
-func (m *Mux) handle(prefix string, buf []byte) {
-	m.trie.Put([]byte(prefix), buf)
-	if m.prefixLength < len(prefix) {
-		m.prefixLength = len(prefix)
+func (p *Prefix) handle(prefix string, buf []byte) {
+	p.trie.Put([]byte(prefix), buf)
+	if p.prefixLength < len(prefix) {
+		p.prefixLength = len(prefix)
 	}
 }
 
-func (m *Mux) setHandler(hand stream.Handler) []byte {
-	k := atomic.AddUint32(&m.size, 1)
-	m.handlers[k] = hand
+func (p *Prefix) setHandler(hand stream.Handler) []byte {
+	k := atomic.AddUint32(&p.size, 1)
+	p.handlers[k] = hand
 	buf := make([]byte, 4)
 	binary.BigEndian.PutUint32(buf, k)
 	return buf
 }
 
-func (m *Mux) getHandler(index []byte) (stream.Handler, bool) {
-	c, ok := m.handlers[binary.BigEndian.Uint32(index)]
+func (p *Prefix) getHandler(index []byte) (stream.Handler, bool) {
+	c, ok := p.handlers[binary.BigEndian.Uint32(index)]
 	return c, ok
 }
 
 // ServeStream dispatches the reader to the handler whose pattern most closely matches the reader.
-func (m *Mux) ServeStream(ctx context.Context, stm stream.Stream) {
-	connector, buf, err := m.Handler(stm)
+func (p *Prefix) ServeStream(ctx context.Context, stm stream.Stream) {
+	connector, buf, err := p.Handler(stm)
 	if err != nil {
 		logger.FromContext(ctx).Error(err, "",
 			"prefix", buf,

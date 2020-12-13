@@ -77,6 +77,12 @@ func newListenConfigNone() stream.ListenConfig {
 	return ListenConfigNone
 }
 
+func (_ListenConfigNone) IsVirtual() (_ bool) {
+	logger.Log.V(-1).Info("this is none of stream.ListenConfig")
+
+	return
+}
+
 func (_ListenConfigNone) ListenStream(_ context.Context) (_ net.Listener, error error) {
 	logger.Log.V(-1).Info("this is none of stream.ListenConfig")
 
@@ -89,6 +95,10 @@ type ListenConfig struct {
 	Name string
 	Def  stream.ListenConfig
 	Ctx  context.Context
+}
+
+func (o *ListenConfig) IsVirtual() bool {
+	return ListenConfigGet(o.Ctx, o.Name, o.Def).IsVirtual()
 }
 
 func (o *ListenConfig) ListenStream(context context.Context) (net.Listener, error) {

@@ -1,7 +1,9 @@
 package log
 
 import (
+	"fmt"
 	"net/http"
+	"sync/atomic"
 
 	"github.com/felixge/httpsnoop"
 	"github.com/pipeproxy/pipe/components/stdio/output"
@@ -12,6 +14,7 @@ import (
 type Log struct {
 	handler http.Handler
 	output  output.Output
+	counter uint64
 }
 
 func NewLog(h http.Handler, o output.Output) *Log {
@@ -32,7 +35,8 @@ func (l *Log) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 	u := r.RequestURI
 
-	ll.WithName("Request").
+	counter := atomic.AddUint64(&l.counter, 1)
+	ll.WithName(fmt.Sprintf("request-%d", counter)).
 		Info(u,
 			"host", r.Host,
 			"method", r.Method,
@@ -40,7 +44,7 @@ func (l *Log) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 			"header", r.Header,
 		)
 	metric := httpsnoop.CaptureMetrics(l.handler, rw, r)
-	ll.WithName("Response").
+	ll.WithName(fmt.Sprintf("response-%d", counter)).
 		Info(u,
 			"code", metric.Code,
 			"duration", metric.Duration,

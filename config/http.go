@@ -55,10 +55,10 @@ func BuildHTTP443ToHTTPSWithStreamHandler(handler bind.HTTPHandler, tls bind.TLS
 
 	redirect := BuildHTTPRedirectWithStreamHandler("{{.Scheme}}s://{{.Host}}{{.RequestURI}}", wait)
 
-	return bind.MuxStreamHandlerConfig{
-		Routes: []bind.MuxStreamHandlerRoute{
+	return bind.PrefixStreamHandlerConfig{
+		Routes: []bind.PrefixStreamHandlerRoute{
 			{
-				Pattern: "http",
+				Pattern: bind.PrefixStreamHandlerProtocolEnumProtocolHTTP1,
 				Handler: redirect,
 			},
 		},
@@ -93,10 +93,10 @@ func BuildH2WithService(address string, handler bind.HTTPHandler, tls bind.TLS) 
 	return bind.StreamServiceConfig{
 		Listener: listen,
 		Handler: BuildStreamLogStderr(
-			bind.MuxStreamHandlerConfig{
-				Routes: []bind.MuxStreamHandlerRoute{
+			bind.PrefixStreamHandlerConfig{
+				Routes: []bind.PrefixStreamHandlerRoute{
 					{
-						Pattern: "http",
+						Pattern: bind.PrefixStreamHandlerProtocolEnumProtocolHTTP1,
 						Handler: BuildHTTPRedirectWithStreamHandler("{{.Scheme}}s://{{.Host}}{{.RequestURI}}", 0),
 					},
 				},

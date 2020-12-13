@@ -29,10 +29,12 @@ type Handler interface {
 
 type ListenConfig interface {
 	ListenStream(ctx context.Context) (StreamListener, error)
+	IsVirtual() bool
 }
 
 type Dialer interface {
 	DialStream(ctx context.Context) (Stream, error)
+	IsVirtual() bool
 	Targets() []Dialer
 	Policy() balance.Policy
 	String() string

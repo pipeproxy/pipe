@@ -50,7 +50,7 @@ Multi:
         Handler:
           '@Kind': log@stream.Handler
           Handler:
-            '@Kind': mux@stream.Handler
+            '@Kind': prefix@stream.Handler
             NotFound:
               '@Kind': http2@stream.Handler
               Handler:
@@ -71,7 +71,7 @@ Multi:
                   '@Kind': redirect@net/http.Handler
                   Code: 302
                   Location: '{{.Scheme}}s://{{.Host}}{{.RequestURI}}'
-              Pattern: http
+              Pattern: http1
           Output:
             '@Kind': file@io.Writer
             Path: /dev/stderr

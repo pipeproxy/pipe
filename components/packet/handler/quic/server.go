@@ -33,3 +33,7 @@ func (s *server) ListenStream(ctx context.Context) (stream.StreamListener, error
 	}
 	return NewListener(ctx, listen), nil
 }
+
+func (s *server) IsVirtual() bool {
+	return false
+}

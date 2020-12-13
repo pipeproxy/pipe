@@ -737,6 +737,47 @@ func (m DefTLSConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End def@tls.TLS type =========
 
+// ========= Begin destination@stream.Handler type =========
+//
+
+const kindDestinationStreamHandlerConfig = `destination@stream.Handler`
+
+// DestinationStreamHandlerConfig destination@stream.Handler
+type DestinationStreamHandlerConfig struct {
+	Destinations []DestinationStreamHandlerRoute
+	NotFound     StreamHandler
+}
+
+type DestinationStreamHandlerRoute struct {
+	Ports   []uint32 `json:",omitempty"`
+	CIDR    string   `json:",omitempty"`
+	Handler StreamHandler
+}
+
+func init() {
+	_ = provider.Register(
+		kindDestinationStreamHandlerConfig,
+		func(r *DestinationStreamHandlerConfig) StreamHandler { return r },
+	)
+}
+
+func (DestinationStreamHandlerConfig) isStreamHandler() {}
+func (DestinationStreamHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m DestinationStreamHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t DestinationStreamHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindDestinationStreamHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End destination@stream.Handler type =========
+
 // ========= Begin dialer@stream.Dialer type =========
 //
 
@@ -1076,6 +1117,7 @@ const kindForwardNetHTTPHandlerConfig = `forward@net/http.Handler`
 
 // ForwardNetHTTPHandlerConfig forward@net/http.Handler
 type ForwardNetHTTPHandlerConfig struct {
+	H2c    bool         `json:",omitempty"`
 	Dialer StreamDialer `json:",omitempty"`
 	URL    string
 }
@@ -2550,48 +2592,6 @@ func (m MultiStreamHandlerConfig) MarshalJSON() ([]byte, error) {
 //
 // ========= End multi@stream.Handler type =========
 
-// ========= Begin mux@stream.Handler type =========
-//
-
-const kindMuxStreamHandlerConfig = `mux@stream.Handler`
-
-// MuxStreamHandlerConfig mux@stream.Handler
-type MuxStreamHandlerConfig struct {
-	Routes   []MuxStreamHandlerRoute
-	NotFound StreamHandler
-}
-
-type MuxStreamHandlerRoute struct {
-	Pattern string `json:",omitempty"`
-	Regexp  string `json:",omitempty"`
-	Prefix  string `json:",omitempty"`
-	Handler StreamHandler
-}
-
-func init() {
-	_ = provider.Register(
-		kindMuxStreamHandlerConfig,
-		func(r *MuxStreamHandlerConfig) StreamHandler { return r },
-	)
-}
-
-func (MuxStreamHandlerConfig) isStreamHandler() {}
-func (MuxStreamHandlerConfig) isComponent()     {}
-
-// MarshalJSON returns m as the JSON encoding of m.
-func (m MuxStreamHandlerConfig) MarshalJSON() ([]byte, error) {
-	type t MuxStreamHandlerConfig
-	data, err := json.Marshal(t(m))
-	if err != nil {
-		return nil, err
-	}
-	data = prepend(kindKey, kindMuxStreamHandlerConfig, data)
-	return data, nil
-}
-
-//
-// ========= End mux@stream.Handler type =========
-
 // ========= Begin none@balance.Policy type =========
 //
 
@@ -3196,6 +3196,59 @@ func (m PprofNetHTTPHandler) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End pprof@net/http.Handler type =========
+
+// ========= Begin prefix@stream.Handler type =========
+//
+
+const kindPrefixStreamHandlerConfig = `prefix@stream.Handler`
+
+// PrefixStreamHandlerConfig prefix@stream.Handler
+type PrefixStreamHandlerConfig struct {
+	Routes   []PrefixStreamHandlerRoute
+	NotFound StreamHandler
+}
+
+type PrefixStreamHandlerRoute struct {
+	Pattern PrefixStreamHandlerProtocolEnum `json:",omitempty"`
+	Regexp  string                          `json:",omitempty"`
+	Prefix  string                          `json:",omitempty"`
+	Handler StreamHandler
+}
+
+type PrefixStreamHandlerProtocolEnum string
+
+const (
+	PrefixStreamHandlerProtocolEnumProtocolTLS    PrefixStreamHandlerProtocolEnum = "tls"
+	PrefixStreamHandlerProtocolEnumProtocolSocks5 PrefixStreamHandlerProtocolEnum = "socks5"
+	PrefixStreamHandlerProtocolEnumProtocolSocks4 PrefixStreamHandlerProtocolEnum = "socks4"
+	PrefixStreamHandlerProtocolEnumProtocolSSH    PrefixStreamHandlerProtocolEnum = "ssh"
+	PrefixStreamHandlerProtocolEnumProtocolHTTP2  PrefixStreamHandlerProtocolEnum = "http2"
+	PrefixStreamHandlerProtocolEnumProtocolHTTP1  PrefixStreamHandlerProtocolEnum = "http1"
+)
+
+func init() {
+	_ = provider.Register(
+		kindPrefixStreamHandlerConfig,
+		func(r *PrefixStreamHandlerConfig) StreamHandler { return r },
+	)
+}
+
+func (PrefixStreamHandlerConfig) isStreamHandler() {}
+func (PrefixStreamHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m PrefixStreamHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t PrefixStreamHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindPrefixStreamHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End prefix@stream.Handler type =========
 
 // ========= Begin query@net/http.Handler type =========
 //
@@ -4007,6 +4060,47 @@ func (m ServiceOnceConfig) MarshalJSON() ([]byte, error) {
 
 //
 // ========= End service@once.Once type =========
+
+// ========= Begin source@stream.Handler type =========
+//
+
+const kindSourceStreamHandlerConfig = `source@stream.Handler`
+
+// SourceStreamHandlerConfig source@stream.Handler
+type SourceStreamHandlerConfig struct {
+	Destinations []SourceStreamHandlerRoute
+	NotFound     StreamHandler
+}
+
+type SourceStreamHandlerRoute struct {
+	Ports   []uint32 `json:",omitempty"`
+	CIDR    string   `json:",omitempty"`
+	Handler StreamHandler
+}
+
+func init() {
+	_ = provider.Register(
+		kindSourceStreamHandlerConfig,
+		func(r *SourceStreamHandlerConfig) StreamHandler { return r },
+	)
+}
+
+func (SourceStreamHandlerConfig) isStreamHandler() {}
+func (SourceStreamHandlerConfig) isComponent()     {}
+
+// MarshalJSON returns m as the JSON encoding of m.
+func (m SourceStreamHandlerConfig) MarshalJSON() ([]byte, error) {
+	type t SourceStreamHandlerConfig
+	data, err := json.Marshal(t(m))
+	if err != nil {
+		return nil, err
+	}
+	data = prepend(kindKey, kindSourceStreamHandlerConfig, data)
+	return data, nil
+}
+
+//
+// ========= End source@stream.Handler type =========
 
 // ========= Begin stream@service.Service type =========
 //

@@ -86,6 +86,12 @@ func (_DialerNone) DialStream(_ context.Context) (_ net.Conn, error error) {
 	return
 }
 
+func (_DialerNone) IsVirtual() (_ bool) {
+	logger.Log.V(-1).Info("this is none of stream.Dialer")
+
+	return
+}
+
 func (_DialerNone) Policy() (_ balance.Policy) {
 	logger.Log.V(-1).Info("this is none of stream.Dialer")
 
@@ -112,6 +118,10 @@ type Dialer struct {
 
 func (o *Dialer) DialStream(context context.Context) (net.Conn, error) {
 	return DialerGet(o.Ctx, o.Name, o.Def).DialStream(context)
+}
+
+func (o *Dialer) IsVirtual() bool {
+	return DialerGet(o.Ctx, o.Name, o.Def).IsVirtual()
 }
 
 func (o *Dialer) Policy() balance.Policy {

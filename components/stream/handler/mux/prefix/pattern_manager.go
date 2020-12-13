@@ -1,4 +1,4 @@
-package mux
+package prefix
 
 var std = newPatternManager()
 
@@ -20,12 +20,12 @@ func newPatternManager() *patternManager {
 	}
 }
 
-func (h *patternManager) RegisterRegexp(name string, pattern string) error {
-	h.patterns[name] = pattern
+func (p *patternManager) RegisterRegexp(name string, pattern string) error {
+	p.patterns[name] = pattern
 	return nil
 }
 
-func (h *patternManager) Get(name string) (string, bool) {
-	pattern, ok := h.patterns[name]
+func (p *patternManager) Get(name string) (string, bool) {
+	pattern, ok := p.patterns[name]
 	return pattern, ok
 }

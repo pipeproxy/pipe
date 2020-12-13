@@ -2,10 +2,8 @@ package dialer
 
 import (
 	"context"
-	"errors"
 	"net"
 
-	"github.com/mikioh/tcp"
 	"github.com/pipeproxy/pipe/components/balance"
 	"github.com/pipeproxy/pipe/components/balance/none"
 	svc_stream "github.com/pipeproxy/pipe/components/service/stream"
@@ -37,16 +35,8 @@ func (d *Dialer) DialStream(ctx context.Context) (stream.Stream, error) {
 	network := d.network
 	address := d.address
 	if d.original {
-		s, ok := svc_stream.GetRawStreamWithContext(ctx)
-		if !ok {
-			return nil, errors.New("unable to get raw stream")
-		}
-		c, err := tcp.NewConn(s)
-		if err != nil {
-			return nil, err
-		}
-		addr, err := c.OriginalDst()
-		if err == nil {
+		s, addr, ok := svc_stream.GetRawStreamAndOriginalDestinationAddrWithContext(ctx)
+		if ok {
 			address = addr.String()
 			h1, port, err := net.SplitHostPort(address)
 			if err != nil {
@@ -80,6 +70,10 @@ func (d *Dialer) DialStream(ctx context.Context) (stream.Stream, error) {
 		"targetAddress", address,
 	)
 	return listener.DialContext(ctx, network, address)
+}
+
+func (d *Dialer) IsVirtual() bool {
+	return d.virtual
 }
 
 func (d *Dialer) Targets() []stream.Dialer {

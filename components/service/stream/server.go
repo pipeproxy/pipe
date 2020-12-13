@@ -2,6 +2,7 @@ package stream
 
 import (
 	"context"
+	"net"
 	"sync"
 	"time"
 
@@ -76,7 +77,7 @@ func (s *Server) Close() error {
 }
 
 func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
-	ctx = withContext(ctx, stm)
+	ctx = withContext(ctx, stm, !s.listenConfig.IsVirtual())
 	if s.disconnectOnClose {
 		s.pool.Store(stm, ctx)
 		defer s.pool.Delete(stm)
@@ -102,15 +103,49 @@ func (nopCloser) Close() error {
 
 type streamCtxKeyType int
 
+type contextData struct {
+	raw         stream.Stream
+	originDst   net.Addr
+	isOriginDst bool
+}
+
 func GetRawStreamWithContext(ctx context.Context) (stream.Stream, bool) {
 	i := ctx.Value(streamCtxKeyType(0))
 	if i == nil {
 		return nil, false
 	}
-	p, ok := i.(stream.Stream)
-	return p, ok
+	p, ok := i.(*contextData)
+	if !ok || p.raw == nil {
+		return nil, false
+	}
+	return p.raw, true
 }
 
-func withContext(ctx context.Context, s stream.Stream) context.Context {
-	return context.WithValue(ctx, streamCtxKeyType(0), s)
+func GetRawStreamAndOriginalDestinationAddrWithContext(ctx context.Context) (stream.Stream, net.Addr, bool) {
+	i := ctx.Value(streamCtxKeyType(0))
+	if i == nil {
+		return nil, nil, false
+	}
+	p, ok := i.(*contextData)
+	if !ok || p.raw == nil || !p.isOriginDst {
+		return nil, nil, false
+	}
+	if p.originDst != nil {
+		return p.raw, p.originDst, true
+	}
+	addr, err := listener.GetOriginalDestinationAddr(p.raw)
+	if err != nil {
+		logger.FromContext(ctx).Error(err, "GetOriginalDestinationAddr")
+		p.isOriginDst = false
+		return nil, nil, false
+	}
+	p.originDst = addr
+	return p.raw, addr, true
+}
+
+func withContext(ctx context.Context, s stream.Stream, d bool) context.Context {
+	return context.WithValue(ctx, streamCtxKeyType(0), &contextData{
+		raw:         s,
+		isOriginDst: d,
+	})
 }

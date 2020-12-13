@@ -28,6 +28,17 @@ func (l *LB) DialStream(ctx context.Context) (stm stream.Stream, err error) {
 	return
 }
 
+func (l *LB) IsVirtual() bool {
+	var b bool
+	for _, d := range l.dialers {
+		if d.IsVirtual() {
+			b = true
+			break
+		}
+	}
+	return b
+}
+
 func (l *LB) Targets() []stream.Dialer {
 	return l.dialers
 }

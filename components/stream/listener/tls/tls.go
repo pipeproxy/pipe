@@ -20,13 +20,17 @@ func NewTls(listenConfig stream.ListenConfig, tlsConfig tls.TLS) *Tls {
 	}
 }
 
-func (d *Tls) ListenStream(ctx context.Context) (stream.StreamListener, error) {
+func (t *Tls) ListenStream(ctx context.Context) (stream.StreamListener, error) {
 	log := logger.FromContext(ctx)
 	log = log.WithName("tls")
 	ctx = logger.WithContext(ctx, log)
-	listener, err := d.listenConfig.ListenStream(ctx)
+	listener, err := t.listenConfig.ListenStream(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return tls.NewListener(listener, d.tlsConfig.TLS()), nil
+	return tls.NewListener(listener, t.tlsConfig.TLS()), nil
+}
+
+func (t *Tls) IsVirtual() bool {
+	return t.listenConfig.IsVirtual()
 }

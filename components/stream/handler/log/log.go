@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync/atomic"
 
+	svc_stream "github.com/pipeproxy/pipe/components/service/stream"
 	"github.com/pipeproxy/pipe/components/stdio/output"
 	"github.com/pipeproxy/pipe/components/stream"
 	"github.com/pipeproxy/pipe/internal/log"
@@ -14,11 +15,11 @@ import (
 type Log struct {
 	handler stream.Handler
 	output  output.Output
-	size    uint64
+	counter uint64
 }
 
 func NewLog(h stream.Handler, o output.Output) *Log {
-	return &Log{handler: h, output: o, size: 0}
+	return &Log{handler: h, output: o, counter: 0}
 }
 
 func (l *Log) ServeStream(ctx context.Context, stm stream.Stream) {
@@ -32,12 +33,17 @@ func (l *Log) ServeStream(ctx context.Context, stm stream.Stream) {
 		ll = log.WithOut(ll, l.output)
 	}
 
-	ll = ll.WithName(fmt.Sprintf("stream-%d", atomic.AddUint64(&l.size, 1)))
+	ll = ll.WithName(fmt.Sprintf("stream-%d", atomic.AddUint64(&l.counter, 1)))
 	ll = ll.WithValues(
 		"localAddress", stm.LocalAddr(),
 		"remoteAddress", stm.RemoteAddr(),
 	)
-	ll.Info("Connect")
+	if _, d, ok := svc_stream.GetRawStreamAndOriginalDestinationAddrWithContext(ctx); ok {
+		ll = ll.WithValues(
+			"originalDestinationAddress", d,
+		)
+	}
+	ll.Info("connect")
 	l.handler.ServeStream(logger.WithContext(ctx, ll), stm)
-	ll.Info("Disconnect")
+	ll.Info("disconnect")
 }

@@ -36,3 +36,7 @@ func (l *Listener) ListenStream(ctx context.Context) (stream.StreamListener, err
 	)
 	return listener.Listen(ctx, l.network, l.address)
 }
+
+func (l *Listener) IsVirtual() bool {
+	return l.virtual
+}
