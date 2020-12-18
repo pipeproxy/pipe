@@ -15,8 +15,8 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/wzshiming/crun v0.3.3
 	github.com/wzshiming/funcfg v0.1.2
-	github.com/wzshiming/lockfile v0.0.5
-	github.com/wzshiming/logger v0.0.0-20201130102445-8496ab0eee53
+	github.com/wzshiming/lockfile v0.1.0
+	github.com/wzshiming/logger v0.0.0-20201218143744-5ae3f93dcd65
 	github.com/wzshiming/notify v0.0.5
 	github.com/wzshiming/trie v0.0.1
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a

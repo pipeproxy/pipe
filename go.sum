@@ -205,10 +205,10 @@ github.com/wzshiming/gotype v0.6.3 h1:fERZgrQswld5dfAlW0+G4ZyKyrUptipoiCNKUK6BGA
 github.com/wzshiming/gotype v0.6.3/go.mod h1:7YULvVsDObRVX2U6iUcF5hixYvHFavLsTSIW26c5GLM=
 github.com/wzshiming/inject v0.1.0 h1:jIxBvu1uZu1hmTtlVT8KyBqXNKwWZoM7+AipVCLr2bE=
 github.com/wzshiming/inject v0.1.0/go.mod h1:TMwIIbf/euizgbEFavNdWAudPr7tO9kM0UOLxJJgJkY=
-github.com/wzshiming/lockfile v0.0.5 h1:UXmyza5BHnG4otZ5tXSUAp4TnHt72oKozKQ0BlwZqoM=
-github.com/wzshiming/lockfile v0.0.5/go.mod h1:vhWLDg1zBZYjo0UGrKCzCa8V+exb/6pq3H9yAulhpHM=
-github.com/wzshiming/logger v0.0.0-20201130102445-8496ab0eee53 h1:Xe4VqDUMMUAACevuJ86GAVNcEL5bniFDpteyZ+zawrw=
-github.com/wzshiming/logger v0.0.0-20201130102445-8496ab0eee53/go.mod h1:ZrCaVKS2W7/ivqWwOXmW7GuOlTe3jC6RCDyP48cJCqc=
+github.com/wzshiming/lockfile v0.1.0 h1:JTkiWxUfCw/bRUrPtubqhkwYPMWfAcGQnP89W+704Y8=
+github.com/wzshiming/lockfile v0.1.0/go.mod h1:vhWLDg1zBZYjo0UGrKCzCa8V+exb/6pq3H9yAulhpHM=
+github.com/wzshiming/logger v0.0.0-20201218143744-5ae3f93dcd65 h1:IR8AjfeU51keevY/bx5uy5Ez/nEDv188pBAY93L0bUM=
+github.com/wzshiming/logger v0.0.0-20201218143744-5ae3f93dcd65/go.mod h1:ZrCaVKS2W7/ivqWwOXmW7GuOlTe3jC6RCDyP48cJCqc=
 github.com/wzshiming/namecase v0.2.0 h1:zRWDTVN8Yfzz9YfpOuM/TpYza/HRO9SrWAR6l9mMpKQ=
 github.com/wzshiming/namecase v0.2.0/go.mod h1:FJT9Q8a289dtinO3AJUDKqRP9UQzq9UxpWDevdDVvYA=
 github.com/wzshiming/notify v0.0.5 h1:c/S99kE2S1jNt74hg5bpmM0DFATEHNg5NDgl8sYKAfo=
