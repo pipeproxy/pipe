@@ -27,8 +27,10 @@ func NewTls(dialer stream.Dialer, tlsConfig tls.TLS) *Tls {
 
 func (t *Tls) DialStream(ctx context.Context) (stream.Stream, error) {
 	log := logger.FromContext(ctx)
-	log = log.WithName("tls")
-	ctx = logger.WithContext(ctx, log)
+	if log.Enabled() {
+		log = log.WithName("tls")
+		ctx = logger.WithContext(ctx, log)
+	}
 	stm, err := t.dialer.DialStream(ctx)
 	if err != nil {
 		return nil, err

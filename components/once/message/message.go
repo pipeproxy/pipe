@@ -9,6 +9,9 @@ import (
 type Message string
 
 func (m Message) Do(ctx context.Context) error {
-	logger.FromContext(ctx).Info(string(m))
+	log := logger.FromContext(ctx)
+	if log.Enabled() {
+		log.Info(string(m))
+	}
 	return nil
 }

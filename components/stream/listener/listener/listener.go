@@ -24,16 +24,21 @@ func NewListener(network string, address string, virtual bool) *Listener {
 
 func (l *Listener) ListenStream(ctx context.Context) (stream.StreamListener, error) {
 	log := logger.FromContext(ctx)
+	if log.Enabled() {
+		if l.virtual {
+			log.Info("Virtual listen stream",
+				"localAddress", l.address,
+				"virtual", true,
+			)
+		} else {
+			log.Info("Listen stream",
+				"localAddress", l.address,
+			)
+		}
+	}
 	if l.virtual {
-		log.Info("Virtual listen stream",
-			"localAddress", l.address,
-			"virtual", true,
-		)
 		return listener.VirtualListen(ctx, l.network, l.address)
 	}
-	log.Info("Listen stream",
-		"localAddress", l.address,
-	)
 	return listener.Listen(ctx, l.network, l.address)
 }
 

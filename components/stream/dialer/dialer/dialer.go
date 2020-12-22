@@ -59,16 +59,22 @@ func (d *Dialer) DialStream(ctx context.Context) (stream.Stream, error) {
 	}
 
 	log := logger.FromContext(ctx)
+	if log.Enabled() {
+		if d.virtual {
+			log.Info("Virtual dial stream",
+				"targetAddress", address,
+				"virtual", true,
+			)
+		} else {
+			log.Info("Dial stream",
+				"targetAddress", address,
+			)
+		}
+
+	}
 	if d.virtual {
-		log.Info("Virtual dial stream",
-			"targetAddress", address,
-			"virtual", true,
-		)
 		return listener.VirtualDialContext(ctx, network, address)
 	}
-	log.Info("Dial stream",
-		"targetAddress", address,
-	)
 	return listener.DialContext(ctx, network, address)
 }
 

@@ -27,8 +27,10 @@ func NewServer(handler http.Handler, tlsConfig tls.TLS) packet.Handler {
 
 func (s *server) ServePacket(ctx context.Context, pkt packet.Packet) {
 	log := logger.FromContext(ctx)
-	log = log.WithName("http3")
-	ctx = logger.WithContext(ctx, log)
+	if log.Enabled() {
+		log = log.WithName("http3")
+		ctx = logger.WithContext(ctx, log)
+	}
 
 	httpServer := &http.Server{
 		BaseContext: func(listener net.Listener) context.Context {

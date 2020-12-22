@@ -25,8 +25,10 @@ func NewServer(pkt packet.Packet, tlsConfig tls.TLS) stream.ListenConfig {
 
 func (s *server) ListenStream(ctx context.Context) (stream.StreamListener, error) {
 	log := logger.FromContext(ctx)
-	log = log.WithName("quic")
-	ctx = logger.WithContext(ctx, log)
+	if log.Enabled() {
+		log = log.WithName("quic")
+		ctx = logger.WithContext(ctx, log)
+	}
 	listen, err := quic.Listen(s.pkt, s.tlsConfig.TLS(), &quic.Config{})
 	if err != nil {
 		return nil, err

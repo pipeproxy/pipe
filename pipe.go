@@ -50,7 +50,11 @@ func NewPipeWithConfig(ctx context.Context, config []byte) (*Pipe, error) {
 
 func (c *Pipe) Start() error {
 	ctx := c.ctx
-	ctx = logger.WithContext(ctx, logger.FromContext(ctx).WithName("first-load"))
+	log := logger.FromContext(ctx)
+	if log.Enabled() {
+		log = log.WithName("first-load")
+		ctx = logger.WithContext(ctx, log)
+	}
 	return c.load(ctx, []byte(c.config), true)
 }
 
@@ -92,9 +96,12 @@ func (c *Pipe) start(ctx context.Context, o once.Once, first bool) error {
 
 func (c *Pipe) Reload(config []byte) error {
 	ctx := c.ctx
-	ctx = logger.WithContext(ctx,
-		logger.FromContext(ctx).WithName(
-			fmt.Sprintf("reload-%d", atomic.AddUint64(&c.reloadCounter, 1))))
+	log := logger.FromContext(ctx)
+	if log.Enabled() {
+		log = log.WithName(
+			fmt.Sprintf("reload-%d", atomic.AddUint64(&c.reloadCounter, 1)))
+		ctx = logger.WithContext(ctx, log)
+	}
 	return c.load(ctx, config, false)
 }
 
@@ -106,8 +113,12 @@ func (c *Pipe) load(ctx context.Context, config []byte, first bool) error {
 	conf := string(config)
 	var o once.Once
 	ctx = ctxcache.WithCache(ctx)
-	err = load.Load(logger.WithContext(ctx, logger.FromContext(ctx).WithName("loading")),
-		inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
+	log := logger.FromContext(ctx)
+	if log.Enabled() {
+		log = log.WithName("loading")
+		ctx = logger.WithContext(ctx, log)
+	}
+	err = load.Load(ctx, inline.NewInlineWithConfig(&inline.Config{Data: conf}), &o)
 	if err != nil {
 		return err
 	}

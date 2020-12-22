@@ -16,10 +16,11 @@ func init() {
 }
 
 type Config struct {
-	Output  output.Output
-	Handler stream.Handler
+	Output              output.Output
+	Handler             stream.Handler
+	OriginalDestination bool `json:",omitempty"`
 }
 
 func NewLogWithConfig(conf *Config) stream.Handler {
-	return NewLog(conf.Handler, conf.Output)
+	return NewLog(conf.Handler, conf.Output, conf.OriginalDestination)
 }

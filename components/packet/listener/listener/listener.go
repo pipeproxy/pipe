@@ -21,8 +21,11 @@ func NewListener(network string, address string) *Listener {
 }
 
 func (n *Listener) ListenPacket(ctx context.Context) (packet.Packet, error) {
-	logger.FromContext(ctx).Info("Listen packet",
-		"localAddress", n.address,
-	)
+	log := logger.FromContext(ctx)
+	if log.Enabled() {
+		log.Info("Listen packet",
+			"localAddress", n.address,
+		)
+	}
 	return listener.ListenPacket(ctx, n.network, n.address)
 }

@@ -2273,8 +2273,9 @@ const kindLogStreamHandlerConfig = `log@stream.Handler`
 
 // LogStreamHandlerConfig log@stream.Handler
 type LogStreamHandlerConfig struct {
-	Output  IoWriter
-	Handler StreamHandler
+	Output              IoWriter
+	Handler             StreamHandler
+	OriginalDestination bool `json:",omitempty"`
 }
 
 func init() {

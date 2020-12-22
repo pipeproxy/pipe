@@ -27,8 +27,10 @@ func NewServer(listenConfig packet.ListenConfig, handler packet.Handler) (*Serve
 
 func (s *Server) Run(ctx context.Context) error {
 	log := logger.FromContext(ctx)
-	log = log.WithName("packet")
-	ctx = logger.WithContext(ctx, log)
+	if log.Enabled() {
+		log = log.WithName("packet")
+		ctx = logger.WithContext(ctx, log)
+	}
 	pkt, err := s.listenConfig.ListenPacket(ctx)
 	if err != nil {
 		return err

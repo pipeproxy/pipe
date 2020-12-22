@@ -39,8 +39,10 @@ func (s *server) serve(ctx context.Context, listen stream.StreamListener, handle
 
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
 	log := logger.FromContext(ctx)
-	log = log.WithName("http1")
-	ctx = logger.WithContext(ctx, log)
+	if log.Enabled() {
+		log = log.WithName("http1")
+		ctx = logger.WithContext(ctx, log)
+	}
 	err := s.serve(ctx, listener.NewSingleConnListener(stm), s.handler)
 	if err != nil {
 		log.Error(err, "http1 server close")

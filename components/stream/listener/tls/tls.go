@@ -22,8 +22,10 @@ func NewTls(listenConfig stream.ListenConfig, tlsConfig tls.TLS) *Tls {
 
 func (t *Tls) ListenStream(ctx context.Context) (stream.StreamListener, error) {
 	log := logger.FromContext(ctx)
-	log = log.WithName("tls")
-	ctx = logger.WithContext(ctx, log)
+	if log.Enabled() {
+		log = log.WithName("tls")
+		ctx = logger.WithContext(ctx, log)
+	}
 	listener, err := t.listenConfig.ListenStream(ctx)
 	if err != nil {
 		return nil, err

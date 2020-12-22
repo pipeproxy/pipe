@@ -13,13 +13,14 @@ import (
 )
 
 type Log struct {
-	handler stream.Handler
-	output  output.Output
-	counter uint64
+	handler             stream.Handler
+	output              output.Output
+	originalDestination bool
+	counter             uint64
 }
 
-func NewLog(h stream.Handler, o output.Output) *Log {
-	return &Log{handler: h, output: o, counter: 0}
+func NewLog(h stream.Handler, o output.Output, originalDestination bool) *Log {
+	return &Log{handler: h, output: o, originalDestination: originalDestination, counter: 0}
 }
 
 func (l *Log) ServeStream(ctx context.Context, stm stream.Stream) {
@@ -38,10 +39,12 @@ func (l *Log) ServeStream(ctx context.Context, stm stream.Stream) {
 		"localAddress", stm.LocalAddr(),
 		"remoteAddress", stm.RemoteAddr(),
 	)
-	if _, d, ok := svc_stream.GetRawStreamAndOriginalDestinationAddrWithContext(ctx); ok {
-		ll = ll.WithValues(
-			"originalDestinationAddress", d,
-		)
+	if l.originalDestination {
+		if _, d, ok := svc_stream.GetRawStreamAndOriginalDestinationAddrWithContext(ctx); ok {
+			ll = ll.WithValues(
+				"originalDestinationAddress", d,
+			)
+		}
 	}
 	ll.Info("connect")
 	l.handler.ServeStream(logger.WithContext(ctx, ll), stm)

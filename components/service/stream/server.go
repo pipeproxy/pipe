@@ -31,8 +31,10 @@ func NewServer(listenConfig stream.ListenConfig, handler stream.Handler, disconn
 
 func (s *Server) Run(ctx context.Context) error {
 	log := logger.FromContext(ctx)
-	log = log.WithName("stream")
-	ctx = logger.WithContext(ctx, log)
+	if log.Enabled() {
+		log = log.WithName("stream")
+		ctx = logger.WithContext(ctx, log)
+	}
 	listen, err := s.listenConfig.ListenStream(ctx)
 	if err != nil {
 		return err
