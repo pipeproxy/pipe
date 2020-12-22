@@ -23,13 +23,16 @@ type Config struct {
 }
 
 func NewDirectWithConfig(conf *Config) (http.Handler, error) {
-	body, err := ioutil.ReadAll(conf.Body)
-	if err != nil {
-		return nil, err
-	}
-	temp, err := template.NewFormat(string(body))
-	if err != nil {
-		return nil, err
+	var temp template.Format
+	if conf.Body != nil {
+		body, err := ioutil.ReadAll(conf.Body)
+		if err != nil {
+			return nil, err
+		}
+		temp, err = template.NewFormat(string(body))
+		if err != nil {
+			return nil, err
+		}
 	}
 	return NewDirect(conf.Code, temp), nil
 }

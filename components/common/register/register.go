@@ -1,7 +1,6 @@
 package register
 
 import (
-	"fmt"
 	"reflect"
 	"strings"
 
@@ -11,34 +10,41 @@ import (
 )
 
 func Register(kind string, fun interface{}) error {
-	kind, err := GetKindName(kind, fun)
+	name, err := getKindName(kind, fun)
 	if err != nil {
+		logger.Log.Error(err, "GetKindName", "kind", kind)
 		return err
 	}
 
-	return types.Default.Register(kind, fun)
+	err = types.Default.Register(name, fun)
+	if err != nil {
+		logger.Log.Error(err, "Register", "kind", kind, "name", name)
+		return err
+	}
+	return nil
 }
 
-func GetKindName(kind string, fun interface{}) (string, error) {
+func getKindName(kind string, fun interface{}) (string, error) {
 	typ, err := types.CheckFunc(reflect.ValueOf(fun))
 	if err != nil {
-		logger.Log.Error(err, "CheckFunc", "kind", kind)
 		return "", err
 	}
+	name := typ.Name()
 	pkg := typ.PkgPath()
-	if pkg == "" {
-		return fmt.Sprintf("%s@%s", kind, typ.Name()), nil
+	if pkg != "" {
+		p := strings.Split(pkg, "components/")
+		if len(p) != 1 {
+			pkg = p[len(p)-1]
+		}
+		name = strings.Join([]string{pkg, name}, ".")
 	}
-	p := strings.Split(pkg, "components/")
-	if len(p) != 1 {
-		pkg = p[len(p)-1]
-	}
-	return fmt.Sprintf("%s@%s.%s", kind, pkg, typ.Name()), nil
+	return strings.Join([]string{kind, name}, "@"), nil
 }
 
 func RegisterWithBuildFunc(name string, f, i interface{}) error {
 	fun, err := extra.BuildFunc(f, i)
 	if err != nil {
+		logger.Log.Error(err, "RegisterWithBuildFunc", "name", name)
 		return err
 	}
 	return Register(name, fun.Interface())
