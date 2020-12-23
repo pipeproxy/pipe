@@ -3,6 +3,7 @@ package file
 import (
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stdio/output"
+	"github.com/pipeproxy/pipe/internal/file"
 )
 
 const (
@@ -18,5 +19,5 @@ type Config struct {
 }
 
 func NewFileWithConfig(conf *Config) (output.Output, error) {
-	return NewFile(conf.Path)
+	return file.NewFile(conf.Path)
 }

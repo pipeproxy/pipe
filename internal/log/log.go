@@ -4,6 +4,7 @@ import (
 	"io"
 
 	"github.com/go-logr/logr"
+	"github.com/pipeproxy/pipe/internal/file"
 	"github.com/wzshiming/logger"
 	"github.com/wzshiming/logger/zap"
 )
@@ -15,19 +16,19 @@ func init() {
 	logger.SetLogger(l)
 }
 
-func NewLogFromFile(file string) (logr.Logger, error) {
-	l, ok := loggerFiles[file]
+func NewLogFromFile(f string) (logr.Logger, error) {
+	l, ok := loggerFiles[f]
 	if ok {
 		return l, nil
 	}
 
-	f, err := NewFile(file)
+	out, err := file.NewFile(f)
 	if err != nil {
 		return nil, err
 	}
 
-	l = NewLog(f)
-	loggerFiles[file] = l
+	l = NewLog(out)
+	loggerFiles[f] = l
 	return l, nil
 }
 
