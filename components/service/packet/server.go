@@ -54,10 +54,7 @@ func (s *Server) Close() error {
 func (s *Server) ServePacket(ctx context.Context, pkt packet.Packet) {
 	s.handler.ServePacket(ctx, nopCloser{pkt})
 	err := pkt.Close()
-	if listener.IsClosedConnError(err) {
-		err = nil
-	}
-	if err != nil {
+	if err != nil && !listener.IsClosedConnError(err) {
 		logger.FromContext(ctx).Error(err, "close listen")
 		return
 	}

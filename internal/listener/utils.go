@@ -2,33 +2,27 @@ package listener
 
 import (
 	"errors"
-	"fmt"
 	"net"
+	"net/http"
 	"os"
 	"reflect"
 	"runtime"
 	"strings"
 )
 
-func buildKey(network, addr string) string {
-	return fmt.Sprintf("%s://%s", network, addr)
-}
+var ErrServerClosed = errors.New("server closed")
 
-func sameAddress(a1, a2 string) string {
-	host1, port1, err := net.SplitHostPort(a1)
-	if err != nil {
-		return a1
+// IsServerClosedError reports whether err is an error from server closed.
+func IsServerClosedError(err error) bool {
+	if err == nil {
+		return false
 	}
 
-	switch port1 {
-	case "0", "":
-		_, port2, err := net.SplitHostPort(a2)
-		if err != nil {
-			return a1
-		}
-		port1 = port2
+	if err == http.ErrServerClosed || err == ErrServerClosed || strings.Contains(strings.ToLower(err.Error()), ErrServerClosed.Error()) {
+		return true
 	}
-	return net.JoinHostPort(host1, port1)
+
+	return false
 }
 
 var ErrNetClosing = errors.New("use of closed network connection")
@@ -39,7 +33,7 @@ func IsClosedConnError(err error) bool {
 		return false
 	}
 
-	if err == ErrNetClosing || strings.Contains(err.Error(), ErrNetClosing.Error()) {
+	if err == ErrNetClosing || strings.Contains(strings.ToLower(err.Error()), ErrNetClosing.Error()) {
 		return true
 	}
 

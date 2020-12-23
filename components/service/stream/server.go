@@ -86,10 +86,7 @@ func (s *Server) ServeStream(ctx context.Context, stm stream.Stream) {
 	}
 	s.handler.ServeStream(ctx, nopCloser{stm})
 	err := stm.Close()
-	if listener.IsClosedConnError(err) {
-		err = nil
-	}
-	if err != nil {
+	if err != nil && !listener.IsClosedConnError(err) {
 		logger.FromContext(ctx).Error(err, "close listen")
 		return
 	}

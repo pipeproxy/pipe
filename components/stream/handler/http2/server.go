@@ -30,7 +30,6 @@ func (s *server) serve(ctx context.Context, listen stream.StreamListener, handle
 		return ctx
 	}
 
-	var err error
 	var tlsConfig *tls.Config
 	if s.tlsConfig != nil {
 		tlsConfig = s.tlsConfig.TLS()
@@ -60,11 +59,7 @@ func (s *server) serve(ctx context.Context, listen stream.StreamListener, handle
 			return err
 		}
 	}
-	err = svc.Serve(listen)
-	if err != nil && !listener.IsClosedConnError(err) {
-		return err
-	}
-	return nil
+	return svc.Serve(listen)
 }
 
 func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
@@ -78,7 +73,7 @@ func (s *server) ServeStream(ctx context.Context, stm stream.Stream) {
 		ctx = logger.WithContext(ctx, log)
 	}
 	err := s.serve(ctx, listener.NewSingleConnListener(stm), s.handler)
-	if err != nil {
+	if err != nil && !listener.IsClosedConnError(err) && !listener.IsServerClosedError(err) {
 		log.Error(err, "http2 server close")
 		return
 	}

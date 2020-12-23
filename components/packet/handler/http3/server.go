@@ -48,12 +48,7 @@ func (s *server) ServePacket(ctx context.Context, pkt packet.Packet) {
 	}()
 
 	err := quicServer.Serve(pkt)
-	if listener.IsClosedConnError(err) {
-		err = nil
-	}
-	if err != nil {
-		if err.Error() != "server closed" {
-			log.Error(err, "http3 server close")
-		}
+	if err != nil && !listener.IsClosedConnError(err) && !listener.IsServerClosedError(err) {
+		log.Error(err, "http3 server close")
 	}
 }
