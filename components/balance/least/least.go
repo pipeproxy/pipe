@@ -2,10 +2,10 @@ package least
 
 import (
 	"container/list"
-	"math/rand"
 	"sync"
 
 	"github.com/pipeproxy/pipe/components/balance"
+	"github.com/pipeproxy/pipe/internal/rand"
 )
 
 type element struct {
@@ -29,7 +29,7 @@ func (l *Least) Init(size uint64) {
 		elem := &element{
 			index: uint64(l.list.Len()),
 		}
-		if rand.Intn(2) == 0 {
+		if rand.Uint64()%2 == 0 {
 			l.list.PushFront(elem)
 		} else {
 			l.list.PushBack(elem)

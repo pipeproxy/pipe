@@ -1,9 +1,8 @@
 package random
 
 import (
-	"math/rand"
-
 	"github.com/pipeproxy/pipe/components/balance"
+	"github.com/pipeproxy/pipe/internal/rand"
 )
 
 type Random struct {

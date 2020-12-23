@@ -1,10 +1,10 @@
 package round_robin
 
 import (
-	"math/rand"
 	"sync/atomic"
 
 	"github.com/pipeproxy/pipe/components/balance"
+	"github.com/pipeproxy/pipe/internal/rand"
 )
 
 type RoundRobin struct {
@@ -13,13 +13,12 @@ type RoundRobin struct {
 }
 
 func NewRoundRobin() balance.Policy {
-	return &RoundRobin{
-		index: rand.Uint64() % 100,
-	}
+	return &RoundRobin{}
 }
 
 func (r *RoundRobin) Init(size uint64) {
 	r.size = size
+	r.index = rand.Uint64() % size
 }
 
 func (r *RoundRobin) InUse(fun func(i uint64)) {
