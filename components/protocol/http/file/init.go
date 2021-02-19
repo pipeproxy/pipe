@@ -15,9 +15,15 @@ func init() {
 }
 
 type Config struct {
-	Root string
+	AutoIndex bool     `json:",omitempty"`
+	Indexes   []string `json:",omitempty"`
+	Root      string
 }
 
 func NewFileWithConfig(conf *Config) http.Handler {
-	return http.FileServer(http.Dir(conf.Root))
+	return &FileServer{
+		AutoIndex:  conf.AutoIndex,
+		Indexes:    conf.Indexes,
+		FileSystem: http.Dir(conf.Root),
+	}
 }
