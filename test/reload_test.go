@@ -18,12 +18,12 @@ func getDirect(port, info string) []byte {
 		Service: bind.StreamServiceConfig{
 			DisconnectOnClose: true,
 			Listener: bind.ListenerStreamListenConfigConfig{
-				Network: bind.ListenerStreamListenConfigListenerNetworkEnumEnumTCP,
+				Network: bind.ListenerStreamListenConfigNetworkEnumEnumNetworkTCP,
 				Address: port,
 			},
 			Handler: bind.HTTP1StreamHandlerConfig{
-				Handler: bind.MuxNetHTTPHandlerConfig{
-					Routes: []bind.MuxNetHTTPHandlerRoute{
+				Handler: bind.PathNetHTTPHandlerConfig{
+					Paths: []bind.PathNetHTTPHandlerRoute{
 						{
 							Path: "/",
 							Handler: bind.DirectNetHTTPHandlerConfig{
