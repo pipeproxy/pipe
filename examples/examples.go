@@ -39,7 +39,8 @@ var (
 							Name: "server",
 							Def: config.BuildH1WithService(":80",
 								config.BuildHTTPLogStderr(bind.FileNetHTTPHandlerConfig{
-									Root: "",
+									AutoIndex: true,
+									Root:      "",
 								})),
 						},
 					},

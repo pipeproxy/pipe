@@ -15,6 +15,7 @@ Multi:
               '@Kind': log@net/http.Handler
               Handler:
                 '@Kind': file@net/http.Handler
+                AutoIndex: true
                 Root: ""
               Output:
                 '@Kind': file@io.Writer

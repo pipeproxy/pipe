@@ -1083,7 +1083,9 @@ const kindFileNetHTTPHandlerConfig = `file@net/http.Handler`
 
 // FileNetHTTPHandlerConfig file@net/http.Handler
 type FileNetHTTPHandlerConfig struct {
-	Root string
+	AutoIndex bool     `json:",omitempty"`
+	Indexes   []string `json:",omitempty"`
+	Root      string
 }
 
 func init() {
