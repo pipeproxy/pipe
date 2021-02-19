@@ -1,8 +1,7 @@
 package file
 
 import (
-	"bytes"
-	"io/ioutil"
+	"os"
 
 	"github.com/pipeproxy/pipe/components/common/register"
 	"github.com/pipeproxy/pipe/components/stdio/input"
@@ -22,10 +21,10 @@ type Config struct {
 
 func NewFileWithConfig(conf *Config) input.Input {
 	return input.NewLazyReader(func() (input.Input, error) {
-		data, err := ioutil.ReadFile(conf.Path)
+		f, err := os.Open(conf.Path)
 		if err != nil {
 			return nil, err
 		}
-		return bytes.NewBuffer(data), nil
+		return input.NewReaderWithAutoClose(f, f), nil
 	})
 }

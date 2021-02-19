@@ -1,7 +1,8 @@
 package http
 
 import (
-	"bytes"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 
@@ -33,11 +34,14 @@ func NewHTTPWithConfig(conf *Config) input.Input {
 		if err != nil {
 			return nil, err
 		}
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return nil, err
+		if resp.StatusCode != http.StatusOK {
+			defer resp.Body.Close()
+			body, err := ioutil.ReadAll(io.LimitReader(resp.Body, 1024))
+			if err != nil {
+				return nil, err
+			}
+			return nil, fmt.Errorf("GET %s fail %s: %s", conf.URL, resp.Status, string(body))
 		}
-		resp.Body.Close()
-		return bytes.NewBuffer(body), nil
+		return input.NewReaderWithAutoClose(resp.Body, resp.Body), nil
 	})
 }
